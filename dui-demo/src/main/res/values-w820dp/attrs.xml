@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+* Copyright (c) 2012-2017 "JUSPAY Technologies"
+* JUSPAY Technologies Pvt. Ltd. [https://www.juspay.in]
+* 
+* This file is part of JUSPAY Platform.
+* 
+* JUSPAY Platform is free software: you can redistribute it and/or modify
+* it for only educational purposes under the terms of the GNU Affero General
+* Public License (GNU AGPL) as published by the Free Software Foundation,
+* either version 3 of the License, or (at your option) any later version.
+* For Enterprise/Commerical licenses, contact <info@juspay.in>.
+* 
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  The end user will
+* be liable for all damages without limitation, which is caused by the
+* ABUSE of the LICENSED SOFTWARE and shall INDEMNIFY JUSPAY for such
+* damages, claims, cost, including reasonable attorney fee claimed on Juspay.
+* The end user has NO right to claim any indemnification based on its use
+* of Licensed Software. See the GNU Affero General Public License for more details.
+* 
+* You should have received a copy of the GNU Affero General Public License
+* along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
+-->
+
+<resources>
+
+    <!-- Declare custom theme attributes that allow changing which styles are
+         used for button bars depending on the API level.
+         ?android:attr/buttonBarStyle is new as of API 11 so this is
+         necessary to support previous API levels. -->
+    <declare-styleable name="ButtonBarContainerTheme">
+        <attr name="metaButtonBarStyle" format="reference"/>
+        <attr name="metaButtonBarButtonStyle" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="TabLayout">
+        <!-- Color of the indicator used to show the currently selected tab. -->
+        <attr name="tabIndicatorColor" format="color"/>
+        <!-- Height of the indicator used to show the currently selected tab. -->
+        <attr name="tabIndicatorHeight" format="dimension"/>
+        <!-- Position in the Y axis from the starting edge that tabs should be positioned from. -->
+        <attr name="tabContentStart" format="dimension"/>
+        <!-- Reference to a background to be applied to tabs. -->
+        <attr name="tabBackground" format="reference"/>
+
+        <!-- The minimum width for tabs. -->
+        <attr name="tabMinWidth" format="dimension"/>
+        <!-- The maximum width for tabs. -->
+        <attr name="tabMaxWidth" format="dimension"/>
+        <!-- A reference to a TextAppearance style to be applied to tabs. -->
+        <attr name="tabTextAppearance" format="reference"/>
+        <!-- The default text color to be applied to tabs. -->
+        <attr name="tabTextColor" format="color"/>
+        <!-- The text color to be applied to the currently selected tab. -->
+        <attr name="tabSelectedTextColor" format="color"/>
+        <!-- The preferred padding along the start edge of tabs. -->
+        <attr name="tabPaddingStart" format="dimension"/>
+        <!-- The preferred padding along the top edge of tabs. -->
+        <attr name="tabPaddingTop" format="dimension"/>
+        <!-- The preferred padding along the end edge of tabs. -->
+        <attr name="tabPaddingEnd" format="dimension"/>
+        <!-- The preferred padding along the bottom edge of tabs. -->
+        <attr name="tabPaddingBottom" format="dimension"/>
+        <!-- The preferred padding along all edges of tabs. -->
+        <attr name="tabPadding" format="dimension"/>
+    </declare-styleable>
+    <declare-styleable name="TabItem">
+        <!-- Text to display in the tab. -->
+        <attr name="android:text" />
+        <!-- Icon to display in the tab. -->
+        <attr name="android:icon" />
+        <!-- A reference to a layout resource to be displayed in the tab. -->
+        <attr name="android:layout" />
+    </declare-styleable>
+
+</resources>
