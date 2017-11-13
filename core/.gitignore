@@ -1,0 +1,5 @@
+.DS_Store
+node_modules/*
+dist/index_bundle.js
+dist/index_bundle.js.map
+npm-debug.log
