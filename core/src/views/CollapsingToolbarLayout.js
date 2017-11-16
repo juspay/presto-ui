@@ -23,27 +23,32 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-module.exports = {
-  ImageView: require("./ImageView"),
-  LinearLayout: require("./LinearLayout"),
-  RelativeLayout: require("./RelativeLayout"),
-  TextView: require("./TextView"),
-  HorizontalScrollView: require("./HorizontalScrollView"),
-  ScrollView: require("./ScrollView"),
-  ProgressBar: require("./ProgressBar"),
-  FrameLayout: require("./FrameLayout"),
-  CheckBox: require("./CheckBox"),
-  Button: require("./Button"),
-  EditText: require("./EditText"),
-  ViewWidget: require("./ViewWidget"),
-  TabLayout: require("./TabLayout"),
-  ViewPager: require("./ViewPager"),
-  Space: require("./Space"),
-  Switch: require("./Switch"),
-  CollapsingToolbarLayout: require("./CollapsingToolbarLayout"),
-  AppBarLayout: require("./AppBarLayout"),
-  CoordinatorLayout: require("./CoordinatorLayout"),
-  ListView: require("./ListView"),
-  RatingBar: require("./RatingBar"),
-  RecyclerView: require("./RecyclerView"),
+var dom = require('../doms');
+var View = require('../baseView');
+
+class CollapsingToolbarLayout extends View {
+  constructor(props, children) {
+    super(props, children);
+
+    this.setIds([
+      'id'
+    ]);
+  }
+
+  render() {
+    var params = this.props;
+    var _this = this;
+    params.__filename = params.__source.fileName + ' :ln ' + params.__source.lineNumber;
+
+    return (
+      <collapsingToolbarLayout
+        id={this.props.id?this.props.id:this.idSet.id}  
+        params={params}>
+
+        {this.children.map(function(child) {child.__filename = _this.__filename; return  child.render()})}
+      </collapsingToolbarLayout>
+    )
+  }
 }
+
+module.exports = CollapsingToolbarLayout;

@@ -23,27 +23,24 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-module.exports = {
-  ImageView: require("./ImageView"),
-  LinearLayout: require("./LinearLayout"),
-  RelativeLayout: require("./RelativeLayout"),
-  TextView: require("./TextView"),
-  HorizontalScrollView: require("./HorizontalScrollView"),
-  ScrollView: require("./ScrollView"),
-  ProgressBar: require("./ProgressBar"),
-  FrameLayout: require("./FrameLayout"),
-  CheckBox: require("./CheckBox"),
-  Button: require("./Button"),
-  EditText: require("./EditText"),
-  ViewWidget: require("./ViewWidget"),
-  TabLayout: require("./TabLayout"),
-  ViewPager: require("./ViewPager"),
-  Space: require("./Space"),
-  Switch: require("./Switch"),
-  CollapsingToolbarLayout: require("./CollapsingToolbarLayout"),
-  AppBarLayout: require("./AppBarLayout"),
-  CoordinatorLayout: require("./CoordinatorLayout"),
-  ListView: require("./ListView"),
-  RatingBar: require("./RatingBar"),
-  RecyclerView: require("./RecyclerView"),
+const getOS = require('../helper').getOS;
+
+function run() {
+  let OS = getOS();
+
+  let type;
+  switch (OS) {
+  case "IOS":
+    type = require("./ios")
+    break;
+  case "WEB":
+    type = require("./web")
+    break;
+  default:
+    type = require("./android")
+  }
+
+  return type;
 }
+
+module.exports = run();

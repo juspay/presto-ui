@@ -30,10 +30,26 @@ Array.prototype.flatten = function() {
   },[]);
 };
 
-var parseParams = require('../helpers/ios/parseParams');
+function flattenObject(ob) {
+  var toReturn = {};
+  for (var i in ob) {
+    if (!ob.hasOwnProperty(i)) continue;
+    if ((typeof ob[i]) == 'object') {
+      var flatObject = flattenObject(ob[i]);
+      for (var x in flatObject) {
+        if (!flatObject.hasOwnProperty(x)) continue;
+        if (typeof flatObject[x] !== "undefined")
+          toReturn[x] = flatObject[x];
+      }
+    } else {
+      toReturn[i] = ob[i];
+    }
+  }
+  return toReturn;
+};
 
 module.exports = function(type, props, ...children){
-	var paramType;
+  var paramType;
 
   children =  children.flatten();
 
@@ -41,19 +57,19 @@ module.exports = function(type, props, ...children){
   props = {};
 
   if(typeof type === "string") {
-    props =  parseParams(type, props, "set");
-
     props.node_id = window.__NODE_ID + '';
-  	window.__NODE_ID++;
+    props = flattenObject(props);
+    window.__NODE_ID++;
+    children.forEach(child => {
+      child.props.parentId = props.id;
+    })
 
-  	if (!props.__filename)
-  	props.__filename = "filename not added";
+    if (!props.__filename)
+    props.__filename = "filename not added";
 
-    type = type[0].toUpperCase() + type.substr(1, type.length);
-
-    return {type: type,  props: props, children: children};
+    return {type: type,  props: props, children: children}
 
   } else {
     return new type(props, children);
   }
-};
+}

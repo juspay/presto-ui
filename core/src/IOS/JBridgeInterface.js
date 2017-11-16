@@ -24,26 +24,25 @@
 */
 
 module.exports = {
-  ImageView: require("./ImageView"),
-  LinearLayout: require("./LinearLayout"),
-  RelativeLayout: require("./RelativeLayout"),
-  TextView: require("./TextView"),
-  HorizontalScrollView: require("./HorizontalScrollView"),
-  ScrollView: require("./ScrollView"),
-  ProgressBar: require("./ProgressBar"),
-  FrameLayout: require("./FrameLayout"),
-  CheckBox: require("./CheckBox"),
-  Button: require("./Button"),
-  EditText: require("./EditText"),
-  ViewWidget: require("./ViewWidget"),
-  TabLayout: require("./TabLayout"),
-  ViewPager: require("./ViewPager"),
-  Space: require("./Space"),
-  Switch: require("./Switch"),
-  CollapsingToolbarLayout: require("./CollapsingToolbarLayout"),
-  AppBarLayout: require("./AppBarLayout"),
-  CoordinatorLayout: require("./CoordinatorLayout"),
-  ListView: require("./ListView"),
-  RatingBar: require("./RatingBar"),
-  RecyclerView: require("./RecyclerView"),
+    getSymbol: function() {
+
+    },
+    hideKeyboard: function() {
+
+    },
+    getFromSharedPrefs: function(key) {
+      return localStorage.getItem(key) || "__failed";
+    },
+    setInSharedPrefs: function(key, value) {
+      localStorage.setItem(key, value);
+    },
+    getDeviceDetails: () => {
+      return JSON.stringify({"deviceId":"TEST","packageName":"in.juspay.dui_android","os":"Android","model":"2014818","version":22,"manufacturer":"Xiaomi"});
+    },
+    viewPagerAdapter: function(id, jsx, tabJsx, cb) {
+      return;
+    },
+    setClickFeedback: function() {
+
+    }
 }

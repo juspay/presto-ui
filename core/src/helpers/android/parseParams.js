@@ -26,10 +26,29 @@
 var mapParams = require('./mapParams');
 var objMap = require('./objMap');
 var callbackMapper  = require("./callbackMapper");
+let R = require('ramda');
 
 var globalObjMap = {};
 var command = "";
 var getSetType;
+
+function attachFeedback(config, keys, i) {
+  var feedbackFn = function() {};
+
+  if (typeof config.feedback !== "undefined") {
+    if (config.feedback == "true") {
+      config.feedback = callbackMapper.map(feedbackFn);
+      window.__ALL_ONCLICKS.push(config.feedback);
+    }
+
+    return;
+  }
+
+  if (config.onClick) {
+    config.feedback = callbackMapper.map(feedbackFn);
+    window.__ALL_ONCLICKS.push(config.feedback);
+  }
+}
 
 function getConfigGroups(config) {
   var groups = {};
@@ -37,60 +56,91 @@ function getConfigGroups(config) {
   var isAnimation;
   var widthFound = 0;
   var heightFound = 0;
+  let paddingVal = config["padding"];
+  if (config.stroke)
+    delete config.padding;
+  if (config.margin) {
+    let margin = config.margin.split(',').map(a => a*1);
+    config.marginStart = margin[0] + '';
+    config.marginEnd = margin[2] + '';
+  }
   var keys =  Object.keys(config);
   var proxyFnName;
+   for (var i = 0; i<keys.length; i++) {
+    attachFeedback(config, keys, i);
 
-  for (var i = 0; i<keys.length; i++) {
-  	if (typeof config[keys[i]] == "undefined" || config[keys[i]] == null) {
-  		delete config[keys[i]];
-  	} else if (typeof config[keys[i]] == "function") {
-  		config[keys[i]] = callbackMapper.map(config[keys[i]]);
-  	} else {
-	    if (keys[i].indexOf('_') && keys[i].split('_')[0] == 'a') {
-	      objType = mapParams[keys[i].split('_')[1]];
-	      isAnimation = true;
-	    } else {
-	      objType = mapParams[keys[i]];
-	      isAnimation = false;
-	    }
-
-	    if (objType) {
-	      if (isAnimation){
-	        if (!groups['ANIMATION'])
-	        groups['ANIMATION'] = [];
+    if (typeof config[keys[i]] == "undefined" || config[keys[i]] == null) {
+      delete config[keys[i]];
+    } else if (typeof config[keys[i]] == "function") {
+      config[keys[i]] = callbackMapper.map(config[keys[i]]);
 
 
-	        groups['ANIMATION'].push({key: keys[i].split('_')[1], value: config[keys[i]]});
-	      } else {
-	        if (!groups[objType.inVokedIn])
-	        groups[objType.inVokedIn] = [];
+      if (keys[i] == "onClick"){
+        window.__FN_MAP[config[keys[i]]] = config.text || config.id || "";
 
-	        if (keys[i] == "width")
-	        widthFound ++;
-	        if (keys[i] == "height")
-	        heightFound ++;
+        if(!config.allowMultipleClicks || config.allowMultipleClick=="false"){
+          window.__THROTTELED_ACTIONS.push(config[keys[i]]);
+        }
 
-	        groups[objType.inVokedIn].push({key: keys[i], value: config[keys[i]]});
-	      }
+      }
+    } else {
+      if (keys[i].indexOf('_') && keys[i].split('_')[0] == 'a') {
+        objType = mapParams[keys[i].split('_')[1]];
+        isAnimation = true;
+      } else {
+        objType = mapParams[keys[i]];
+        isAnimation = false;
+      }
 
-	      if (keys[i]!=="pattern" && keys[i] !== "root" && keys[i] !== "id" && keys[i]!== "__filename") {
-	      	delete config[keys[i]];
-	      }
-	    }
-  	}
+      if (keys[i] == "stroke") {
+        let padding = [0,0,0,0];
+
+        if (paddingVal)
+          padding = paddingVal.split(',').map(a => a*1);
+
+        let strokeValue = config["stroke"].split(',')[0] * 1;
+        padding = padding.map(dim => dim + strokeValue);
+        config["padding"] = padding.join(',');
+        keys.push("padding");
+      }
+
+      if (objType) {
+        if (isAnimation){
+          if (!groups['ANIMATION'])
+          groups['ANIMATION'] = [];
+
+
+          groups['ANIMATION'].push({key: keys[i].split('_')[1], value: config[keys[i]]})
+        } else {
+          if (!groups[objType.inVokedIn])
+          groups[objType.inVokedIn] = [];
+
+          if (keys[i] == "width")
+          widthFound ++;
+          if (keys[i] == "height")
+          heightFound ++;
+
+          groups[objType.inVokedIn].push({key: keys[i], value: config[keys[i]]})
+        }
+
+        if (keys[i]!=="pattern" && keys[i] !== "root" && keys[i] !== "id" && keys[i]!== "__filename") {
+          delete config[keys[i]];
+        }
+      }
+    }
   }
 
   if (getSetType == "set") {
-  	if (!groups.PARAMS)
-		groups.PARAMS = [];
+    if (!groups.PARAMS)
+    groups.PARAMS = [];
 
-	  if (!widthFound)
-	  groups.PARAMS.push({key: "width", value: 'wrap_content'});
-	  if (!heightFound)
-	  groups.PARAMS.push({key: "height", value: 'wrap_content'});
+    if (!widthFound)
+    groups.PARAMS.push({key: "width", value: 'wrap_content'});
+    if (!heightFound)
+    groups.PARAMS.push({key: "height", value: 'wrap_content'});
   }
 
-	return groups;
+  return groups;
 }
 
 function getCtr(viewGroup) {
@@ -103,8 +153,8 @@ function getCtr(viewGroup) {
     'view': 'android.widget.LinearLayout$LayoutParams->new',
     'horizontalScrollView': 'android.widget.LinearLayout$LayoutParams->new',
     'listView': 'android.widget.LinearLayout$LayoutParams->new',
-    'expandableListView': 'android.widget.LinearLayout$LayoutParams->new'
-  };
+    'expandableListView': 'android.widget.LinearLayout$LayoutParams->new',
+  }
 
   if(!viewGroupMap[viewGroup]) {
     throw new Error("No such view group found : " + viewGroup);
@@ -114,29 +164,29 @@ function getCtr(viewGroup) {
 }
 
 function handleSpecialChars(value) {
-	value =  value.indexOf(',')>-1?value.replace(/\,/g, '\\\\,'):value;
-	value =  value.indexOf(':')>-1?value.replace(/\:/g, '\\\\:'):value;
-	value =  value.indexOf(':')>-1?value.replace(/\=/g, '\\\\='):value;
-	value =  value.indexOf(';')>-1?value.replace(/\;/g, '\\\\;'):value;
+  value =  value.indexOf(',')>-1?value.replace(/\,/g, '\\\\,'):value;
+  value =  value.indexOf(':')>-1?value.replace(/\:/g, '\\\\:'):value;
+  value =  value.indexOf(':')>-1?value.replace(/\=/g, '\\\\='):value;
+  value =  value.indexOf(';')>-1?value.replace(/\;/g, '\\\\;'):value;
 
-	return value;
+  return value;
 }
 
 function appendArgs(attrs, obj) {
-	if (!obj.values)
-	return "";
+  if (!obj.values)
+  return "";
 
   var args = "";
   var value = (attrs.key == "text" || attrs.key == "hint")
-  	?attrs.value:attrs.value.replace(/ /g,'');
+    ?attrs.value:attrs.value.replace(/ /g,'');
 
-	var incomingArgs;
+  var incomingArgs;
   if (attrs.key == "text" || attrs.key == "hint") {
-  	incomingArgs = [];
-  	incomingArgs.push(handleSpecialChars(value));
+    incomingArgs = [];
+    incomingArgs.push(handleSpecialChars(value));
 
   } else {
-  	incomingArgs = value.split(',');
+    incomingArgs = value.split(',');
   }
 
   for  (var i =0 ;i<obj.values.length; i++) {
@@ -171,7 +221,7 @@ function prepareCtr(attrs, belongsTo) {
   }
 
   if (!obj || !obj.required)
-    return ctr;
+  return ctr
 
   reqAttrs = obj.required.split(',');
 
@@ -188,15 +238,21 @@ function prepareCtr(attrs, belongsTo) {
   return ctr.substring(0, ctr.length - 1);
 }
 
-function parseColor(color) {
-  return 'set_colorInt=android.graphics.Color->parseColor:s_' + color + ';';
+function parseHtml(text) {
+  return 'set_html=android.text.Html->fromHtml:s_' + text + ';';
+}
+
+function parseColor(color, setterName) {
+  if (!setterName)
+  setterName = 'set_colorInt';
+  return setterName + '=android.graphics.Color->parseColor:s_' + color + ';';
 }
 
 function mashThis(attrs, obj, belongsTo, transformFn) {
-	if (attrs.key == "width" || attrs.key == "height")
-	return '';
+  if (attrs.key == "width" || attrs.key == "height")
+  return '';
 
-	var beforeCmd = "";
+  var beforeCmd = "";
   var afterCmd = "";
   var prePend = '';
   var currTransVal;
@@ -208,42 +264,73 @@ function mashThis(attrs, obj, belongsTo, transformFn) {
   var keyWord;
   var _cmd;
   var finalCmd;
-
+  var color1;
   attrs.value += '';
 
-  if (attrs.key == "foreground" || attrs.key == "color" || attrs.key == "background" || attrs.key == "stroke" || attrs.key == "btnColor") {
+//todo:tabTextColors
+  if (attrs.key == "foreground" ||
+    attrs.key == "tabTextColors" ||
+    attrs.key == "selectedTabIndicatorColor"  ||
+    attrs.key == "color" ||
+    attrs.key == "background" ||
+    attrs.key == "stroke" ||
+    attrs.key == "btnColor") {
+
     if (attrs.key == "stroke") {
       color = attrs.value.split(',')[1];
       currTransVal = appendArgs(attrs,obj).split(',')[0] + ',get_colorInt';
-    } else {
+    } else if(attrs.key == "tabTextColors"){
+      color = attrs.value.split(',')[0];
+      color1 = attrs.value.split(',')[1];
+      currTransVal = 'get_colorInt1' + ',get_colorInt';
+    }else {
       color = attrs.value;
       currTransVal = 'get_colorInt';
     }
 
-    prePend = parseColor(color);
+    if(attrs.key == "tabTextColors"){
+      prePend = parseColor(color,"set_colorInt1")+','+parseColor(color1);
+    }else{
+      prePend = parseColor(color);
+    }
+  }
+
+  if (attrs.key == "fontStyle") {
+    prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + attrs.value + "\.ttf;";
+    currTransVal = "get_type";
+  }
+
+  if (attrs.key == "dividerDrawable") {
+    prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_"+  attrs.value +",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;"
+    currTransVal = "get_482380";
+  }
+
+  if (attrs.key == "textFromHtml") {
+    prePend = parseHtml(handleSpecialChars(attrs.value));
+    currTransVal = 'get_html';
   }
 
   if(attrs.key == "backgroundTint"){
     color = attrs.value;
     prePend = parseColor(color)+'set_colorstate=android.content.res.ColorStateList->valueOf:get_colorInt;' ;
-    currTransVal = 'get_colorstate';
+    currTransVal = 'get_colorstate'
   }
 
   if (attrs.key == "typeface") {
-    prePend = "set_face=this->getTypeface;";
+    prePend = "set_face=this->getTypeface;"
     currTransVal = 'get_face,' + appendArgs(attrs,obj);
   }
 
   if(attrs.key == "buttonTint"){
     color = attrs.value;
     prePend = parseColor(color)+'set_colorstate=android.content.res.ColorStateList->valueOf:get_colorInt;' ;
-    currTransVal = 'get_colorstate';
+    currTransVal = 'get_colorstate'
   }
 
   if(attrs.key == "hintColor"){
     color = attrs.value;
     prePend = parseColor(color)+'set_colorstate=android.content.res.ColorStateList->valueOf:get_colorInt;' ;
-    currTransVal = 'get_colorstate';
+    currTransVal = 'get_colorstate'
   }
 
   if (attrs.key == "btnBackground") {
@@ -254,8 +341,7 @@ function mashThis(attrs, obj, belongsTo, transformFn) {
 
   if (attrs.key == "selectableItem") {
     color = attrs.value;
-    prePend =  "set_outv=android.util.TypedValue->new;set_theme=ctx->getTheme;get_theme->resolveAttribute:i_16843534,"
-      + "get_outv,b_true;set_c=get_outv->getClass;set_f=get_c->getDeclaredField:s_resourceId;get_f->setAccessible:b_true;set_v=get_f->get:get_outv;";
+    prePend =  "set_outv=android.util.TypedValue->new;set_theme=ctx->getTheme;get_theme->resolveAttribute:i_16843534,get_outv,b_true;set_c=get_outv->getClass;set_f=get_c->getDeclaredField:s_resourceId;get_f->setAccessible:b_true;set_v=get_f->get:get_outv;"
     currTransVal =  'get_v';
   }
 
@@ -265,35 +351,32 @@ function mashThis(attrs, obj, belongsTo, transformFn) {
   }
 
   if (attrs.key == "imageUrl") {
-    prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_" +  attrs.value
-      + ",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;";
+    prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_"+  attrs.value +",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;"
     currTransVal = "get_482380";
   }
 
   if (attrs.key == "backgroundDrawable") {
-    prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_" +  attrs.value
-      + ",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;";
+    prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_"+  attrs.value +",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;"
     currTransVal = "get_482380";
   }
 
   if (attrs.key == "fontFamily") {
     attrs.value = appendArgs(attrs,obj);
     values = attrs.value.split(',');
-    return "set_fontFace=android.graphics.Typeface->create:" + values[0] + "," + values[1]
-      + ";" + "this->setTypeface:get_fontFace," + values[1] + ";";
+    return "set_fontFace=android.graphics.Typeface->create:"+values[0]+","+values[1]+";"+"this->setTypeface:get_fontFace,"+values[1]+";"
   }
 
   if(attrs.key=="fontSize") {
-  	currTransVal = appendArgs(attrs,obj).split(',')[0] + ',f_' + ((window.__WIDTH * (attrs.value.split(',')[1]) * 1)) / 100;
+    currTransVal = appendArgs(attrs,obj).split(',')[0] + ',f_' + ((window.__WIDTH*(attrs.value.split(',')[1])*1))/100;
   }
 
   if(attrs.key=="curve") {
-  	prePend =  "set_interp=android.view.animation.DecelerateInterpolator->new;";
-  	currTransVal = "get_interp";
+    prePend =  "set_interp=android.view.animation.DecelerateInterpolator->new;";
+    currTransVal = "get_interp";
   }
 
   if(attrs.key=="focus") {
-  	afterCmd =  "set_win=ctx->getWindow;get_win->setSoftInputMode:5;";
+    afterCmd =  "set_win=ctx->getWindow;get_win->setSoftInputMode:5;";
   }
 
   if (attrs.key == "shadowLayer") {
@@ -302,7 +385,7 @@ function mashThis(attrs, obj, belongsTo, transformFn) {
     arr.splice(arr.length1 , 1);
 
     prePend = parseColor(color);
-    currTransVal =  arr.join(',') + ',get_colorInt';
+    currTransVal =  arr.join(',') + ',get_colorInt'
   }
 
   if (attrs.key == "values") {
@@ -321,31 +404,31 @@ function mashThis(attrs, obj, belongsTo, transformFn) {
   }
 
   if (belongsTo == "VIEW")
-    keyWord = globalObjMap[belongsTo].val;
+  keyWord = globalObjMap[belongsTo].val;
   else
-    keyWord = 'get_' + globalObjMap[belongsTo].val;
+  keyWord = 'get_' + globalObjMap[belongsTo].val;
 
   if (transformFn || attrs.key == "duration" || attrs.key == "delay" || attrs.key == "curve")
-    _cmd = keyWord +  '->' + ((typeof obj.fnName == "undefined")?obj.varName:obj.fnName);
+  _cmd = keyWord +  '->' + ((typeof obj.fnName == "undefined")?obj.varName:obj.fnName);
   else
-    _cmd = keyWord + '->' +   attrs.key;
+  _cmd = keyWord + '->' +   attrs.key;
 
-	if (obj.values && obj.values.length)
-	  _cmd += ':';
+  if (obj.values && obj.values.length)
+  _cmd += ':';
 
   if (!prePend && !currTransVal)
-    _cmd +=  appendArgs(attrs, obj) + ';';
+  _cmd +=  appendArgs(attrs, obj) + ';'
   else
-    _cmd += currTransVal + ';';
+  _cmd += currTransVal + ';';
 
   // for testing
   if (typeof finalCmd !== "undefined") {
-  	console.log(beforeCmd  + prePend + _cmd + afterCmd);
-  	return finalCmd;
+    console.log(beforeCmd  + prePend + _cmd + afterCmd);
+    return finalCmd;
   }
 
 
-  return beforeCmd  + prePend + _cmd + afterCmd;
+  return beforeCmd  + prePend + _cmd + afterCmd
 }
 
 function parseAttrs(attrs, belongsTo, transformFn) {
@@ -354,7 +437,7 @@ function parseAttrs(attrs, belongsTo, transformFn) {
   var cmd = '';
   var _cmd;
 
-  for (var i = 0 ;i < attrs.length; i++) {
+  for (var i =0 ;i<attrs.length; i++) {
     obj = mapParams[attrs[i].key];
     if (obj) {
       cmd += mashThis(attrs[i], obj, belongsTo, transformFn);
@@ -371,13 +454,13 @@ function parseGroups(type, groups, config) {
   var keys = Object.keys(groups);
   var ctr;
 
-  for (var i = 0; i < keys.length; i++) {
-  	if  (keys[i] == "FOREGROUND") {
+  for (var i = 0; i< keys.length; i++) {
+    if  (keys[i] == "FOREGROUND") {
       if (!globalObjMap[keys[i]]) {
         if (getSetType == "set") {
           globalObjMap[keys[i]] = {ctr: "android.graphics.drawable.GradientDrawable->new",  val:  keys[i] };
           command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true)
-            + 'this->' + "setForeground" + ':' + 'get_' +  globalObjMap[keys[i]].val + ';';
+            + 'this->' + "setForeground" + ':' + 'get_' +  globalObjMap[keys[i]].val + ';'
         } else {
           globalObjMap[keys[i]] = {ctr: 'get_view->getForeground',  val:  keys[i] };
           command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true);
@@ -395,24 +478,24 @@ function parseGroups(type, groups, config) {
         globalObjMap.VIEW = {ctr: "get_view", val: "get_view"};
       }
 
-      command +=  parseAttrs(groups.VIEW, 'VIEW', true);
+      command +=  parseAttrs(groups.VIEW, 'VIEW', true)
 
     } else if (keys[i] == "PARAMS") {
       if (getSetType == "set") {
-      	if (!globalObjMap.PARAMS) {
-        	ctr = config.root?getCtr(type):'PARAM_CTR_HOLDER';
-        	globalObjMap.PARAMS = {ctr: ctr, val: "PARAMS" };
-      	}
+        if (!globalObjMap.PARAMS) {
+          ctr = config.root?getCtr(type):'PARAM_CTR_HOLDER';
+          globalObjMap.PARAMS = {ctr: ctr, val: "PARAMS" };
+        }
 
-      	command +=  'set_' +  globalObjMap.PARAMS.val + '=' +  parseAttrs(groups.PARAMS, 'PARAMS', true)
+        command +=  'set_' +  globalObjMap.PARAMS.val + '=' +  parseAttrs(groups.PARAMS, 'PARAMS', true)
              + 'this->' + objMap.PARAMS.viewMethod.split(',')[0] + ':get_'  + globalObjMap.PARAMS.val + ';';
       } else {
-      	if (!globalObjMap.PARAMS) {
-        	ctr = "get_view->getLayoutParams";
-        	globalObjMap.PARAMS = {ctr: ctr, val: "PARAMS" };
-      	}
+        if (!globalObjMap.PARAMS) {
+          ctr = "get_view->getLayoutParams";
+          globalObjMap.PARAMS = {ctr: ctr, val: "PARAMS" };
+        }
 
-      	command += 'set_' +  globalObjMap.PARAMS.val + '=' +  parseAttrs(groups[keys[i]], keys[i], true);
+        command += 'set_' +  globalObjMap.PARAMS.val + '=' +  parseAttrs(groups[keys[i]], keys[i], true);
       }
 
     } else if (keys[i] == "MUTATEBG") {
@@ -437,7 +520,7 @@ function parseGroups(type, groups, config) {
         if (getSetType == "set") {
           globalObjMap[keys[i]] = {ctr: objMap[keys[i]].ctr,  val:  keys[i] };
           command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true)
-            + 'this->' + objMap[keys[i]].viewMethod.split(',')[0] + ':' + 'get_' +  globalObjMap[keys[i]].val + ';';
+            + 'this->' + objMap[keys[i]].viewMethod.split(',')[0] + ':' + 'get_' +  globalObjMap[keys[i]].val + ';'
         } else {
           globalObjMap[keys[i]] = {ctr: 'get_view->getBackground',  val:  keys[i] };
           command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true);
@@ -449,20 +532,20 @@ function parseGroups(type, groups, config) {
 }
 
 var flattenObject = function(ob) {
-	var toReturn = {};
-	for (var i in ob) {
-		if (!ob.hasOwnProperty(i)) continue;
-		if ((typeof ob[i]) == 'object') {
-			var flatObject = flattenObject(ob[i]);
-			for (var x in flatObject) {
-				if (!flatObject.hasOwnProperty(x)) continue;
-				toReturn[x] = flatObject[x];
-			}
-		} else {
-			toReturn[i] = ob[i];
-		}
-	}
-	return toReturn;
+  var toReturn = {};
+  for (var i in ob) {
+    if (!ob.hasOwnProperty(i)) continue;
+    if ((typeof ob[i]) == 'object') {
+      var flatObject = flattenObject(ob[i]);
+      for (var x in flatObject) {
+        if (!flatObject.hasOwnProperty(x)) continue;
+        toReturn[x] = flatObject[x];
+      }
+    } else {
+      toReturn[i] = ob[i];
+    }
+  }
+  return toReturn;
 };
 
 module.exports = function(type, config, _getSetType) {
@@ -476,7 +559,7 @@ module.exports = function(type, config, _getSetType) {
 
   var flag = 0;
   var keys = Object.keys(config);
-  for (var i = 0; i < keys.length; i++) {
+  for (var i=0; i<keys.length; i++) {
     if (keys[i] == 'runInUI')  {
       flag  = 1;
       break;
@@ -484,8 +567,8 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (!flag) {
-  	config.runInUI = parseGroups(type, groups, config);
+    config.runInUI = parseGroups(type, groups, config);
   }
 
   return config;
-};
+}

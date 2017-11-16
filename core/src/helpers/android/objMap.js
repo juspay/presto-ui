@@ -33,6 +33,7 @@ var  map = {
     'required': '',
     'viewMethod': 'setBackground,getBackground'
   }
-};
+}
+
 
 module.exports = map;

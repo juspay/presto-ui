@@ -34,4 +34,5 @@ module.exports = [
 	"#FFFAE5",
 	"#F5FAEB",
 	"#E5FFF5"
-];
+]
+

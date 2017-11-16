@@ -24,26 +24,23 @@
 */
 
 module.exports = {
-  ImageView: require("./ImageView"),
-  LinearLayout: require("./LinearLayout"),
-  RelativeLayout: require("./RelativeLayout"),
-  TextView: require("./TextView"),
-  HorizontalScrollView: require("./HorizontalScrollView"),
-  ScrollView: require("./ScrollView"),
-  ProgressBar: require("./ProgressBar"),
-  FrameLayout: require("./FrameLayout"),
-  CheckBox: require("./CheckBox"),
-  Button: require("./Button"),
-  EditText: require("./EditText"),
-  ViewWidget: require("./ViewWidget"),
-  TabLayout: require("./TabLayout"),
-  ViewPager: require("./ViewPager"),
-  Space: require("./Space"),
-  Switch: require("./Switch"),
-  CollapsingToolbarLayout: require("./CollapsingToolbarLayout"),
-  AppBarLayout: require("./AppBarLayout"),
-  CoordinatorLayout: require("./CoordinatorLayout"),
-  ListView: require("./ListView"),
-  RatingBar: require("./RatingBar"),
-  RecyclerView: require("./RecyclerView"),
+  handle : (ui, callback) => {
+
+    if(ui.render) {
+      if (typeof Android === "undefined")
+        throw new Error("Android is undefined");
+
+      if (window.__OS != "ANDROID")
+        return Android.Render(ui.render, null);
+      else
+        return Android.Render(JSON.stringify(ui.render), null);
+    }
+
+    if(ui.runInUI) {
+      Android.runInUI(ui.runInUI, null);
+    }
+    if(ui.addViewToParent) {
+      Android.addViewToParent(ui.addViewToParent.parentId, JSON.stringify(ui.addViewToParent.jsx), ui.addViewToParent.index, null);
+    }
+  }
 }

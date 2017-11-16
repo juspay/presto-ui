@@ -23,27 +23,28 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-module.exports = {
-  ImageView: require("./ImageView"),
-  LinearLayout: require("./LinearLayout"),
-  RelativeLayout: require("./RelativeLayout"),
-  TextView: require("./TextView"),
-  HorizontalScrollView: require("./HorizontalScrollView"),
-  ScrollView: require("./ScrollView"),
-  ProgressBar: require("./ProgressBar"),
-  FrameLayout: require("./FrameLayout"),
-  CheckBox: require("./CheckBox"),
-  Button: require("./Button"),
-  EditText: require("./EditText"),
-  ViewWidget: require("./ViewWidget"),
-  TabLayout: require("./TabLayout"),
-  ViewPager: require("./ViewPager"),
-  Space: require("./Space"),
-  Switch: require("./Switch"),
-  CollapsingToolbarLayout: require("./CollapsingToolbarLayout"),
-  AppBarLayout: require("./AppBarLayout"),
-  CoordinatorLayout: require("./CoordinatorLayout"),
-  ListView: require("./ListView"),
-  RatingBar: require("./RatingBar"),
-  RecyclerView: require("./RecyclerView"),
+var dom = require('../doms');
+var View = require('../baseView');
+
+class Button extends View {
+	constructor(props, children) {
+		super(props, children);
+
+		this.setIds([
+			'id'
+		]);
+	}
+
+	render() {
+		var params = this.props;
+		params.__filename = params.__source.fileName  + ' :ln ' + params.__source.lineNumber;
+		
+		return (
+			<button 
+				id={this.props.id?this.props.id:this.idSet.id}  
+				params={params}/>
+		)
+	}
 }
+
+module.exports = Button;
