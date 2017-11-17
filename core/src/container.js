@@ -24,7 +24,6 @@
 */
 
 const R = require("ramda");
-const objectAssign = require('object-assign');
 const uiHandler = require('./handler');
 const animations = require('./animations');
 

@@ -25,7 +25,6 @@
 
 const View = require("./views/View");
 const getOS = require('./helper').getOS;
-const objectAssign = require('object-assign');
 
 String.prototype.addCmd = function(data) {
   return this.concat(data);
