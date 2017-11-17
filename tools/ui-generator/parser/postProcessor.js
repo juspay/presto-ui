@@ -1,0 +1,257 @@
+const utils = require('../utils');
+const parser = require('./parser');
+
+function findViewById(id, view) {
+  if (!view)
+    return null;
+  if (view.elem["do_objectID"] == id)
+    return view;
+  for (let i in view.childs) {
+    let found = findViewById(id, view.childs[i]);
+    if (found)
+      return found;
+  }
+  return null;
+}
+
+function findViewByName(name, view) {
+  if (!view)
+    return null;
+  if (view.elem["name"] == name)
+    return view;
+  for (let i in view.childs) {
+    let found = findViewByName(name, view.childs[i]);
+    if (found)
+      return found;
+  }
+  return null;
+}
+
+function listPropSetter(name, symbolList) {
+  for (let i in symbolList) {
+    let symbol = symbolList[i];
+    symbol.setProp(name, name, "property");
+  }
+}
+
+function textOverride(view, symbol, overrides, symbolList, symbolTable) {
+  for (let key in overrides) {
+    let override = overrides[key];
+    if (typeof override != "string") {
+      let symbolView = findViewById(key, symbol.view);
+      if (!symbolView)
+        continue;
+      symbolList.push(symbolView);
+      textOverride(view, symbolTable[symbolView.id], override, symbolList,
+        symbolTable);
+      symbolList.pop();
+      continue;
+    } else if (key == "symbolID") {
+      continue;
+    }
+    let child = findViewById(key, symbol.view);
+    if (!child)
+      return;
+    let name = utils.escape(child.name, true);
+    let value = "";
+    if (!child.props.text) {
+      symbol.props.constructor.addTextDef(name, "");
+    } else if (child.props.text.type == "text") {
+      value = child.props.text.value;
+      symbol.props.constructor.addTextDef(name, value || "");
+    }
+    symbol.props.render.addConditionalDef(name);
+    child.setProp("text", name, "variable");
+    view.setProp(name, override, "text");
+    listPropSetter(name, symbolList);
+  }
+}
+
+function symbolOverride(view, symbol, overrides, symbolList,
+  symbolTable, globalConf) {
+  for (let key in overrides) {
+    let override = overrides[key];
+    if (typeof override != "object")
+      continue;
+    else if (!override["symbolID"]) {
+      let symbolView = findViewById(key, symbol.view);
+      if (!symbolView)
+        continue;
+      symbolList.push(symbolView);
+      symbolOverride(view, symbolTable[symbolView.id], override, symbolList,
+        symbolTable, globalConf);
+      symbolList.pop();
+      continue;
+    }
+    let child = findViewById(key, symbol.view);
+    if (!child)
+      continue;
+    let name = utils.escape(child.name, true);
+    let symbolName = utils.escape(symbol.name, true);
+    let newSymbolName = utils.escape(symbolTable[override["symbolID"]].name,
+      true);
+    if (!globalConf[symbolName])
+      globalConf[symbolName] = {};
+
+    if (!globalConf[symbolName][name])
+      globalConf[symbolName][name] = {};
+    let globals = globalConf[symbolName][name];
+    globals[newSymbolName] = Object.keys(globals).length;
+    symbol.props.addOverride(name, override["symbolID"], child.id);
+    symbol.props.render.addFuncCall(name, "override");
+    view.setProp(name, [symbolName, name, newSymbolName], "global");
+    child.nameOverride = name;
+    listPropSetter(name, symbolList);
+  }
+}
+
+function override(view, symbolTable, globalConf) {
+  if (view.type == "symbol") {
+    if (!view.elem.overrides)
+      return;
+    let overrides = view.elem.overrides;
+    textOverride(view, symbolTable[view.id], overrides, [], symbolTable);
+    symbolOverride(view, symbolTable[view.id], overrides, [], symbolTable,
+      globalConf);
+  }
+  view.childs.forEach((child) => override(child, symbolTable, globalConf));
+}
+
+function screenFlow(view, artboardProp, config) {
+  view.childs.forEach((child) => screenFlow(child, artboardProp, config));
+  let id = view.elem["do_objectID"];
+  if (!config[id])
+    return;
+  if (!config[id]["screenFlowTarget"])
+    return;
+  let screenName = utils.escape(config[id]["screenFlowTarget"], true);
+  let viewName = utils.escape(view.name, true);
+  view.setProp("onClick", viewName + "_flow", "this");
+  artboardProp.addScreenFlow(viewName + "_flow", screenName);
+}
+
+function overlay(view, table, id) {
+  let rootview = table[id].view;
+  let relative = rootview;
+  if (rootview.type != "RelativeLayout") {
+    relative = new parser.View("RelativeLayout", rootview.elem);
+    delete relative.props.id;
+    relative.addChild(rootview);
+    rootview.setProp("root", "true", "bool");
+    relative.props.height = rootview.props.height;
+    rootview.setProp("height", "match_parent");
+    relative.props.width = rootview.props.width;
+    rootview.setProp("width", "match_parent");
+    if (rootview.props.margin) {
+      relative.props.margin = rootview.props.margin;
+      delete rootview.props.margin;
+    }
+    table[id].view = relative;
+  }
+  view.setProp("visibility", "gone");
+  relative.addChild(view);
+}
+
+function overlayPages(view, artboardMap, config) {
+  let status = false;
+  let id = view.elem["do_objectID"];
+  view.childs.forEach((child) => status = status || overlayPages(child,
+    artboardMap, config));
+  if (!config[id])
+    return status;
+  if (!config[id]["overlayTarget"])
+    return status;
+  // Do not add the layout if the overlayType prop is given
+  if (config[id]["overlayType"])
+    return true;
+
+  let screenName = utils.escape(config[id]["overlayTarget"]);
+  overlay(view, artboardMap, screenName);
+  delete config[id]["overlayTarget"];
+  return true;
+}
+
+function overlaySymbol(view, symbolTable, config) {
+  let status;
+  let id = view.elem["do_objectID"];
+  view.childs.forEach((child) => status = overlaySymbol(child,
+    symbolTable, config));
+
+  if (!config[id])
+    return status;
+  if (!config[id]["overlayTarget"])
+    return status;
+
+  let symbolName = utils.escape(config[id]["overlayTarget"]);
+  let symbolId;
+
+  for (let j in symbolTable) {
+    if (symbolTable[j].name == symbolName) {
+      symbolId = j;
+      break;
+    }
+  }
+
+  if (!symbolId) {
+    utils.warn("Invalid symbol overlay", view.name,
+      "Overlay target does not exist: " + symbolName);
+    return status;
+  }
+  delete config[id]["overlayTarget"];
+  // Do not add the layout if the overlayType prop is given
+  if (config[id]["overlayType"])
+    return symbolId;
+
+  overlay(view, symbolTable, symbolId);
+
+  return symbolId;
+}
+
+function replaceSymbols(artboardMap, replacedSymbols) {
+  let sanitize = function (view) {
+    if (view.type == "symbol" && replacedSymbols[view.id]) {
+      view.id = replacedSymbols[view.id];
+    }
+    view.childs.forEach(child => sanitize(child));
+  }
+  Object.keys(artboardMap).forEach((id) => sanitize(artboardMap[id].view));
+}
+
+module.exports = function (pages, symbolTable, config) {
+  let globalConf = {};
+  let artboardMap = {};
+  let replacedSymbols = {};
+  pages.forEach(page => page.artboards.forEach(a => artboardMap[a.name] = a))
+
+  for (let i=0; i < pages.length; i++) {
+    let page = pages[i];
+    let artboards = page.artboards.filter(board=> {
+      if (overlayPages(board.view, artboardMap, config)) {
+        delete artboardMap[board.name];
+      } else {
+        return board;
+      }
+    })
+    page.artboards = artboards;
+  }
+
+  for (let i in symbolTable) {
+    let symbol = symbolTable[i];
+    let symbolId = overlaySymbol(symbol.view, symbolTable, config);
+    override(symbol.view, symbolTable, globalConf);
+    if (symbolId) {
+      replacedSymbols[i] = symbolId;
+      delete symbolTable[i];
+    }
+  }
+
+  replaceSymbols(artboardMap, replacedSymbols);
+
+  for (let j in artboardMap) {
+    let artboard = artboardMap[j];
+    artboardMap[artboard.name] = artboard;
+    override(artboard.view, symbolTable, globalConf);
+    screenFlow(artboard.view, artboard.props, config);
+  }
+  return globalConf;
+}
