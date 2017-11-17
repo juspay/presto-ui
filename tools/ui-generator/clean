@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-if [ -d "output" ]
-then
-rm -rf ./output
-fi
