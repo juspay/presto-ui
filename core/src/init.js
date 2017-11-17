@@ -25,9 +25,6 @@
 
 const containers = require('./container');
 const getOS = require('./helper').getOS;
-let purescriptObj;
-let purescriptMain;
-let purescriptChangeFlow;
 
 const getCurrTime = () => (new Date()).getTime();
 
@@ -218,22 +215,14 @@ const runDuiCallback = (state) => {
     callback(state)();
 };
 
-let purescriptInit = (meta, purescriptObj_) => {
+let purescriptInit = (meta, main) => {
   containers.registerScreenMeta(meta);
-  purescriptObj = purescriptObj_;
-  purescriptMain = purescriptObj.main;
-  purescriptChangeFlow = purescriptObj.changeFlow;
 
   window.__duiShowScreen = duiShowScreen;
   window.__duiCb = null;
   window.__runDuiCallback = runDuiCallback;
   window.__setCallback = setCallback
-  window.__changePureScriptFlow = purescriptChangeFlow;
-  purescriptMain();
+  main();
 };
-
-window.onWebSocketMessage = function (message) {
-  console.info(atob(message));
-}
 
 module.exports = purescriptInit;
