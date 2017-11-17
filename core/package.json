@@ -28,6 +28,6 @@
     "url": "git@github.com:juspay/presto-ui.git"
   },
   "author": "JUSPAY Technologies <info@juspay.in>",
-  "license": "AGPL",
+  "license": "AGPL-3.0",
   "homepage": "https://github.com/juspay/presto-ui"
 }
