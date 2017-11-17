@@ -31,4 +31,4 @@ function main() {
 }
 
 window.pages = require('./screens').pages;
-init(meta, { main });
+init(meta, main);
