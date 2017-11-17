@@ -16,5 +16,5 @@
     "postinstall": "./setup"
   },
   "author": "Juspay",
-  "license": "ISC"
+  "license": "AGPL"
 }
