@@ -57,7 +57,6 @@ const addToStack = function (screenName, screenData) {
 }
 
 const renderScreen = function (data) {
-  JBridge.hideKeyboard();
 
   let screen;
   let isCached = false;
@@ -129,7 +128,6 @@ const getDirection = function () {
 }
 
 const handleGoBack = function (data) {
-  JBridge.hideKeyboard();
 
   let stackLen = window.__SCREEN_STACK.length;
   if (stackLen == 1) {
