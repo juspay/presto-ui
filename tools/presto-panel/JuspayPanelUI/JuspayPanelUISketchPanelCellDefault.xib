@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="`"/>
+        <customView id="VOz-wC-YDv" customClass="JuspayPanelUISketchPanelCellDefault">
+            <rect key="frame" x="0.0" y="0.0" width="261" height="199"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QAJ-Ya-J6j">
+                    <rect key="frame" x="0.0" y="172" width="261" height="27"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="27" id="V6G-rM-4fx"/>
+                    </constraints>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" drawsBackground="YES" id="pTe-xI-4Ev">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" red="0.94509803920000002" green="0.94509803920000002" blue="0.94509803920000002" alpha="1" colorSpace="calibratedRGB"/>
+                    </textFieldCell>
+                </textField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GfQ-Lc-OKJ">
+                    <rect key="frame" x="4" y="129" width="86" height="32"/>
+                    <buttonCell key="cell" type="push" title="Vertical" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eCr-fF-f7b">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MEU-Wz-gQm">
+                    <rect key="frame" x="8" y="177" width="68" height="16"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Orientation" id="zgc-Ij-3de">
+                        <font key="font" metaFont="system" size="12"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jbV-6h-wS0">
+                    <rect key="frame" x="90" y="129" width="103" height="32"/>
+                    <buttonCell key="cell" type="push" title="Horizontal" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="BdB-4I-CDL">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstItem="GfQ-Lc-OKJ" firstAttribute="leading" secondItem="VOz-wC-YDv" secondAttribute="leading" constant="10" id="INh-o4-Zp4"/>
+                <constraint firstItem="MEU-Wz-gQm" firstAttribute="leading" secondItem="VOz-wC-YDv" secondAttribute="leading" constant="10" id="Kap-gi-BQE"/>
+                <constraint firstItem="GfQ-Lc-OKJ" firstAttribute="top" secondItem="QAJ-Ya-J6j" secondAttribute="bottom" constant="15" id="MlQ-9Y-Mu7"/>
+                <constraint firstItem="QAJ-Ya-J6j" firstAttribute="leading" secondItem="VOz-wC-YDv" secondAttribute="leading" id="W5s-YM-twT"/>
+                <constraint firstItem="jbV-6h-wS0" firstAttribute="leading" secondItem="GfQ-Lc-OKJ" secondAttribute="trailing" constant="12" id="boH-Uc-kzm"/>
+                <constraint firstAttribute="trailing" secondItem="QAJ-Ya-J6j" secondAttribute="trailing" id="gY7-mw-Box"/>
+                <constraint firstItem="QAJ-Ya-J6j" firstAttribute="top" secondItem="VOz-wC-YDv" secondAttribute="top" id="oNm-6x-ML2"/>
+                <constraint firstItem="jbV-6h-wS0" firstAttribute="baseline" secondItem="GfQ-Lc-OKJ" secondAttribute="baseline" id="r87-7z-Gms"/>
+                <constraint firstItem="MEU-Wz-gQm" firstAttribute="top" secondItem="VOz-wC-YDv" secondAttribute="top" constant="6" id="u4g-ps-XeR"/>
+            </constraints>
+            <connections>
+                <outlet property="horizontal" destination="jbV-6h-wS0" id="iZz-Hg-9lG"/>
+                <outlet property="vertical" destination="GfQ-Lc-OKJ" id="r34-Tg-XVR"/>
+            </connections>
+            <point key="canvasLocation" x="99.5" y="88.5"/>
+        </customView>
+    </objects>
+</document>

@@ -1,0 +1,828 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		03BAA5211F140C1E001A493A /* JuspayPanelUI.js in Resources */ = {isa = PBXBuildFile; fileRef = 03BAA5201F140C1E001A493A /* JuspayPanelUI.js */; };
+		03BAA5231F140C1E001A493A /* JuspayPanelUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 03BAA5221F140C1E001A493A /* JuspayPanelUI.m */; };
+		03BAA5261F140C1E001A493A /* JuspayPanelUIMSDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 03BAA5251F140C1E001A493A /* JuspayPanelUIMSDocument.h */; };
+		03BAA5281F140C1E001A493A /* JuspayPanelUIMSInspectorStackView.h in Headers */ = {isa = PBXBuildFile; fileRef = 03BAA5271F140C1E001A493A /* JuspayPanelUIMSInspectorStackView.h */; };
+		03BAA52B1F140C1E001A493A /* JuspayPanelUISketchPanel.h in Headers */ = {isa = PBXBuildFile; fileRef = 03BAA52A1F140C1E001A493A /* JuspayPanelUISketchPanel.h */; };
+		03BAA52D1F140C1E001A493A /* JuspayPanelUISketchPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 03BAA52C1F140C1E001A493A /* JuspayPanelUISketchPanel.m */; };
+		03BAA52F1F140C1E001A493A /* JuspayPanelUISketchPanelCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 03BAA52E1F140C1E001A493A /* JuspayPanelUISketchPanelCell.h */; };
+		03BAA5311F140C1E001A493A /* JuspayPanelUISketchPanelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 03BAA5301F140C1E001A493A /* JuspayPanelUISketchPanelCell.m */; };
+		03BAA53A1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 03BAA5391F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.h */; };
+		03BAA53C1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 03BAA53B1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.m */; };
+		03BAA53E1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03BAA53D1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.xib */; };
+		03BAA5401F140C1E001A493A /* JuspayPanelUISketchPanelController.h in Headers */ = {isa = PBXBuildFile; fileRef = 03BAA53F1F140C1E001A493A /* JuspayPanelUISketchPanelController.h */; };
+		03BAA5421F140C1E001A493A /* JuspayPanelUISketchPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03BAA5411F140C1E001A493A /* JuspayPanelUISketchPanelController.m */; };
+		03BAA5441F140C1E001A493A /* JuspayPanelUISketchPanelDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 03BAA5431F140C1E001A493A /* JuspayPanelUISketchPanelDataSource.h */; };
+		03BAA5461F140C1E001A493A /* CocoaScript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BAA5451F140C1E001A493A /* CocoaScript.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		03BAA5481F140C1F001A493A /* Mocha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BAA5471F140C1F001A493A /* Mocha.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		03BAA54A1F140C1F001A493A /* JuspayPanelUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 03BAA51F1F140C1E001A493A /* JuspayPanelUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03BAA5501F140C3F001A493A /* JuspayPanelUI.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 03BAA51D1F140C1E001A493A /* JuspayPanelUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		03EAE60F1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.h in Headers */ = {isa = PBXBuildFile; fileRef = 03EAE6061F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.h */; };
+		03EAE6101F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.m in Sources */ = {isa = PBXBuildFile; fileRef = 03EAE6071F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.m */; };
+		03EAE6111F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE6081F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.xib */; };
+		03EAE6121F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.h in Headers */ = {isa = PBXBuildFile; fileRef = 03EAE6091F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.h */; };
+		03EAE6131F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = 03EAE60A1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.m */; };
+		03EAE6141F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE60B1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.xib */; };
+		03EAE6151F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.h in Headers */ = {isa = PBXBuildFile; fileRef = 03EAE60C1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.h */; };
+		03EAE6161F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.m in Sources */ = {isa = PBXBuildFile; fileRef = 03EAE60D1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.m */; };
+		03EAE6171F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE60E1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.xib */; };
+		03EAE6211F1E33D20042B10D /* bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE6191F1E33D20042B10D /* bottom.png */; };
+		03EAE6221F1E33D20042B10D /* centerv.png in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE61A1F1E33D20042B10D /* centerv.png */; };
+		03EAE6231F1E33D20042B10D /* centreh.png in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE61B1F1E33D20042B10D /* centreh.png */; };
+		03EAE6241F1E33D20042B10D /* Horizontal.png in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE61C1F1E33D20042B10D /* Horizontal.png */; };
+		03EAE6251F1E33D20042B10D /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE61D1F1E33D20042B10D /* left.png */; };
+		03EAE6261F1E33D20042B10D /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE61E1F1E33D20042B10D /* right.png */; };
+		03EAE6271F1E33D20042B10D /* top.png in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE61F1F1E33D20042B10D /* top.png */; };
+		03EAE6281F1E33D20042B10D /* Vertical.png in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE6201F1E33D20042B10D /* Vertical.png */; };
+		051617FA1F1FA6B80023724A /* helpers.js in Resources */ = {isa = PBXBuildFile; fileRef = 18FD63F11F1CC088006563A6 /* helpers.js */; };
+		05C0A5101F22594500B6893B /* DEUApi.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C0A50F1F22594500B6893B /* DEUApi.m */; };
+		05CA375D1F233843008659E3 /* AFHTTPSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CA37501F233843008659E3 /* AFHTTPSessionManager.h */; };
+		05CA375E1F233843008659E3 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 05CA37511F233843008659E3 /* AFHTTPSessionManager.m */; };
+		05CA375F1F233843008659E3 /* AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CA37521F233843008659E3 /* AFNetworking.h */; };
+		05CA37601F233843008659E3 /* AFNetworkReachabilityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CA37531F233843008659E3 /* AFNetworkReachabilityManager.h */; };
+		05CA37611F233843008659E3 /* AFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 05CA37541F233843008659E3 /* AFNetworkReachabilityManager.m */; };
+		05CA37621F233843008659E3 /* AFSecurityPolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CA37551F233843008659E3 /* AFSecurityPolicy.h */; };
+		05CA37631F233843008659E3 /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 05CA37561F233843008659E3 /* AFSecurityPolicy.m */; };
+		05CA37641F233843008659E3 /* AFURLRequestSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CA37571F233843008659E3 /* AFURLRequestSerialization.h */; };
+		05CA37651F233843008659E3 /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 05CA37581F233843008659E3 /* AFURLRequestSerialization.m */; };
+		05CA37661F233843008659E3 /* AFURLResponseSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CA37591F233843008659E3 /* AFURLResponseSerialization.h */; };
+		05CA37671F233843008659E3 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 05CA375A1F233843008659E3 /* AFURLResponseSerialization.m */; };
+		05CA37681F233843008659E3 /* AFURLSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CA375B1F233843008659E3 /* AFURLSessionManager.h */; };
+		05CA37691F233843008659E3 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 05CA375C1F233843008659E3 /* AFURLSessionManager.m */; };
+		186D3FE91F1B6E8C00D3CD28 /* file.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 186D3FE61F1B599800D3CD28 /* file.html */; };
+		18AFEA7D1F1F3BA200438A2F /* JuspayPanelUISketchPanelCellDefault.h in Headers */ = {isa = PBXBuildFile; fileRef = 18AFEA7B1F1F3BA200438A2F /* JuspayPanelUISketchPanelCellDefault.h */; };
+		18AFEA7E1F1F3BA200438A2F /* JuspayPanelUISketchPanelCellDefault.m in Sources */ = {isa = PBXBuildFile; fileRef = 18AFEA7C1F1F3BA200438A2F /* JuspayPanelUISketchPanelCellDefault.m */; };
+		18BBE0001F1DED98002144A8 /* DUIPropsMapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 18BBDFFE1F1DED98002144A8 /* DUIPropsMapper.h */; };
+		18BBE0011F1DED98002144A8 /* DUIPropsMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BBDFFF1F1DED98002144A8 /* DUIPropsMapper.m */; };
+		18BBE0021F1DEDA0002144A8 /* DUIPropsMapper.h in Sources */ = {isa = PBXBuildFile; fileRef = 18BBDFFE1F1DED98002144A8 /* DUIPropsMapper.h */; };
+		18FD63F21F1CC356006563A6 /* helpers.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = 18FD63F11F1CC088006563A6 /* helpers.js */; };
+		18FD63F31F1CD27B006563A6 /* manifest.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 03BAA50D1F140BFB001A493A /* manifest.json */; };
+		8E10C3911F38B60400D6E5A5 /* export.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E10C3901F38B60400D6E5A5 /* export.js */; };
+		8E10C3931F38BA7100D6E5A5 /* copyPaste.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E10C3921F38BA7100D6E5A5 /* copyPaste.js */; };
+		8E10C3981F38BEE200D6E5A5 /* script in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E10C3971F38BEE200D6E5A5 /* script */; };
+		8E6CD7741F6D5A9A00C829FF /* DUIPropsFeedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E6CD7731F6D5A9A00C829FF /* DUIPropsFeedback.m */; };
+		8E6CD7761F6D5AEC00C829FF /* DUIPropsFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 8E6CD7751F6D5AEC00C829FF /* DUIPropsFeedback.h */; };
+		8ED0B8D41F6FAFD100CC727A /* DUIPropsOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 8ED0B8D31F6FAFD100CC727A /* DUIPropsOverride.m */; };
+		8ED0B8D61F6FAFED00CC727A /* DUIPropsOverride.h in Headers */ = {isa = PBXBuildFile; fileRef = 8ED0B8D51F6FAFED00CC727A /* DUIPropsOverride.h */; };
+		DC11BB631F307BA000C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = DC11BB611F307BA000C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.h */; };
+		DC11BB641F307BA000C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = DC11BB621F307BA000C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.m */; };
+		DC11BB661F307BF500C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC11BB651F307BF500C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.xib */; };
+		DC38C3ED1F28863000B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = DC38C3EB1F28863000B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.h */; };
+		DC38C3EE1F28863000B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DC38C3EC1F28863000B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.m */; };
+		DC38C3F01F28866700B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC38C3EF1F28866700B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.xib */; };
+		DC56B5511F39B72E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.h in Headers */ = {isa = PBXBuildFile; fileRef = DC56B54F1F39B72E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.h */; };
+		DC56B5521F39B72E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = DC56B5501F39B72E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.m */; };
+		DC56B5541F39B74E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC56B5531F39B74E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		03BAA54E1F140C38001A493A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 03BAA5001F140BFB001A493A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 03BAA51C1F140C1E001A493A;
+			remoteInfo = JuspayPanelUI;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		03BAA5061F140BFB001A493A /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Sketch;
+			dstSubfolderSpec = 1;
+			files = (
+				8E10C3981F38BEE200D6E5A5 /* script in CopyFiles */,
+				8E10C3931F38BA7100D6E5A5 /* copyPaste.js in CopyFiles */,
+				8E10C3911F38B60400D6E5A5 /* export.js in CopyFiles */,
+				18FD63F31F1CD27B006563A6 /* manifest.json in CopyFiles */,
+				18FD63F21F1CC356006563A6 /* helpers.js in CopyFiles */,
+				03BAA5501F140C3F001A493A /* JuspayPanelUI.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		186D3FE81F1B5E9900D3CD28 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Resources;
+			dstSubfolderSpec = 1;
+			files = (
+				186D3FE91F1B6E8C00D3CD28 /* file.html in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		03BAA50A1F140BFB001A493A /* JuspayPanel.sketchplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JuspayPanel.sketchplugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		03BAA50D1F140BFB001A493A /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
+		03BAA5111F140BFB001A493A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		03BAA51D1F140C1E001A493A /* JuspayPanelUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JuspayPanelUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		03BAA51F1F140C1E001A493A /* JuspayPanelUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUI.h; sourceTree = "<group>"; };
+		03BAA5201F140C1E001A493A /* JuspayPanelUI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = JuspayPanelUI.js; sourceTree = "<group>"; };
+		03BAA5221F140C1E001A493A /* JuspayPanelUI.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUI.m; sourceTree = "<group>"; };
+		03BAA5251F140C1E001A493A /* JuspayPanelUIMSDocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUIMSDocument.h; sourceTree = "<group>"; };
+		03BAA5271F140C1E001A493A /* JuspayPanelUIMSInspectorStackView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUIMSInspectorStackView.h; sourceTree = "<group>"; };
+		03BAA52A1F140C1E001A493A /* JuspayPanelUISketchPanel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanel.h; sourceTree = "<group>"; };
+		03BAA52C1F140C1E001A493A /* JuspayPanelUISketchPanel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanel.m; sourceTree = "<group>"; };
+		03BAA52E1F140C1E001A493A /* JuspayPanelUISketchPanelCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelCell.h; sourceTree = "<group>"; };
+		03BAA5301F140C1E001A493A /* JuspayPanelUISketchPanelCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanelCell.m; sourceTree = "<group>"; };
+		03BAA5391F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelCellHeader.h; sourceTree = "<group>"; };
+		03BAA53B1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanelCellHeader.m; sourceTree = "<group>"; };
+		03BAA53D1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = JuspayPanelUISketchPanelCellHeader.xib; sourceTree = "<group>"; };
+		03BAA53F1F140C1E001A493A /* JuspayPanelUISketchPanelController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelController.h; sourceTree = "<group>"; };
+		03BAA5411F140C1E001A493A /* JuspayPanelUISketchPanelController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanelController.m; sourceTree = "<group>"; };
+		03BAA5431F140C1E001A493A /* JuspayPanelUISketchPanelDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelDataSource.h; sourceTree = "<group>"; };
+		03BAA5451F140C1E001A493A /* CocoaScript.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CocoaScript.framework; sourceTree = "<group>"; };
+		03BAA5471F140C1F001A493A /* Mocha.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mocha.framework; sourceTree = "<group>"; };
+		03BAA5491F140C1F001A493A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		03EAE6061F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelCellAlignment.h; sourceTree = "<group>"; };
+		03EAE6071F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanelCellAlignment.m; sourceTree = "<group>"; };
+		03EAE6081F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JuspayPanelUISketchPanelCellAlignment.xib; sourceTree = "<group>"; };
+		03EAE6091F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelCellOrientation.h; sourceTree = "<group>"; };
+		03EAE60A1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanelCellOrientation.m; sourceTree = "<group>"; };
+		03EAE60B1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JuspayPanelUISketchPanelCellOrientation.xib; sourceTree = "<group>"; };
+		03EAE60C1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelCellSpacing.h; sourceTree = "<group>"; };
+		03EAE60D1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanelCellSpacing.m; sourceTree = "<group>"; };
+		03EAE60E1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JuspayPanelUISketchPanelCellSpacing.xib; sourceTree = "<group>"; };
+		03EAE6191F1E33D20042B10D /* bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bottom.png; sourceTree = "<group>"; };
+		03EAE61A1F1E33D20042B10D /* centerv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = centerv.png; sourceTree = "<group>"; };
+		03EAE61B1F1E33D20042B10D /* centreh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = centreh.png; sourceTree = "<group>"; };
+		03EAE61C1F1E33D20042B10D /* Horizontal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Horizontal.png; sourceTree = "<group>"; };
+		03EAE61D1F1E33D20042B10D /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = left.png; sourceTree = "<group>"; };
+		03EAE61E1F1E33D20042B10D /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = right.png; sourceTree = "<group>"; };
+		03EAE61F1F1E33D20042B10D /* top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = top.png; sourceTree = "<group>"; };
+		03EAE6201F1E33D20042B10D /* Vertical.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Vertical.png; sourceTree = "<group>"; };
+		05C0A50F1F22594500B6893B /* DEUApi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DEUApi.m; sourceTree = "<group>"; };
+		05CA37501F233843008659E3 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
+		05CA37511F233843008659E3 /* AFHTTPSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPSessionManager.m; sourceTree = "<group>"; };
+		05CA37521F233843008659E3 /* AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworking.h; sourceTree = "<group>"; };
+		05CA37531F233843008659E3 /* AFNetworkReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkReachabilityManager.h; sourceTree = "<group>"; };
+		05CA37541F233843008659E3 /* AFNetworkReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkReachabilityManager.m; sourceTree = "<group>"; };
+		05CA37551F233843008659E3 /* AFSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSecurityPolicy.h; sourceTree = "<group>"; };
+		05CA37561F233843008659E3 /* AFSecurityPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFSecurityPolicy.m; sourceTree = "<group>"; };
+		05CA37571F233843008659E3 /* AFURLRequestSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLRequestSerialization.h; sourceTree = "<group>"; };
+		05CA37581F233843008659E3 /* AFURLRequestSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLRequestSerialization.m; sourceTree = "<group>"; };
+		05CA37591F233843008659E3 /* AFURLResponseSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLResponseSerialization.h; sourceTree = "<group>"; };
+		05CA375A1F233843008659E3 /* AFURLResponseSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLResponseSerialization.m; sourceTree = "<group>"; };
+		05CA375B1F233843008659E3 /* AFURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLSessionManager.h; sourceTree = "<group>"; };
+		05CA375C1F233843008659E3 /* AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLSessionManager.m; sourceTree = "<group>"; };
+		186D3FE61F1B599800D3CD28 /* file.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = file.html; sourceTree = "<group>"; };
+		18AFEA7B1F1F3BA200438A2F /* JuspayPanelUISketchPanelCellDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelCellDefault.h; sourceTree = "<group>"; };
+		18AFEA7C1F1F3BA200438A2F /* JuspayPanelUISketchPanelCellDefault.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanelCellDefault.m; sourceTree = "<group>"; };
+		18BBDFFE1F1DED98002144A8 /* DUIPropsMapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DUIPropsMapper.h; sourceTree = "<group>"; };
+		18BBDFFF1F1DED98002144A8 /* DUIPropsMapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DUIPropsMapper.m; sourceTree = "<group>"; };
+		18FD63F11F1CC088006563A6 /* helpers.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = helpers.js; sourceTree = "<group>"; };
+		8E10C3901F38B60400D6E5A5 /* export.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = export.js; sourceTree = "<group>"; };
+		8E10C3921F38BA7100D6E5A5 /* copyPaste.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = copyPaste.js; sourceTree = "<group>"; };
+		8E10C3971F38BEE200D6E5A5 /* script */ = {isa = PBXFileReference; lastKnownFileType = folder; path = script; sourceTree = "<group>"; };
+		8E6CD7731F6D5A9A00C829FF /* DUIPropsFeedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DUIPropsFeedback.m; sourceTree = "<group>"; };
+		8E6CD7751F6D5AEC00C829FF /* DUIPropsFeedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DUIPropsFeedback.h; sourceTree = "<group>"; };
+		8ED0B8D31F6FAFD100CC727A /* DUIPropsOverride.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DUIPropsOverride.m; sourceTree = "<group>"; };
+		8ED0B8D51F6FAFED00CC727A /* DUIPropsOverride.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DUIPropsOverride.h; sourceTree = "<group>"; };
+		DC11BB611F307BA000C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelSmartComponent.h; sourceTree = "<group>"; };
+		DC11BB621F307BA000C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanelSmartComponent.m; sourceTree = "<group>"; };
+		DC11BB651F307BF500C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JuspayPanelUISketchPanelSmartComponent.xib; sourceTree = "<group>"; };
+		DC38C3EB1F28863000B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelBackgroundLayer.h; sourceTree = "<group>"; };
+		DC38C3EC1F28863000B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanelBackgroundLayer.m; sourceTree = "<group>"; };
+		DC38C3EF1F28866700B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JuspayPanelUISketchPanelBackgroundLayer.xib; sourceTree = "<group>"; };
+		DC56B54F1F39B72E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelScreenFlow.h; sourceTree = "<group>"; };
+		DC56B5501F39B72E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanelScreenFlow.m; sourceTree = "<group>"; };
+		DC56B5531F39B74E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JuspayPanelUISketchPanelScreenFlow.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		03BAA5051F140BFB001A493A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		03BAA5181F140C1E001A493A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				03BAA5461F140C1E001A493A /* CocoaScript.framework in Frameworks */,
+				03BAA5481F140C1F001A493A /* Mocha.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		03BAA4FF1F140BFB001A493A = {
+			isa = PBXGroup;
+			children = (
+				03BAA50C1F140BFB001A493A /* JuspayPanel */,
+				03BAA51E1F140C1E001A493A /* JuspayPanelUI */,
+				03BAA50B1F140BFB001A493A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		03BAA50B1F140BFB001A493A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				03BAA50A1F140BFB001A493A /* JuspayPanel.sketchplugin */,
+				03BAA51D1F140C1E001A493A /* JuspayPanelUI.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		03BAA50C1F140BFB001A493A /* JuspayPanel */ = {
+			isa = PBXGroup;
+			children = (
+				8E10C3971F38BEE200D6E5A5 /* script */,
+				8E10C3921F38BA7100D6E5A5 /* copyPaste.js */,
+				8E10C3901F38B60400D6E5A5 /* export.js */,
+				18FD63F11F1CC088006563A6 /* helpers.js */,
+				03BAA50D1F140BFB001A493A /* manifest.json */,
+				03BAA5111F140BFB001A493A /* Info.plist */,
+				186D3FE61F1B599800D3CD28 /* file.html */,
+			);
+			path = JuspayPanel;
+			sourceTree = "<group>";
+		};
+		03BAA51E1F140C1E001A493A /* JuspayPanelUI */ = {
+			isa = PBXGroup;
+			children = (
+				03BAA51F1F140C1E001A493A /* JuspayPanelUI.h */,
+				03BAA5201F140C1E001A493A /* JuspayPanelUI.js */,
+				03BAA5221F140C1E001A493A /* JuspayPanelUI.m */,
+				03BAA5451F140C1E001A493A /* CocoaScript.framework */,
+				03BAA5471F140C1F001A493A /* Mocha.framework */,
+				03BAA5491F140C1F001A493A /* Info.plist */,
+				03BAA5241F140C1E001A493A /* Protocols */,
+				03BAA5291F140C1E001A493A /* Library */,
+				03BAA5321F140C1E001A493A /* User Subclasses */,
+			);
+			path = JuspayPanelUI;
+			sourceTree = "<group>";
+		};
+		03BAA5241F140C1E001A493A /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				03BAA5251F140C1E001A493A /* JuspayPanelUIMSDocument.h */,
+				03BAA5271F140C1E001A493A /* JuspayPanelUIMSInspectorStackView.h */,
+			);
+			name = Protocols;
+			sourceTree = "<group>";
+		};
+		03BAA5291F140C1E001A493A /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				03BAA52A1F140C1E001A493A /* JuspayPanelUISketchPanel.h */,
+				03BAA52C1F140C1E001A493A /* JuspayPanelUISketchPanel.m */,
+				03BAA52E1F140C1E001A493A /* JuspayPanelUISketchPanelCell.h */,
+				03BAA5301F140C1E001A493A /* JuspayPanelUISketchPanelCell.m */,
+			);
+			name = Library;
+			sourceTree = "<group>";
+		};
+		03BAA5321F140C1E001A493A /* User Subclasses */ = {
+			isa = PBXGroup;
+			children = (
+				18BBDFFE1F1DED98002144A8 /* DUIPropsMapper.h */,
+				18BBDFFF1F1DED98002144A8 /* DUIPropsMapper.m */,
+				8E6CD7751F6D5AEC00C829FF /* DUIPropsFeedback.h */,
+				8E6CD7731F6D5A9A00C829FF /* DUIPropsFeedback.m */,
+				8ED0B8D51F6FAFED00CC727A /* DUIPropsOverride.h */,
+				8ED0B8D31F6FAFD100CC727A /* DUIPropsOverride.m */,
+				03BAA5391F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.h */,
+				03BAA53B1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.m */,
+				03BAA53D1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.xib */,
+				03BAA53F1F140C1E001A493A /* JuspayPanelUISketchPanelController.h */,
+				03BAA5411F140C1E001A493A /* JuspayPanelUISketchPanelController.m */,
+				03BAA5431F140C1E001A493A /* JuspayPanelUISketchPanelDataSource.h */,
+				03EAE6181F1E33D20042B10D /* icons */,
+				03EAE6051F1E2D9F0042B10D /* JuspayCells */,
+				05C0A50F1F22594500B6893B /* DEUApi.m */,
+				05CA374F1F233843008659E3 /* AFNetworking */,
+			);
+			name = "User Subclasses";
+			sourceTree = "<group>";
+		};
+		03EAE6051F1E2D9F0042B10D /* JuspayCells */ = {
+			isa = PBXGroup;
+			children = (
+				03EAE6061F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.h */,
+				03EAE6071F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.m */,
+				03EAE6081F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.xib */,
+				03EAE6091F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.h */,
+				03EAE60A1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.m */,
+				03EAE60B1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.xib */,
+				03EAE60C1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.h */,
+				03EAE60D1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.m */,
+				03EAE60E1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.xib */,
+				DC38C3EB1F28863000B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.h */,
+				DC38C3EC1F28863000B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.m */,
+				DC38C3EF1F28866700B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.xib */,
+				18AFEA7B1F1F3BA200438A2F /* JuspayPanelUISketchPanelCellDefault.h */,
+				18AFEA7C1F1F3BA200438A2F /* JuspayPanelUISketchPanelCellDefault.m */,
+				DC11BB651F307BF500C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.xib */,
+				DC11BB611F307BA000C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.h */,
+				DC11BB621F307BA000C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.m */,
+				DC56B54F1F39B72E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.h */,
+				DC56B5501F39B72E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.m */,
+				DC56B5531F39B74E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.xib */,
+			);
+			path = JuspayCells;
+			sourceTree = "<group>";
+		};
+		03EAE6181F1E33D20042B10D /* icons */ = {
+			isa = PBXGroup;
+			children = (
+				03EAE6191F1E33D20042B10D /* bottom.png */,
+				03EAE61A1F1E33D20042B10D /* centerv.png */,
+				03EAE61B1F1E33D20042B10D /* centreh.png */,
+				03EAE61C1F1E33D20042B10D /* Horizontal.png */,
+				03EAE61D1F1E33D20042B10D /* left.png */,
+				03EAE61E1F1E33D20042B10D /* right.png */,
+				03EAE61F1F1E33D20042B10D /* top.png */,
+				03EAE6201F1E33D20042B10D /* Vertical.png */,
+			);
+			path = icons;
+			sourceTree = "<group>";
+		};
+		05CA374F1F233843008659E3 /* AFNetworking */ = {
+			isa = PBXGroup;
+			children = (
+				05CA37501F233843008659E3 /* AFHTTPSessionManager.h */,
+				05CA37511F233843008659E3 /* AFHTTPSessionManager.m */,
+				05CA37521F233843008659E3 /* AFNetworking.h */,
+				05CA37531F233843008659E3 /* AFNetworkReachabilityManager.h */,
+				05CA37541F233843008659E3 /* AFNetworkReachabilityManager.m */,
+				05CA37551F233843008659E3 /* AFSecurityPolicy.h */,
+				05CA37561F233843008659E3 /* AFSecurityPolicy.m */,
+				05CA37571F233843008659E3 /* AFURLRequestSerialization.h */,
+				05CA37581F233843008659E3 /* AFURLRequestSerialization.m */,
+				05CA37591F233843008659E3 /* AFURLResponseSerialization.h */,
+				05CA375A1F233843008659E3 /* AFURLResponseSerialization.m */,
+				05CA375B1F233843008659E3 /* AFURLSessionManager.h */,
+				05CA375C1F233843008659E3 /* AFURLSessionManager.m */,
+			);
+			path = AFNetworking;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		03BAA5191F140C1E001A493A /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05CA37681F233843008659E3 /* AFURLSessionManager.h in Headers */,
+				05CA37641F233843008659E3 /* AFURLRequestSerialization.h in Headers */,
+				03BAA52F1F140C1E001A493A /* JuspayPanelUISketchPanelCell.h in Headers */,
+				05CA37621F233843008659E3 /* AFSecurityPolicy.h in Headers */,
+				05CA37601F233843008659E3 /* AFNetworkReachabilityManager.h in Headers */,
+				DC11BB631F307BA000C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.h in Headers */,
+				DC38C3ED1F28863000B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.h in Headers */,
+				03BAA5441F140C1E001A493A /* JuspayPanelUISketchPanelDataSource.h in Headers */,
+				03EAE60F1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.h in Headers */,
+				03EAE6121F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.h in Headers */,
+				05CA375D1F233843008659E3 /* AFHTTPSessionManager.h in Headers */,
+				03BAA54A1F140C1F001A493A /* JuspayPanelUI.h in Headers */,
+				03BAA5261F140C1E001A493A /* JuspayPanelUIMSDocument.h in Headers */,
+				03BAA52B1F140C1E001A493A /* JuspayPanelUISketchPanel.h in Headers */,
+				18AFEA7D1F1F3BA200438A2F /* JuspayPanelUISketchPanelCellDefault.h in Headers */,
+				03BAA5281F140C1E001A493A /* JuspayPanelUIMSInspectorStackView.h in Headers */,
+				03EAE6151F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.h in Headers */,
+				8ED0B8D61F6FAFED00CC727A /* DUIPropsOverride.h in Headers */,
+				05CA37661F233843008659E3 /* AFURLResponseSerialization.h in Headers */,
+				03BAA5401F140C1E001A493A /* JuspayPanelUISketchPanelController.h in Headers */,
+				8E6CD7761F6D5AEC00C829FF /* DUIPropsFeedback.h in Headers */,
+				03BAA53A1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.h in Headers */,
+				DC56B5511F39B72E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.h in Headers */,
+				18BBE0001F1DED98002144A8 /* DUIPropsMapper.h in Headers */,
+				05CA375F1F233843008659E3 /* AFNetworking.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		03BAA5091F140BFB001A493A /* JuspayPanel */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 03BAA5141F140BFB001A493A /* Build configuration list for PBXNativeTarget "JuspayPanel" */;
+			buildPhases = (
+				03BAA5041F140BFB001A493A /* Sources */,
+				03BAA5051F140BFB001A493A /* Frameworks */,
+				03BAA5061F140BFB001A493A /* CopyFiles */,
+				03BAA5071F140BFB001A493A /* ShellScript */,
+				03BAA5081F140BFB001A493A /* ShellScript */,
+				186D3FE81F1B5E9900D3CD28 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				03BAA54F1F140C38001A493A /* PBXTargetDependency */,
+			);
+			name = JuspayPanel;
+			productName = JuspayPanel;
+			productReference = 03BAA50A1F140BFB001A493A /* JuspayPanel.sketchplugin */;
+			productType = "com.apple.product-type.bundle";
+		};
+		03BAA51C1F140C1E001A493A /* JuspayPanelUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 03BAA54B1F140C1F001A493A /* Build configuration list for PBXNativeTarget "JuspayPanelUI" */;
+			buildPhases = (
+				03BAA5171F140C1E001A493A /* Sources */,
+				03BAA5181F140C1E001A493A /* Frameworks */,
+				03BAA5191F140C1E001A493A /* Headers */,
+				03BAA51A1F140C1E001A493A /* Resources */,
+				03BAA51B1F140C1E001A493A /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JuspayPanelUI;
+			productName = JuspayPanelUI;
+			productReference = 03BAA51D1F140C1E001A493A /* JuspayPanelUI.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		03BAA5001F140BFB001A493A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = "Juspay Technologies";
+				TargetAttributes = {
+					03BAA5091F140BFB001A493A = {
+						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = YM9U73Z2JM;
+						ProvisioningStyle = Automatic;
+					};
+					03BAA51C1F140C1E001A493A = {
+						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = YM9U73Z2JM;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 03BAA5031F140BFB001A493A /* Build configuration list for PBXProject "JuspayPanel" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 03BAA4FF1F140BFB001A493A;
+			productRefGroup = 03BAA50B1F140BFB001A493A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				03BAA5091F140BFB001A493A /* JuspayPanel */,
+				03BAA51C1F140C1E001A493A /* JuspayPanelUI */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		03BAA51A1F140C1E001A493A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC56B5541F39B74E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.xib in Resources */,
+				051617FA1F1FA6B80023724A /* helpers.js in Resources */,
+				03EAE6141F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.xib in Resources */,
+				03EAE6221F1E33D20042B10D /* centerv.png in Resources */,
+				03EAE6261F1E33D20042B10D /* right.png in Resources */,
+				DC38C3F01F28866700B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.xib in Resources */,
+				03EAE6241F1E33D20042B10D /* Horizontal.png in Resources */,
+				03EAE6111F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.xib in Resources */,
+				03EAE6281F1E33D20042B10D /* Vertical.png in Resources */,
+				03EAE6171F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.xib in Resources */,
+				03BAA53E1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.xib in Resources */,
+				03EAE6251F1E33D20042B10D /* left.png in Resources */,
+				DC11BB661F307BF500C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.xib in Resources */,
+				03EAE6211F1E33D20042B10D /* bottom.png in Resources */,
+				03EAE6271F1E33D20042B10D /* top.png in Resources */,
+				03BAA5211F140C1E001A493A /* JuspayPanelUI.js in Resources */,
+				03EAE6231F1E33D20042B10D /* centreh.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		03BAA5071F140BFB001A493A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo \"Installing ${WRAPPER_NAME} to ~/Library/Application\\ Support/com.bohemiancoding.sketch3/Plugins/\"\ncp -rf ${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME} ~/Library/Application\\ Support/com.bohemiancoding.sketch3/Plugins/\necho \"... Finished!\"";
+		};
+		03BAA5081F140BFB001A493A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "f1=\"manifest.json\"\necho \"CONFIGURATION_BUILD_DIR = $CONFIGURATION_BUILD_DIR\"\necho \"CONTENTS_FOLDER_PATH = $CONTENTS_FOLDER_PATH\"\necho \"PLUGIN_VERSION = $PLUGIN_VERSION\"\necho \"PLUGIN_BUILD = $PLUGIN_BUILD\"\necho \"PLUGIN_IDENTIFIER = $PLUGIN_IDENTIFIER\"\nf2=\"$CONFIGURATION_BUILD_DIR/$CONTENTS_FOLDER_PATH/Sketch/$f1\"\nif [ -f $f2 ]; then\nsed -i \"\" -e \"s/PLUGIN_VERSION/$PLUGIN_VERSION/g\" \"$f2\"\nsed -i \"\" -e \"s/PLUGIN_BUILD/$PLUGIN_BUILD/g\" \"$f2\"\nsed -i \"\" -e \"s/PLUGIN_IDENTIFIER/$PLUGIN_IDENTIFIER/g\" \"$f2\"\n#atom \"$f2\"\nelse\necho \"File not found: $f2\"\nfi";
+		};
+		03BAA51B1F140C1E001A493A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Copy .js to .framework/.js\ncp ${SRCROOT}/${TARGET_NAME}/${TARGET_NAME}.js ${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}/";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		03BAA5041F140BFB001A493A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		03BAA5171F140C1E001A493A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC11BB641F307BA000C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.m in Sources */,
+				18AFEA7E1F1F3BA200438A2F /* JuspayPanelUISketchPanelCellDefault.m in Sources */,
+				05CA37631F233843008659E3 /* AFSecurityPolicy.m in Sources */,
+				8ED0B8D41F6FAFD100CC727A /* DUIPropsOverride.m in Sources */,
+				18BBE0021F1DEDA0002144A8 /* DUIPropsMapper.h in Sources */,
+				03EAE6161F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.m in Sources */,
+				05C0A5101F22594500B6893B /* DEUApi.m in Sources */,
+				03EAE6101F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.m in Sources */,
+				18BBE0011F1DED98002144A8 /* DUIPropsMapper.m in Sources */,
+				05CA37651F233843008659E3 /* AFURLRequestSerialization.m in Sources */,
+				03EAE6131F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.m in Sources */,
+				05CA37691F233843008659E3 /* AFURLSessionManager.m in Sources */,
+				03BAA53C1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.m in Sources */,
+				03BAA5231F140C1E001A493A /* JuspayPanelUI.m in Sources */,
+				03BAA52D1F140C1E001A493A /* JuspayPanelUISketchPanel.m in Sources */,
+				05CA37671F233843008659E3 /* AFURLResponseSerialization.m in Sources */,
+				DC56B5521F39B72E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.m in Sources */,
+				05CA37611F233843008659E3 /* AFNetworkReachabilityManager.m in Sources */,
+				DC38C3EE1F28863000B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.m in Sources */,
+				03BAA5311F140C1E001A493A /* JuspayPanelUISketchPanelCell.m in Sources */,
+				03BAA5421F140C1E001A493A /* JuspayPanelUISketchPanelController.m in Sources */,
+				8E6CD7741F6D5A9A00C829FF /* DUIPropsFeedback.m in Sources */,
+				05CA375E1F233843008659E3 /* AFHTTPSessionManager.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		03BAA54F1F140C38001A493A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 03BAA51C1F140C1E001A493A /* JuspayPanelUI */;
+			targetProxy = 03BAA54E1F140C38001A493A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		03BAA5121F140BFB001A493A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		03BAA5131F140BFB001A493A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		03BAA5151F140BFB001A493A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = YM9U73Z2JM;
+				INFOPLIST_FILE = JuspayPanel/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PLUGIN_BUILD = 1;
+				PLUGIN_IDENTIFIER = "${PRODUCT_BUNDLE_IDENTIFIER}";
+				PLUGIN_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = in.juspay.JuspayPanel;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = sketchplugin;
+			};
+			name = Debug;
+		};
+		03BAA5161F140BFB001A493A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = YM9U73Z2JM;
+				INFOPLIST_FILE = JuspayPanel/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PLUGIN_BUILD = 1;
+				PLUGIN_IDENTIFIER = "${PRODUCT_BUNDLE_IDENTIFIER}";
+				PLUGIN_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = in.juspay.JuspayPanel;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = sketchplugin;
+			};
+			name = Release;
+		};
+		03BAA54C1F140C1F001A493A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = YM9U73Z2JM;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/JuspayPanelUI",
+				);
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = JuspayPanelUI/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_BUNDLE_IDENTIFIER = in.juspay.JuspayPanelUI;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		03BAA54D1F140C1F001A493A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = YM9U73Z2JM;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/JuspayPanelUI",
+				);
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = JuspayPanelUI/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_BUNDLE_IDENTIFIER = in.juspay.JuspayPanelUI;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		03BAA5031F140BFB001A493A /* Build configuration list for PBXProject "JuspayPanel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				03BAA5121F140BFB001A493A /* Debug */,
+				03BAA5131F140BFB001A493A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		03BAA5141F140BFB001A493A /* Build configuration list for PBXNativeTarget "JuspayPanel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				03BAA5151F140BFB001A493A /* Debug */,
+				03BAA5161F140BFB001A493A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		03BAA54B1F140C1F001A493A /* Build configuration list for PBXNativeTarget "JuspayPanelUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				03BAA54C1F140C1F001A493A /* Debug */,
+				03BAA54D1F140C1F001A493A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 03BAA5001F140BFB001A493A /* Project object */;
+}
