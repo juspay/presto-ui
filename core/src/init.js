@@ -215,7 +215,7 @@ const runDuiCallback = (state) => {
     callback(state)();
 };
 
-let purescriptInit = (meta, main) => {
+module.exports = (meta, main) => {
   containers.registerScreenMeta(meta);
 
   window.__duiShowScreen = duiShowScreen;
@@ -224,5 +224,3 @@ let purescriptInit = (meta, main) => {
   window.__setCallback = setCallback
   main();
 };
-
-module.exports = purescriptInit;
