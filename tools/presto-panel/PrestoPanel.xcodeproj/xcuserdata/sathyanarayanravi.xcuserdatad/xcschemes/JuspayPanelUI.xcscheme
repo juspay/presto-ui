@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "03BAA51C1F140C1E001A493A"
-               BuildableName = "PrestoPanelUI.framework"
-               BlueprintName = "PrestoPanelUI"
+               BuildableName = "JuspayPanelUI.framework"
+               BlueprintName = "JuspayPanelUI"
                ReferencedContainer = "container:PrestoPanel.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,8 +46,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "03BAA51C1F140C1E001A493A"
-            BuildableName = "PrestoPanelUI.framework"
-            BlueprintName = "PrestoPanelUI"
+            BuildableName = "JuspayPanelUI.framework"
+            BlueprintName = "JuspayPanelUI"
             ReferencedContainer = "container:PrestoPanel.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -64,8 +64,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "03BAA51C1F140C1E001A493A"
-            BuildableName = "PrestoPanelUI.framework"
-            BlueprintName = "PrestoPanelUI"
+            BuildableName = "JuspayPanelUI.framework"
+            BlueprintName = "JuspayPanelUI"
             ReferencedContainer = "container:PrestoPanel.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

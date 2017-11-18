@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "03BAA5091F140BFB001A493A"
-               BuildableName = "PrestoPanel.sketchplugin"
-               BlueprintName = "PrestoPanel"
+               BuildableName = "JuspayPanel.sketchplugin"
+               BlueprintName = "JuspayPanel"
                ReferencedContainer = "container:PrestoPanel.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -44,14 +44,15 @@
       allowLocationSimulation = "YES">
       <PathRunnable
          runnableDebuggingMode = "0"
+         BundleIdentifier = "com.bohemiancoding.sketch3"
          FilePath = "/Applications/Sketch.app">
       </PathRunnable>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "03BAA5091F140BFB001A493A"
-            BuildableName = "PrestoPanel.sketchplugin"
-            BlueprintName = "PrestoPanel"
+            BuildableName = "JuspayPanel.sketchplugin"
+            BlueprintName = "JuspayPanel"
             ReferencedContainer = "container:PrestoPanel.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -68,8 +69,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "03BAA5091F140BFB001A493A"
-            BuildableName = "PrestoPanel.sketchplugin"
-            BlueprintName = "PrestoPanel"
+            BuildableName = "JuspayPanel.sketchplugin"
+            BlueprintName = "JuspayPanel"
             ReferencedContainer = "container:PrestoPanel.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
