@@ -1,5 +1,6 @@
 {
 	  "name": "Presto Panel",
+      "description": "Presto Plugin for auto generation of UI"
 	  "author": "Sachin Sharma",
 	  "identifier" : "PLUGIN_IDENTIFIER",
 	  "compatibleVersion": 47,
