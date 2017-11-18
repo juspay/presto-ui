@@ -38,7 +38,7 @@ const exporter = require('./exporter');
 const utils = require('./utils')
 
 const sketchRegex = /^.*\.sketch$/;
-const jsonRegex = /^.*\.json$/;
+const jsonRegex = /^.*\.sketch.json$/;
 
 const time = () => (new Date()).getTime();
 
