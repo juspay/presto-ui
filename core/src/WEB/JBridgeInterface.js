@@ -26,7 +26,6 @@
 var ViewPageAdapter = require("./ViewPageAdapter");
 var axios = require('axios');
 var Renderer = require("./Render");
-let imageSync = require('qr-image').imageSync;
 
 module.exports = {
   getSymbol: function (type) {
@@ -75,18 +74,6 @@ module.exports = {
     }
   },
 
-  hideKeyboard: function () {
-
-  },
-
-  trackEvent: function () {
-
-  },
-
-  isNetworkAvailable: function () {
-    return true;
-  },
-
   callAPI: function (method, url, data, headers, type, callback) {
     axios({
       method: method,
@@ -101,15 +88,6 @@ module.exports = {
     })
   },
 
-  checkPermission: function (cb) {
-    var s = {
-      PHONE_STATE_PERMISSION: true,
-      SMS_PERMISSION: true,
-      STORAGE_PERMISSION: true
-    };
-    window.callUICallback(cb, s);
-  },
-
   getFromSharedPrefs: function (key) {
     return localStorage.getItem(key) || "__failed";
   },
@@ -118,35 +96,12 @@ module.exports = {
     localStorage.setItem(key, value);
   },
 
-  getDeviceDetails: () => {
-    return JSON.stringify({
-      "deviceId": "TEST",
-      "packageName": "in.juspay.dui_android",
-      "os": "Android",
-      "model": "2014818",
-      "version": 22,
-      "manufacturer": "Xiaomi"
-    });
-  },
-
   viewPagerAdapter: function (id, jsx, tabJsx, cb) {
     ViewPageAdapter.createTabs(id, jsx, tabJsx, cb);
   },
 
-  setClickFeedback: function (id, jsx) {
-
-  },
-
   switchToViewPagerIndex: function (index) {
     ViewPageAdapter.toggleView(index);
-  },
-
-  showQrCode: function (id, uri, vpa, type, callback) {
-    var img = imageSync(uri, {
-      type: 'png'
-    });
-    var imgBase64 = img.toString("base64");
-    document.getElementById(id).src = "data:image/png;base64," + imgBase64;
   },
 
   getKey: function (key, defaultValue) {
@@ -155,10 +110,5 @@ module.exports = {
 
   setKey: function (key, value) {
     return localStorage.setItem(key, value);
-  },
-
-  showVideo: function (id, youtubeURL) {
-    let dom = document.getElementById(id);
-    dom.innerHTML = `<iframe width="100%" height="100%" src="${youtubeURL}" frameborder="0" allowfullscreen></iframe>`
   }
 }
