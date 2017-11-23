@@ -1,0 +1,20 @@
+{
+  "name": "presto-ui-generator",
+  "version": "0.1.1",
+  "description": "Converts sketch exports to Presto-UI code",
+  "main": "index.js",
+  "dependencies": {
+    "argparse": "^1.0.9",
+    "colors": "^1.1.2",
+    "fs-extra": "^4.0.0",
+    "node-watch": "^0.5.5",
+    "ramda": "^0.24.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "./index.js",
+    "postinstall": "./setup"
+  },
+  "author": "Juspay",
+  "license": "AGPL"
+}
