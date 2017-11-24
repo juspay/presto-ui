@@ -4,7 +4,6 @@
 /output/
 /.psc*
 /.psa*
-/dist/
 .DS_Store
 npm-debug.log
 tags
@@ -48,7 +47,6 @@ tramp
 
 # cask packages
 .cask/
-dist/
 
 # Flycheck
 flycheck_*.el
