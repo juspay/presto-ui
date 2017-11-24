@@ -7,76 +7,63 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		03BAA5211F140C1E001A493A /* JuspayPanelUI.js in Resources */ = {isa = PBXBuildFile; fileRef = 03BAA5201F140C1E001A493A /* JuspayPanelUI.js */; };
-		03BAA5231F140C1E001A493A /* JuspayPanelUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 03BAA5221F140C1E001A493A /* JuspayPanelUI.m */; };
-		03BAA5261F140C1E001A493A /* JuspayPanelUIMSDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 03BAA5251F140C1E001A493A /* JuspayPanelUIMSDocument.h */; };
-		03BAA5281F140C1E001A493A /* JuspayPanelUIMSInspectorStackView.h in Headers */ = {isa = PBXBuildFile; fileRef = 03BAA5271F140C1E001A493A /* JuspayPanelUIMSInspectorStackView.h */; };
-		03BAA52B1F140C1E001A493A /* JuspayPanelUISketchPanel.h in Headers */ = {isa = PBXBuildFile; fileRef = 03BAA52A1F140C1E001A493A /* JuspayPanelUISketchPanel.h */; };
-		03BAA52D1F140C1E001A493A /* JuspayPanelUISketchPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 03BAA52C1F140C1E001A493A /* JuspayPanelUISketchPanel.m */; };
-		03BAA52F1F140C1E001A493A /* JuspayPanelUISketchPanelCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 03BAA52E1F140C1E001A493A /* JuspayPanelUISketchPanelCell.h */; };
-		03BAA5311F140C1E001A493A /* JuspayPanelUISketchPanelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 03BAA5301F140C1E001A493A /* JuspayPanelUISketchPanelCell.m */; };
-		03BAA53A1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 03BAA5391F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.h */; };
-		03BAA53C1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 03BAA53B1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.m */; };
-		03BAA53E1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03BAA53D1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.xib */; };
-		03BAA5401F140C1E001A493A /* JuspayPanelUISketchPanelController.h in Headers */ = {isa = PBXBuildFile; fileRef = 03BAA53F1F140C1E001A493A /* JuspayPanelUISketchPanelController.h */; };
-		03BAA5421F140C1E001A493A /* JuspayPanelUISketchPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03BAA5411F140C1E001A493A /* JuspayPanelUISketchPanelController.m */; };
-		03BAA5441F140C1E001A493A /* JuspayPanelUISketchPanelDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 03BAA5431F140C1E001A493A /* JuspayPanelUISketchPanelDataSource.h */; };
-		03BAA5461F140C1E001A493A /* CocoaScript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BAA5451F140C1E001A493A /* CocoaScript.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		03BAA5481F140C1F001A493A /* Mocha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BAA5471F140C1F001A493A /* Mocha.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		03BAA54A1F140C1F001A493A /* JuspayPanelUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 03BAA51F1F140C1E001A493A /* JuspayPanelUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		03BAA5501F140C3F001A493A /* JuspayPanelUI.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 03BAA51D1F140C1E001A493A /* JuspayPanelUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		03EAE60F1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.h in Headers */ = {isa = PBXBuildFile; fileRef = 03EAE6061F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.h */; };
-		03EAE6101F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.m in Sources */ = {isa = PBXBuildFile; fileRef = 03EAE6071F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.m */; };
-		03EAE6111F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE6081F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.xib */; };
-		03EAE6121F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.h in Headers */ = {isa = PBXBuildFile; fileRef = 03EAE6091F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.h */; };
-		03EAE6131F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = 03EAE60A1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.m */; };
-		03EAE6141F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE60B1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.xib */; };
-		03EAE6151F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.h in Headers */ = {isa = PBXBuildFile; fileRef = 03EAE60C1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.h */; };
-		03EAE6161F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.m in Sources */ = {isa = PBXBuildFile; fileRef = 03EAE60D1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.m */; };
-		03EAE6171F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE60E1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.xib */; };
-		03EAE6211F1E33D20042B10D /* bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE6191F1E33D20042B10D /* bottom.png */; };
-		03EAE6221F1E33D20042B10D /* centerv.png in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE61A1F1E33D20042B10D /* centerv.png */; };
-		03EAE6231F1E33D20042B10D /* centreh.png in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE61B1F1E33D20042B10D /* centreh.png */; };
-		03EAE6241F1E33D20042B10D /* Horizontal.png in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE61C1F1E33D20042B10D /* Horizontal.png */; };
-		03EAE6251F1E33D20042B10D /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE61D1F1E33D20042B10D /* left.png */; };
-		03EAE6261F1E33D20042B10D /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE61E1F1E33D20042B10D /* right.png */; };
-		03EAE6271F1E33D20042B10D /* top.png in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE61F1F1E33D20042B10D /* top.png */; };
-		03EAE6281F1E33D20042B10D /* Vertical.png in Resources */ = {isa = PBXBuildFile; fileRef = 03EAE6201F1E33D20042B10D /* Vertical.png */; };
-		05C0A5101F22594500B6893B /* DEUApi.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C0A50F1F22594500B6893B /* DEUApi.m */; };
-		05CA375D1F233843008659E3 /* AFHTTPSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CA37501F233843008659E3 /* AFHTTPSessionManager.h */; };
-		05CA375E1F233843008659E3 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 05CA37511F233843008659E3 /* AFHTTPSessionManager.m */; };
-		05CA375F1F233843008659E3 /* AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CA37521F233843008659E3 /* AFNetworking.h */; };
-		05CA37601F233843008659E3 /* AFNetworkReachabilityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CA37531F233843008659E3 /* AFNetworkReachabilityManager.h */; };
-		05CA37611F233843008659E3 /* AFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 05CA37541F233843008659E3 /* AFNetworkReachabilityManager.m */; };
-		05CA37621F233843008659E3 /* AFSecurityPolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CA37551F233843008659E3 /* AFSecurityPolicy.h */; };
-		05CA37631F233843008659E3 /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 05CA37561F233843008659E3 /* AFSecurityPolicy.m */; };
-		05CA37641F233843008659E3 /* AFURLRequestSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CA37571F233843008659E3 /* AFURLRequestSerialization.h */; };
-		05CA37651F233843008659E3 /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 05CA37581F233843008659E3 /* AFURLRequestSerialization.m */; };
-		05CA37661F233843008659E3 /* AFURLResponseSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CA37591F233843008659E3 /* AFURLResponseSerialization.h */; };
-		05CA37671F233843008659E3 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 05CA375A1F233843008659E3 /* AFURLResponseSerialization.m */; };
-		05CA37681F233843008659E3 /* AFURLSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CA375B1F233843008659E3 /* AFURLSessionManager.h */; };
-		05CA37691F233843008659E3 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 05CA375C1F233843008659E3 /* AFURLSessionManager.m */; };
-		186D3FE91F1B6E8C00D3CD28 /* file.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 186D3FE61F1B599800D3CD28 /* file.html */; };
-		18AFEA7D1F1F3BA200438A2F /* JuspayPanelUISketchPanelCellDefault.h in Headers */ = {isa = PBXBuildFile; fileRef = 18AFEA7B1F1F3BA200438A2F /* JuspayPanelUISketchPanelCellDefault.h */; };
-		18AFEA7E1F1F3BA200438A2F /* JuspayPanelUISketchPanelCellDefault.m in Sources */ = {isa = PBXBuildFile; fileRef = 18AFEA7C1F1F3BA200438A2F /* JuspayPanelUISketchPanelCellDefault.m */; };
-		18BBE0001F1DED98002144A8 /* DUIPropsMapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 18BBDFFE1F1DED98002144A8 /* DUIPropsMapper.h */; };
-		18BBE0011F1DED98002144A8 /* DUIPropsMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BBDFFF1F1DED98002144A8 /* DUIPropsMapper.m */; };
-		18BBE0021F1DEDA0002144A8 /* DUIPropsMapper.h in Sources */ = {isa = PBXBuildFile; fileRef = 18BBDFFE1F1DED98002144A8 /* DUIPropsMapper.h */; };
-		18FD63F31F1CD27B006563A6 /* manifest.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 03BAA50D1F140BFB001A493A /* manifest.json */; };
-		3C1AA9431FB8765B004B46C5 /* src in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3C1AA9421FB8765B004B46C5 /* src */; };
-		8E6CD7741F6D5A9A00C829FF /* DUIPropsFeedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E6CD7731F6D5A9A00C829FF /* DUIPropsFeedback.m */; };
-		8E6CD7761F6D5AEC00C829FF /* DUIPropsFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 8E6CD7751F6D5AEC00C829FF /* DUIPropsFeedback.h */; };
-		8ED0B8D41F6FAFD100CC727A /* DUIPropsOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 8ED0B8D31F6FAFD100CC727A /* DUIPropsOverride.m */; };
-		8ED0B8D61F6FAFED00CC727A /* DUIPropsOverride.h in Headers */ = {isa = PBXBuildFile; fileRef = 8ED0B8D51F6FAFED00CC727A /* DUIPropsOverride.h */; };
-		DC11BB631F307BA000C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = DC11BB611F307BA000C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.h */; };
-		DC11BB641F307BA000C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = DC11BB621F307BA000C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.m */; };
-		DC11BB661F307BF500C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC11BB651F307BF500C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.xib */; };
-		DC38C3ED1F28863000B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = DC38C3EB1F28863000B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.h */; };
-		DC38C3EE1F28863000B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DC38C3EC1F28863000B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.m */; };
-		DC38C3F01F28866700B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC38C3EF1F28866700B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.xib */; };
-		DC56B5511F39B72E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.h in Headers */ = {isa = PBXBuildFile; fileRef = DC56B54F1F39B72E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.h */; };
-		DC56B5521F39B72E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = DC56B5501F39B72E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.m */; };
-		DC56B5541F39B74E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC56B5531F39B74E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.xib */; };
+		0325F0221FC47F9100D6E1F4 /* manifest.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 03D15DC61FC4437D00CA4A37 /* manifest.json */; };
+		0325F0231FC47FA600D6E1F4 /* src in CopyFiles */ = {isa = PBXBuildFile; fileRef = 03D15E461FC4439700CA4A37 /* src */; };
+		0325F0291FC4817B00D6E1F4 /* CocoaScript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03D15DD31FC4438400CA4A37 /* CocoaScript.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		0325F02A1FC4817B00D6E1F4 /* Mocha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03D15DD41FC4438400CA4A37 /* Mocha.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		03BAA5501F140C3F001A493A /* PrestoPanelUI.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 03BAA51D1F140C1E001A493A /* PrestoPanelUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		03D15E111FC4438500CA4A37 /* PrestoPanelUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D15DD51FC4438400CA4A37 /* PrestoPanelUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03D15E121FC4438500CA4A37 /* PrestoPanelUISketchPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D15DD71FC4438400CA4A37 /* PrestoPanelUISketchPanel.m */; };
+		03D15E131FC4438500CA4A37 /* PrestoPanelUISketchPanelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D15DD81FC4438400CA4A37 /* PrestoPanelUISketchPanelCell.m */; };
+		03D15E141FC4438500CA4A37 /* PrestoPanelUISketchPanel.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D15DD91FC4438400CA4A37 /* PrestoPanelUISketchPanel.h */; };
+		03D15E151FC4438500CA4A37 /* PrestoPanelUISketchPanelCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D15DDA1FC4438400CA4A37 /* PrestoPanelUISketchPanelCell.h */; };
+		03D15E161FC4438500CA4A37 /* PrestoPanelUISketchPanelCellHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D15DDC1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellHeader.h */; };
+		03D15E171FC4438500CA4A37 /* PrestoPanelUISketchPanelController.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D15DDD1FC4438400CA4A37 /* PrestoPanelUISketchPanelController.h */; };
+		03D15E181FC4438500CA4A37 /* PrestoPanelUISketchPanelDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D15DDE1FC4438400CA4A37 /* PrestoPanelUISketchPanelDataSource.h */; };
+		03D15E191FC4438500CA4A37 /* PrestoPanelUISketchPanelCellDefault.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D15DDF1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellDefault.h */; };
+		03D15E1A1FC4438500CA4A37 /* PrestoPanelUISketchPanelCellDefault.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03D15DE01FC4438400CA4A37 /* PrestoPanelUISketchPanelCellDefault.xib */; };
+		03D15E1B1FC4438500CA4A37 /* PrestoPanelUISketchPanelCellSpacing.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D15DE21FC4438400CA4A37 /* PrestoPanelUISketchPanelCellSpacing.m */; };
+		03D15E1C1FC4438500CA4A37 /* PrestoPanelUISketchPanelCellAlignment.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03D15DE31FC4438400CA4A37 /* PrestoPanelUISketchPanelCellAlignment.xib */; };
+		03D15E1D1FC4438500CA4A37 /* PrestoPanelUISketchPanelBackgroundLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D15DE41FC4438400CA4A37 /* PrestoPanelUISketchPanelBackgroundLayer.h */; };
+		03D15E1E1FC4438500CA4A37 /* PrestoPanelUISketchPanelCellDefault.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D15DE51FC4438400CA4A37 /* PrestoPanelUISketchPanelCellDefault.h */; };
+		03D15E1F1FC4438500CA4A37 /* PrestoPanelUISketchPanelScreenFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D15DE61FC4438400CA4A37 /* PrestoPanelUISketchPanelScreenFlow.m */; };
+		03D15E201FC4438500CA4A37 /* PrestoPanelUISketchPanelSmartComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D15DE71FC4438400CA4A37 /* PrestoPanelUISketchPanelSmartComponent.h */; };
+		03D15E211FC4438500CA4A37 /* PrestoPanelUISketchPanelSmartComponent.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03D15DE81FC4438400CA4A37 /* PrestoPanelUISketchPanelSmartComponent.xib */; };
+		03D15E221FC4438500CA4A37 /* PrestoPanelUISketchPanelCellAlignment.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D15DE91FC4438400CA4A37 /* PrestoPanelUISketchPanelCellAlignment.m */; };
+		03D15E231FC4438500CA4A37 /* PrestoPanelUISketchPanelScreenFlow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03D15DEA1FC4438400CA4A37 /* PrestoPanelUISketchPanelScreenFlow.xib */; };
+		03D15E241FC4438500CA4A37 /* PrestoPanelUISketchPanelCellOrientation.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D15DEB1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellOrientation.h */; };
+		03D15E251FC4438500CA4A37 /* PrestoPanelUISketchPanelCellOrientation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03D15DEC1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellOrientation.xib */; };
+		03D15E261FC4438500CA4A37 /* PrestoPanelUISketchPanelCellSpacing.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D15DED1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellSpacing.h */; };
+		03D15E271FC4438500CA4A37 /* PrestoPanelUISketchPanelCellDefault.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D15DEE1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellDefault.m */; };
+		03D15E281FC4438500CA4A37 /* PrestoPanelUISketchPanelBackgroundLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D15DEF1FC4438400CA4A37 /* PrestoPanelUISketchPanelBackgroundLayer.m */; };
+		03D15E291FC4438500CA4A37 /* PrestoPanelUISketchPanelCellSpacing.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03D15DF01FC4438400CA4A37 /* PrestoPanelUISketchPanelCellSpacing.xib */; };
+		03D15E2A1FC4438500CA4A37 /* PrestoPanelUISketchPanelScreenFlow.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D15DF11FC4438400CA4A37 /* PrestoPanelUISketchPanelScreenFlow.h */; };
+		03D15E2B1FC4438500CA4A37 /* PrestoPanelUISketchPanelBackgroundLayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03D15DF21FC4438400CA4A37 /* PrestoPanelUISketchPanelBackgroundLayer.xib */; };
+		03D15E2C1FC4438500CA4A37 /* PrestoPanelUISketchPanelCellOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D15DF31FC4438400CA4A37 /* PrestoPanelUISketchPanelCellOrientation.m */; };
+		03D15E2D1FC4438500CA4A37 /* PrestoPanelUISketchPanelCellAlignment.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D15DF41FC4438400CA4A37 /* PrestoPanelUISketchPanelCellAlignment.h */; };
+		03D15E2E1FC4438500CA4A37 /* PrestoPanelUISketchPanelSmartComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D15DF51FC4438400CA4A37 /* PrestoPanelUISketchPanelSmartComponent.m */; };
+		03D15E2F1FC4438500CA4A37 /* DUIPropsFeedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D15DF61FC4438400CA4A37 /* DUIPropsFeedback.m */; };
+		03D15E301FC4438500CA4A37 /* DUIPropsOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D15DF71FC4438400CA4A37 /* DUIPropsOverride.m */; };
+		03D15E311FC4438500CA4A37 /* DUIPropsMapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D15DF81FC4438400CA4A37 /* DUIPropsMapper.h */; };
+		03D15E321FC4438500CA4A37 /* DEUApi.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D15DF91FC4438400CA4A37 /* DEUApi.m */; };
+		03D15E331FC4438500CA4A37 /* PrestoPanelUISketchPanelCellHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03D15DFA1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellHeader.xib */; };
+		03D15E341FC4438500CA4A37 /* PrestoPanelUISketchPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D15DFB1FC4438400CA4A37 /* PrestoPanelUISketchPanelController.m */; };
+		03D15E351FC4438500CA4A37 /* PrestoPanelUISketchPanelCellHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D15DFC1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellHeader.m */; };
+		03D15E361FC4438500CA4A37 /* centreh.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D15DFE1FC4438400CA4A37 /* centreh.png */; };
+		03D15E371FC4438500CA4A37 /* Vertical.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D15DFF1FC4438400CA4A37 /* Vertical.png */; };
+		03D15E381FC4438500CA4A37 /* bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D15E001FC4438400CA4A37 /* bottom.png */; };
+		03D15E391FC4438500CA4A37 /* Horizontal.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D15E011FC4438400CA4A37 /* Horizontal.png */; };
+		03D15E3A1FC4438500CA4A37 /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D15E021FC4438400CA4A37 /* left.png */; };
+		03D15E3B1FC4438500CA4A37 /* top.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D15E031FC4438400CA4A37 /* top.png */; };
+		03D15E3C1FC4438500CA4A37 /* centerv.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D15E041FC4438400CA4A37 /* centerv.png */; };
+		03D15E3D1FC4438500CA4A37 /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D15E051FC4438400CA4A37 /* right.png */; };
+		03D15E3E1FC4438500CA4A37 /* DUIPropsFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D15E061FC4438400CA4A37 /* DUIPropsFeedback.h */; };
+		03D15E3F1FC4438500CA4A37 /* DUIPropsMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D15E071FC4438400CA4A37 /* DUIPropsMapper.m */; };
+		03D15E401FC4438500CA4A37 /* DUIPropsOverride.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D15E081FC4438400CA4A37 /* DUIPropsOverride.h */; };
+		03D15E411FC4438500CA4A37 /* PrestoPanelUI.js in Resources */ = {isa = PBXBuildFile; fileRef = 03D15E091FC4438400CA4A37 /* PrestoPanelUI.js */; };
+		03D15E421FC4438500CA4A37 /* PrestoPanelUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D15E0A1FC4438400CA4A37 /* PrestoPanelUI.m */; };
+		03D15E431FC4438500CA4A37 /* PrestoPanelUIMSDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D15E0C1FC4438400CA4A37 /* PrestoPanelUIMSDocument.h */; };
+		03D15E441FC4438500CA4A37 /* PrestoPanelUIMSInspectorStackView.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D15E0D1FC4438400CA4A37 /* PrestoPanelUIMSInspectorStackView.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,7 +72,7 @@
 			containerPortal = 03BAA5001F140BFB001A493A /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 03BAA51C1F140C1E001A493A;
-			remoteInfo = JuspayPanelUI;
+			remoteInfo = PrestoPanelUI;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -96,9 +83,9 @@
 			dstPath = Contents/Sketch;
 			dstSubfolderSpec = 1;
 			files = (
-				3C1AA9431FB8765B004B46C5 /* src in CopyFiles */,
-				18FD63F31F1CD27B006563A6 /* manifest.json in CopyFiles */,
-				03BAA5501F140C3F001A493A /* JuspayPanelUI.framework in CopyFiles */,
+				03BAA5501F140C3F001A493A /* PrestoPanelUI.framework in CopyFiles */,
+				0325F0221FC47F9100D6E1F4 /* manifest.json in CopyFiles */,
+				0325F0231FC47FA600D6E1F4 /* src in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,85 +95,74 @@
 			dstPath = Contents/Resources;
 			dstSubfolderSpec = 1;
 			files = (
-				186D3FE91F1B6E8C00D3CD28 /* file.html in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		03BAA50A1F140BFB001A493A /* JuspayPanel.sketchplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JuspayPanel.sketchplugin; sourceTree = BUILT_PRODUCTS_DIR; };
-		03BAA50D1F140BFB001A493A /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
-		03BAA5111F140BFB001A493A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		03BAA51D1F140C1E001A493A /* JuspayPanelUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JuspayPanelUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		03BAA51F1F140C1E001A493A /* JuspayPanelUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUI.h; sourceTree = "<group>"; };
-		03BAA5201F140C1E001A493A /* JuspayPanelUI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = JuspayPanelUI.js; sourceTree = "<group>"; };
-		03BAA5221F140C1E001A493A /* JuspayPanelUI.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUI.m; sourceTree = "<group>"; };
-		03BAA5251F140C1E001A493A /* JuspayPanelUIMSDocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUIMSDocument.h; sourceTree = "<group>"; };
-		03BAA5271F140C1E001A493A /* JuspayPanelUIMSInspectorStackView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUIMSInspectorStackView.h; sourceTree = "<group>"; };
-		03BAA52A1F140C1E001A493A /* JuspayPanelUISketchPanel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanel.h; sourceTree = "<group>"; };
-		03BAA52C1F140C1E001A493A /* JuspayPanelUISketchPanel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanel.m; sourceTree = "<group>"; };
-		03BAA52E1F140C1E001A493A /* JuspayPanelUISketchPanelCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelCell.h; sourceTree = "<group>"; };
-		03BAA5301F140C1E001A493A /* JuspayPanelUISketchPanelCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanelCell.m; sourceTree = "<group>"; };
-		03BAA5391F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelCellHeader.h; sourceTree = "<group>"; };
-		03BAA53B1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanelCellHeader.m; sourceTree = "<group>"; };
-		03BAA53D1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = JuspayPanelUISketchPanelCellHeader.xib; sourceTree = "<group>"; };
-		03BAA53F1F140C1E001A493A /* JuspayPanelUISketchPanelController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelController.h; sourceTree = "<group>"; };
-		03BAA5411F140C1E001A493A /* JuspayPanelUISketchPanelController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanelController.m; sourceTree = "<group>"; };
-		03BAA5431F140C1E001A493A /* JuspayPanelUISketchPanelDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelDataSource.h; sourceTree = "<group>"; };
-		03BAA5451F140C1E001A493A /* CocoaScript.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CocoaScript.framework; sourceTree = "<group>"; };
-		03BAA5471F140C1F001A493A /* Mocha.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mocha.framework; sourceTree = "<group>"; };
-		03BAA5491F140C1F001A493A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		03EAE6061F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelCellAlignment.h; sourceTree = "<group>"; };
-		03EAE6071F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanelCellAlignment.m; sourceTree = "<group>"; };
-		03EAE6081F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JuspayPanelUISketchPanelCellAlignment.xib; sourceTree = "<group>"; };
-		03EAE6091F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelCellOrientation.h; sourceTree = "<group>"; };
-		03EAE60A1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanelCellOrientation.m; sourceTree = "<group>"; };
-		03EAE60B1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JuspayPanelUISketchPanelCellOrientation.xib; sourceTree = "<group>"; };
-		03EAE60C1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelCellSpacing.h; sourceTree = "<group>"; };
-		03EAE60D1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanelCellSpacing.m; sourceTree = "<group>"; };
-		03EAE60E1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JuspayPanelUISketchPanelCellSpacing.xib; sourceTree = "<group>"; };
-		03EAE6191F1E33D20042B10D /* bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bottom.png; sourceTree = "<group>"; };
-		03EAE61A1F1E33D20042B10D /* centerv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = centerv.png; sourceTree = "<group>"; };
-		03EAE61B1F1E33D20042B10D /* centreh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = centreh.png; sourceTree = "<group>"; };
-		03EAE61C1F1E33D20042B10D /* Horizontal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Horizontal.png; sourceTree = "<group>"; };
-		03EAE61D1F1E33D20042B10D /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = left.png; sourceTree = "<group>"; };
-		03EAE61E1F1E33D20042B10D /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = right.png; sourceTree = "<group>"; };
-		03EAE61F1F1E33D20042B10D /* top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = top.png; sourceTree = "<group>"; };
-		03EAE6201F1E33D20042B10D /* Vertical.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Vertical.png; sourceTree = "<group>"; };
-		05C0A50F1F22594500B6893B /* DEUApi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DEUApi.m; sourceTree = "<group>"; };
-		05CA37501F233843008659E3 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
-		05CA37511F233843008659E3 /* AFHTTPSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPSessionManager.m; sourceTree = "<group>"; };
-		05CA37521F233843008659E3 /* AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworking.h; sourceTree = "<group>"; };
-		05CA37531F233843008659E3 /* AFNetworkReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkReachabilityManager.h; sourceTree = "<group>"; };
-		05CA37541F233843008659E3 /* AFNetworkReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkReachabilityManager.m; sourceTree = "<group>"; };
-		05CA37551F233843008659E3 /* AFSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSecurityPolicy.h; sourceTree = "<group>"; };
-		05CA37561F233843008659E3 /* AFSecurityPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFSecurityPolicy.m; sourceTree = "<group>"; };
-		05CA37571F233843008659E3 /* AFURLRequestSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLRequestSerialization.h; sourceTree = "<group>"; };
-		05CA37581F233843008659E3 /* AFURLRequestSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLRequestSerialization.m; sourceTree = "<group>"; };
-		05CA37591F233843008659E3 /* AFURLResponseSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLResponseSerialization.h; sourceTree = "<group>"; };
-		05CA375A1F233843008659E3 /* AFURLResponseSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLResponseSerialization.m; sourceTree = "<group>"; };
-		05CA375B1F233843008659E3 /* AFURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLSessionManager.h; sourceTree = "<group>"; };
-		05CA375C1F233843008659E3 /* AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLSessionManager.m; sourceTree = "<group>"; };
-		186D3FE61F1B599800D3CD28 /* file.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = file.html; sourceTree = "<group>"; };
-		18AFEA7B1F1F3BA200438A2F /* JuspayPanelUISketchPanelCellDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelCellDefault.h; sourceTree = "<group>"; };
-		18AFEA7C1F1F3BA200438A2F /* JuspayPanelUISketchPanelCellDefault.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanelCellDefault.m; sourceTree = "<group>"; };
-		18BBDFFE1F1DED98002144A8 /* DUIPropsMapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DUIPropsMapper.h; sourceTree = "<group>"; };
-		18BBDFFF1F1DED98002144A8 /* DUIPropsMapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DUIPropsMapper.m; sourceTree = "<group>"; };
-		3C1AA9421FB8765B004B46C5 /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; path = src; sourceTree = "<group>"; };
-		8E6CD7731F6D5A9A00C829FF /* DUIPropsFeedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DUIPropsFeedback.m; sourceTree = "<group>"; };
-		8E6CD7751F6D5AEC00C829FF /* DUIPropsFeedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DUIPropsFeedback.h; sourceTree = "<group>"; };
-		8ED0B8D31F6FAFD100CC727A /* DUIPropsOverride.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DUIPropsOverride.m; sourceTree = "<group>"; };
-		8ED0B8D51F6FAFED00CC727A /* DUIPropsOverride.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DUIPropsOverride.h; sourceTree = "<group>"; };
-		DC11BB611F307BA000C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelSmartComponent.h; sourceTree = "<group>"; };
-		DC11BB621F307BA000C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanelSmartComponent.m; sourceTree = "<group>"; };
-		DC11BB651F307BF500C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JuspayPanelUISketchPanelSmartComponent.xib; sourceTree = "<group>"; };
-		DC38C3EB1F28863000B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelBackgroundLayer.h; sourceTree = "<group>"; };
-		DC38C3EC1F28863000B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanelBackgroundLayer.m; sourceTree = "<group>"; };
-		DC38C3EF1F28866700B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JuspayPanelUISketchPanelBackgroundLayer.xib; sourceTree = "<group>"; };
-		DC56B54F1F39B72E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuspayPanelUISketchPanelScreenFlow.h; sourceTree = "<group>"; };
-		DC56B5501F39B72E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JuspayPanelUISketchPanelScreenFlow.m; sourceTree = "<group>"; };
-		DC56B5531F39B74E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JuspayPanelUISketchPanelScreenFlow.xib; sourceTree = "<group>"; };
+		0325F0261FC4817B00D6E1F4 /* PrestoPanel.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PrestoPanel.xcodeproj; path = "/Users/Sachin/Desktop/Projects/Official/juspay-panel/PrestoPanel.xcodeproj"; sourceTree = "<absolute>"; };
+		03BAA50A1F140BFB001A493A /* PrestoPanel.sketchplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrestoPanel.sketchplugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		03BAA51D1F140C1E001A493A /* PrestoPanelUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PrestoPanelUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		03D15DC51FC4437D00CA4A37 /* file.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = file.html; sourceTree = "<group>"; };
+		03D15DC61FC4437D00CA4A37 /* manifest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
+		03D15DC71FC4437D00CA4A37 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		03D15DD31FC4438400CA4A37 /* CocoaScript.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CocoaScript.framework; sourceTree = "<group>"; };
+		03D15DD41FC4438400CA4A37 /* Mocha.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mocha.framework; sourceTree = "<group>"; };
+		03D15DD51FC4438400CA4A37 /* PrestoPanelUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrestoPanelUI.h; sourceTree = "<group>"; };
+		03D15DD71FC4438400CA4A37 /* PrestoPanelUISketchPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrestoPanelUISketchPanel.m; sourceTree = "<group>"; };
+		03D15DD81FC4438400CA4A37 /* PrestoPanelUISketchPanelCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrestoPanelUISketchPanelCell.m; sourceTree = "<group>"; };
+		03D15DD91FC4438400CA4A37 /* PrestoPanelUISketchPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrestoPanelUISketchPanel.h; sourceTree = "<group>"; };
+		03D15DDA1FC4438400CA4A37 /* PrestoPanelUISketchPanelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrestoPanelUISketchPanelCell.h; sourceTree = "<group>"; };
+		03D15DDC1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrestoPanelUISketchPanelCellHeader.h; sourceTree = "<group>"; };
+		03D15DDD1FC4438400CA4A37 /* PrestoPanelUISketchPanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrestoPanelUISketchPanelController.h; sourceTree = "<group>"; };
+		03D15DDE1FC4438400CA4A37 /* PrestoPanelUISketchPanelDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrestoPanelUISketchPanelDataSource.h; sourceTree = "<group>"; };
+		03D15DDF1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrestoPanelUISketchPanelCellDefault.h; sourceTree = "<group>"; };
+		03D15DE01FC4438400CA4A37 /* PrestoPanelUISketchPanelCellDefault.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrestoPanelUISketchPanelCellDefault.xib; sourceTree = "<group>"; };
+		03D15DE21FC4438400CA4A37 /* PrestoPanelUISketchPanelCellSpacing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrestoPanelUISketchPanelCellSpacing.m; sourceTree = "<group>"; };
+		03D15DE31FC4438400CA4A37 /* PrestoPanelUISketchPanelCellAlignment.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrestoPanelUISketchPanelCellAlignment.xib; sourceTree = "<group>"; };
+		03D15DE41FC4438400CA4A37 /* PrestoPanelUISketchPanelBackgroundLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrestoPanelUISketchPanelBackgroundLayer.h; sourceTree = "<group>"; };
+		03D15DE51FC4438400CA4A37 /* PrestoPanelUISketchPanelCellDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrestoPanelUISketchPanelCellDefault.h; sourceTree = "<group>"; };
+		03D15DE61FC4438400CA4A37 /* PrestoPanelUISketchPanelScreenFlow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrestoPanelUISketchPanelScreenFlow.m; sourceTree = "<group>"; };
+		03D15DE71FC4438400CA4A37 /* PrestoPanelUISketchPanelSmartComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrestoPanelUISketchPanelSmartComponent.h; sourceTree = "<group>"; };
+		03D15DE81FC4438400CA4A37 /* PrestoPanelUISketchPanelSmartComponent.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrestoPanelUISketchPanelSmartComponent.xib; sourceTree = "<group>"; };
+		03D15DE91FC4438400CA4A37 /* PrestoPanelUISketchPanelCellAlignment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrestoPanelUISketchPanelCellAlignment.m; sourceTree = "<group>"; };
+		03D15DEA1FC4438400CA4A37 /* PrestoPanelUISketchPanelScreenFlow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrestoPanelUISketchPanelScreenFlow.xib; sourceTree = "<group>"; };
+		03D15DEB1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrestoPanelUISketchPanelCellOrientation.h; sourceTree = "<group>"; };
+		03D15DEC1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellOrientation.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrestoPanelUISketchPanelCellOrientation.xib; sourceTree = "<group>"; };
+		03D15DED1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellSpacing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrestoPanelUISketchPanelCellSpacing.h; sourceTree = "<group>"; };
+		03D15DEE1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellDefault.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrestoPanelUISketchPanelCellDefault.m; sourceTree = "<group>"; };
+		03D15DEF1FC4438400CA4A37 /* PrestoPanelUISketchPanelBackgroundLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrestoPanelUISketchPanelBackgroundLayer.m; sourceTree = "<group>"; };
+		03D15DF01FC4438400CA4A37 /* PrestoPanelUISketchPanelCellSpacing.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrestoPanelUISketchPanelCellSpacing.xib; sourceTree = "<group>"; };
+		03D15DF11FC4438400CA4A37 /* PrestoPanelUISketchPanelScreenFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrestoPanelUISketchPanelScreenFlow.h; sourceTree = "<group>"; };
+		03D15DF21FC4438400CA4A37 /* PrestoPanelUISketchPanelBackgroundLayer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrestoPanelUISketchPanelBackgroundLayer.xib; sourceTree = "<group>"; };
+		03D15DF31FC4438400CA4A37 /* PrestoPanelUISketchPanelCellOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrestoPanelUISketchPanelCellOrientation.m; sourceTree = "<group>"; };
+		03D15DF41FC4438400CA4A37 /* PrestoPanelUISketchPanelCellAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrestoPanelUISketchPanelCellAlignment.h; sourceTree = "<group>"; };
+		03D15DF51FC4438400CA4A37 /* PrestoPanelUISketchPanelSmartComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrestoPanelUISketchPanelSmartComponent.m; sourceTree = "<group>"; };
+		03D15DF61FC4438400CA4A37 /* DUIPropsFeedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DUIPropsFeedback.m; sourceTree = "<group>"; };
+		03D15DF71FC4438400CA4A37 /* DUIPropsOverride.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DUIPropsOverride.m; sourceTree = "<group>"; };
+		03D15DF81FC4438400CA4A37 /* DUIPropsMapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DUIPropsMapper.h; sourceTree = "<group>"; };
+		03D15DF91FC4438400CA4A37 /* DEUApi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DEUApi.m; sourceTree = "<group>"; };
+		03D15DFA1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrestoPanelUISketchPanelCellHeader.xib; sourceTree = "<group>"; };
+		03D15DFB1FC4438400CA4A37 /* PrestoPanelUISketchPanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrestoPanelUISketchPanelController.m; sourceTree = "<group>"; };
+		03D15DFC1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrestoPanelUISketchPanelCellHeader.m; sourceTree = "<group>"; };
+		03D15DFE1FC4438400CA4A37 /* centreh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = centreh.png; sourceTree = "<group>"; };
+		03D15DFF1FC4438400CA4A37 /* Vertical.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Vertical.png; sourceTree = "<group>"; };
+		03D15E001FC4438400CA4A37 /* bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bottom.png; sourceTree = "<group>"; };
+		03D15E011FC4438400CA4A37 /* Horizontal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Horizontal.png; sourceTree = "<group>"; };
+		03D15E021FC4438400CA4A37 /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = left.png; sourceTree = "<group>"; };
+		03D15E031FC4438400CA4A37 /* top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = top.png; sourceTree = "<group>"; };
+		03D15E041FC4438400CA4A37 /* centerv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = centerv.png; sourceTree = "<group>"; };
+		03D15E051FC4438400CA4A37 /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = right.png; sourceTree = "<group>"; };
+		03D15E061FC4438400CA4A37 /* DUIPropsFeedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DUIPropsFeedback.h; sourceTree = "<group>"; };
+		03D15E071FC4438400CA4A37 /* DUIPropsMapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DUIPropsMapper.m; sourceTree = "<group>"; };
+		03D15E081FC4438400CA4A37 /* DUIPropsOverride.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DUIPropsOverride.h; sourceTree = "<group>"; };
+		03D15E091FC4438400CA4A37 /* PrestoPanelUI.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = PrestoPanelUI.js; sourceTree = "<group>"; };
+		03D15E0A1FC4438400CA4A37 /* PrestoPanelUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrestoPanelUI.m; sourceTree = "<group>"; };
+		03D15E0C1FC4438400CA4A37 /* PrestoPanelUIMSDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrestoPanelUIMSDocument.h; sourceTree = "<group>"; };
+		03D15E0D1FC4438400CA4A37 /* PrestoPanelUIMSInspectorStackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrestoPanelUIMSInspectorStackView.h; sourceTree = "<group>"; };
+		03D15E0E1FC4438400CA4A37 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		03D15E461FC4439700CA4A37 /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; path = src; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,162 +177,157 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				03BAA5461F140C1E001A493A /* CocoaScript.framework in Frameworks */,
-				03BAA5481F140C1F001A493A /* Mocha.framework in Frameworks */,
+				0325F0291FC4817B00D6E1F4 /* CocoaScript.framework in Frameworks */,
+				0325F02A1FC4817B00D6E1F4 /* Mocha.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0325F0241FC4817B00D6E1F4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0325F0261FC4817B00D6E1F4 /* PrestoPanel.xcodeproj */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		0325F0271FC4817B00D6E1F4 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
 		03BAA4FF1F140BFB001A493A = {
 			isa = PBXGroup;
 			children = (
-				03BAA50C1F140BFB001A493A /* JuspayPanel */,
-				03BAA51E1F140C1E001A493A /* JuspayPanelUI */,
+				03D15DC41FC4437D00CA4A37 /* PrestoPanel */,
+				03D15DD21FC4438400CA4A37 /* PrestoPanelUI */,
 				03BAA50B1F140BFB001A493A /* Products */,
+				0325F0241FC4817B00D6E1F4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		03BAA50B1F140BFB001A493A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				03BAA50A1F140BFB001A493A /* JuspayPanel.sketchplugin */,
-				03BAA51D1F140C1E001A493A /* JuspayPanelUI.framework */,
+				03BAA50A1F140BFB001A493A /* PrestoPanel.sketchplugin */,
+				03BAA51D1F140C1E001A493A /* PrestoPanelUI.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		03BAA50C1F140BFB001A493A /* JuspayPanel */ = {
+		03D15DC41FC4437D00CA4A37 /* PrestoPanel */ = {
 			isa = PBXGroup;
 			children = (
-				3C1AA9421FB8765B004B46C5 /* src */,
-				03BAA50D1F140BFB001A493A /* manifest.json */,
-				03BAA5111F140BFB001A493A /* Info.plist */,
-				186D3FE61F1B599800D3CD28 /* file.html */,
+				03D15DC51FC4437D00CA4A37 /* file.html */,
+				03D15DC61FC4437D00CA4A37 /* manifest.json */,
+				03D15DC71FC4437D00CA4A37 /* Info.plist */,
+				03D15E461FC4439700CA4A37 /* src */,
 			);
-			path = JuspayPanel;
+			path = PrestoPanel;
 			sourceTree = "<group>";
 		};
-		03BAA51E1F140C1E001A493A /* JuspayPanelUI */ = {
+		03D15DD21FC4438400CA4A37 /* PrestoPanelUI */ = {
 			isa = PBXGroup;
 			children = (
-				03BAA51F1F140C1E001A493A /* JuspayPanelUI.h */,
-				03BAA5201F140C1E001A493A /* JuspayPanelUI.js */,
-				03BAA5221F140C1E001A493A /* JuspayPanelUI.m */,
-				03BAA5451F140C1E001A493A /* CocoaScript.framework */,
-				03BAA5471F140C1F001A493A /* Mocha.framework */,
-				03BAA5491F140C1F001A493A /* Info.plist */,
-				03BAA5241F140C1E001A493A /* Protocols */,
-				03BAA5291F140C1E001A493A /* Library */,
-				03BAA5321F140C1E001A493A /* User Subclasses */,
+				03D15DD51FC4438400CA4A37 /* PrestoPanelUI.h */,
+				03D15E0A1FC4438400CA4A37 /* PrestoPanelUI.m */,
+				03D15E091FC4438400CA4A37 /* PrestoPanelUI.js */,
+				03D15DD61FC4438400CA4A37 /* Library */,
+				03D15E0B1FC4438400CA4A37 /* Protocols */,
+				03D15DDB1FC4438400CA4A37 /* User Subclasses */,
+				03D15DD41FC4438400CA4A37 /* Mocha.framework */,
+				03D15DD31FC4438400CA4A37 /* CocoaScript.framework */,
+				03D15E0E1FC4438400CA4A37 /* Info.plist */,
 			);
-			path = JuspayPanelUI;
+			path = PrestoPanelUI;
 			sourceTree = "<group>";
 		};
-		03BAA5241F140C1E001A493A /* Protocols */ = {
+		03D15DD61FC4438400CA4A37 /* Library */ = {
 			isa = PBXGroup;
 			children = (
-				03BAA5251F140C1E001A493A /* JuspayPanelUIMSDocument.h */,
-				03BAA5271F140C1E001A493A /* JuspayPanelUIMSInspectorStackView.h */,
+				03D15DD71FC4438400CA4A37 /* PrestoPanelUISketchPanel.m */,
+				03D15DD81FC4438400CA4A37 /* PrestoPanelUISketchPanelCell.m */,
+				03D15DD91FC4438400CA4A37 /* PrestoPanelUISketchPanel.h */,
+				03D15DDA1FC4438400CA4A37 /* PrestoPanelUISketchPanelCell.h */,
 			);
-			name = Protocols;
+			path = Library;
 			sourceTree = "<group>";
 		};
-		03BAA5291F140C1E001A493A /* Library */ = {
+		03D15DDB1FC4438400CA4A37 /* User Subclasses */ = {
 			isa = PBXGroup;
 			children = (
-				03BAA52A1F140C1E001A493A /* JuspayPanelUISketchPanel.h */,
-				03BAA52C1F140C1E001A493A /* JuspayPanelUISketchPanel.m */,
-				03BAA52E1F140C1E001A493A /* JuspayPanelUISketchPanelCell.h */,
-				03BAA5301F140C1E001A493A /* JuspayPanelUISketchPanelCell.m */,
+				03D15DDC1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellHeader.h */,
+				03D15DDD1FC4438400CA4A37 /* PrestoPanelUISketchPanelController.h */,
+				03D15DDE1FC4438400CA4A37 /* PrestoPanelUISketchPanelDataSource.h */,
+				03D15DDF1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellDefault.h */,
+				03D15DE01FC4438400CA4A37 /* PrestoPanelUISketchPanelCellDefault.xib */,
+				03D15DE11FC4438400CA4A37 /* PrestoCells */,
+				03D15DF61FC4438400CA4A37 /* DUIPropsFeedback.m */,
+				03D15DF71FC4438400CA4A37 /* DUIPropsOverride.m */,
+				03D15DF81FC4438400CA4A37 /* DUIPropsMapper.h */,
+				03D15DF91FC4438400CA4A37 /* DEUApi.m */,
+				03D15DFA1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellHeader.xib */,
+				03D15DFB1FC4438400CA4A37 /* PrestoPanelUISketchPanelController.m */,
+				03D15DFC1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellHeader.m */,
+				03D15DFD1FC4438400CA4A37 /* icons */,
+				03D15E061FC4438400CA4A37 /* DUIPropsFeedback.h */,
+				03D15E071FC4438400CA4A37 /* DUIPropsMapper.m */,
+				03D15E081FC4438400CA4A37 /* DUIPropsOverride.h */,
 			);
-			name = Library;
+			path = "User Subclasses";
 			sourceTree = "<group>";
 		};
-		03BAA5321F140C1E001A493A /* User Subclasses */ = {
+		03D15DE11FC4438400CA4A37 /* PrestoCells */ = {
 			isa = PBXGroup;
 			children = (
-				18BBDFFE1F1DED98002144A8 /* DUIPropsMapper.h */,
-				18BBDFFF1F1DED98002144A8 /* DUIPropsMapper.m */,
-				8E6CD7751F6D5AEC00C829FF /* DUIPropsFeedback.h */,
-				8E6CD7731F6D5A9A00C829FF /* DUIPropsFeedback.m */,
-				8ED0B8D51F6FAFED00CC727A /* DUIPropsOverride.h */,
-				8ED0B8D31F6FAFD100CC727A /* DUIPropsOverride.m */,
-				03BAA5391F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.h */,
-				03BAA53B1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.m */,
-				03BAA53D1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.xib */,
-				03BAA53F1F140C1E001A493A /* JuspayPanelUISketchPanelController.h */,
-				03BAA5411F140C1E001A493A /* JuspayPanelUISketchPanelController.m */,
-				03BAA5431F140C1E001A493A /* JuspayPanelUISketchPanelDataSource.h */,
-				03EAE6181F1E33D20042B10D /* icons */,
-				03EAE6051F1E2D9F0042B10D /* JuspayCells */,
-				05C0A50F1F22594500B6893B /* DEUApi.m */,
-				05CA374F1F233843008659E3 /* AFNetworking */,
+				03D15DE41FC4438400CA4A37 /* PrestoPanelUISketchPanelBackgroundLayer.h */,
+				03D15DEF1FC4438400CA4A37 /* PrestoPanelUISketchPanelBackgroundLayer.m */,
+				03D15DF21FC4438400CA4A37 /* PrestoPanelUISketchPanelBackgroundLayer.xib */,
+				03D15DF41FC4438400CA4A37 /* PrestoPanelUISketchPanelCellAlignment.h */,
+				03D15DE91FC4438400CA4A37 /* PrestoPanelUISketchPanelCellAlignment.m */,
+				03D15DE31FC4438400CA4A37 /* PrestoPanelUISketchPanelCellAlignment.xib */,
+				03D15DE51FC4438400CA4A37 /* PrestoPanelUISketchPanelCellDefault.h */,
+				03D15DEE1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellDefault.m */,
+				03D15DEB1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellOrientation.h */,
+				03D15DF31FC4438400CA4A37 /* PrestoPanelUISketchPanelCellOrientation.m */,
+				03D15DEC1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellOrientation.xib */,
+				03D15DED1FC4438400CA4A37 /* PrestoPanelUISketchPanelCellSpacing.h */,
+				03D15DE21FC4438400CA4A37 /* PrestoPanelUISketchPanelCellSpacing.m */,
+				03D15DF01FC4438400CA4A37 /* PrestoPanelUISketchPanelCellSpacing.xib */,
+				03D15DF11FC4438400CA4A37 /* PrestoPanelUISketchPanelScreenFlow.h */,
+				03D15DE61FC4438400CA4A37 /* PrestoPanelUISketchPanelScreenFlow.m */,
+				03D15DEA1FC4438400CA4A37 /* PrestoPanelUISketchPanelScreenFlow.xib */,
+				03D15DE71FC4438400CA4A37 /* PrestoPanelUISketchPanelSmartComponent.h */,
+				03D15DF51FC4438400CA4A37 /* PrestoPanelUISketchPanelSmartComponent.m */,
+				03D15DE81FC4438400CA4A37 /* PrestoPanelUISketchPanelSmartComponent.xib */,
 			);
-			name = "User Subclasses";
+			path = PrestoCells;
 			sourceTree = "<group>";
 		};
-		03EAE6051F1E2D9F0042B10D /* JuspayCells */ = {
+		03D15DFD1FC4438400CA4A37 /* icons */ = {
 			isa = PBXGroup;
 			children = (
-				03EAE6061F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.h */,
-				03EAE6071F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.m */,
-				03EAE6081F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.xib */,
-				03EAE6091F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.h */,
-				03EAE60A1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.m */,
-				03EAE60B1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.xib */,
-				03EAE60C1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.h */,
-				03EAE60D1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.m */,
-				03EAE60E1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.xib */,
-				DC38C3EB1F28863000B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.h */,
-				DC38C3EC1F28863000B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.m */,
-				DC38C3EF1F28866700B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.xib */,
-				18AFEA7B1F1F3BA200438A2F /* JuspayPanelUISketchPanelCellDefault.h */,
-				18AFEA7C1F1F3BA200438A2F /* JuspayPanelUISketchPanelCellDefault.m */,
-				DC11BB651F307BF500C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.xib */,
-				DC11BB611F307BA000C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.h */,
-				DC11BB621F307BA000C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.m */,
-				DC56B54F1F39B72E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.h */,
-				DC56B5501F39B72E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.m */,
-				DC56B5531F39B74E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.xib */,
-			);
-			path = JuspayCells;
-			sourceTree = "<group>";
-		};
-		03EAE6181F1E33D20042B10D /* icons */ = {
-			isa = PBXGroup;
-			children = (
-				03EAE6191F1E33D20042B10D /* bottom.png */,
-				03EAE61A1F1E33D20042B10D /* centerv.png */,
-				03EAE61B1F1E33D20042B10D /* centreh.png */,
-				03EAE61C1F1E33D20042B10D /* Horizontal.png */,
-				03EAE61D1F1E33D20042B10D /* left.png */,
-				03EAE61E1F1E33D20042B10D /* right.png */,
-				03EAE61F1F1E33D20042B10D /* top.png */,
-				03EAE6201F1E33D20042B10D /* Vertical.png */,
+				03D15DFE1FC4438400CA4A37 /* centreh.png */,
+				03D15DFF1FC4438400CA4A37 /* Vertical.png */,
+				03D15E001FC4438400CA4A37 /* bottom.png */,
+				03D15E011FC4438400CA4A37 /* Horizontal.png */,
+				03D15E021FC4438400CA4A37 /* left.png */,
+				03D15E031FC4438400CA4A37 /* top.png */,
+				03D15E041FC4438400CA4A37 /* centerv.png */,
+				03D15E051FC4438400CA4A37 /* right.png */,
 			);
 			path = icons;
 			sourceTree = "<group>";
 		};
-		05CA374F1F233843008659E3 /* AFNetworking */ = {
+		03D15E0B1FC4438400CA4A37 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				05CA37501F233843008659E3 /* AFHTTPSessionManager.h */,
-				05CA37511F233843008659E3 /* AFHTTPSessionManager.m */,
-				05CA37521F233843008659E3 /* AFNetworking.h */,
-				05CA37531F233843008659E3 /* AFNetworkReachabilityManager.h */,
-				05CA37541F233843008659E3 /* AFNetworkReachabilityManager.m */,
-				05CA37551F233843008659E3 /* AFSecurityPolicy.h */,
-				05CA37561F233843008659E3 /* AFSecurityPolicy.m */,
-				05CA37571F233843008659E3 /* AFURLRequestSerialization.h */,
-				05CA37581F233843008659E3 /* AFURLRequestSerialization.m */,
-				05CA37591F233843008659E3 /* AFURLResponseSerialization.h */,
-				05CA375A1F233843008659E3 /* AFURLResponseSerialization.m */,
-				05CA375B1F233843008659E3 /* AFURLSessionManager.h */,
-				05CA375C1F233843008659E3 /* AFURLSessionManager.m */,
+				03D15E0C1FC4438400CA4A37 /* PrestoPanelUIMSDocument.h */,
+				03D15E0D1FC4438400CA4A37 /* PrestoPanelUIMSInspectorStackView.h */,
 			);
-			path = AFNetworking;
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -366,40 +337,34 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05CA37681F233843008659E3 /* AFURLSessionManager.h in Headers */,
-				05CA37641F233843008659E3 /* AFURLRequestSerialization.h in Headers */,
-				03BAA52F1F140C1E001A493A /* JuspayPanelUISketchPanelCell.h in Headers */,
-				05CA37621F233843008659E3 /* AFSecurityPolicy.h in Headers */,
-				05CA37601F233843008659E3 /* AFNetworkReachabilityManager.h in Headers */,
-				DC11BB631F307BA000C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.h in Headers */,
-				DC38C3ED1F28863000B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.h in Headers */,
-				03BAA5441F140C1E001A493A /* JuspayPanelUISketchPanelDataSource.h in Headers */,
-				03EAE60F1F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.h in Headers */,
-				03EAE6121F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.h in Headers */,
-				05CA375D1F233843008659E3 /* AFHTTPSessionManager.h in Headers */,
-				03BAA54A1F140C1F001A493A /* JuspayPanelUI.h in Headers */,
-				03BAA5261F140C1E001A493A /* JuspayPanelUIMSDocument.h in Headers */,
-				03BAA52B1F140C1E001A493A /* JuspayPanelUISketchPanel.h in Headers */,
-				18AFEA7D1F1F3BA200438A2F /* JuspayPanelUISketchPanelCellDefault.h in Headers */,
-				03BAA5281F140C1E001A493A /* JuspayPanelUIMSInspectorStackView.h in Headers */,
-				03EAE6151F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.h in Headers */,
-				8ED0B8D61F6FAFED00CC727A /* DUIPropsOverride.h in Headers */,
-				05CA37661F233843008659E3 /* AFURLResponseSerialization.h in Headers */,
-				03BAA5401F140C1E001A493A /* JuspayPanelUISketchPanelController.h in Headers */,
-				8E6CD7761F6D5AEC00C829FF /* DUIPropsFeedback.h in Headers */,
-				03BAA53A1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.h in Headers */,
-				DC56B5511F39B72E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.h in Headers */,
-				18BBE0001F1DED98002144A8 /* DUIPropsMapper.h in Headers */,
-				05CA375F1F233843008659E3 /* AFNetworking.h in Headers */,
+				03D15E111FC4438500CA4A37 /* PrestoPanelUI.h in Headers */,
+				03D15E401FC4438500CA4A37 /* DUIPropsOverride.h in Headers */,
+				03D15E2D1FC4438500CA4A37 /* PrestoPanelUISketchPanelCellAlignment.h in Headers */,
+				03D15E431FC4438500CA4A37 /* PrestoPanelUIMSDocument.h in Headers */,
+				03D15E1D1FC4438500CA4A37 /* PrestoPanelUISketchPanelBackgroundLayer.h in Headers */,
+				03D15E1E1FC4438500CA4A37 /* PrestoPanelUISketchPanelCellDefault.h in Headers */,
+				03D15E3E1FC4438500CA4A37 /* DUIPropsFeedback.h in Headers */,
+				03D15E2A1FC4438500CA4A37 /* PrestoPanelUISketchPanelScreenFlow.h in Headers */,
+				03D15E201FC4438500CA4A37 /* PrestoPanelUISketchPanelSmartComponent.h in Headers */,
+				03D15E241FC4438500CA4A37 /* PrestoPanelUISketchPanelCellOrientation.h in Headers */,
+				03D15E141FC4438500CA4A37 /* PrestoPanelUISketchPanel.h in Headers */,
+				03D15E151FC4438500CA4A37 /* PrestoPanelUISketchPanelCell.h in Headers */,
+				03D15E441FC4438500CA4A37 /* PrestoPanelUIMSInspectorStackView.h in Headers */,
+				03D15E181FC4438500CA4A37 /* PrestoPanelUISketchPanelDataSource.h in Headers */,
+				03D15E261FC4438500CA4A37 /* PrestoPanelUISketchPanelCellSpacing.h in Headers */,
+				03D15E191FC4438500CA4A37 /* PrestoPanelUISketchPanelCellDefault.h in Headers */,
+				03D15E161FC4438500CA4A37 /* PrestoPanelUISketchPanelCellHeader.h in Headers */,
+				03D15E171FC4438500CA4A37 /* PrestoPanelUISketchPanelController.h in Headers */,
+				03D15E311FC4438500CA4A37 /* DUIPropsMapper.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		03BAA5091F140BFB001A493A /* JuspayPanel */ = {
+		03BAA5091F140BFB001A493A /* PrestoPanel */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 03BAA5141F140BFB001A493A /* Build configuration list for PBXNativeTarget "JuspayPanel" */;
+			buildConfigurationList = 03BAA5141F140BFB001A493A /* Build configuration list for PBXNativeTarget "PrestoPanel" */;
 			buildPhases = (
 				03BAA5041F140BFB001A493A /* Sources */,
 				03BAA5051F140BFB001A493A /* Frameworks */,
@@ -413,14 +378,14 @@
 			dependencies = (
 				03BAA54F1F140C38001A493A /* PBXTargetDependency */,
 			);
-			name = JuspayPanel;
-			productName = JuspayPanel;
-			productReference = 03BAA50A1F140BFB001A493A /* JuspayPanel.sketchplugin */;
+			name = PrestoPanel;
+			productName = PrestoPanel;
+			productReference = 03BAA50A1F140BFB001A493A /* PrestoPanel.sketchplugin */;
 			productType = "com.apple.product-type.bundle";
 		};
-		03BAA51C1F140C1E001A493A /* JuspayPanelUI */ = {
+		03BAA51C1F140C1E001A493A /* PrestoPanelUI */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 03BAA54B1F140C1F001A493A /* Build configuration list for PBXNativeTarget "JuspayPanelUI" */;
+			buildConfigurationList = 03BAA54B1F140C1F001A493A /* Build configuration list for PBXNativeTarget "PrestoPanelUI" */;
 			buildPhases = (
 				03BAA5171F140C1E001A493A /* Sources */,
 				03BAA5181F140C1E001A493A /* Frameworks */,
@@ -432,9 +397,9 @@
 			);
 			dependencies = (
 			);
-			name = JuspayPanelUI;
+			name = PrestoPanelUI;
 			productName = JuspayPanelUI;
-			productReference = 03BAA51D1F140C1E001A493A /* JuspayPanelUI.framework */;
+			productReference = 03BAA51D1F140C1E001A493A /* PrestoPanelUI.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -468,10 +433,16 @@
 			mainGroup = 03BAA4FF1F140BFB001A493A;
 			productRefGroup = 03BAA50B1F140BFB001A493A /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 0325F0271FC4817B00D6E1F4 /* Products */;
+					ProjectRef = 0325F0261FC4817B00D6E1F4 /* PrestoPanel.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
-				03BAA5091F140BFB001A493A /* JuspayPanel */,
-				03BAA51C1F140C1E001A493A /* JuspayPanelUI */,
+				03BAA5091F140BFB001A493A /* PrestoPanel */,
+				03BAA51C1F140C1E001A493A /* PrestoPanelUI */,
 			);
 		};
 /* End PBXProject section */
@@ -481,22 +452,23 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DC56B5541F39B74E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.xib in Resources */,
-				03EAE6141F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.xib in Resources */,
-				03EAE6221F1E33D20042B10D /* centerv.png in Resources */,
-				03EAE6261F1E33D20042B10D /* right.png in Resources */,
-				DC38C3F01F28866700B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.xib in Resources */,
-				03EAE6241F1E33D20042B10D /* Horizontal.png in Resources */,
-				03EAE6111F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.xib in Resources */,
-				03EAE6281F1E33D20042B10D /* Vertical.png in Resources */,
-				03EAE6171F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.xib in Resources */,
-				03BAA53E1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.xib in Resources */,
-				03EAE6251F1E33D20042B10D /* left.png in Resources */,
-				DC11BB661F307BF500C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.xib in Resources */,
-				03EAE6211F1E33D20042B10D /* bottom.png in Resources */,
-				03EAE6271F1E33D20042B10D /* top.png in Resources */,
-				03BAA5211F140C1E001A493A /* JuspayPanelUI.js in Resources */,
-				03EAE6231F1E33D20042B10D /* centreh.png in Resources */,
+				03D15E2B1FC4438500CA4A37 /* PrestoPanelUISketchPanelBackgroundLayer.xib in Resources */,
+				03D15E371FC4438500CA4A37 /* Vertical.png in Resources */,
+				03D15E211FC4438500CA4A37 /* PrestoPanelUISketchPanelSmartComponent.xib in Resources */,
+				03D15E381FC4438500CA4A37 /* bottom.png in Resources */,
+				03D15E251FC4438500CA4A37 /* PrestoPanelUISketchPanelCellOrientation.xib in Resources */,
+				03D15E1A1FC4438500CA4A37 /* PrestoPanelUISketchPanelCellDefault.xib in Resources */,
+				03D15E3A1FC4438500CA4A37 /* left.png in Resources */,
+				03D15E331FC4438500CA4A37 /* PrestoPanelUISketchPanelCellHeader.xib in Resources */,
+				03D15E3C1FC4438500CA4A37 /* centerv.png in Resources */,
+				03D15E291FC4438500CA4A37 /* PrestoPanelUISketchPanelCellSpacing.xib in Resources */,
+				03D15E3D1FC4438500CA4A37 /* right.png in Resources */,
+				03D15E1C1FC4438500CA4A37 /* PrestoPanelUISketchPanelCellAlignment.xib in Resources */,
+				03D15E361FC4438500CA4A37 /* centreh.png in Resources */,
+				03D15E3B1FC4438500CA4A37 /* top.png in Resources */,
+				03D15E411FC4438500CA4A37 /* PrestoPanelUI.js in Resources */,
+				03D15E231FC4438500CA4A37 /* PrestoPanelUISketchPanelScreenFlow.xib in Resources */,
+				03D15E391FC4438500CA4A37 /* Horizontal.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -556,29 +528,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DC11BB641F307BA000C1D7C9 /* JuspayPanelUISketchPanelSmartComponent.m in Sources */,
-				18AFEA7E1F1F3BA200438A2F /* JuspayPanelUISketchPanelCellDefault.m in Sources */,
-				05CA37631F233843008659E3 /* AFSecurityPolicy.m in Sources */,
-				8ED0B8D41F6FAFD100CC727A /* DUIPropsOverride.m in Sources */,
-				18BBE0021F1DEDA0002144A8 /* DUIPropsMapper.h in Sources */,
-				03EAE6161F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellSpacing.m in Sources */,
-				05C0A5101F22594500B6893B /* DEUApi.m in Sources */,
-				03EAE6101F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellAlignment.m in Sources */,
-				18BBE0011F1DED98002144A8 /* DUIPropsMapper.m in Sources */,
-				05CA37651F233843008659E3 /* AFURLRequestSerialization.m in Sources */,
-				03EAE6131F1E2D9F0042B10D /* JuspayPanelUISketchPanelCellOrientation.m in Sources */,
-				05CA37691F233843008659E3 /* AFURLSessionManager.m in Sources */,
-				03BAA53C1F140C1E001A493A /* JuspayPanelUISketchPanelCellHeader.m in Sources */,
-				03BAA5231F140C1E001A493A /* JuspayPanelUI.m in Sources */,
-				03BAA52D1F140C1E001A493A /* JuspayPanelUISketchPanel.m in Sources */,
-				05CA37671F233843008659E3 /* AFURLResponseSerialization.m in Sources */,
-				DC56B5521F39B72E0099EDB6 /* JuspayPanelUISketchPanelScreenFlow.m in Sources */,
-				05CA37611F233843008659E3 /* AFNetworkReachabilityManager.m in Sources */,
-				DC38C3EE1F28863000B1F286 /* JuspayPanelUISketchPanelBackgroundLayer.m in Sources */,
-				03BAA5311F140C1E001A493A /* JuspayPanelUISketchPanelCell.m in Sources */,
-				03BAA5421F140C1E001A493A /* JuspayPanelUISketchPanelController.m in Sources */,
-				8E6CD7741F6D5A9A00C829FF /* DUIPropsFeedback.m in Sources */,
-				05CA375E1F233843008659E3 /* AFHTTPSessionManager.m in Sources */,
+				03D15E2E1FC4438500CA4A37 /* PrestoPanelUISketchPanelSmartComponent.m in Sources */,
+				03D15E341FC4438500CA4A37 /* PrestoPanelUISketchPanelController.m in Sources */,
+				03D15E121FC4438500CA4A37 /* PrestoPanelUISketchPanel.m in Sources */,
+				03D15E281FC4438500CA4A37 /* PrestoPanelUISketchPanelBackgroundLayer.m in Sources */,
+				03D15E421FC4438500CA4A37 /* PrestoPanelUI.m in Sources */,
+				03D15E321FC4438500CA4A37 /* DEUApi.m in Sources */,
+				03D15E271FC4438500CA4A37 /* PrestoPanelUISketchPanelCellDefault.m in Sources */,
+				03D15E351FC4438500CA4A37 /* PrestoPanelUISketchPanelCellHeader.m in Sources */,
+				03D15E131FC4438500CA4A37 /* PrestoPanelUISketchPanelCell.m in Sources */,
+				03D15E2C1FC4438500CA4A37 /* PrestoPanelUISketchPanelCellOrientation.m in Sources */,
+				03D15E3F1FC4438500CA4A37 /* DUIPropsMapper.m in Sources */,
+				03D15E1B1FC4438500CA4A37 /* PrestoPanelUISketchPanelCellSpacing.m in Sources */,
+				03D15E1F1FC4438500CA4A37 /* PrestoPanelUISketchPanelScreenFlow.m in Sources */,
+				03D15E2F1FC4438500CA4A37 /* DUIPropsFeedback.m in Sources */,
+				03D15E301FC4438500CA4A37 /* DUIPropsOverride.m in Sources */,
+				03D15E221FC4438500CA4A37 /* PrestoPanelUISketchPanelCellAlignment.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -587,7 +552,7 @@
 /* Begin PBXTargetDependency section */
 		03BAA54F1F140C38001A493A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 03BAA51C1F140C1E001A493A /* JuspayPanelUI */;
+			target = 03BAA51C1F140C1E001A493A /* PrestoPanelUI */;
 			targetProxy = 03BAA54E1F140C38001A493A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -688,13 +653,13 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = YM9U73Z2JM;
-				INFOPLIST_FILE = JuspayPanel/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/PrestoPanel/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PLUGIN_BUILD = 1;
 				PLUGIN_IDENTIFIER = "${PRODUCT_BUNDLE_IDENTIFIER}";
 				PLUGIN_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = in.juspay.JuspayPanel;
+				PRODUCT_BUNDLE_IDENTIFIER = in.juspay.PrestoPanel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -708,13 +673,13 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = YM9U73Z2JM;
-				INFOPLIST_FILE = JuspayPanel/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/PrestoPanel/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PLUGIN_BUILD = 1;
 				PLUGIN_IDENTIFIER = "${PRODUCT_BUNDLE_IDENTIFIER}";
 				PLUGIN_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = in.juspay.JuspayPanel;
+				PRODUCT_BUNDLE_IDENTIFIER = in.juspay.PrestoPanel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -736,13 +701,14 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/JuspayPanelUI",
+					"$(PROJECT_DIR)/PrestoPanelUI",
 				);
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = JuspayPanelUI/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/PrestoPanelUI/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				PRODUCT_BUNDLE_IDENTIFIER = in.juspay.JuspayPanelUI;
+				PRODUCT_BUNDLE_IDENTIFIER = in.juspay.PrestoPanelUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -764,13 +730,14 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/JuspayPanelUI",
+					"$(PROJECT_DIR)/PrestoPanelUI",
 				);
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = JuspayPanelUI/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/PrestoPanelUI/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				PRODUCT_BUNDLE_IDENTIFIER = in.juspay.JuspayPanelUI;
+				PRODUCT_BUNDLE_IDENTIFIER = in.juspay.PrestoPanelUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -790,7 +757,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		03BAA5141F140BFB001A493A /* Build configuration list for PBXNativeTarget "JuspayPanel" */ = {
+		03BAA5141F140BFB001A493A /* Build configuration list for PBXNativeTarget "PrestoPanel" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				03BAA5151F140BFB001A493A /* Debug */,
@@ -799,7 +766,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		03BAA54B1F140C1F001A493A /* Build configuration list for PBXNativeTarget "JuspayPanelUI" */ = {
+		03BAA54B1F140C1F001A493A /* Build configuration list for PBXNativeTarget "PrestoPanelUI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				03BAA54C1F140C1F001A493A /* Debug */,

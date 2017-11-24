@@ -4,12 +4,12 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>JuspayPanel.xcscheme</key>
+		<key>PrestoPanel.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
-		<key>JuspayPanelUI.xcscheme</key>
+		<key>PrestoPanelUI.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>1</integer>
