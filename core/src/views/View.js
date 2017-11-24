@@ -23,11 +23,9 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-const objectAssign = require('object-assign');
-
 class View {
 	constructor(props, children) {
-		this.props = objectAssign({}, this.props, props);
+		this.props = props;
 		this.children = children;
 	}
 }

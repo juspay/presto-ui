@@ -23,4 +23,26 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-module.exports = {}
+var path = require('path');
+var plugins = [];
+
+module.exports = {
+  devtool: "source-map",
+  entry: ["./index.js"],
+  output: {
+    path: __dirname + "/dist",
+    filename: "index_bundle.js",
+    publicPath: '/dist/',
+    sourceMapFilename: "index_bundle.js.map"
+  },
+  plugins: plugins,
+  module: {
+    loaders: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules\/(?!presto-ui)/,
+        loader: "babel-loader"
+      },
+    ]
+  }
+}
