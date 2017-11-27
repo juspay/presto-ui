@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13529"/>
+        <capability name="box content view" minToolsVersion="7.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+        <capability name="system font weights other than Regular or Bold" minToolsVersion="7.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="xfr-Lp-aRK" customClass="PrestoPanelUISketchPanelSmartComponent">
+            <rect key="frame" x="0.0" y="0.0" width="216" height="207"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TPA-zy-Wm5">
+                    <rect key="frame" x="0.0" y="180" width="212" height="27"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <subviews>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nlP-Pd-9zh">
+                            <rect key="frame" x="10" y="4" width="117" height="17"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Smart Component" id="T7c-Dy-W3Q">
+                                <font key="font" metaFont="systemSemibold" size="12"/>
+                                <color key="textColor" red="0.4431372549" green="0.4431372549" blue="0.4431372549" alpha="0.84999999999999998" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                    </subviews>
+                </customView>
+                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Npo-D2-y0A">
+                    <rect key="frame" x="56" y="148" width="153" height="26"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" altersStateOfSelectedItem="NO" selectedItem="TUW-jA-4pe" id="6ms-As-N5F">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" size="11" name=".AppleSystemUIFont"/>
+                        <menu key="menu" autoenablesItems="NO" id="21E-2g-pYL">
+                            <items>
+                                <menuItem title="None" id="TUW-jA-4pe" userLabel="None"/>
+                                <menuItem title="ListView" id="AZ4-sC-Xxd" userLabel="ListView"/>
+                                <menuItem title="EditText" id="B11-6k-Zjw" userLabel="EditText"/>
+                                <menuItem title="ScrollView" id="lY8-FY-V1I" userLabel="ScrollView"/>
+                                <menuItem title="QR" id="Jrp-PX-IQN" userLabel="QR"/>
+                                <menuItem title="Mutable TextView" id="FJL-jT-OmC" userLabel="Mutable TextView"/>
+                                <menuItem title="Radio Button" id="wwR-Xv-fS6" userLabel="Mutable TextView"/>
+                                <menuItem title="Radio Group" id="DPh-gN-YrQ" userLabel="Mutable TextView"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                </popUpButton>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5es-5W-xTi">
+                    <rect key="frame" x="19" y="155" width="37" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Type" id="umx-hx-nVc">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pT9-mg-5bF">
+                    <rect key="frame" x="56" y="115" width="153" height="26"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" altersStateOfSelectedItem="NO" id="lQT-To-sao">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" size="11" name=".AppleSystemUIFont"/>
+                        <menu key="menu" autoenablesItems="NO" id="xle-uj-kvS"/>
+                    </popUpButtonCell>
+                </popUpButton>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YTx-Uj-Zcn">
+                    <rect key="frame" x="4" y="122" width="52" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="On-State" id="1oC-1N-7FD">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <box fixedFrame="YES" title="Events" translatesAutoresizingMaskIntoConstraints="NO" id="9GW-FL-Ltk">
+                    <rect key="frame" x="15" y="16" width="186" height="94"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <view key="contentView" id="yLO-ZR-zrY">
+                        <rect key="frame" x="2" y="2" width="182" height="75"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Z9-lP-sy5">
+                                <rect key="frame" x="18" y="30" width="87" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="onChange" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Vf1-zC-i3q">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="cellTitle"/>
+                                </buttonCell>
+                            </button>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="USj-YJ-Eeb">
+                                <rect key="frame" x="18" y="10" width="96" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="onLongPress" bezelStyle="regularSquare" imagePosition="left" inset="2" id="P1Q-ad-DBP">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="cellTitle"/>
+                                </buttonCell>
+                            </button>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ENy-To-9y5">
+                                <rect key="frame" x="18" y="50" width="67" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="onClick" bezelStyle="regularSquare" imagePosition="left" inset="2" id="y8H-fW-mAk">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="cellTitle"/>
+                                </buttonCell>
+                            </button>
+                        </subviews>
+                    </view>
+                    <font key="titleFont" size="12" name=".AppleSystemUIFont"/>
+                </box>
+            </subviews>
+            <connections>
+                <outlet property="objectTypeList" destination="Npo-D2-y0A" id="yL4-GR-Whl"/>
+                <outlet property="onChangeButton" destination="9Z9-lP-sy5" id="AXw-if-Irh"/>
+                <outlet property="onClickButton" destination="ENy-To-9y5" id="uEN-SP-zDx"/>
+                <outlet property="onLongPressButton" destination="USj-YJ-Eeb" id="sR1-eD-hyj"/>
+                <outlet property="overlayList" destination="pT9-mg-5bF" id="hRu-Ph-vyv"/>
+                <outlet property="topBackgroundView" destination="TPA-zy-Wm5" id="ul3-mz-0DV"/>
+            </connections>
+            <point key="canvasLocation" x="133" y="116.5"/>
+        </customView>
+        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="O1z-pD-8W8">
+            <rect key="frame" x="0.0" y="0.0" width="116" height="17"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Component Type" id="Q5j-Jh-V8S">
+                <font key="font" metaFont="smallSystem"/>
+                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+            </textFieldCell>
+            <point key="canvasLocation" x="107" y="219"/>
+        </textField>
+    </objects>
+</document>
