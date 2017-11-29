@@ -1,5 +1,4 @@
-app.js
-.babelrc
-webpack.config.js
-test/*
-dist/*
+*
+!lib/**/*
+!package.json
+!*.md

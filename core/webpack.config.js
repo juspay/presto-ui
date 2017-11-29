@@ -24,13 +24,10 @@
 */
 
 module.exports = {
-	devtool: "source-map",
-	entry: ["./demo/index.js"],
+	entry: "./index.js",
   output: {
-    path: __dirname + "/dist",
-    filename: "index_bundle.js",
-    publicPath: '/dist/',
-    sourceMapFilename: "index_bundle.js.map"
+    filename: "lib/index.js",
+    libraryTarget: 'commonjs2'
   },
   module: {
     loaders: [
