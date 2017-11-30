@@ -167,6 +167,11 @@ let runInUI = function (cmd) {
     computeChildDimens(parentView);
     runInUIHelper(view.type, each);
     parentView.children.forEach(child => inflate(child));
+
+    if (parentView.props.parentIsScroll) {
+      let scrollView = window.__VIEWS[parentView.props.parentId];
+      getContentDimensionsCmd(scrollView).forEach(tuple => runInUIHelper(tuple[0], tuple[1]));
+    }
   });
 };
 
