@@ -154,7 +154,7 @@ function helper(args) {
   let startTime = time();
   let paths = extractSketch(args.path);
   let config = utils.parseJSONFile(paths.config);
-  let data = parse(paths.sketch, config, args.prod);
+  let data = parse(args.name, paths.sketch, config, args.prod);
   let parseTime = time();
   utils.success("Completed", "Parse", "time elapased - " + (parseTime -
     startTime) / 1000 + "s");

@@ -56,8 +56,9 @@ module.exports = function (obj) {
     "globalConfig": globalConfig(globalConf),
     "controller": controller(pagesObj, symbolTable),
     "screenMeta": meta(pagesObj),
-    "strings": res(obj.strmap.strings),
-    "accessibility": res(obj.strmap.accessibility)
+    "strings": res(obj.resMap.strings),
+    "accessibility": res(obj.resMap.accessibility),
+    "fontStyle": JSON.stringify(obj.resMap.fontStyle, null, 2),
   };
   return result;
 }
