@@ -109,16 +109,29 @@ function exportConfig(projectPath, code) {
 }
 
 function exportStrings(projectPath, code) {
-  let dir = path.join(projectPath, "res");
-  utils.mkdir(dir);
-  let stringsPath = path.join(dir, "strings.js");
-  utils.writeFile(stringsPath, code);
+  let dir = path.join(projectPath, "res/strings");
+  utils.mkdirs(dir);
+  let indexPath = path.join(dir, "index.js");
+  if (!fs.existsSync(indexPath))
+    utils.writeFile(indexPath, code.index);
+  let englishPath = path.join(dir, "en_US.json");
+  utils.writeFile(englishPath, code.en_US);
 }
 
 function exportAccessibility(projectPath, code) {
+  let dir = path.join(projectPath, "res/accessibility");
+  utils.mkdirs(dir);
+  let indexPath = path.join(dir, "index.js");
+  if (!fs.existsSync(indexPath))
+    utils.writeFile(indexPath, code.index);
+  let englishPath = path.join(dir, "en_US.json");
+  utils.writeFile(englishPath, code.en_US);
+}
+
+function exportFontStyle(projectPath, code) {
   let dir = path.join(projectPath, "res");
   utils.mkdir(dir);
-  let accessibilityPath = path.join(dir, "accessibility.js");
+  let accessibilityPath = path.join(dir, "fontStyle.json");
   utils.writeFile(accessibilityPath, code);
 }
 
@@ -164,6 +177,7 @@ function exportCode(projectPath, code) {
   exportController(projectPath, code.controller);
   exportStrings(projectPath, code.strings);
   exportAccessibility(projectPath, code.accessibility);
+  exportFontStyle(projectPath, code.fontStyle);
 }
 
 function commands(sketch, projectPath, isProject, pregelPath) {

@@ -69,8 +69,14 @@ function mkdirs(path) {
     fs.mkdirsSync(path);
 }
 
-function readFile(filepath) {
-  pathExists(filepath);
+function readFile(filepath, defaultValue) {
+  try {
+    pathExists(filepath);
+  } catch(e) {
+    if (defaultValue)
+      return defaultValue;
+    throw e;
+  }
   return fs.readFileSync(filepath, "utf8");
 }
 
@@ -78,8 +84,8 @@ function writeFile(path, data) {
   fs.writeFileSync(path, data);
 }
 
-function parseJSONFile(filepath) {
-  let rawdata = readFile(filepath);
+function parseJSONFile(filepath, defaultValue) {
+  let rawdata = readFile(filepath, defaultValue);
   try {
     let data = JSON.parse(rawdata);
     return data;

@@ -32,13 +32,22 @@ const utils = require('../utils');
 module.exports = (data) => {
   let defaultlang = "en_US";
   let code = "";
-  code += `const DEFAULT = "${defaultlang}";\n\n`;
-  let obj = {};
-  obj[defaultlang] = data;
-  let json = JSON.stringify(obj, null, 2);
-  code += 'const strings = ' + json;
-  code += '\n\n';
+  code += `const en_US = require('./en_US')\n\n`;
+  code += `const languages = {\n\t"en_US": en_US\n};\n\n`;
   code +=
-    `module.exports = () => Object.assign({}, strings[DEFAULT], strings[window.LANGUAGE]);\n`;
-  return code;
+    `module.exports = () => {
+  let lang = languages[window.LANGUAGE] || {};
+  let strings = {};
+  for (let i in en_US) {
+    if (lang[i])
+      strings[i] = lang[i];
+    else
+      strings[i] = en_US[i];
+  }
+  return strings;
+}`;
+  return {
+    en_US: JSON.stringify(data, null, 2),
+    index: code
+  };
 }

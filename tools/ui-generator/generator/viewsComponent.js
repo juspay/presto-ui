@@ -156,18 +156,15 @@ function importsCode(artboard, symbolTable, isComponent) {
       `const Controller = require('./${dots}${'controller/components/' + artboard.name}');\n`;
     code += `const Strings = require('./${dots}res/strings');\n`;
     code += `const Accessibility = require('./${dots}res/accessibility');\n`;
+    code += `const Font = require('./${dots}res/fontStyle');\n`;
   } else {
     code += `const Config = require('./../../globalConfig');\n`;
     code +=
       `const Controller = require('./../../controller/pages/${artboard.pageName}/${artboard.name}');\n`;
     code += `const Strings = require('./../../res/strings');\n`;
     code += `const Accessibility = require('./../../res/accessibility');\n`;
+    code += `const Font = require('./../../res/fontStyle');\n`;
   }
-
-  code += '\n';
-
-  code += `let STR = {};\n`;
-  code += `let HINT = {};\n`
 
   return code + '\n';
 }
@@ -176,8 +173,8 @@ function constructor(artboard) {
   let definitions = artboard.props.constructor.definitions;
   let code = utils.indent(`constructor(props, children, state) {\n`, 1);
   code += utils.indent(`super(props, children, state);\n`, 2);
-  code += utils.indent(`STR = Strings();\n`, 2);
-  code += utils.indent(`HINT = Accessibility();\n`, 2);
+  code += utils.indent(`this.STR = Strings();\n`, 2);
+  code += utils.indent(`this.HINT = Accessibility();\n`, 2);
   code += definitionsToCode(definitions, artboard.name);
   code += utils.indent(`}\n\n`, 1);
   return code;

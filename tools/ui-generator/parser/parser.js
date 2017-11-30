@@ -38,10 +38,10 @@ const alignments = ["top", "center", "left", "right", "bottom"];
 const rootLayouts = ["LinearLayout", "ScrollView", "RelativeLayout",
     "HorizontalScrollView", "ListView"
   ];
-  /**
-   * @typedef {Object} Props - Map of properties
-   * @example {'width':'100'}
-   */
+/**
+ * @typedef {Object} Props - Map of properties
+ * @example {'width':'100'}
+ */
 
 /**
  * @typedef {Object} Elem - JSON of sketch element
@@ -62,6 +62,46 @@ const rootLayouts = ["LinearLayout", "ScrollView", "RelativeLayout",
  * @property {Object} elem - Sketch JSON
  * @property {name} Name
  */
+
+// Resources like Strings, Fonts etc. are maintained here for common shareable assets
+let resourceMap;
+
+
+/**
+ * Helper to fill the resources values, checks if the value is already mapped and if it's not
+ * then it creates a unique key
+ * @param {string} value - value of the resource
+ * @return {string} - key which can used for this mapping
+ */
+function mapString(value, view) {
+  let map = resourceMap["strings"];
+  let values = Object.values(map)
+  let keys = Object.keys(map)
+  let index = -1;
+  if (~(index = values.indexOf(value)))
+    return "this.STR." + keys[index];
+
+  let name = utils.escape(view.name, true);
+  let len = 1;
+  while (~keys.indexOf(name) && len < value.length) {
+    name = (view.name) + '_' + utils.escape(value.slice(0, len), true);
+    len++;
+  }
+
+  if (~keys.indexOf(name)) {
+    name = (view.name) + '_' + utils.escape(value.slice(0, len), true) + parseInt(Math.random * 1000);
+  }
+
+  map[name] = value;
+  return "this.STR." + name;
+}
+
+function mapFont(value) {
+  let key = utils.escape(value, true).toUpperCase();
+  resourceMap["fontStyle"][key] = value;
+  return  "Font." + key;
+}
+
 function View(type, elem) {
   this.type = type;
   this.props = {};
@@ -90,7 +130,6 @@ function View(type, elem) {
     if (this.elem.name && this.type != "symbol") {
       this.setProp("id", "this.idSet." + escapedName, "variable");
       this.setProp("style", "this.style_" + escapedName, "variable");
-      this.setProp("accessibilityHint", this.elem.name, "text");
     } else {
       this.setProp("parentProps", "this.props_" + escapedName, "variable");
     }
@@ -124,14 +163,17 @@ function setTextViewProps(view, config) {
     return;
   if (config[id].text) {
     var text = decodeURIComponent(config[id].text);
-    view.setProp("text", text, "text");
+    let name = mapString(text, view);
+    view.setProp("text", name, "variable");
   }
   if (config[id].fontSize)
     view.setProp("textSize", parseInt(config[id].fontSize), "string");
   if (config[id].textRGBA)
     view.setProp("color", utils.rgb2hexText(config[id].textRGBA), "string");
-  if (config[id]["font-family"])
-    view.setProp("fontStyle", config[id]["font-family"]);
+  if (config[id]["font-family"]) {
+    let font = mapFont(config[id]["font-family"]);
+    view.setProp("fontStyle", font, "variable");
+  }
   if (config[id]["textAlign"])
     view.setProp("textAlign", config[id]["textAlign"]);
   if (config[id]["line-height"])
@@ -190,7 +232,7 @@ function setOrientation(view, config) {
       return;
     }
     view.setProp("orientation", orientation);
-    
+
   }
   if (config[id] && config[id]["gravity"]) {
     let gravity = config[id]["gravity"];
@@ -632,7 +674,12 @@ function parse(elem, symbolTable, config) {
   return null;
 }
 
+function registerResourcesMap(map) {
+  resourceMap = map;
+}
+
 module.exports = {
   parse,
-  View
+  View,
+  registerResourcesMap
 }
