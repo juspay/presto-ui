@@ -179,11 +179,11 @@ let inflateView = function (view, parentElement) {
       elem.style.overflowX = "scroll";
       elem.style.overflowY = "hidden";
       elem.style.whiteSpace = "noWrap";
-      elem.style.position = "relative";
+      elem.style.position = "absolute";
     } else if (view.type == "scrollView") {
       elem.style.overflowY = "scroll";
       elem.style.overflowX = "hidden";
-      elem.style.position = "relative";
+      elem.style.position = "absolute";
     } else if (view.type == "listView") {
       elem.style.overflowY = "scroll";
       elem.style.overflowX = "hidden";

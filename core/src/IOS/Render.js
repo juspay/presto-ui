@@ -49,15 +49,26 @@ function scrollHelper(view) {
 }
 
 function sumChildDimens(view) {
-  let isHorizontal = view.props.orientation == "horizontal";
-  let dimenKey = (isHorizontal) ? "w" : "h";
-  let axisKey = (isHorizontal) ? "x" : "y";
-  let index = (isHorizontal) ? 3: 2;
+  let isVertical = view.props.orientation == "vertical";
+  let dimenKey = (!isVertical) ? "w" : "h";
+  let axisKey = (!isVertical) ? "x" : "y";
+  let index = (!isVertical) ? 3: 2;
   if (view.children.length == 0) {
     view.props[dimenKey] = '0';
     return;
   }
-  let lastChild = view.children[view.children.length - 1];
+  let lastChild;
+  for (let i=view.children.length -1; i >= 0 ; i--) {
+    lastChild = view.children[i];
+    if (lastChild.props.visibility!="gone")
+      break;
+    lastChild = null;
+  }
+
+  if (!lastChild) {
+    view.props[dimenKey] = '0';
+    return;
+  }
   let margin = lastChild.props.margin ? lastChild.props.margin.split(',').map(a => a*1):[0,0,0,0];
   let padding = view.props.padding ? view.props.padding.split(',').map(a => a*1):[0,0,0,0];
   let dimen = lastChild.props[axisKey] * 1 + lastChild.props[dimenKey] * 1 + margin[index] + padding[index];
@@ -68,12 +79,12 @@ function setContentDimension(view, children) {
   if (children.length == 0)
     return;
   let container = children[0];
-  let isHorizontal = container.props.orientation == "horizontal";
+  let isVertical = container.props.orientation == "vertical";
   let margin = container.props.margin ? container.props.margin.split(',').map(a => a*1):[0,0,0,0];
   let padding = view.props.padding ? view.props.padding.split(',').map(a => a*1):[0,0,0,0];
   let height = container.props.h * 1;
   let width = container.props.w * 1;
-  if (isHorizontal) {
+  if (!isVertical) {
     width += padding[0] + padding[2] + margin[0] + margin[2];
   } else {
     height += padding[1] + padding[3] + margin[1] + margin[3];
