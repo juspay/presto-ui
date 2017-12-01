@@ -173,8 +173,7 @@ function overlay(view, table, id) {
     }
     table[id].view = relative;
   }
-  view.setProp("visibility", "gone");
-  relative.addChild(view);
+  table[id].props.addOverlay(view.name, view);
 }
 
 function overlayPages(view, artboardMap, config) {

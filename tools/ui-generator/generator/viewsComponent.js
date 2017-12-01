@@ -107,6 +107,10 @@ function importsCode(artboard, symbolTable, isComponent) {
 
   uniqueLayoutTypes(artboard.view, layoutTable, symbolTable);
 
+  for (let name in props.overlays) {
+    uniqueLayoutTypes(props.overlays[name], layoutTable, symbolTable);
+  }
+
   for (let iLayout in mandatoryImports) {
     let layout = mandatoryImports[iLayout];
     code += `const ${layout} = ${mapper[layout]};\n`;
@@ -323,6 +327,16 @@ function screenFlowFunc(funcName, screenName) {
   return code + '\n';
 }
 
+function overlayCode(name, view, symbolTable) {
+  let code = "";
+  code += utils.indent(`${name + "_overlay"} = () => {\n`,1);
+  code += utils.indent(`return (\n`,2);
+  code += transpiler(view, symbolTable, 3);
+  code += utils.indent(');\n', 2);
+  code += utils.indent('}\n\n',1);
+  return code;
+}
+
 /**
  * Generates code for the class
  * @param {Artboard}
@@ -344,6 +358,10 @@ function classCode(artboard, symbolTable, isComponent) {
   for (let name in artboard.props.adapters) {
     let obj = artboard.props.adapters[name];
     code += getAdapter(name, obj, symbolTable);
+  }
+  for (let name in artboard.props.overlays) {
+    let obj = artboard.props.overlays[name];
+    code += overlayCode(name, obj, symbolTable);
   }
   code += render(artboard, symbolTable, isComponent);
   code += "};\n";
