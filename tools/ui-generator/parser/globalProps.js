@@ -73,6 +73,7 @@ function config() {
   this.overrides = {};
   this.screenFlow = {};
   this.adapters = {};
+  this.overlays = {};
 
   this.addOverride = function (name, value, defaultVal) {
     if (!this.overrides[name])
@@ -86,6 +87,14 @@ function config() {
 
   this.addScreenFlow = function (functionName, screenName){
     this.screenFlow[functionName] = screenName;
+  }
+
+  this.addOverlay = function (name, view) {
+    if (this.overlays[name]) {
+      utils.error("Repeated overlay", name, "make sure every overlay gets unique name");
+      return;
+    }
+    this.overlays[utils.escape(name, true)] = view;
   }
 
   this.addAdapter = function  (name, type, id, data, isProd) {
