@@ -36,7 +36,8 @@ function viewCtxObj(view) {
     w: props.w * 1,
     h: props.h * 1,
     x: 0,
-    y: 0
+    y: 0,
+    width: props.w * 1,
   };
 
   view.children.forEach(child => {
@@ -135,7 +136,7 @@ function computeGravity(view, viewCtx, isRelative) {
 
       let value = props[dimen] * 1;
 
-      if (props.alignParentBottom && dimen == "h" && isRelative) {
+      if (isRelative && props.alignParentBottom && dimen == "h") {
         maxValue = viewCtx[dimen];
         return;
       }
@@ -177,6 +178,8 @@ function computeBasic(view, ignoreGravity) {
   if (!ignoreGravity && view.props.gravity)
     computeGravity(view, viewCtx, true);
 
+  let containerWidth = viewCtx.width;
+
   children.forEach(child => {
     let props = child.props;
     let margins = [0, 0, 0, 0];
@@ -210,11 +213,15 @@ function computeBasic(view, ignoreGravity) {
       props.x += Math.floor(extraWidth / 2);
       props.y += Math.floor(extraHeight / 2);
     }
+
+    if (window.RTL)
+      props.x = containerWidth - props.x - props.w;
   });
 }
 
 function computeLinearlayout(view) {
   let viewCtx = viewCtxObj(view);
+  let containerWidth = viewCtx.width;
   let parentProps = view.props;
   let children = view.children;
   let isHorizontal = (parentProps.orientation === "vertical") ? false : true;
@@ -324,9 +331,7 @@ function computeLinearlayout(view) {
       props[passiveDimen] -= margins[passiveMargin[0]] + margins[
         passiveMargin[1]];
       props[passiveDimen] += '';
-    }
-
-    if (hasPassiveGravity) {
+    } else if (hasPassiveGravity) {
       let availablePassive = viewCtx[passiveDimen] - props[passiveDimen];
       if (availablePassive < 0)
         console.error(new Error("Child " + passiveDimen +
@@ -337,6 +342,9 @@ function computeLinearlayout(view) {
     }
     props[passiveAxis] += axis + passiveMarginVal;
     props[passiveAxis] += '';
+
+    if (window.RTL)
+      props.x = containerWidth - props.x - props.w;
   });
 }
 
