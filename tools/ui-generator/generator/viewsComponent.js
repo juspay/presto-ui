@@ -158,16 +158,22 @@ function importsCode(artboard, symbolTable, isComponent) {
     code += `const Config = require('./${dots}globalConfig');\n`;
     code +=
       `const Controller = require('./${dots}${'controller/components/' + artboard.name}');\n`;
-    code += `const Strings = require('./${dots}res/strings');\n`;
+    code += `const Strings = require('./${dots}res/string');\n`;
     code += `const Accessibility = require('./${dots}res/accessibility');\n`;
     code += `const Font = require('./${dots}res/fontStyle');\n`;
+    code += `const FontColor = require('./${dots}res/fontColor');\n`;
+    code += `const FontSize = require('./${dots}res/fontSize');\n`;
+    code += `const Color = require('./${dots}res/color');\n`;
   } else {
     code += `const Config = require('./../../globalConfig');\n`;
     code +=
       `const Controller = require('./../../controller/pages/${artboard.pageName}/${artboard.name}');\n`;
-    code += `const Strings = require('./../../res/strings');\n`;
+    code += `const Strings = require('./../../res/string');\n`;
     code += `const Accessibility = require('./../../res/accessibility');\n`;
     code += `const Font = require('./../../res/fontStyle');\n`;
+    code += `const Color = require('./../../res/color');\n`;
+    code += `const FontSize = require('./../../res/fontSize');\n`;
+    code += `const FontColor = require('./../../res/fontColor');\n`;
   }
 
   return code + '\n';
