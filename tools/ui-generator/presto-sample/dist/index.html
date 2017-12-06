@@ -38,22 +38,44 @@
     </div>
   </div>
 
-  <div id="fullscreen">
-
-  </div>
+  <div id="fullscreen"></div>
 
 
   <script type="text/javascript">
     let pagesPopulated = {};
     let panelOpen = true;
+    let isFullscreen = false;
 
     let collapsebtn = document.getElementById('collapse-button');
     let sideboard = document.getElementById('sideboard');
 
+    let supportedSize = {
+      "Samsung S5": {width: "360px", height: "640px", zoom: "0.75"},
+      "Nexus 5X": {width: "412px", height: "732px", zoom: "0.75"},
+      "Iphone 5": {width: "320px", height: "568px", zoom: "0.75"},
+      "Iphone 6": {width: "375px", height: "667px", zoom: "0.75"},
+      "Iphone 6 plus": {width: "414px", height: "738px", zoom: "0.75"}
+    };
+
+    let selector = document.getElementById("device-selector");
+    for (let name in supportedSize) {
+      let option = document.createElement("option");
+      option.innerHTML = name;
+      selector.appendChild(option);
+    }
+
     collapsebtn.addEventListener('click', ()=>{
     		sideboard.className = panelOpen ? "closed":"";
+        if (isFullscreen) {
+          window.onresize();
+        }
     		panelOpen = !panelOpen;
     });
+
+    if (localStorage.getItem("fullscreen") == "true") {
+      document.getElementById('switch').checked = true;
+      setTimeout(fullscreen, 0);
+    }
 
     function fullscreen(e) {
     	let toggle = document.getElementById('switch');
@@ -63,6 +85,8 @@
   		let phone = document.getElementById('phone');
 
     	if (toggle.checked) {
+        isFullscreen = true;
+        localStorage.setItem("fullscreen", true);
     		content.parentNode.removeChild(content);
         content.style.width="100%";
         content.style.height="100%";
@@ -71,6 +95,8 @@
     		if (window.onresize)
     			window.onresize();
     	} else {
+        localStorage.setItem("fullscreen", false);
+        isFullscreen = false;
 				content.parentNode.removeChild(content);
 				phone.insertBefore(content, phone.children[1]);
 				display.className = "";
@@ -86,21 +112,6 @@
 		    blinker.className = status;
 		  });
 		}
-
-    let supportedSize = {
-    	"Samsung S5": {width: "360px", height: "640px", zoom: "0.75"},
-    	"Nexus 5": {width: "360px", height: "640px", zoom: "0.75"},
-    	"Iphone 5": {width: "320px", height: "568px", zoom: "0.75"},
-    	"Iphone 6": {width: "375px", height: "667px", zoom: "0.75"},
-    	"Iphone 6 plus": {width: "414px", height: "738px", zoom: "0.75"}
-    };
-
-    let selector = document.getElementById("device-selector");
-    for (let name in supportedSize) {
-    	let option = document.createElement("option");
-    	option.innerHTML = name;
-    	selector.appendChild(option);
-    }
 
     function updateDeviceSize(){
     	let value = selector.value;
