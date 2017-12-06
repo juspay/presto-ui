@@ -72,13 +72,13 @@ let resourceMap;
  * @param {string} value - value of the resource
  * @return {string} - key which can used for this mapping
  */
-function mapString(value, view) {
-  let map = resourceMap["string"];
+function mapString(value, view, type) {
+  let map = resourceMap[type];
   let values = Object.values(map)
   let keys = Object.keys(map)
   let index = -1;
   if (~(index = values.indexOf(value)))
-    return "this.STR." + keys[index];
+    return keys[index];
 
   let name = utils.escape(view.name, true);
   let len = 1;
@@ -92,7 +92,7 @@ function mapString(value, view) {
   }
 
   map[name] = value;
-  return "this.STR." + name;
+  return name;
 }
 
 function mapper(value, type) {
@@ -169,7 +169,7 @@ function setTextViewProps(view, config) {
     return;
   if (config[id].text) {
     var text = decodeURIComponent(config[id].text);
-    let name = mapString(text, view);
+    let name = "this.STR." + mapString(text, view, "string");
     view.setProp("text", name, "variable");
   }
   if (config[id].fontSize) {
@@ -331,6 +331,19 @@ function setAlignments(view, config) {
 }
 
 /**
+ * Sets accessibilityHint of the elem from the config
+ * @param {View}
+ * @param {Config}
+ */
+function setAccessibilityHint(view, config) {
+  let id = view.elem["do_objectID"];
+  if (config[id] && config[id]["accessibilityHint"]) {
+    let hint = "this.HINT." + mapString(config[id]["accessibilityHint"], view, "accessibility");
+    view.setProp("accessibilityHint", hint, "variable");
+  }
+}
+
+/**
  * Responsible for setting properties of the elem
  * @param {View}
  */
@@ -343,8 +356,9 @@ function setProps(view, config) {
   }
   setMargin(view, config);
   setWeight(view, config);
-  setAlignments(view, config);
   setEvents(view, config);
+  setAlignments(view, config);
+  setAccessibilityHint(view, config);
 }
 
 /**
