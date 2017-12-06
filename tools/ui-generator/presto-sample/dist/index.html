@@ -1,137 +1,235 @@
 <html>
+
 <head>
-	<title>Presto</title>
-	<script src="./socket.js"></script>
-	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport'/>
-	<meta charset="utf-8"/>
-	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+  <title>Presto UI</title>
+  <script src="./socket.js"></script>
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport' />
+  <meta charset="utf-8" />
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900" rel="stylesheet">
   <link href="./style.css" rel="stylesheet">
 </head>
+
 <body>
-<script type="text/javascript">
-	const ENV = "DEV";
-	let pagesPopulated = {};
-	let content = document.createElement('div');
-	content.id = "content";
-	content.className = "content";
 
-	if (ENV == "DEV") {
-		let parent = document.createElement('div');
-		parent.className = 'parent';
-		let side = document.createElement('div');
-		side.id = 'side';
-		side.className = 'side';
-		let image = document.createElement('div');
-		image.className = 'image';
-		document.body.appendChild(parent);
-		parent.appendChild(side);
-		parent.appendChild(image);
-		image.appendChild(content);
-	} else {
-		document.body.appendChild(content);
-	}
+  <div id="sideboard">
+    <img id="presto-img" src="presto.png" />
+    <div id="fullscreen-button">
+          Fullscreen
+	  			<input type="checkbox" id="switch" onchange="fullscreen()" /><label id="switch-label" for="switch">Toggle</label>
+    </div>
+    <div id="page-list"></div>
+    <div id="collapse-button"></div>
+  </div>
 
-	function addPages() {
-		if(!window.pages){
-			setTimeout(addPages, 5000);
-			return;
+  <div id="display">
+    <label id="size-toggle">
+      <select id="device-selector">
+      </select>
+    </label>
+    <div id="phone">
+      <div id="header" onclick="blink()" > <span id="blinker"></span> <span id="camera-front"></span>
+      </div>
+      <div id="content" class="content">
+      </div>
+      <div id="footer">
+        <div id="home-button"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="fullscreen">
+
+  </div>
+
+
+  <script type="text/javascript">
+    let pagesPopulated = {};
+    let panelOpen = true;
+
+    let collapsebtn = document.getElementById('collapse-button');
+    let sideboard = document.getElementById('sideboard');
+
+    collapsebtn.addEventListener('click', ()=>{
+    		sideboard.className = panelOpen ? "closed":"";
+    		panelOpen = !panelOpen;
+    });
+
+    function fullscreen(e) {
+    	let toggle = document.getElementById('switch');
+  		let display = document.getElementById('display');
+  		let content = document.getElementById('content');
+  		let fullscreen = document.getElementById('fullscreen');
+  		let phone = document.getElementById('phone');
+
+    	if (toggle.checked) {
+    		content.parentNode.removeChild(content);
+        content.style.width="100%";
+        content.style.height="100%";
+    		fullscreen.appendChild(content);
+    		display.className = "closed";
+    		if (window.onresize)
+    			window.onresize();
+    	} else {
+				content.parentNode.removeChild(content);
+				phone.insertBefore(content, phone.children[1]);
+				display.className = "";
+        updateDeviceSize();
+    	}
+    }
+
+    function blink(status) {
+    	let blinker = document.getElementById("blinker");
+    	blinker.id = "";
+		  setTimeout(() => {
+		    blinker.id = "blinker";
+		    blinker.className = status;
+		  });
 		}
-		let pages = window.pages;
-		let side = document.getElementById('side');
-		if (!side) {
-			return;
-		}
-		for(let i in pages) {
-			let page = pages[i];
-			if(!pagesPopulated[i]){
-				let div = document.createElement('div');
-				div.innerHTML =  i;
-				div.className = "sidePage";
-				side.appendChild(div);
-				pagesPopulated[i] = {};
-			}
-			for(let j in page){
-				let artboard = page[j];
-				if(typeof artboard != "string")
-					continue;
-				if(pagesPopulated[i][artboard])
-					continue;
-				let div = document.createElement('div');
-				div.innerHTML =  artboard;
-				div.className = "sideArtboard";
-				div.addEventListener("click", ()=>{
-					window.__duiShowScreen(null, {screen: artboard});
-				});
-				side.appendChild(div);
-				pagesPopulated[i][artboard] = true;
-			}
-		}
-	}
 
-	var reloadApp = function() {
-		var headID = document.getElementsByTagName("head")[0];
-	    var newScript = document.createElement('script');
-	    newScript.type = 'text/javascript';
-	    newScript.id = 'mystique';
-	    newScript.src = '/dist/index_bundle.js';
-	    newScript.onload = addPages;
-	    headID.appendChild(newScript);
-	}
+    let supportedSize = {
+    	"Samsung S5": {width: "360px", height: "640px", zoom: "0.75"},
+    	"Nexus 5": {width: "360px", height: "640px", zoom: "0.75"},
+    	"Iphone 5": {width: "320px", height: "568px", zoom: "0.75"},
+    	"Iphone 6": {width: "375px", height: "667px", zoom: "0.75"},
+    	"Iphone 6 plus": {width: "414px", height: "738px", zoom: "0.75"}
+    };
 
-	var currentHash = null
-	var onSocketMsg = {
-		hot: function() {
-			console.log("hot");
-		},
-		invalid: function() {
-			console.log("App updated. Recompiling...");
-		},
-		hash: function(hash) {
-			currentHash = hash;
-			console.log(hash);
-		},
-		"still-ok": function() {
-			console.log("App ready.");
-		},
-		ok: function() {
-			reloadApp();
-		},
-		warnings: function(warnings) {
-			console.log("Warnings while compiling.");
-			reloadApp();
-		},
-		errors: function(errors) {
-			console.log("App updated with errors. No reload!");
+    let selector = document.getElementById("device-selector");
+    for (let name in supportedSize) {
+    	let option = document.createElement("option");
+    	option.innerHTML = name;
+    	selector.appendChild(option);
+    }
 
-			if (Android)
-			Android.throwError(errors[0]);
-		},
-		"proxy-error": function(errors) {
-			console.log("Could not proxy to content base target!");
+    function updateDeviceSize(){
+    	let value = selector.value;
+    	let dimensions = supportedSize[value];
+    	let content = document.getElementById('content');
+    	let phone = document.getElementById('phone');
+    	content.style.width = dimensions.width;
+    	content.style.height = dimensions.height;
+    	phone.style.zoom = dimensions.zoom;
+    	if (window.onresize)
+    		window.onresize();
+    }
 
-			if (Android)
-			Android.throwError(errors[0]);
-		},
-		close: function() {
-			console.log("Disconnected.");
-		},
-		"log-level": function (data) {
-			console.log(data)
-		}
-	}
-	window.onload = function() {
-		var sock = new SockJS('/sockjs-node');
-		sock.onopen = function() {
-		   console.log('open');
-		};
-		sock.onmessage = function(e) {
-		  var msg = JSON.parse(e.data);
-			onSocketMsg[msg.type](msg.data)
-		};
-		sock.onclose = function() {
-		   console.log('close');
-		};
-	}
-</script>
+    selector.addEventListener("change", updateDeviceSize);
+
+    updateDeviceSize();
+
+    function setActive(div) {
+    	let pages = document.getElementsByClassName('page selected');
+    	for (let i=0; i<pages.length; i++)
+    		pages[i].className = "page";
+
+    	let artboards = document.getElementsByClassName('artboard selected');
+    	for (let i=0; i<artboards.length; i++)
+    		artboards[i].className = "artboard";
+
+    	div.parentNode.className = "page selected"
+    	div.className = "artboard selected"
+    }
+
+    function addPages() {
+      if (!window.pages) {
+        setTimeout(addPages, 5000);
+        return;
+      }
+      let pages = window.pages;
+      let pageList = document.getElementById('page-list');
+      if (!pageList) {
+        return;
+      }
+
+      let selectedFirstArtboard = false;
+
+      for (let i in pages) {
+        let page = pages[i];
+        let pageElem = document.createElement('div');
+        pageElem.className = "page";
+        let span = document.createElement('span');
+        span.innerHTML = i;
+        pageElem.appendChild(span);
+        pageList.appendChild(pageElem);
+        for (let j in page) {
+          let artboard = page[j];
+          if (typeof artboard != "string")
+            continue;
+          let div = document.createElement('div');
+          div.className = "artboard";
+          let span = document.createElement('span');
+          span.innerHTML = artboard;
+          div.appendChild(span);
+          div.addEventListener("click", () => {
+          	setActive(div);
+            window.__duiShowScreen(null, {
+              screen: artboard
+            });
+          });
+          pageElem.appendChild(div);
+          if (!selectedFirstArtboard) {
+          	selectedFirstArtboard = true;
+          	setActive(div);
+          }
+        }
+      }
+    }
+
+    var reloadApp = function() {
+      var headID = document.getElementsByTagName("head")[0];
+      var newScript = document.createElement('script');
+      newScript.type = 'text/javascript';
+      newScript.id = 'mystique';
+      newScript.src = '/dist/index_bundle.js';
+      newScript.onload = addPages;
+      headID.appendChild(newScript);
+    }
+
+    var currentHash = null
+    var onSocketMsg = {
+      hot: console.log,
+      hash: function(hash) {},
+      "proxy-error": console.log,
+      invalid: function() {
+        blink("compile");
+      },
+      "still-ok": function() {
+        blink("ready")
+      },
+      ok: function() {
+      	blink("ready");
+        reloadApp();
+      },
+      warnings: function(warnings) {
+      	blink("warning")
+      	console.log("Warning found during the build")
+        reloadApp();
+      },
+      errors: function(errors) {
+      	blink("error")
+      	console.log("Errors found during the build");
+      },
+      close: function() {
+      	blink("error");
+        console.log("Disconnected.");
+      },
+      "log-level": console.log
+    }
+    window.onload = function() {
+      var sock = new SockJS('/sockjs-node');
+      sock.onopen = function() {
+
+      };
+      sock.onmessage = function(e) {
+        var msg = JSON.parse(e.data);
+        onSocketMsg[msg.type](msg.data)
+      };
+      sock.onclose = function() {
+        onSocketMsg["close"]()
+      };
+    }
+  </script>
 </body>
+
 </html>
