@@ -108,6 +108,7 @@ input:checked + #switch-label:after {
   font-weight: 500;
   padding: 5px 3px;
   margin-bottom: 10px;
+  word-wrap: break-word;
   display: block;
 }
 
@@ -123,20 +124,24 @@ input:checked + #switch-label:after {
   margin-left: 20px;
   cursor: pointer;
   transition: all 300ms;
+  border-left: 2px solid transparent;
+  padding-left: 5px;
 }
 
 .artboard > span {
   font-size: 16px;
   color: #eeeeee;
   font-weight: 300;
-  padding-left: 5px;
   border-left: 2px solid transparent;
   transition: all 250ms ease-out;
 }
 
-.artboard:hover > span, .artboard:active > span, .artboard.selected > span {
-  border-color: #fdf731;
+.artboard:hover, .artboard:active, .artboard.selected {
   padding-left: 10px;
+  border-color: #fdf731;
+}
+
+.artboard:hover > span, .artboard:active > span, .artboard.selected > span {
   font-weight: 400;
 }
 
@@ -200,6 +205,10 @@ input:checked + #switch-label:after {
 
 #sideboard.closed ~ #display {
   width: 100%;
+  padding-left: 0px;
+}
+
+#sideboard.closed ~ #fullscreen {
   padding-left: 0px;
 }
 
@@ -276,7 +285,7 @@ input:checked + #switch-label:after {
   width: 100%;
   height: 100%;
   position: absolute;
-  transition: all 300ms;
+  padding-left: 280px;
   display: none;
 }
 
