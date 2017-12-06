@@ -145,16 +145,18 @@ function indent(str, tabs) {
 }
 
 function escape(str, removeSlash) {
-  if (typeof str == "string") {
-    str = str.trim();
-    if(!alphaRegex.test(str.charAt(0))){
-      str = "a_" + str;
-    }
-    str = str.charAt(0).toUpperCase() + str.slice(1);
-    if (removeSlash)
-      return str.replace(/[^a-zA-Z0-9]/g, "_");
-    return str.replace(/[^a-zA-Z0-9/]/g, "_");
+  if (typeof str != "string")
+    str = String(str);
+
+  str = str.trim();
+  if(!alphaRegex.test(str.charAt(0))){
+    str = "a_" + str;
   }
+  str = str.charAt(0).toUpperCase() + str.slice(1);
+  if (removeSlash)
+    return str.replace(/[^a-zA-Z0-9]/g, "_");
+  return str.replace(/[^a-zA-Z0-9/]/g, "_");
+
   return str;
 }
 

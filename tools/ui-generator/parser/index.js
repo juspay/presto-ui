@@ -62,9 +62,12 @@ module.exports = function (name, folderPath, config, isProd) {
   let pages = [];
 
   let resMap = {
-    strings: utils.parseJSONFile(path.join("output", name, "res", "strings", "en_US.json"), "{}"),
+    string: utils.parseJSONFile(path.join("output", name, "res", "string", "en_US.json"), "{}"),
     fontStyle: utils.parseJSONFile(path.join("output", name, "res", "fontStyle.json"), "{}"),
     accessibility: utils.parseJSONFile(path.join("output", name, "res", "accessibility", "en_US.json"), "{}"),
+    fontColor: utils.parseJSONFile(path.join("output", name, "res", "fontColor.json"), "{}"),
+    fontSize: utils.parseJSONFile(path.join("output", name, "res", "fontSize.json"), "{}"),
+    color: utils.parseJSONFile(path.join("output", name, "res", "color.json"), "{}"),
   }
 
   parser.registerResourcesMap(resMap);

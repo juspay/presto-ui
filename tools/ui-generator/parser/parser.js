@@ -66,7 +66,6 @@ const rootLayouts = ["LinearLayout", "ScrollView", "RelativeLayout",
 // Resources like Strings, Fonts etc. are maintained here for common shareable assets
 let resourceMap;
 
-
 /**
  * Helper to fill the resources values, checks if the value is already mapped and if it's not
  * then it creates a unique key
@@ -74,7 +73,7 @@ let resourceMap;
  * @return {string} - key which can used for this mapping
  */
 function mapString(value, view) {
-  let map = resourceMap["strings"];
+  let map = resourceMap["string"];
   let values = Object.values(map)
   let keys = Object.keys(map)
   let index = -1;
@@ -96,10 +95,17 @@ function mapString(value, view) {
   return "this.STR." + name;
 }
 
-function mapFont(value) {
+function mapper(value, type) {
+  let map = resourceMap[type];
+  let keys = Object.keys(map);
+  let values = Object.values(map);
+  let index;
+  if (~(index = values.indexOf(value)))
+    return keys[index];
+
   let key = utils.escape(value, true).toUpperCase();
-  resourceMap["fontStyle"][key] = value;
-  return  "Font." + key;
+  resourceMap[type][key] = value;
+  return key;
 }
 
 function View(type, elem) {
@@ -166,12 +172,16 @@ function setTextViewProps(view, config) {
     let name = mapString(text, view);
     view.setProp("text", name, "variable");
   }
-  if (config[id].fontSize)
-    view.setProp("textSize", parseInt(config[id].fontSize), "string");
-  if (config[id].textRGBA)
-    view.setProp("color", utils.rgb2hexText(config[id].textRGBA), "string");
+  if (config[id].fontSize) {
+    let size = "FontSize." + mapper(config[id].fontSize, "fontSize");
+    view.setProp("textSize", size, "variable");
+  }
+  if (config[id].textRGBA) {
+    let color = "FontColor." + mapper(utils.rgb2hexText(config[id].textRGBA), "fontColor");
+    view.setProp("color", color, "variable");
+  }
   if (config[id]["font-family"]) {
-    let font = mapFont(config[id]["font-family"]);
+    let font = "Font." + mapper(config[id]["font-family"], "fontStyle");
     view.setProp("fontStyle", font, "variable");
   }
   if (config[id]["textAlign"])
@@ -208,8 +218,8 @@ function setDims(view, config) {
 function setStyle(view) {
   let elemStyle = view.elem.style;
   if (elemStyle && elemStyle.fills) {
-    let background = utils.rgb2hex(elemStyle.fills[0].color);
-    view.setProp("background", background, "string");
+    let background = "Color." + mapper(utils.rgb2hex(elemStyle.fills[0].color), "color");
+    view.setProp("background", background , "variable");
   }
   if (elemStyle && elemStyle.borders && elemStyle.borders[0].isEnabled) {
     let color = utils.rgb2hex(elemStyle.borders[0].color, true);
