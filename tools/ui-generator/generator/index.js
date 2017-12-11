@@ -39,6 +39,12 @@ function globalConfig(config){
 	return value;
 }
 
+function replaceNumbers(key, value) {
+  if (typeof value == "object")
+    return value;
+  return String(value);
+}
+
 /**
  * Generator - Converts the json objects to code
  * @param {Array.<{name:string, artboards:Array.<Artboard>}>} pages - Array of page objects
@@ -58,10 +64,10 @@ module.exports = function (obj) {
     "screenMeta": meta(pagesObj),
     "string": res(obj.resMap.string),
     "accessibility": res(obj.resMap.accessibility),
-    "fontStyle": JSON.stringify(obj.resMap.fontStyle, null, 2),
-    "fontColor": JSON.stringify(obj.resMap.fontColor, null, 2),
-    "fontSize": JSON.stringify(obj.resMap.fontSize, null, 2),
-    "color": JSON.stringify(obj.resMap.color, null, 2),
+    "fontStyle": JSON.stringify(obj.resMap.fontStyle, replaceNumbers, 2),
+    "fontColor": JSON.stringify(obj.resMap.fontColor, replaceNumbers, 2),
+    "fontSize": JSON.stringify(obj.resMap.fontSize, replaceNumbers, 2),
+    "color": JSON.stringify(obj.resMap.color, replaceNumbers, 2),
   };
   return result;
 }

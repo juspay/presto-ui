@@ -91,6 +91,8 @@ function mapString(value, view, type) {
     name = (view.name) + '_' + utils.escape(value.slice(0, len), true) + parseInt(Math.random * 1000);
   }
 
+  name = utils.escape(name, true);
+
   map[name] = value;
   return name;
 }

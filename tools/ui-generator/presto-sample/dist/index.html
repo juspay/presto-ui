@@ -72,7 +72,7 @@
     		panelOpen = !panelOpen;
     });
 
-    if (localStorage.getItem("fullscreen") == "true") {
+    if (localStorage && localStorage.getItem("fullscreen") == "true") {
       document.getElementById('switch').checked = true;
       setTimeout(fullscreen, 0);
     }
@@ -86,7 +86,8 @@
 
     	if (toggle.checked) {
         isFullscreen = true;
-        localStorage.setItem("fullscreen", true);
+        if (localStorage)
+          localStorage.setItem("fullscreen", true);
     		content.parentNode.removeChild(content);
         content.style.width="100%";
         content.style.height="100%";
@@ -95,7 +96,8 @@
     		if (window.onresize)
     			window.onresize();
     	} else {
-        localStorage.setItem("fullscreen", false);
+        if (localStorage)
+          localStorage.setItem("fullscreen", false);
         isFullscreen = false;
 				content.parentNode.removeChild(content);
 				phone.insertBefore(content, phone.children[1]);
