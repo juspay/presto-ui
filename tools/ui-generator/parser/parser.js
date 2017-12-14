@@ -136,7 +136,7 @@ function View(type, elem) {
   this.setBasicProps = function () {
     let escapedName = utils.escape(this.elem.name, true);
     if (this.elem.name && this.type != "symbol") {
-      this.setProp("id", "this.idSet." + escapedName, "variable");
+      this.setProp("id", `this.id("${escapedName}")`, "variable");
       this.setProp("style", "this.style_" + escapedName, "variable");
     } else {
       this.setProp("parentProps", "this.props_" + escapedName, "variable");

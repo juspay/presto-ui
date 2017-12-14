@@ -34,9 +34,9 @@ function Definitions() {
     };
   }
 
-  this.addTextDef = function (name, value) {
+  this.addTextDef = function (name, value, type) {
     this.definitions[name] = {
-      "type": "text",
+      "type": type || "text",
       "value": value
     };
   }

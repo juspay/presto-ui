@@ -48,8 +48,8 @@ function definitionsToCode(definitions, artboardName) {
       code += utils.indent(`let ${name} = this.override_${name}();\n`, 2);
     } else if (type == "id") {
       ids.push(name);
-    } else if (type == "strmap") {
-      code += utils.indent(`this.${name} = STR.${value};\n`, 2);
+    } else if (type == "variable") {
+      code += utils.indent(`this.${name} = ${value};\n`, 2);
     } else
       utils.warn("definitions type not supported", type, "Artboard name: " +
         artboardName)
@@ -202,6 +202,7 @@ function render(artboard, symbolTable, isComponent) {
   code += utils.indent('this.layout = (\n', 2);
   code += transpiler(artboard.view, symbolTable, 3);
   code += utils.indent(");\n", 2);
+  code += utils.indent(`this.containerId = this.layout.idSet.id;\n`, 2);
   code += utils.indent('return this.layout.render();\n', 2);
   code += utils.indent('}\n\n', 1);
   return code;
@@ -312,12 +313,12 @@ function getAdapter(name, obj, symbolTable) {
       `view:this.${fnName}(d).render(), value: "", viewType: 0\n`, 3);
     code += utils.indent(`}));\n`, 2);
     code += utils.indent(
-      `JBridge.listViewAdapter(this.idSet.${name}, JSON.stringify(views), null, data.length, null);\n`,
+      `JBridge.listViewAdapter(this.id("${name}"), JSON.stringify(views), null, data.length, null);\n`,
       2);
   } else if (type == "scroll") {
     code += utils.indent('data.forEach((d, i)=>{\n',2);
     code += utils.indent(`let view = this.${fnName}(d).render();\n`,3);
-    code += utils.indent(`this.appendChild(this.idSet.${name}, view, i, null, false);\n`, 3);
+    code += utils.indent(`this.appendChild(this.id("${name}"), view, i, null, false);\n`, 3);
     code += utils.indent(`});\n`,2);
   }
   code += utils.indent('}\n', 1);

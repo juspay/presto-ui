@@ -74,7 +74,7 @@ function listview(view, props, config, isProd) {
   props.addAdapter(idName, "listview", itemId, data, isProd);
   view.setProp("afterRender", idName, "this");
   view.setProp("root", "true", "bool");
-  view.setProp("id", "idSet." + idName, "this");
+  view.setProp("id", `id("${idName}")`, "this");
 }
 
 function qr(view, props, config) {
@@ -85,7 +85,7 @@ function qr(view, props, config) {
   if (view.type != "ImageView")
     return utils.warn("Invalid QR", view.name, "QR should be a imageview");
 
-  view.setProp("id", "idSet.qr", "this");
+  view.setProp("id", `id("qr")`, "this");
   props.constructor.addId("qr");
 }
 
@@ -139,7 +139,7 @@ function scrollViewAdapter(view, props, isProd) {
     props.constructor.addId(idName);
     props.addAdapter(idName, "scroll", id, data, isProd);
     view.childs[0].setProp("afterRender", idName, "this");
-    view.childs[0].setProp("id", "idSet." + idName, "this");
+    view.childs[0].setProp("id", `id("${idName}")`, "this");
     return;
   }
   view.childs.forEach(child => scrollViewAdapter(child, props, isProd));
