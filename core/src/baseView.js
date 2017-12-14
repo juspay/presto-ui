@@ -87,6 +87,14 @@ class BaseView extends View {
     return this.foundChildren;
   }
 
+  id(name) {
+    if (!this.idSet[name]) {
+      window.__ID++;
+      this.idSet[name] = window.__ID;
+    }
+    return this.idSet[name];
+  }
+
   setIds(arr) {
     if (!this.idSet)
       this.idSet = {};

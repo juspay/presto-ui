@@ -25,6 +25,8 @@
 
 var dom = require('../doms');
 var View = require('../baseView');
+var TextView = require('./TextView');
+var LinearLayout = require('./LinearLayout');
 
 class ViewPager extends View {
   constructor(props, children) {
@@ -35,17 +37,55 @@ class ViewPager extends View {
     ]);
   }
 
+  resolveChildren () {
+    var _this = this;
+
+    return this.children.map(function(child) {
+      return  child.render();
+    });
+  }
+
   render() {
     var params = this.props;
-    var _this = this;
-    params.__filename = params.__source.fileName + ' :ln ' + params.__source.lineNumber;
+    var children = this.resolveChildren();
 
+    if (window.__OS == "IOS") {
+      return (
+        <collectionView
+          collectionView="true"
+          id={this.props.id ? this.props.id : this.idSet.id}
+          params={params}>
+
+          {children}
+
+        </collectionView>
+      );
+    } else if (window.__OS == "WEB") {
+      params.background = "#dddddd";
+      params.gravity="center";
+      return (
+        <LinearLayout
+          params={params}>
+
+          <TextView
+            text="ViewPager is not support on Web"
+            color="#e74c3c"
+            gravity="center"
+            textSize="24"
+            width="match_parent"
+            height="24"/>
+
+        </LinearLayout>
+      ).render();
+    }
+
+    params.viewPagerChildren = JSON.stringify(children);
     return (
       <viewPager
-        id={this.props.id?this.props.id:this.idSet.id}  
+        id={this.props.id?this.props.id:this.idSet.id}
         params={params}>
 
-        {this.children.map(function(child) {child.__filename = _this.__filename; return  child.render()})}
+
       </viewPager>
     )
   }

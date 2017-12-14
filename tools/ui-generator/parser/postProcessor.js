@@ -81,9 +81,8 @@ function textOverride(view, symbol, overrides, symbolList, symbolTable) {
     let value = "";
     if (!child.props.text) {
       symbol.props.constructor.addTextDef(name, "");
-    } else if (child.props.text.type == "text") {
-      value = child.props.text.value;
-      symbol.props.constructor.addTextDef(name, value || "");
+    } else if (child.props.text.value.indexOf("this") == 0) {
+      symbol.props.constructor.addTextDef(name, child.props.text.value, child.props.text.type)
     }
     symbol.props.render.addConditionalDef(name);
     child.setProp("text", name, "variable");
@@ -160,6 +159,8 @@ function overlay(view, table, id) {
   let relative = rootview;
   if (rootview.type != "RelativeLayout") {
     relative = new parser.View("RelativeLayout", rootview.elem);
+    relative.setProp("style", relative.props.style.value + "_relative", "variable");
+    rootview.props.id = relative.props.id;
     delete relative.props.id;
     relative.addChild(rootview);
     rootview.setProp("root", "true", "bool");

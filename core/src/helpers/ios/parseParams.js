@@ -813,6 +813,8 @@ function generateType(type){
     generatedType = "uILabel";
   } else if (type == "scrollView" || type == "horizontalScrollView") {
     generatedType = "uIScrollView";
+  } else if (type == "collectionView" || type == "tableView") {
+    generatedType = type;
   } else {
     generatedType = "uIView";
   }
@@ -990,7 +992,6 @@ module.exports = function(type, config, _getSetType) {
     };
 
     let animate = self_animate(props);
-    console.log(animate);
     config.methods.push(self_animate(props));
   }
 
@@ -1017,7 +1018,6 @@ module.exports = function(type, config, _getSetType) {
     };
 
     let animate = self_animate(props);
-    console.log(animate);
     config.methods.push(self_animate(props));
   }
 

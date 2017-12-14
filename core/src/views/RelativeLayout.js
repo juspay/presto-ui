@@ -39,7 +39,6 @@ class RelativeLayout extends View {
     var _this = this;
 
     return this.children.map(function(child) {
-      child.__filename = _this.__filename;
       return  child.render();
     });
   }

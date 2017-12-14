@@ -19,8 +19,8 @@ input {
 }
 
 @font-face {
-	font-family: "SourceSansPro";
-	src: local("Source Sans Pro");
+  font-family: "SourceSansPro";
+  src: local("Source Sans Pro");
 }
 
 #sideboard {
@@ -105,7 +105,6 @@ input:checked + #switch-label:after {
 }
 
 .page > span {
-  text-transform: uppercase;
   font-size: 18px;
   color: #eeeeee;
   font-weight: 500;
@@ -116,10 +115,7 @@ input:checked + #switch-label:after {
 }
 
 .page.selected > span {
-  background-color: #fdf731;
-  border-color: #fdf731;
-  border-bottom: 2px solid;
-  color: #141448;
+  font-weight: bold;
 }
 
 .artboard {
@@ -135,17 +131,25 @@ input:checked + #switch-label:after {
   font-size: 16px;
   color: #eeeeee;
   font-weight: 300;
+  padding-left: 10px;
   border-left: 2px solid transparent;
-  transition: all 250ms ease-out;
 }
 
-.artboard:hover, .artboard:active, .artboard.selected {
-  padding-left: 10px;
+.artboard:hover, .artboard:active {
   border-color: #fdf731;
 }
 
+.artboard.selected {
+  background-color: #fdf731;
+  font-weight: bold;
+}
+
+.artboard.selected > span {
+  color: #141448;
+}
+
 .artboard:hover > span, .artboard:active > span, .artboard.selected > span {
-  font-weight: 400;
+  font-weight: bold;
 }
 
 #size-toggle {

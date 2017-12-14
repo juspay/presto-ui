@@ -358,6 +358,8 @@ function computeChildDimens(view) {
   } else if (view.type == "listView") {
     view.orientation = "vertical";
     computeLinearlayout(view);
+  } else {
+    computeBasic(view, false);
   }
 
   return view;

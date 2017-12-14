@@ -96,7 +96,7 @@ const appendToRoot = function (screen, dontAnimate) {
   let layout = screen.render();
   window.__ROOTSCREEN.appendChild(window.__ROOTSCREEN.idSet.root, layout,
     window.__SCREEN_INDEX, screen.afterRender);
-  if (dontAnimate)
+  if (dontAnimate || window.__OS == "IOS")
     return;
   animate();
 }
