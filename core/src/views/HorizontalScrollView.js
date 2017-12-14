@@ -42,7 +42,6 @@ class HorizontalScrollView extends View {
     var _this = this;
 
     return this.children.map(function(child) {
-      child.__filename = _this.__filename;
       return  child.render();
     });
   }
@@ -51,8 +50,6 @@ class HorizontalScrollView extends View {
     var params = this.props;
 
     let children = this.resolveChildren();
-
-    params.__filename = params.__source.fileName  + ' :ln ' + params.__source.lineNumber;
 
     return (
       <horizontalScrollView

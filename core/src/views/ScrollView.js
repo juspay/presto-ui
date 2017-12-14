@@ -45,7 +45,6 @@ class ScrollView extends View {
     var _this = this;
 
     return this.children.map(function(child) {
-      child.__filename = _this.__filename;
       return  child.render();
     });
   }
@@ -55,9 +54,6 @@ class ScrollView extends View {
     let children = this.resolveChildren();
 
     this.setOrientation(params);
-
-    params.__filename = params.__source.fileName  + ' :ln ' + params.__source.lineNumber;
-
     return (
       <scrollView
         id={this.props.id?this.props.id:this.idSet.id}

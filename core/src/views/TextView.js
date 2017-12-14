@@ -38,11 +38,8 @@ class TextView extends View {
 
   render() {
     var params = this.props;
-    params.__filename = params.__source.fileName + ' :ln ' + params.__source.lineNumber;
-
     return (
       <textView
-      fontStyle = {this.props.fontStyle?this.props.fontStyle:"OpenSans-Regular"}
 			  id={this.props.id?this.props.id:this.idSet.id}
 				params={params}/>
     )

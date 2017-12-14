@@ -25,6 +25,8 @@
 
 var dom = require('../doms');
 var View = require('../baseView');
+var ScrollView = require('./ScrollView');
+var LinearLayout = require('./LinearLayout');
 
 class ListView extends View {
 	constructor(props, children) {
@@ -35,10 +37,49 @@ class ListView extends View {
 		]);
 	}
 
+  resolveChildren () {
+    var _this = this;
+
+    return this.children.map(function(child) {
+      return  child.render();
+    });
+  }
+
 	render() {
 		var params = this.props;
-		params.__filename = params.__source.fileName  + ' :ln ' + params.__source.lineNumber;
+    var children = this.resolveChildren();
 
+    if (window.__OS == "IOS") {
+      return (
+        <tableView
+          tableView="true"
+          id={this.props.id?this.props.id:this.idSet.id}
+          params={params}>
+
+          {children}
+
+        </tableView>
+      );
+    } else if (window.__OS == "WEB") {
+      return (
+        <ScrollView
+          id={this.props.id ? this.props.id:this.idSet.id}
+          params={params}>
+
+          <LinearLayout
+            width="match_parent"
+            height="match_parent"
+            orientation="vertical">
+
+            {this.children}
+
+          </LinearLayout>
+
+        </ScrollView>
+      ).render();
+    }
+
+    params.listChildren = JSON.stringify(children);
 		return (
 			<listView
 				id={this.props.id?this.props.id:this.idSet.id}

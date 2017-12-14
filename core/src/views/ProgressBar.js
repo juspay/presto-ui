@@ -37,10 +37,8 @@ class ProgressBar extends View {
 
 	render() {
 		var params = this.props;
-		params.__filename = params.__source.fileName  + ' :ln ' + params.__source.lineNumber;
-
 		return (
-			<progressBar  
+			<progressBar
 				id={this.props.id?this.props.id:this.idSet.id}
 				params={params}/>
 		)

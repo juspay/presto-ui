@@ -39,11 +39,10 @@ class EditText extends View {
 
   render() {
     var params = this.props;
-    params.__filename = params.__source.fileName + ' :ln ' + params.__source.lineNumber;
 
     return (
       <editText
-				id={this.props.id?this.props.id:this.idSet.id}  
+				id={this.props.id?this.props.id:this.idSet.id}
 				params={params}/>
     )
   }
