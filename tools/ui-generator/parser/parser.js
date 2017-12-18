@@ -66,6 +66,10 @@ const rootLayouts = ["LinearLayout", "ScrollView", "RelativeLayout",
 // Resources like Strings, Fonts etc. are maintained here for common shareable assets
 let resourceMap;
 
+let artboardName;
+let stringNumber = 1;
+
+
 /**
  * Helper to fill the resources values, checks if the value is already mapped and if it's not
  * then it creates a unique key
@@ -77,22 +81,11 @@ function mapString(value, view, type) {
   let values = Object.values(map)
   let keys = Object.keys(map)
   let index = -1;
+
   if (~(index = values.indexOf(value)))
     return keys[index];
 
-  let name = utils.escape(view.name, true);
-  let len = 1;
-  while (~keys.indexOf(name) && len < value.length) {
-    name = (view.name) + '_' + utils.escape(value.slice(0, len), true);
-    len++;
-  }
-
-  if (~keys.indexOf(name)) {
-    name = (view.name) + '_' + utils.escape(value.slice(0, len), true) + parseInt(Math.random * 1000);
-  }
-
-  name = utils.escape(name, true);
-
+  let name = utils.escape(view.name, true) + stringNumber++;
   map[name] = value;
   return name;
 }
@@ -658,6 +651,7 @@ function processTextAlign(view) {
 function parse(elem, symbolTable, config) {
   let view = parseRootView(elem, config);
   let name = utils.escape(elem.name);
+  artboardName = name;
   processAlignments(null, view);
   processTextAlign(view);
 
