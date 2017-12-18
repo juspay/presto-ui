@@ -129,6 +129,7 @@ input:checked + #switch-label:after {
 
 .artboard > span {
   font-size: 16px;
+  word-wrap: break-word;
   color: #eeeeee;
   font-weight: 300;
   padding-left: 10px;

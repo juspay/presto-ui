@@ -119,8 +119,11 @@ function symbolOverride(view, symbol, overrides, symbolList,
 
     if (!globalConf[symbolName][name])
       globalConf[symbolName][name] = {};
+
     let globals = globalConf[symbolName][name];
-    globals[newSymbolName] = Object.keys(globals).length;
+    if (!globals[newSymbolName])
+      globals[newSymbolName] = Object.keys(globals).length;
+
     symbol.props.addOverride(name, override["symbolID"], child.id);
     symbol.props.render.addFuncCall(name, "override");
     view.setProp(name, [symbolName, name, newSymbolName], "global");
