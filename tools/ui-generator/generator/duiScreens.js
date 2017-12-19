@@ -34,7 +34,6 @@ const utils = require('../utils');
  * @return {string} code
  */
 function generate(pages) {
-  let artboards = [];
   let pagesDict = {};
   for (let iPage in pages) {
     let page = pages[iPage];
@@ -44,15 +43,10 @@ function generate(pages) {
     for (let iArtboard in page.artboards) {
       let artboard = page.artboards[iArtboard];
       pagesDict[page.name].push(artboard.name);
-      artboards.push(artboard.name);
     }
+    pagesDict[page.name].sort();
   }
-  let obj = {
-    pages: pagesDict,
-    artboards: artboards
-  };
-  obj = JSON.stringify(obj, null, 2);
-  return obj;
+  return JSON.stringify(pagesDict, Object.keys(pagesDict).sort(), 2);
 }
 
 module.exports = generate;

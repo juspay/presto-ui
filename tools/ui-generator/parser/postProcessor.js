@@ -77,6 +77,8 @@ function textOverride(view, symbol, overrides, symbolList, symbolTable) {
     let child = findViewById(key, symbol.view);
     if (!child)
       return;
+    if (child.type != "TextView")
+      return;
     let name = utils.escape(child.name, true);
     let value = "";
     if (!child.props.text) {
