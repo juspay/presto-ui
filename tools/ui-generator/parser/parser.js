@@ -67,6 +67,9 @@ const rootLayouts = ["LinearLayout", "ScrollView", "RelativeLayout",
 let resourceMap;
 
 let artboardName;
+let idCount;
+let idMap;
+let ignoreIdLayers = ["Bg", "Separator"];
 let stringNumber = 1;
 
 
@@ -128,6 +131,16 @@ function View(type, elem) {
 
   this.setBasicProps = function () {
     let escapedName = utils.escape(this.elem.name, true);
+
+    if (!idMap[escapedName])
+      idMap[escapedName] = 0;
+
+    idMap[escapedName]++;
+
+    while (idMap[escapedName] >1 && ignoreIdLayers.indexOf(escapedName) == -1) {
+      escapedName += idCount++ * 100000000 + 'ø';
+    }
+
     if (this.elem.name && this.type != "symbol") {
       this.setProp("id", `this.id("${escapedName}")`, "variable");
       this.setProp("style", "this.style_" + escapedName, "variable");
@@ -642,6 +655,19 @@ function processTextAlign(view) {
   delete view.props.textAlign;
 }
 
+function complainNameConflicts() {
+  let layerNameConflicts = [];
+  for (let name in idMap) {
+    if (~ignoreIdLayers.indexOf(name))
+      continue;
+    if (idMap[name] > 1)
+      layerNameConflicts.push(name);
+  }
+  if (layerNameConflicts.length > 0) {
+    utils.warn('Name conflict in artboard', artboardName, layerNameConflicts.join(','));
+  }
+}
+
 /**
  * Parses the artboards and symbols of a page
  * @param {Array.<{name:string, path:string}>} pageObj - Object of page name and path
@@ -649,11 +675,14 @@ function processTextAlign(view) {
  * @return {Array.<Artboard>}
  */
 function parse(elem, symbolTable, config) {
-  let view = parseRootView(elem, config);
   let name = utils.escape(elem.name);
   artboardName = name;
+  idCount = 1;
+  idMap = {};
+  let view = parseRootView(elem, config);
   processAlignments(null, view);
   processTextAlign(view);
+  complainNameConflicts();
 
   if (rootLayouts.indexOf(view.type) != -1)
       view.setProp("root", "true", "bool");

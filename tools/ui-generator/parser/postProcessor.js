@@ -76,7 +76,9 @@ function textOverride(view, symbol, overrides, symbolList, symbolTable) {
     }
     let child = findViewById(key, symbol.view);
     if (!child)
-      return;
+      continue;
+    if (child.type != "TextView")
+      continue;
     let name = utils.escape(child.name, true);
     let value = "";
     if (!child.props.text) {
@@ -86,8 +88,18 @@ function textOverride(view, symbol, overrides, symbolList, symbolTable) {
     }
     symbol.props.render.addConditionalDef(name);
     child.setProp("text", name, "variable");
-    view.setProp(name, override, "text");
-    listPropSetter(name, symbolList);
+
+    if (symbolList.length  == 0)
+      return view.setProp(name, override, "text");
+
+    view.setProp(utils.escape(symbolList[0].name, true) + "_" + name, override, "text");
+    for (let i=0; i < (symbolList.length - 1); i++) {
+      let delegatePropName = utils.escape(symbolList[i+1].name, true) + "_" + name;
+      let propName = utils.escape(symbolList[i].name, true) + "_" + name;
+      symbolList[i].setProp(delegatePropName, propName, "property");
+    }
+    let lastSymbol = symbolList[symbolList.length - 1];
+    lastSymbol.setProp(name, utils.escape(lastSymbol.name, true) + "_" + name, "property");
   }
 }
 

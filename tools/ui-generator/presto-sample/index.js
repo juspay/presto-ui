@@ -30,5 +30,5 @@ function main() {
 	window.__duiShowScreen(null, {screen: "INIT_UI"})
 }
 
-window.pages = require('./screens').pages;
+window.pages = require('./screens');
 init(meta, main);
