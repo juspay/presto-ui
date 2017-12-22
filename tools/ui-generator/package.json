@@ -1,6 +1,6 @@
 {
   "name": "presto-ui-generator",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Converts sketch exports to Presto-UI code",
   "main": "index.js",
   "dependencies": {
