@@ -96,9 +96,24 @@ function getOS() {
   return "WEB";
 }
 
+function merge(a, b) {
+  if (typeof a != "object")
+    return b;
+
+  if (typeof b != "object")
+    return a;
+
+  for (let key in b) {
+    a[key] = b[key];
+  }
+
+  return a;
+}
+
 module.exports = {
   shouldInfateChilds,
   shouldMove,
   cacheDimen,
-  getOS
+  getOS,
+  merge,
 }

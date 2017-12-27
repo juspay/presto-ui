@@ -25,6 +25,7 @@
 
 const containers = require('./container');
 const getOS = require('./helper').getOS;
+const merge = require('./helper').merge;
 
 const getCurrTime = () => (new Date()).getTime();
 
@@ -35,7 +36,7 @@ if (window.__OS == "WEB") {
   window.JBridge = require("./WEB/JBridgeInterface");;
 } else if (window.__OS == "IOS") {
   window.Android = require("./IOS/AndroidInterface");
-  window.JBridge = require("./IOS/JBridgeInterface");
+  window.JBridge = merge(window.JBridge, {});
 }
 
 window.__ENV = 0;
@@ -218,10 +219,7 @@ const runDuiCallback = (state) => {
 module.exports = (meta, main, jbridgeOverrides) => {
   if (typeof jbridgeOverrides == "function") {
     let overrides = jbridgeOverrides();
-    if (typeof overrides == "object") {
-      for (let key in overrides)
-        window.JBridge[key] = overrides[key];
-    }
+    window.JBridge = merge(window.JBridge, overrides);
   }
   containers.registerScreenMeta(meta);
 
