@@ -215,12 +215,20 @@ const runDuiCallback = (state) => {
     callback(state)();
 };
 
-module.exports = (meta, main) => {
+module.exports = (meta, main, jbridgeOverrides) => {
+  if (typeof jbridgeOverrides == "function") {
+    let overrides = jbridgeOverrides();
+    if (typeof overrides == "object") {
+      for (let key in overrides)
+        window.JBridge[key] = overrides[key];
+    }
+  }
   containers.registerScreenMeta(meta);
 
   window.__duiShowScreen = duiShowScreen;
   window.__duiCb = null;
   window.__runDuiCallback = runDuiCallback;
-  window.__setCallback = setCallback
+  window.__setCallback = setCallback;
+
   main();
 };
