@@ -9,7 +9,7 @@
   "dependencies": {
     "axios": "^0.16.2",
     "source-map": "^0.5.6",
-    "presto-ui": "^0.2.0"
+    "presto-ui": "latest"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
