@@ -180,12 +180,16 @@ class BaseView extends View {
     return JSON.stringify(jsx);
   }
 
-  delete(id) {
+  removeView(id) {
+    if (__OS == "WEB")
+      return Android.removeView(id);
     return "set_VIEW=ctx->findViewById:i_" + id +
       ";set_PARENT=get_VIEW->getParent;get_PARENT->removeView:get_VIEW;"
   }
 
-  removeAllChildren(id) {
+  removeChildren(id) {
+    if (__OS == "WEB")
+      return Android.removeChildren(id);
     return "set_VIEW=ctx->findViewById:i_" + id +
       ";get_VIEW->removeAllViews;"
   }

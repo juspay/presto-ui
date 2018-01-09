@@ -22,16 +22,43 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
+const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
-module.exports = {
-	entry: "./index.js",
+let plugins = [
+  new UglifyJsPlugin(),
+  new webpack.optimize.ModuleConcatenationPlugin(),
+  new webpack.optimize.OccurrenceOrderPlugin()
+];
+
+let development = {
+  name: "development",
+  entry: "./index.js",
   output: {
-    filename: "lib/index.js",
+    path: __dirname +  "/lib",
+    filename: "presto.development.js",
     libraryTarget: 'commonjs2'
   },
   module: {
     loaders: [
       {test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"},
     ]
-  }
+  },
 };
+
+let production = {
+  entry: "./index.js",
+  output: {
+    path: __dirname +  "/lib",
+    filename: "presto.production.min.js",
+    libraryTarget: 'commonjs2'
+  },
+  module: {
+    loaders: [
+      {test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"},
+    ]
+  },
+  plugins: plugins
+};
+
+module.exports = [development, production];

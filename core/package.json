@@ -13,11 +13,12 @@
     "babel-preset-stage-0": "^6.5.0",
     "ramda": "latest",
     "axios": "latest",
-    "webpack": "^1.13.1"
+    "uglifyjs-webpack-plugin": "^1.1.6",
+    "webpack": "^3.5.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "webpack -p --progress --colors"
+    "compile": "webpack --progress --colors"
   },
   "repository": {
     "type": "git",
