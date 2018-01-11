@@ -62,6 +62,9 @@ function listPropSetter(name, symbolList) {
 function textOverride(view, symbol, overrides, symbolList, symbolTable) {
   for (let key in overrides) {
     let override = overrides[key];
+    if (key == "symbolID") {
+      symbol = symbolTable[override];
+    }
     if (typeof override != "string") {
       let symbolView = findViewById(key, symbol.view);
       if (!symbolView)
