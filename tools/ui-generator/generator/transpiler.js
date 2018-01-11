@@ -30,36 +30,40 @@ const utils = require('../utils');
 
 function props(props, tabs) {
   let jsx = "";
-  let styleValue;
+  let spreads = [];
   for (let key in props) {
     let obj = props[key];
     let type = obj.type;
     let value = obj.value;
-    if (type == "string" || type == "text")
+    if (type == "string" || type == "text") {
       value = `"${value}"`;
-    else if (type == "this")
+    }
+    else if (type == "this") {
       value = `{this.${value}}`;
-    else if (type == "property")
+    }
+    else if (type == "property") {
       value = `{this.props.${value}}`;
-    else if (type == "strmap")
+    }
+    else if (type == "strmap") {
       value = `{STR.${value}}`;
+    }
     else if (type == "global") {
-      let globals = "Config";
+      let str = "Config";
       for (let i in value)
-        globals += `["${value[i]}"]`;
-      value = `{${globals}}`;
-    } else
-      value = `{${value}}`;
-    if (key == "style") {
-      styleValue = value;
+        str += `["${value[i]}"]`;
+      value = `{${str}}`
+    } else if (type == "spread") {
+      spreads.push(`{...${value}}`);
       continue;
+    } else {
+      value = `{${value}}`;
     }
     jsx += "\n";
     jsx += utils.indent(`${key}=${value}`, tabs + 1);
   }
-  if (styleValue) {
+  for (let i of spreads) {
     jsx += "\n";
-    jsx += utils.indent(`style=${styleValue}`, tabs + 1);
+    jsx += utils.indent(i, tabs + 1);
   }
   return jsx;
 }

@@ -72,6 +72,8 @@ let idMap;
 let ignoreIdLayers = ["Bg", "Separator"];
 let stringNumber = 1;
 
+// True if processing a symbol
+let isSymbol = false;
 
 /**
  * Helper to fill the resources values, checks if the value is already mapped and if it's not
@@ -143,9 +145,9 @@ function View(type, elem) {
 
     if (this.elem.name && this.type != "symbol") {
       this.setProp("id", `this.id("${escapedName}")`, "variable");
-      this.setProp("style", "this.style_" + escapedName, "variable");
+      this.setProp("style", "this.style_" + escapedName, "spread");
     } else {
-      this.setProp("parentProps", "this.props_" + escapedName, "variable");
+      this.setProp("parentProps", "this.props_" + escapedName, "spread");
     }
   }
 
@@ -161,8 +163,9 @@ function setEvents(view, config) {
   let events = config[id].events;
   events.forEach(event => {
     let name = event + '_' + utils.escape(view.name, true);
-    view.setProp(event, `(this.${name}) ? this.${name}.bind(this) : null`,
-      "condition");
+    if (isSymbol)
+      name = "props." + name;
+    view.setProp(event, "this." + name, "variable");
   });
 }
 
@@ -675,6 +678,11 @@ function complainNameConflicts() {
  * @return {Array.<Artboard>}
  */
 function parse(elem, symbolTable, config) {
+  if (elem["_class"] == "symbolMaster")
+    isSymbol = true;
+  else
+    isSymbol = false;
+
   let name = utils.escape(elem.name);
   artboardName = name;
   idCount = 1;
