@@ -108,7 +108,7 @@ function edittext(view, props, config, parentProp) {
   }
 
   if (parentProp.background)
-    view.setProp("background", parentProp.background.value);
+    view.setProp("background", parentProp.background.value, "variable");
   else
     view.setProp("background", "#ffffff");
 

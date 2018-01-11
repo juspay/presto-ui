@@ -25,6 +25,7 @@
 
 const utils = require('../utils');
 const parser = require('./parser');
+const rootLayouts = require('./constants').rootLayouts;
 
 function findViewById(id, view) {
   if (!view)
@@ -62,6 +63,9 @@ function listPropSetter(name, symbolList) {
 function textOverride(view, symbol, overrides, symbolList, symbolTable) {
   for (let key in overrides) {
     let override = overrides[key];
+    if (key == "symbolID") {
+      symbol = symbolTable[override];
+    }
     if (typeof override != "string") {
       let symbolView = findViewById(key, symbol.view);
       if (!symbolView)
@@ -183,12 +187,16 @@ function overlay(view, table, id) {
     rootview.setProp("height", "match_parent");
     relative.props.width = rootview.props.width;
     rootview.setProp("width", "match_parent");
+    delete rootview.props.root;
+    relative.setProp("root", true, "variable");
     if (rootview.props.margin) {
       relative.props.margin = rootview.props.margin;
       delete rootview.props.margin;
     }
     table[id].view = relative;
   }
+  if (rootLayouts.indexOf(view.type) != -1)
+    view.setProp("root", "true", "bool");
   table[id].props.addOverlay(view.name, view);
 }
 
