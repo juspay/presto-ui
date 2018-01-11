@@ -28,6 +28,7 @@
 */
 const utils = require('../utils');
 const R = require('ramda');
+const rootLayouts = require('./constants').rootLayouts;
 
 const orientations = ["vertical", "horizontal"];
 
@@ -35,9 +36,6 @@ const gravitys = ["top", "left", "center_vertical", "center_horizontal", "center
 
 const alignments = ["top", "center", "left", "right", "bottom"];
 
-const rootLayouts = ["LinearLayout", "ScrollView", "RelativeLayout",
-    "HorizontalScrollView", "ListView"
-  ];
 /**
  * @typedef {Object} Props - Map of properties
  * @example {'width':'100'}
@@ -396,6 +394,7 @@ function parseImageView(elem, config) {
   let view = new View("ImageView", elem);
   let imageUrl = config[id]["imageSource"];
   setProps(view, config);
+  delete view.props.background;
   view.setProp('imageUrl', imageUrl);
   return view;
 }
