@@ -128,6 +128,10 @@ function symbolOverride(view, symbol, overrides, symbolList,
       continue;
     let name = utils.escape(child.name, true);
     let symbolName = utils.escape(symbol.name, true);
+    // Using flag to avoid flattening overriden view
+    symbolTable[override["symbolID"]].overriden = true;
+    symbol.overriden = true;
+    symbolTable[child.id].overriden = true;
     let newSymbolName = utils.escape(symbolTable[override["symbolID"]].name,
       true);
     if (!globalConf[symbolName])
@@ -265,10 +269,28 @@ function replaceSymbols(artboardMap, replacedSymbols) {
   Object.keys(artboardMap).forEach((id) => sanitize(artboardMap[id].view));
 }
 
+function flattenSymbols(map, flattenMap) {
+  let flatten = function (view) {
+    if (view.type == "symbol" && flattenMap[view.id]) {
+      let symbolView = flattenMap[view.id];
+      delete view.id;
+      view.type = symbolView.type;
+      for (let i in symbolView.props) {
+        if (symbolView.props[i].type == "string") {
+          view.props[i] = symbolView.props[i];
+        }
+      }
+    }
+    view.childs.forEach(child => flatten(child));
+  }
+  Object.keys(map).forEach(id => flatten(map[id].view));
+}
+
 module.exports = function (pages, symbolTable, config) {
   let globalConf = {};
   let artboardMap = {};
   let replacedSymbols = {};
+  let flattenMap = {};
   pages.forEach(page => page.artboards.forEach(a => artboardMap[a.name] = a))
 
   for (let i=0; i < pages.length; i++) {
@@ -301,5 +323,17 @@ module.exports = function (pages, symbolTable, config) {
     override(artboard.view, symbolTable, globalConf);
     screenFlow(artboard.view, artboard.props, config);
   }
+
+  for (let i in symbolTable) {
+    let symbol = symbolTable[i];
+    if (!symbol.overriden && symbol.view.type == "ImageView") {
+      flattenMap[i] = symbol.view;
+      delete symbolTable[i];
+    }
+  }
+
+  flattenSymbols(artboardMap, flattenMap);
+  flattenSymbols(symbolTable, flattenMap);
+
   return globalConf;
 }

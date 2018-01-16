@@ -91,9 +91,9 @@ module.exports = function (name, folderPath, config, isProd) {
     symbol.props = new Props();
   }
 
+  let globalConfig = postProcessor(pages, symbolTable, config);
   smartComponents.pages(pages, config, isProd);
   smartComponents.symbols(symbolTable, config, isProd);
-  let globalConfig = postProcessor(pages, symbolTable, config);
 
   return {
     pages,
