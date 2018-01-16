@@ -31,19 +31,7 @@ var LinearLayout = require('./LinearLayout');
 class ListView extends View {
 	constructor(props, children) {
 		super(props, children);
-		this.displayName = "ListView"
-		this.setIds([
-			'id'
-		]);
 	}
-
-  resolveChildren () {
-    var _this = this;
-
-    return this.children.map(function(child) {
-      return  child.render();
-    });
-  }
 
 	render() {
 		var params = this.props;
@@ -53,8 +41,7 @@ class ListView extends View {
       return (
         <tableView
           tableView="true"
-          id={this.props.id?this.props.id:this.idSet.id}
-          params={params}>
+          {...params}>
 
           {children}
 
@@ -63,8 +50,7 @@ class ListView extends View {
     } else if (window.__OS == "WEB") {
       return (
         <ScrollView
-          id={this.props.id ? this.props.id:this.idSet.id}
-          params={params}>
+          {...params}>
 
           <LinearLayout
             width="match_parent"
@@ -82,8 +68,7 @@ class ListView extends View {
     params.listChildren = JSON.stringify(children);
 		return (
 			<listView
-				id={this.props.id?this.props.id:this.idSet.id}
-				params={params}/>
+				{...params}/>
 		)
 	}
 }

@@ -29,18 +29,13 @@ var View = require('../baseView');
 class ProgressBar extends View {
 	constructor(props, children) {
 		super(props, children);
-
-		this.setIds([
-			'id'
-		]);
 	}
 
 	render() {
 		var params = this.props;
 		return (
 			<progressBar
-				id={this.props.id?this.props.id:this.idSet.id}
-				params={params}/>
+				{...params}/>
 		)
 	}
 }

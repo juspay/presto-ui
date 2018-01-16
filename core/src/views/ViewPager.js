@@ -31,18 +31,6 @@ var LinearLayout = require('./LinearLayout');
 class ViewPager extends View {
   constructor(props, children) {
     super(props, children);
-
-    this.setIds([
-      'id'
-    ]);
-  }
-
-  resolveChildren () {
-    var _this = this;
-
-    return this.children.map(function(child) {
-      return  child.render();
-    });
   }
 
   render() {
@@ -53,8 +41,7 @@ class ViewPager extends View {
       return (
         <collectionView
           collectionView="true"
-          id={this.props.id ? this.props.id : this.idSet.id}
-          params={params}>
+          {...params}>
 
           {children}
 
@@ -65,7 +52,7 @@ class ViewPager extends View {
       params.gravity="center";
       return (
         <LinearLayout
-          params={params}>
+          {...params}>
 
           <TextView
             text="ViewPager is not support on Web"
@@ -82,8 +69,7 @@ class ViewPager extends View {
     params.viewPagerChildren = JSON.stringify(children);
     return (
       <viewPager
-        id={this.props.id?this.props.id:this.idSet.id}
-        params={params}>
+        {...params}>
 
 
       </viewPager>

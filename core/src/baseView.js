@@ -23,8 +23,8 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-const View = require("./views/View");
 const getOS = require('./helper').getOS;
+const merge =  require("./helper").merge;
 
 String.prototype.addCmd = function(data) {
   return this.concat(data);
@@ -46,10 +46,11 @@ else if (window.__OS == "WEB")
 else
   parseParams = require('./helpers/ios/parseParams');
 
-class BaseView extends View {
+class BaseView {
 
   constructor(props, children) {
-    super(props, children);
+    this.props = props || {};
+    this.children = children || [];
 
     window.__SETFN = function (config) {
       Android.runInUI(
@@ -59,6 +60,22 @@ class BaseView extends View {
     }.bind(this)
 
     this.idSet = {};
+
+    if (this.props.id) {
+      this.idSet["id"] = this.props.id;
+    } else {
+      this.props.id = this.id("id");
+    }
+
+    if (this.props._ref) {
+      this.props._ref(this);
+    }
+  }
+
+  resolveChildren() {
+    return this.children.map(function(child) {
+      return child.render();
+    });
   }
 
   findRecurse(obj, selector) {
@@ -100,8 +117,10 @@ class BaseView extends View {
       this.idSet = {};
 
     for (var i = 0; i < arr.length; i++) {
-      window.__ID++;
-      this.idSet[arr[i]] = window.__ID + '';
+      if (!this.idSet[arr[i]]) {
+        window.__ID++;
+        this.idSet[arr[i]] = window.__ID + '';
+      }
     }
   }
 
@@ -178,6 +197,17 @@ class BaseView extends View {
       return jsx;
 
     return JSON.stringify(jsx);
+  }
+
+  updateProps(props) {
+    this.props = merge(this.props, props);
+    const oldContainerId = this.layout.idSet.id;
+    const layout = this.render();
+    for (let i=0; i<layout.children.length; i++) {
+      if (i==0) this.replaceChild(oldContainerId, layout.children[i], i);
+      else this.appendChild(oldContainerId, layout.children[i], i);
+    }
+    this.layout.idSet.id = oldContainerId;
   }
 
   removeView(id) {
