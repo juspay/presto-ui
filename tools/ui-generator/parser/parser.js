@@ -705,7 +705,7 @@ function parse(elem, symbolTable, config) {
   } else if (elem["_class"] == "symbolMaster") {
     let parentProps = ["width", "height", "margin", "weight", "visibility", "id"];
     parentProps.forEach((prop) => {
-      let value = 0;
+      let value = null;
 
       if (prop == "margin")
         value = "0,0,0,0";
@@ -714,8 +714,11 @@ function parse(elem, symbolTable, config) {
         value = view.props[prop].value;
       }
 
+      if (typeof value == "string")
+        value = `"${value}"`;
+
       view.setProp(prop,
-        `this.props.${prop} ? this.props.${prop}:"${value}"`,
+        `this.props.${prop} ? this.props.${prop} : ${value}`,
         "variable");
 
     });
