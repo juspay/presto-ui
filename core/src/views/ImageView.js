@@ -29,20 +29,14 @@ var View = require('../baseView');
 class ImageView extends View {
 	constructor(props, children) {
 		super(props, children);
-
-		this.setIds([
-			'id'
-		]);
 	}
 
 	render() {
 		var params = this.props;
-		var id = this.props.id?this.props.id:this.idSet.id;
 
 		return (
 			<imageView
-				id={id}
-				params={params}/>
+				{...params}/>
 		)
 	}
 }

@@ -32,18 +32,6 @@ var View = require('../baseView');
 class HorizontalScrollView extends View {
   constructor(props, children) {
     super(props, children);
-
-    this.setIds([
-      'id'
-    ]);
-  }
-
-  resolveChildren() {
-    var _this = this;
-
-    return this.children.map(function(child) {
-      return  child.render();
-    });
   }
 
   render() {
@@ -53,8 +41,7 @@ class HorizontalScrollView extends View {
 
     return (
       <horizontalScrollView
-        id={this.props.id?this.props.id:this.idSet.id}
-        params={params}>
+        {...params}>
 
         {children}
       </horizontalScrollView>

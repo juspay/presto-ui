@@ -30,18 +30,13 @@ var View = require('../baseView');
 class TextView extends View {
   constructor(props, children) {
     super(props, children);
-
-    this.setIds([
-      'id'
-    ]);
   }
 
   render() {
     var params = this.props;
     return (
       <textView
-			  id={this.props.id?this.props.id:this.idSet.id}
-				params={params}/>
+				{...params}/>
     )
   }
 }
