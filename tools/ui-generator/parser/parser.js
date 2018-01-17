@@ -690,6 +690,7 @@ function parse(elem, symbolTable, config) {
   processAlignments(null, view);
   processTextAlign(view);
   complainNameConflicts();
+  delete view.props.id;
 
   if (rootLayouts.indexOf(view.type) != -1)
       view.setProp("root", "true", "bool");
@@ -697,15 +698,14 @@ function parse(elem, symbolTable, config) {
   if (elem["_class"] == "artboard") {
     view.setProp("width", "match_parent");
     view.setProp("height", "match_parent");
-    delete view.props.id;
     return {
       "name": name,
       "view": view
     };
   } else if (elem["_class"] == "symbolMaster") {
-    let parentProps = ["width", "height", "margin", "weight"];
+    let parentProps = ["width", "height", "margin", "weight", "visibility", "id"];
     parentProps.forEach((prop) => {
-      let value = "0";
+      let value = null;
 
       if (prop == "margin")
         value = "0,0,0,0";
@@ -714,8 +714,11 @@ function parse(elem, symbolTable, config) {
         value = view.props[prop].value;
       }
 
+      if (typeof value == "string")
+        value = `"${value}"`;
+
       view.setProp(prop,
-        `this.props.${prop} ? this.props.${prop}:"${value}"`,
+        `this.props.${prop} ? this.props.${prop} : ${value}`,
         "variable");
 
     });

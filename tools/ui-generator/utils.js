@@ -172,6 +172,15 @@ function pathDiff(curr, to) {
   return '../'.repeat(currPath.length - i - 1) + toPath.join('/');
 }
 
+function merge(a,b) {
+  if (typeof a == "undefined" || typeof b == "undefined")
+    return a || b || {};
+  for (let i in b) {
+    a[i] = b[i];
+  }
+  return a;
+}
+
 module.exports = {
   pathExists,
   readFile,
@@ -187,6 +196,7 @@ module.exports = {
   rgb2hexText,
   exec,
   exec2,
+  merge,
   error: (...args) => logFormat("error", ...args),
   success: (...args) => logFormat("success", ...args),
   warn: (...args) => logFormat("warn", ...args),

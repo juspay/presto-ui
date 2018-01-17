@@ -253,6 +253,10 @@ function getItemFunction(id, data, symbolTable) {
       "value": name
     }
   });
+  view.props["data"] = {
+    type: "variable",
+    value: "data"
+  };
   let fnName = utils.escape(symbolTable[id].name, true) + "Item";
   code += utils.indent(`${fnName} = (data) => {\n`, 1);
   propSet.forEach((name) => {
@@ -276,36 +280,38 @@ function getAdapter(name, obj, symbolTable) {
 
   code += getItemFunction(id, data, symbolTable);
 
-  if (isProd)
-    return code;
-
   let fnName = utils.escape(symbolTable[id].name, true) + "Item";
-  code += utils.indent(`${name} = () => {\n`, 1);
-  code += utils.indent(`let data = [\n`, 2);
-  data.forEach((props) => {
-    let keys = Object.keys(props);
-    let obj = utils.indent("{", 3);
-    keys.forEach((name) => {
-      if (ignoreProp.indexOf(name) != -1)
-        return;
-      let prop = props[name];
-      let value = "";
-      if (prop.type == "text")
-        value = `"${prop.value}"`;
-      else if (prop.type == "global") {
-        value = "Config";
-        prop.value.forEach((val) => {
-          value += `["${val}"]`
-        });
-      } else {
-        utils.warn("Listview type not supported", prop.type);
-      }
-      obj += `${name}: ${value}, `;
+  if (!isProd) {
+    code += utils.indent(`${name} = () => {\n`, 1);
+    code += utils.indent(`let data = [\n`, 2);
+    data.forEach((props) => {
+      let keys = Object.keys(props);
+      let obj = utils.indent("{", 3);
+      keys.forEach((name) => {
+        if (ignoreProp.indexOf(name) != -1)
+          return;
+        let prop = props[name];
+        let value = "";
+        if (prop.type == "text")
+          value = `"${prop.value}"`;
+        else if (prop.type == "global") {
+          value = "Config";
+          prop.value.forEach((val) => {
+            value += `["${val}"]`
+          });
+        } else {
+          utils.warn("Listview type not supported", prop.type);
+        }
+        obj += `${name}: ${value}, `;
+      });
+      obj += "},\n";
+      code += obj;
     });
-    obj += "},\n";
-    code += obj;
-  });
-  code += utils.indent(`];\n`, 2);
+    code += utils.indent(`];\n`, 2);
+  } else {
+    code += utils.indent(`${name} = (data) => {\n`, 1);
+  }
+  code += utils.indent(`if (!data) { return; }\n`, 2);
   if (type == "listview") {
     code += utils.indent('let views = [];\n', 2);
     code += utils.indent('data.forEach((d)=>views.push({\n', 2);
