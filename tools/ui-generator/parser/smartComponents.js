@@ -25,24 +25,6 @@
 
 const utils = require('../utils');
 
-function mutableTextview(view, props, config) {
-  let id = view.elem["do_objectID"];
-  if (config[id] && config[id]["componentType"] == "Mutable TextView") {
-    if (view.type == "TextView") {
-      let name = utils.escape(view.elem.name, true);
-      let value = (view.props.text) ? view.props.text.value : "";
-      props.constructor.addTextDef(name, value);
-
-      if (!view.props.text || view.props.text.type == "string")
-        view.setProp("text", name, "this");
-    } else {
-      utils.warn("Mutable property on " + view.type, view.name,
-        "Mutable property can be applied only on text");
-    }
-  }
-  view.childs.forEach((child) => mutableTextview(child, props, config));
-}
-
 function listview(view, props, config, isProd) {
   let id = view.elem["do_objectID"];
   if (!(config[id] && config[id]["componentType"] == "ListView"))
@@ -75,18 +57,6 @@ function listview(view, props, config, isProd) {
   view.setProp("afterRender", idName, "this");
   view.setProp("root", "true", "bool");
   view.setProp("id", `id("${idName}")`, "this");
-}
-
-function qr(view, props, config) {
-  let id = view.elem["do_objectID"];
-  if (!(config[id] && config[id]["componentType"] == "QR"))
-    return view.childs.forEach((child) => qr(child, props, config));
-
-  if (view.type != "ImageView")
-    return utils.warn("Invalid QR", view.name, "QR should be a imageview");
-
-  view.setProp("id", `id("qr")`, "this");
-  props.constructor.addId("qr");
 }
 
 function edittext(view, props, config, parentProp) {
@@ -145,12 +115,17 @@ function scrollViewAdapter(view, props, isProd) {
   view.childs.forEach(child => scrollViewAdapter(child, props, isProd));
 }
 
+function apply(view, props, config, isProd) {
+  listview(view, props, config, isProd);
+  edittext(view, props, config);
+  scrollViewAdapter(view, props, isProd);
+}
+
 function helper(artboard, config, isProd) {
-  mutableTextview(artboard.view, artboard.props, config);
-  listview(artboard.view, artboard.props, config, isProd);
-  qr(artboard.view, artboard.props, config);
-  edittext(artboard.view, artboard.props, config);
-  scrollViewAdapter(artboard.view, artboard.props, isProd);
+  apply(artboard.view, artboard.props, config, isProd);
+  for (let name in artboard.props.overlays) {
+    apply(artboard.props.overlays[name], artboard.props, config, isProd);
+  }
 }
 
 module.exports.pages = function (pages, config, isProd) {

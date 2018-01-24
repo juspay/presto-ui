@@ -160,18 +160,6 @@ function escape(str, removeSlash) {
   return str;
 }
 
-function pathDiff(curr, to) {
-  let currPath = curr.split('/');
-  let toPath = to.split('/');
-  let i;
-  for (i = 0; i < currPath.length; i++) {
-    if (currPath[i] == toPath[i])
-      continue;
-    break;
-  }
-  return '../'.repeat(currPath.length - i - 1) + toPath.join('/');
-}
-
 function merge(a,b) {
   if (typeof a == "undefined" || typeof b == "undefined")
     return a || b || {};
@@ -190,7 +178,6 @@ module.exports = {
   pad,
   indent,
   escape,
-  pathDiff,
   mkdir,
   mkdirs,
   rgb2hexText,

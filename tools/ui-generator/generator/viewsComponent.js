@@ -133,8 +133,9 @@ function importsCode(artboard, symbolTable, isComponent) {
       let Cname = utils.escape(layout, true);
       importLine = `const ${Cname} = `;
       if (isComponent) {
-        layout = utils.pathDiff(artboard.name, layout);
-        importLine += `require('./${layout}');`
+        let length = artboard.name.split('/').length;
+        let dots = '../'.repeat(length);
+        importLine += `require('./components/${dots}${layout}');`
       } else {
         importLine += `require('../../components/${layout}');`
       }
@@ -158,22 +159,22 @@ function importsCode(artboard, symbolTable, isComponent) {
     code += `const Config = require('./${dots}globalConfig');\n`;
     code +=
       `const Controller = require('./${dots}${'controller/components/' + artboard.name}');\n`;
-    code += `const Strings = require('./${dots}res/string');\n`;
-    code += `const Accessibility = require('./${dots}res/accessibility');\n`;
-    code += `const Font = require('./${dots}res/fontStyle');\n`;
-    code += `const FontColor = require('./${dots}res/fontColor');\n`;
-    code += `const FontSize = require('./${dots}res/fontSize');\n`;
-    code += `const Color = require('./${dots}res/color');\n`;
+    code += `const STR = require('./${dots}res/string').values;\n`;
+    code += `const HINT = require('./${dots}res/accessibility').values;\n`;
+    code += `const Font = require('./${dots}res/fontStyle').values;\n`;
+    code += `const FontColor = require('./${dots}res/fontColor').values;\n`;
+    code += `const FontSize = require('./${dots}res/fontSize').values;\n`;
+    code += `const Color = require('./${dots}res/color').values;\n`;
   } else {
     code += `const Config = require('./../../globalConfig');\n`;
     code +=
       `const Controller = require('./../../controller/pages/${artboard.pageName}/${artboard.name}');\n`;
-    code += `const Strings = require('./../../res/string');\n`;
-    code += `const Accessibility = require('./../../res/accessibility');\n`;
-    code += `const Font = require('./../../res/fontStyle');\n`;
-    code += `const Color = require('./../../res/color');\n`;
-    code += `const FontSize = require('./../../res/fontSize');\n`;
-    code += `const FontColor = require('./../../res/fontColor');\n`;
+    code += `const STR = require('./../../res/string').values;\n`;
+    code += `const HINT = require('./../../res/accessibility').values;\n`;
+    code += `const Font = require('./../../res/fontStyle').values;\n`;
+    code += `const Color = require('./../../res/color').values;\n`;
+    code += `const FontSize = require('./../../res/fontSize').values;\n`;
+    code += `const FontColor = require('./../../res/fontColor').values;\n`;
   }
 
   return code + '\n';
@@ -183,8 +184,6 @@ function constructor(artboard) {
   let definitions = artboard.props.constructor.definitions;
   let code = utils.indent(`constructor(props, children, state) {\n`, 1);
   code += utils.indent(`super(props, children, state);\n`, 2);
-  code += utils.indent(`this.STR = Strings();\n`, 2);
-  code += utils.indent(`this.HINT = Accessibility();\n`, 2);
   code += definitionsToCode(definitions, artboard.name);
   code += utils.indent(`}\n\n`, 1);
   return code;
@@ -197,6 +196,7 @@ function onPop() {
 function render(artboard, symbolTable, isComponent) {
   let code = "";
   code += utils.indent('render = () => {\n', 1);
+  code += utils.indent('if (typeof this.preRender === "function") { this.preRender(); }\n', 2)
   let definitions = artboard.props.render.definitions;
   code += definitionsToCode(definitions, artboard.name);
   code += utils.indent('this.layout = (\n', 2);
