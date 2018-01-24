@@ -108,33 +108,14 @@ function exportConfig(projectPath, code) {
   utils.writeFile(configPath, code);
 }
 
-function exportStrings(projectPath, code) {
-  let dir = path.join(projectPath, "res/string");
+function exportRes(projectPath, resName, code) {
+  let dir = path.join(projectPath, "res", resName);
   utils.mkdirs(dir);
   let indexPath = path.join(dir, "index.js");
   if (!fs.existsSync(indexPath))
     utils.writeFile(indexPath, code.index);
-  let englishPath = path.join(dir, "en_US.json");
-  utils.writeFile(englishPath, code.en_US);
-}
-
-function exportAccessibility(projectPath, code) {
-  let dir = path.join(projectPath, "res/accessibility");
-  utils.mkdirs(dir);
-  let indexPath = path.join(dir, "index.js");
-  if (!fs.existsSync(indexPath))
-    utils.writeFile(indexPath, code.index);
-  let englishPath = path.join(dir, "en_US.json");
-  utils.writeFile(englishPath, code.en_US);
-}
-
-function exportRes(projectPath, code) {
-  let dir = path.join(projectPath, "res");
-  utils.mkdir(dir);
-  utils.writeFile(path.join(dir, "fontStyle.json"), code.fontStyle);
-  utils.writeFile(path.join(dir, "fontColor.json"), code.fontColor);
-  utils.writeFile(path.join(dir, "fontSize.json"), code.fontSize);
-  utils.writeFile(path.join(dir, "color.json"), code.color);
+  let defaultPath = path.join(dir, "default.json");
+  utils.writeFile(defaultPath, code.default);
 }
 
 function exportController(projectPath, code) {
@@ -177,9 +158,12 @@ function exportCode(projectPath, code) {
   exportDuiScreen(projectPath, code.duiScreens);
   exportConfig(projectPath, code.globalConfig);
   exportController(projectPath, code.controller);
-  exportStrings(projectPath, code.string);
-  exportAccessibility(projectPath, code.accessibility);
-  exportRes(projectPath, code);
+  exportRes(projectPath, "string", code.string);
+  exportRes(projectPath, "accessibility", code.accessibility);
+  exportRes(projectPath, "color", code.color);
+  exportRes(projectPath, "fontColor", code.fontColor);
+  exportRes(projectPath, "fontSize", code.fontSize);
+  exportRes(projectPath, "fontStyle", code.fontStyle);
 }
 
 function commands(sketch, projectPath, isProject, pregelPath) {

@@ -27,18 +27,9 @@ const dom = require("presto-ui").doms;
 const View = require("presto-ui").baseView;
 const RelativeLayout = require("presto-ui").views.RelativeLayout;
 
-const strings = require('./../res/string');
-const accessibility = require('./../res/accessibility');
-
 class RootScreen extends View {
   constructor(props, children) {
     super(props, children);
-    this.updateLanguage("en_US");
-  }
-
-  updateLanguage(language) {
-    strings.updateLanguage(language);
-    accessibility.updateLanguage(language);
   }
 
   render() {

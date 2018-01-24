@@ -29,22 +29,29 @@ const utils = require('../utils');
  @module generator/strings
 */
 
+function replaceNumbers(key, value) {
+  if (typeof value == "object")
+    return value;
+  return String(value);
+}
+
 module.exports = (data) => {
-  let defaultlang = "en_US";
+  let defaultlang = "default";
   let code = "";
-  code += `const en_US = require('./en_US')\n`;
-  code += `const languages = {\n\t"en_US": en_US\n};\n`;
-  code += `const strings = {};\n\n`
+  code += `const defaultValues = require('./default')\n`;
+  code += `const options = { defaultValues };\n`;
+  code += `const values = {};\n\n`
   code +=
-    `function updateLanguage(language) {
-    const languageStr = languages[language] || {};
-    for (let i in en_US) {
-        strings[i] = languageStr[i] || en_US[i];
+    `function updateValues(option) {
+    const optionValues = options[option] || {};
+    for (let i in defaultValues) {
+      values[i] = optionValues[i] || defaultValues[i];
     }
 }\n\n`;
-  code += "module.exports = {strings, updateLanguage};\n"
+  code += "updateValues();\n\n"
+  code += "module.exports = {values, updateValues};\n"
   return {
-    en_US: JSON.stringify(data, null, 2),
+    default: JSON.stringify(data, replaceNumbers, 2),
     index: code
   };
 }

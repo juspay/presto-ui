@@ -159,22 +159,22 @@ function importsCode(artboard, symbolTable, isComponent) {
     code += `const Config = require('./${dots}globalConfig');\n`;
     code +=
       `const Controller = require('./${dots}${'controller/components/' + artboard.name}');\n`;
-    code += `const STR = require('./${dots}res/string').strings;\n`;
-    code += `const HINT = require('./${dots}res/accessibility').strings;\n`;
-    code += `const Font = require('./${dots}res/fontStyle');\n`;
-    code += `const FontColor = require('./${dots}res/fontColor');\n`;
-    code += `const FontSize = require('./${dots}res/fontSize');\n`;
-    code += `const Color = require('./${dots}res/color');\n`;
+    code += `const STR = require('./${dots}res/string').values;\n`;
+    code += `const HINT = require('./${dots}res/accessibility').values;\n`;
+    code += `const Font = require('./${dots}res/fontStyle').values;\n`;
+    code += `const FontColor = require('./${dots}res/fontColor').values;\n`;
+    code += `const FontSize = require('./${dots}res/fontSize').values;\n`;
+    code += `const Color = require('./${dots}res/color').values;\n`;
   } else {
     code += `const Config = require('./../../globalConfig');\n`;
     code +=
       `const Controller = require('./../../controller/pages/${artboard.pageName}/${artboard.name}');\n`;
-    code += `const STR = require('./../../res/string').strings;\n`;
-    code += `const HINT = require('./../../res/accessibility').strings;\n`;
-    code += `const Font = require('./../../res/fontStyle');\n`;
-    code += `const Color = require('./../../res/color');\n`;
-    code += `const FontSize = require('./../../res/fontSize');\n`;
-    code += `const FontColor = require('./../../res/fontColor');\n`;
+    code += `const STR = require('./../../res/string').values;\n`;
+    code += `const HINT = require('./../../res/accessibility').values;\n`;
+    code += `const Font = require('./../../res/fontStyle').values;\n`;
+    code += `const Color = require('./../../res/color').values;\n`;
+    code += `const FontSize = require('./../../res/fontSize').values;\n`;
+    code += `const FontColor = require('./../../res/fontColor').values;\n`;
   }
 
   return code + '\n';
