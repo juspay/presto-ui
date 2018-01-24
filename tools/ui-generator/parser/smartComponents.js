@@ -115,10 +115,17 @@ function scrollViewAdapter(view, props, isProd) {
   view.childs.forEach(child => scrollViewAdapter(child, props, isProd));
 }
 
+function apply(view, props, config, isProd) {
+  listview(view, props, config, isProd);
+  edittext(view, props, config);
+  scrollViewAdapter(view, props, isProd);
+}
+
 function helper(artboard, config, isProd) {
-  listview(artboard.view, artboard.props, config, isProd);
-  edittext(artboard.view, artboard.props, config);
-  scrollViewAdapter(artboard.view, artboard.props, isProd);
+  apply(artboard.view, artboard.props, config, isProd);
+  for (let name in artboard.props.overlays) {
+    apply(artboard.props.overlays[name], artboard.props, config, isProd);
+  }
 }
 
 module.exports.pages = function (pages, config, isProd) {
