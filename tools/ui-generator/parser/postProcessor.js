@@ -273,7 +273,11 @@ function flattenSymbols(map, flattenMap) {
   let flatten = function (view) {
     if (view.type == "symbol" && flattenMap[view.id]) {
       let symbolView = flattenMap[view.id];
+      const escapedName = utils.escape(symbolView.name, true);
       delete view.id;
+      delete view.props.parentProps;
+      view.setProp("id", `this.id("${escapedName}")`, "variable");
+      view.setProp("style", `this.style_${escapedName}`, "spread");
       view.type = symbolView.type;
       for (let i in symbolView.props) {
         if (symbolView.props[i].type == "string") {

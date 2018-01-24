@@ -696,6 +696,7 @@ function parse(elem, symbolTable, config) {
       view.setProp("root", "true", "bool");
 
   if (elem["_class"] == "artboard") {
+    view.setProp("clickable", "true");
     view.setProp("width", "match_parent");
     view.setProp("height", "match_parent");
     return {
