@@ -23,24 +23,31 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-var dom = require("presto-ui").doms;
-var View = require("presto-ui").baseView;
-var RelativeLayout = require("presto-ui").views.RelativeLayout;
+const dom = require("presto-ui").doms;
+const View = require("presto-ui").baseView;
+const RelativeLayout = require("presto-ui").views.RelativeLayout;
+
+const strings = require('./../res/string');
+const accessibility = require('./../res/accessibility');
 
 class RootScreen extends View {
   constructor(props, children) {
     super(props, children);
-    this.setIds(['root']);
+    this.updateLanguage("en_US");
+  }
+
+  updateLanguage(language) {
+    strings.updateLanguage(language);
+    accessibility.updateLanguage(language);
   }
 
   render() {
-
     this.layout = (
       <RelativeLayout
         root="true"
         width="match_parent"
         height="match_parent"
-        id = {this.idSet.root}/>
+        id={this.id("root")}/>
     );
 
     return this.layout.render();

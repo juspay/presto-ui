@@ -32,20 +32,17 @@ const utils = require('../utils');
 module.exports = (data) => {
   let defaultlang = "en_US";
   let code = "";
-  code += `const en_US = require('./en_US')\n\n`;
-  code += `const languages = {\n\t"en_US": en_US\n};\n\n`;
+  code += `const en_US = require('./en_US')\n`;
+  code += `const languages = {\n\t"en_US": en_US\n};\n`;
+  code += `const strings = {};\n\n`
   code +=
-    `module.exports = () => {
-  let lang = languages[window.LANGUAGE] || {};
-  let strings = {};
-  for (let i in en_US) {
-    if (lang[i])
-      strings[i] = lang[i];
-    else
-      strings[i] = en_US[i];
-  }
-  return strings;
-}`;
+    `function updateLanguage(language) {
+    const languageStr = languages[language] || {};
+    for (let i in en_US) {
+        strings[i] = languageStr[i] || en_US[i];
+    }
+}\n\n`;
+  code += "module.exports = {strings, updateLanguage};\n"
   return {
     en_US: JSON.stringify(data, null, 2),
     index: code

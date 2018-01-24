@@ -178,7 +178,7 @@ function setTextViewProps(view, config) {
     return;
   if (config[id].text) {
     var text = decodeURIComponent(config[id].text);
-    let name = "this.STR." + mapString(text, view, "string");
+    let name = "STR." + mapString(text, view, "string");
     view.setProp("text", name, "variable");
   }
   if (config[id].fontSize) {
@@ -347,7 +347,7 @@ function setAlignments(view, config) {
 function setAccessibilityHint(view, config) {
   let id = view.elem["do_objectID"];
   if (config[id] && config[id]["accessibilityHint"]) {
-    let hint = "this.HINT." + mapString(config[id]["accessibilityHint"], view, "accessibility");
+    let hint = "HINT." + mapString(config[id]["accessibilityHint"], view, "accessibility");
     view.setProp("accessibilityHint", hint, "variable");
   }
 }
