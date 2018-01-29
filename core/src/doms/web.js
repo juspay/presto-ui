@@ -46,6 +46,7 @@ module.exports = function (type, props, ...children) {
       children: children
     };
     window.__VIEWS[props.id] = obj;
+    window.__VIEW_DIMENSIONS[props.id] = null;
     return obj;
   } else {
     return new type(props, children);
