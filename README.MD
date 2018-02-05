@@ -15,7 +15,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-Depending upon weather you are using it for Android or IOS or Web you may have to make "Android" or "IOS" or "Web" global variable available. This will ensure the right platform gets the necessary commands from the JS engine (Web view/browser).
+Depending upon whether you are using it for Android or IOS or Web you may have to make "Android" or "IOS" or "Web" global variable available. This will ensure the right platform gets the necessary commands from the JS engine (Web view/browser).
 
 ### Installing
 Install using npm
