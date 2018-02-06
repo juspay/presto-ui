@@ -174,13 +174,11 @@ const handleScreenActions = function (data) {
   if (data.action == "INIT_UI") {
     window.__ROOTSCREEN = determineScreen("RootScreen", data.state);
 
-    setTimeout(() => {
-      performAction(screenMeta.INIT_UI, {});
-    }, 0);
-
-    return {
+    uiHandler.handle({
       render: window.__ROOTSCREEN.render()
-    };
+    });
+
+    return performAction(screenMeta.INIT_UI, {});
   }
 
   if (window.__CURR_SCREEN == data.action) {
@@ -218,9 +216,7 @@ function performAction(action, state) {
     action: action,
     state: state
   };
-  setTimeout(() => {
-    uiHandler.handle(handleScreenActions(currState), null)
-  }, 0);
+  uiHandler.handle(handleScreenActions(currState), null)
 }
 
 module.exports = {

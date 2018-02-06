@@ -34,7 +34,11 @@ var excluded = {
   "ViewPager": "android.support.v4.view.",
   "RotateAnimation": "android.view.animation.",
   "LinearInterpolator": "android.view.animation.",
-  "Animation": "android.view.animation."
+  "Animation": "android.view.animation.",
+  "PagerTabStrip": "android.support.v4.view.",
+  "PagerTitleStrip": "android.support.v4.view.",
+  "TabLayout": "in.org.npci.upiapp.",
+  "ShimmerFrameLayout": "com.facebook.shimmer.",
 }
 
 function getCtr(viewGroup) {
