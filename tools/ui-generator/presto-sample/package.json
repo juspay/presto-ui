@@ -4,7 +4,7 @@
   "private": false,
   "scripts": {
     "compile": "webpack --progress --colors --optimize-minimize",
-    "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --content-base dist/"
+    "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --content-base dist/ --host 0.0.0.0"
   },
   "dependencies": {
     "axios": "^0.16.2",

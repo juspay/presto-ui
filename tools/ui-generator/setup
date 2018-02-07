@@ -24,4 +24,9 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 
 cd presto-sample
-npm install
+
+if [ -x "$(command -v yarn)" ]; then
+  yarn install
+else
+  npm install
+fi

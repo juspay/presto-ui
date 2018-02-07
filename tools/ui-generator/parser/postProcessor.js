@@ -94,8 +94,10 @@ function textOverride(view, symbol, overrides, symbolList, symbolTable) {
     symbol.props.render.addConditionalDef(name);
     child.setProp("text", name, "variable");
 
-    if (symbolList.length  == 0)
-      return view.setProp(name, override, "text");
+    if (symbolList.length  == 0) {
+      view.setProp(name, override, "text");
+      continue;
+    }
 
     view.setProp(utils.escape(symbolList[0].name, true) + "_" + name, override, "text");
     for (let i=0; i < (symbolList.length - 1); i++) {
