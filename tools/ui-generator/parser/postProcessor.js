@@ -85,9 +85,10 @@ function textOverride(view, symbol, overrides, symbolList, symbolTable) {
       continue;
     let name = utils.escape(child.name, true);
     let value = "";
+
     if (!child.props.text) {
       symbol.props.constructor.addTextDef(name, "");
-    } else if (child.props.text.value.indexOf("this") == 0) {
+    } else if (child.props.text.value.indexOf("STR.") == 0) {
       symbol.props.constructor.addTextDef(name, child.props.text.value, child.props.text.type)
     }
     symbol.props.render.addConditionalDef(name);

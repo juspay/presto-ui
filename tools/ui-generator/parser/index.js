@@ -62,12 +62,12 @@ module.exports = function (name, folderPath, config, isProd) {
   let pages = [];
 
   let resMap = {
-    string: utils.parseJSONFile(path.join("output", name, "res", "string", "en_US.json"), "{}"),
-    fontStyle: utils.parseJSONFile(path.join("output", name, "res", "fontStyle.json"), "{}"),
-    accessibility: utils.parseJSONFile(path.join("output", name, "res", "accessibility", "en_US.json"), "{}"),
-    fontColor: utils.parseJSONFile(path.join("output", name, "res", "fontColor.json"), "{}"),
-    fontSize: utils.parseJSONFile(path.join("output", name, "res", "fontSize.json"), "{}"),
-    color: utils.parseJSONFile(path.join("output", name, "res", "color.json"), "{}"),
+    string: utils.parseJSONFile(path.join("output", name, "res", "string", "default.json"), "{}"),
+    fontStyle: utils.parseJSONFile(path.join("output", name, "res", "fontStyle", "default.json"), "{}"),
+    accessibility: utils.parseJSONFile(path.join("output", name, "res", "accessibility", "default.json"), "{}"),
+    fontColor: utils.parseJSONFile(path.join("output", name, "res", "fontColor", "default.json"), "{}"),
+    fontSize: utils.parseJSONFile(path.join("output", name, "res", "fontSize", "default.json"), "{}"),
+    color: utils.parseJSONFile(path.join("output", name, "res", "color", "default.json"), "{}"),
   }
 
   parser.registerResourcesMap(resMap);
