@@ -23,11 +23,16 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-const R = require("ramda");
-const uiHandler = require('./handler');
 const animations = require('./animations');
 
 let screenMeta;
+
+const hideScreen = (screen) => {
+  Android.runInUI(window.__ROOTSCREEN.cmd({
+    id: screen.__ids.rootId,
+    visibility: "gone"
+  }), null);
+}
 
 const determineScreen = (screenName, state) => {
   let screen;
@@ -59,17 +64,16 @@ const addToStack = function (screenName, screenData) {
 const renderScreen = function (data) {
 
   let screen;
-  let isCached = false;
-  let takeFromCache = true;
+  let takeFromCache = false;
   let screenData = window.__CACHED_SCREENS[data.action];
 
   if (screenData) {
-    isCached = true;
-
     screen = screenData.screen;
     if (typeof screen.shouldCacheScreen !== "undefined" && !screen.shouldCacheScreen) {
+      hideScreen(screen);
       updateNode(data);
-      takeFromCache = false;
+    } else {
+      takeFromCache = true;
     }
   } else {
     window.__ANIMATE_DIR = 1;
@@ -86,14 +90,14 @@ const renderScreen = function (data) {
   addToStack(data.action, window.__CACHED_SCREENS[data.action]);
   return {
     screen: screenData.screen,
-    isCached: isCached,
     takeFromCache: takeFromCache
   }
 }
 
 const appendToRoot = function (screen, dontAnimate) {
   window.__SCREEN_INDEX++;
-  let layout = screen.render();
+  const layout = screen.render();
+  screen.__ids = {rootId: screen.layout.idSet.id};
   window.__ROOTSCREEN.appendChild(window.__ROOTSCREEN.idSet.root, layout,
     window.__SCREEN_INDEX, screen.afterRender);
   if (dontAnimate || window.__OS == "IOS")
@@ -102,10 +106,8 @@ const appendToRoot = function (screen, dontAnimate) {
 }
 
 const animate = function () {
-  let fromId = window.__CACHED_SCREENS[window.__PREV_SCREEN].screen.layout.idSet
-    .id;
-  let toId = window.__CACHED_SCREENS[window.__CURR_SCREEN].screen.layout.idSet
-    .id;
+  let fromId = window.__CACHED_SCREENS[window.__PREV_SCREEN].screen.__ids.rootId;
+  let toId = window.__CACHED_SCREENS[window.__CURR_SCREEN].screen.__ids.rootId;
   let direction = window.__ANIMATE_DIR;
   let animator;
   if (direction == 1) {
@@ -114,9 +116,7 @@ const animate = function () {
     animator = window.__CACHED_SCREENS[window.__PREV_SCREEN].screen.screenTransition;
   }
   let animationCMD = animations.getAnimation(fromId, toId, direction, animator);
-  setTimeout(() => {
-    Android.runInUI(animationCMD, null)
-  }, 0);
+  Android.runInUI(animationCMD, null);
 }
 
 const getDirection = function () {
@@ -127,78 +127,47 @@ const getDirection = function () {
   return -1;
 }
 
-const handleGoBack = function (data) {
-
-  let stackLen = window.__SCREEN_STACK.length;
-  if (stackLen == 1) {
-    if (typeof window.__ROOTSCREEN.minimizeApp === "function")
-      window.__ROOTSCREEN.minimizeApp();
-    return;
-  }
-
-  let screenData = window.__CACHED_SCREENS[window.__CURR_SCREEN];
-  if (typeof screenData.screen.onBackPress === "function") {
-    if (!screenData.screen.onBackPress()) {
-      return;
-    }
-  }
-
-  window.__PREV_SCREEN = window.__SCREEN_STACK[stackLen - 1];
-  window.__CURR_SCREEN = window.__SCREEN_STACK[stackLen - 2];
-  window.__SCREEN_STACK.pop();
-
-  let screen = window.__CACHED_SCREENS[window.__CURR_SCREEN].screen;
-  data.action = window.__CURR_SCREEN;
-
-  if (typeof screen.shouldCacheScreen !== "undefined" && !screen.shouldCacheScreen) {
-    updateNode(data);
-    window.__ANIMATE_DIR = getDirection();
-    appendToRoot(window.__CACHED_SCREENS[window.__CURR_SCREEN].screen);
-  } else {
-    window.__ANIMATE_DIR = -1;
-    animate();
-    if (typeof screen.onPop === "function")
-      screen.onPop(data.state, "backPress");
-  }
-}
-
 const handleScreenActions = function (data) {
-  let currView;
-  let res;
-
-  if (data.action == "GO_BACK") {
-    handleGoBack(data);
-    return {};
+  if (window.__CURR_SCREEN == data.action) {
+    const rootFn = window.__ROOTSCREEN.handleStateChange;
+    if (typeof rootFn == "function" && rootFn(data.state) == true)
+      return;
+    const fn = window.__CACHED_SCREENS[__CURR_SCREEN].screen.handleStateChange;
+    if (typeof fn === "function")
+      fn(data.state);
+    return;
   }
 
   if (data.action == "INIT_UI") {
     window.__ROOTSCREEN = determineScreen("RootScreen", data.state);
+    const layout = window.__ROOTSCREEN.render();
 
-    uiHandler.handle({
-      render: window.__ROOTSCREEN.render()
-    });
+    if (window.__OS == "ANDROID")
+      Android.Render(JSON.stringify(layout), null);
+    else
+      Android.Render(layout, null);
 
     return performAction(screenMeta.INIT_UI, {});
-  }
-
-  if (window.__CURR_SCREEN == data.action) {
-    return {};
   }
 
   if (!window.__CURR_SCREEN && !window.__PREV_SCREEN) {
     window.__CURR_SCREEN = data.action;
     appendToRoot(renderScreen(data).screen, true);
-    return {};
+    const id = window.__CACHED_SCREENS[window.__CURR_SCREEN].screen.__ids.rootId;
+    const animationCMD = animations.getAnimation(-1, id, 0, animations.types.SIMPLE);
+    Android.runInUI(animationCMD, null);
+    return;
+  }
+
+  if (window.__PREV_SCREEN && data.action != window.__PREV_SCREEN) {
+    hideScreen(window.__CACHED_SCREENS[window.__PREV_SCREEN].screen);
   }
 
   window.__PREV_SCREEN = window.__CURR_SCREEN;
   window.__CURR_SCREEN = data.action;
 
-  res = renderScreen(data);
-  if (!res.isCached) {
-    appendToRoot(res.screen);
-    return {};
-  } else if (res.takeFromCache) {
+  const res = renderScreen(data);
+  if (res.takeFromCache) {
     window.__ANIMATE_DIR = getDirection();
     animate();
     if (typeof res.screen.onPop === "function")
@@ -208,15 +177,10 @@ const handleScreenActions = function (data) {
     appendToRoot(res.screen);
   }
 
-  return {};
 }
 
 function performAction(action, state) {
-  let currState = {
-    action: action,
-    state: state
-  };
-  uiHandler.handle(handleScreenActions(currState), null)
+  handleScreenActions({action, state});
 }
 
 module.exports = {

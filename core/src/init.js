@@ -144,7 +144,7 @@ window.callUICallback = function () {
     currTime = getCurrTime();
     timeDiff = currTime - window.__LAST_FN_CALLED.timeStamp;
 
-    if (timeDiff >= 2000) {
+    if (timeDiff >= 1000) {
       console.log("BUTTON_CLICKED_" + window.__CURR_SCREEN);
       JBridge.trackEvent("BUTTON_CLICKED", "BUTTON_CLICKED_" + window.__CURR_SCREEN);
       window.__PROXY_FN[fName].call(null, ...functionArgs);
@@ -174,34 +174,8 @@ window.onActivityLifeCycleEvent = (event) => {
     eventFn(event);
 }
 
-/*
-  WEB Only
-  Hides the popupMenu Div
-*/
-function hidePopupMenu() {
-  let popupMenu = document.getElementsByClassName("popupMenu");
-  for (let i = 0; i < popupMenu.length; i++) {
-    popupMenu[i].style.display = "none";
-  }
-}
-
 const duiShowScreen = (callback, state) => {
-  let stackLen = window.__SCREEN_STACK.length;
   window.__duiCb = callback;
-
-  if (window.__OS == "WEB")
-    hidePopupMenu();
-
-  if (state.screen == window.__CURR_SCREEN) {
-    let fn = window.__CACHED_SCREENS[__CURR_SCREEN].screen.handleStateChange(state);
-    if (typeof fn === "function")
-      fn(state);
-    return;
-  }
-
-  if (stackLen >= 2 && window.__SCREEN_STACK[stackLen - 2] == state.screen)
-    return containers.changeScreen("GO_BACK", state);
-
   containers.changeScreen(state.screen, state);
 };
 

@@ -26,7 +26,6 @@
 const parseParams = require('../helpers/ios/parseParams');
 const {computeChildDimens} = require('../compute');
 const helper = require('../helper');
-const R = require('ramda');
 
 function scrollHelper(view) {
   let isScroll = (view.type.toLocaleLowerCase().indexOf("scroll") != -1) ? view.type : false;
@@ -129,7 +128,7 @@ function inflate(view) {
       sumChildDimens(view);
     helper.cacheDimen(view);
     window.__VIEWS[id] = view;
-    let newView = R.clone(view);
+    let newView = helper.copy(view);
     view.children.forEach((child, i) => {
       newView.children[i] = inflate(child);
     });
@@ -174,7 +173,7 @@ let runInUI = function (cmd) {
 
     let view = window.__VIEWS[id];
     let parentView = window.__VIEWS[view.props.parentId];
-    view.props = R.merge(view.props, each);
+    view.props = helper.merge(view.props, each);
     computeChildDimens(parentView);
     runInUIHelper(view.type, each);
     parentView.children.forEach(child => inflate(child));

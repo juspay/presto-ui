@@ -73,7 +73,9 @@ class BaseView {
   }
 
   resolveChildren() {
-    return this.children.map(function(child) {
+    const children = (Array.isArray(this.props.children)) ? this.props.children : this.children;
+    this.props.children = null;
+    return children.map(function(child) {
       return child.render();
     });
   }

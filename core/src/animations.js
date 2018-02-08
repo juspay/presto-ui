@@ -47,6 +47,7 @@ const DEFAULT_ANIMATION = AnimationTypes.SLIDE;
 function simpleHandler(fromId, toId, direction) {
   let cmd = VIEW.cmd({
     id: toId,
+    visibility: 'visible',
     translationZ: ++window.ZIndex
   });
   return cmd;
@@ -59,6 +60,7 @@ function slideDownHandler(fromId, toId, direction) {
   if (direction == 1) {
     cmd = VIEW.cmd({
       id: toId,
+      visibility: 'visible',
       translationY: window.__HEIGHT,
       a_duration: '300',
       a_translationY: '0',
@@ -68,6 +70,7 @@ function slideDownHandler(fromId, toId, direction) {
 
     cmd = VIEW.cmd({
       id: fromId,
+      visibility: 'visible',
       a_translationY: -0.2 * window.__HEIGHT,
       a_duration: '300'
     });
@@ -79,6 +82,7 @@ function slideDownHandler(fromId, toId, direction) {
   window.ZIndex++;
   cmd = VIEW.cmd({
     id: fromId,
+    visibility: 'visible',
     translationY: 0,
     a_translationY: window.__HEIGHT,
     a_duration: '300',
@@ -88,6 +92,7 @@ function slideDownHandler(fromId, toId, direction) {
 
   cmd = VIEW.cmd({
     id: toId,
+    visibility: 'visible',
     translationZ: window.ZIndex-1,
     a_translationY: '0',
     translationY: -0.2 * window.__HEIGHT,
@@ -103,6 +108,15 @@ function slideHandler(fromId, toId, direction) {
   let cmd;
   if (direction == 1) {
     cmd = VIEW.cmd({
+      id: fromId,
+      translationX: '0',
+      visibility: 'visible',
+      a_duration: '300',
+      a_translationX: (-.2 * window.__WIDTH) + '',
+    });
+    container = container.addCmd(cmd);
+
+    cmd = VIEW.cmd({
       id: toId,
       visibility: 'visible',
       translationX: window.__WIDTH,
@@ -111,20 +125,13 @@ function slideHandler(fromId, toId, direction) {
       translationZ: ++window.ZIndex,
     });
     container = container.addCmd(cmd);
-    cmd = VIEW.cmd({
-      id: fromId,
-      translationX: '0',
-      visibility: 'visible',
-      a_duration: '300',
-      a_translationX: (-.2 * window.__WIDTH) + '',
-    });
-    container = container.addCmd(cmd);
   }
 
   if (direction == -1) {
     window.ZIndex++;
     cmd = VIEW.cmd({
       id: fromId,
+      visibility: 'visible',
       translationX: '0',
       a_duration: '300',
       a_translationX: window.__WIDTH,

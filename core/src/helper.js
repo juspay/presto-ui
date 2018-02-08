@@ -32,7 +32,8 @@ function cacheDimen(view) {
     h: props.h,
     stroke: props.stroke ? props.stroke.split(",")[0] * 1 : 0,
     x: props.x,
-    y: props.y
+    y: props.y,
+    gravity: props.gravity,
   }
   window.__VIEW_DIMENSIONS[props.id] = dimen;
 }
@@ -70,6 +71,7 @@ function shouldInfateChilds(view) {
     w: props.w,
     h: props.h,
     stroke: props.stroke ? props.stroke.split(",")[0] * 1 : 0,
+    gravity: props.gravity,
   };
 
   let changed = false;
@@ -110,10 +112,23 @@ function merge(a, b) {
   return a;
 }
 
+function copy(aObject) {
+  if (typeof aObject != "object" || aObject == null)
+    return aObject;
+  let bObject, v, k;
+  bObject = Array.isArray(aObject) ? [] : {};
+  for (k in aObject) {
+    v = aObject[k];
+    bObject[k] = bObject[k] = (v === null) ? null : (typeof v === "object") ? copy(v) : v;
+  }
+  return bObject;
+}
+
 module.exports = {
   shouldInfateChilds,
   shouldMove,
   cacheDimen,
   getOS,
   merge,
+  copy,
 }

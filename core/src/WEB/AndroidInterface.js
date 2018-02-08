@@ -24,7 +24,6 @@
  */
 
 var Render = require("./Render");
-const R = require('ramda');
 
 module.exports = {
   getScreenDimensions: function () {

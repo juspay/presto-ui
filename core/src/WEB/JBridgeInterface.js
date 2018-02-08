@@ -24,7 +24,6 @@
 */
 
 var ViewPageAdapter = require("./ViewPageAdapter");
-var axios = require('axios');
 var Renderer = require("./Render");
 
 module.exports = {
@@ -75,17 +74,7 @@ module.exports = {
   },
 
   callAPI: function (method, url, data, headers, type, callback) {
-    axios({
-      method: method,
-      url: url,
-      data: JSON.parse(data),
-      headers: JSON.parse(headers),
-    }).then(function (resp) {
-      window.callJSCallback(callback, "success",
-        btoa(JSON.stringify(resp.data)), resp.status);
-    }).catch(function (err) {
-      console.log(err);
-    })
+
   },
 
   getFromSharedPrefs: function (key) {

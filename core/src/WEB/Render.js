@@ -23,11 +23,8 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-let {
-  computeChildDimens
-} = require("../compute");
+let { computeChildDimens } = require("../compute");
 let helper = require("../helper");
-let R = require("ramda");
 
 function createTextElement(elem, config) {
   let children = elem.childNodes;
@@ -118,7 +115,7 @@ function setAttributes(type, elem, props, firstRender) {
   }
 
   if ((props.style.transform || props.style.opacity) && props.animation.transition) {
-    setTimeout(afterTransition, 100);
+    requestAnimationFrame(() => requestAnimationFrame(afterTransition));
   } else if (props.animation.transition) {
     afterTransition();
   }
@@ -244,7 +241,7 @@ let runInUI = function (cmd) {
     let parentDom = elem.parentNode;
     let view = window.__VIEWS[elem.id];
     let parentView = window.__VIEWS[parentDom.id];
-    view.props = R.merge(view.props, each);
+    view.props = helper.merge(view.props, each);
     setAttributes(view.type, elem, view.props, false);
     computeChildDimens(parentView);
     parentView.children.forEach(child => {
