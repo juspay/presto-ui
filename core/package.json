@@ -1,6 +1,6 @@
 {
   "name": "presto-ui",
-  "version": "v0.3.3",
+  "version": "v0.3.4",
   "description": "Javascript framework for building platform independent apps.",
   "main": "lib/index.js",
   "dependencies": {},
