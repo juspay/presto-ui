@@ -24,6 +24,7 @@
 */
 
 let { computeChildDimens } = require("../compute");
+let parseParams = require("../helpers/web/parseParams");
 let helper = require("../helper");
 
 function createTextElement(elem, config) {
@@ -37,58 +38,30 @@ function createTextElement(elem, config) {
   elem.appendChild(span);
 }
 
-function popup(elem, props) {
-  let menuItems = props["popupMenu"].split(',');
-  let menuBar = document.createElement("div");
-  menuBar.setAttribute("class", "popupMenu");
-  menuBar.style.cssText =
-    "display: none; position: absolute; right: 20px; top:20px; z-index: 5;" +
-    "box-shadow: 0px 5px 10px #888888;";
-  document.body.appendChild(menuBar)
-  let clickCb = "onMenuItemClick";
-  for (let i = 0; i < menuItems.length; i++) {
-    let menuDiv = document.createElement("div");
-    menuDiv.setAttribute("class", "menuItem");
-    menuDiv.textContent = menuItems[i];
-    menuBar.appendChild(menuDiv);
-    let index = i;
-    if (props[clickCb] &&
-      typeof props[clickCb] == "function") {
-      menuDiv.addEventListener("click", () => {
-        props[clickCb](index);
-      });
-    }
-  }
-  elem.addEventListener("click", function () {
-    if (menuBar.style.display == "none")
-      menuBar.style.display = "";
-    else
-      menuBar.style.display = "none";
-  });
-}
-
 function setAttributes(type, elem, props, firstRender) {
   if (type == "horizontalScrollView" || type == "scrollView")
     elem.style.overflow = "auto";
 
-  let afterTransition = (x) => {
-    let animation = props.animation;
-    let myElem = elem;
-    let pro = props;
-    if (animation.transition) {
-      myElem.style.transition = animation.transition;
-      myElem.style.transform = animation.transform;
-      if (animation.opacity)
-        myElem.style.opacity = animation.opacity;
-    }
+  let afterTransition = () => {
+    const p = props;
+    let transform = "";
+    if (p.a_scaleX || p.a_scaleY)
+      transform = `scale3d(${p.a_scaleX || 1}, ${p.a_scaleY || 1}, 1) `;
+    if (p.a_translationX || p.a_translationY)
+      transform += `translate3d(${p.a_translationX || 0}px, ${p.a_translationY || 0}px, 0px) `;
+    if (p.a_rotation || p.a_rotationX || p.a_rotationY)
+      transform += `rotateX(${p.a_rotationX || p.a_rotation || 0}deg) rotateY(${p.a_rotationY || p.a_rotation || 0}deg) `;
+    if (p.a_duration || p.delay)
+      elem.style.transition = `all ${p.a_duration || 0}ms ${p.delay || 0}ms`;
+    if (transform != "")
+      elem.style.transform = transform;
+
+    if (p.a_alpha !== null)
+      elem.style.opacity = p.a_alpha;
   };
 
-  elem.style.transition = props.transition;
-
   for (let key in props) {
-    if (key == "popupMenu") {
-      popup(elem, props);
-    } else if (key == "text") {
+    if (key == "text") {
       if (type == "editText")
         elem.value = props[key];
       else
@@ -114,9 +87,9 @@ function setAttributes(type, elem, props, firstRender) {
     }
   }
 
-  if ((props.style.transform || props.style.opacity) && props.animation.transition) {
+  if ((props.style.transform || props.style.opacity)) {
     requestAnimationFrame(() => requestAnimationFrame(afterTransition));
-  } else if (props.animation.transition) {
+  } else {
     afterTransition();
   }
 
@@ -243,7 +216,14 @@ let runInUI = function (cmd) {
     let parentView = window.__VIEWS[parentDom.id];
     view.props = helper.merge(view.props, each);
     setAttributes(view.type, elem, view.props, false);
-    computeChildDimens(parentView);
+    if (parentView.type == "relativeLayout") {
+      const children = parentView.children;
+      parentView.children = [view];
+      computeChildDimens(parentView);
+      parentView.children = children;
+    } else {
+      computeChildDimens(parentView);
+    }
     parentView.children.forEach(child => {
       inflateView(child, parentDom);
     });

@@ -73,7 +73,15 @@ module.exports = {
     }
 
     parentView.children.splice(index, 0, view);
-    Render.computeChildDimens(parentView);
+    if (parentView.type == "relativeLayout") {
+      const children = parentView.children;
+      parentView.children = [view];
+      Render.computeChildDimens(parentView);
+      parentView.children = children;
+    } else {
+      Render.computeChildDimens(parentView);
+    }
+
     if (parentView.type === "linearLayout")
       parentView.children.forEach(child => {
         Render.inflateView(child, parent);

@@ -64,9 +64,6 @@ function shouldMove(view) {
 function shouldInfateChilds(view) {
   let props = view.props;
 
-  if (props.visibility == "gone")
-    return null;
-
   let dimen = {
     w: props.w,
     h: props.h,
@@ -78,6 +75,8 @@ function shouldInfateChilds(view) {
   let cachedDimen = window.__VIEW_DIMENSIONS[props.id];
   if (!cachedDimen)
     return true;
+  if (props.visibility == "gone")
+    return null;
   for (let key in dimen) {
     if (cachedDimen[key] != dimen[key]) {
       changed = true;

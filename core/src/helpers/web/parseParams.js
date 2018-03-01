@@ -89,8 +89,6 @@ function parseLayoutProps(type, config, key) {
   if (!config.style) {
     config.style = {};
     config.style.transform = "";
-    config.animation = {};
-    config.animation.transform = "";
   }
 
   if (!config.attributes)
@@ -171,64 +169,32 @@ function parseLayoutProps(type, config, key) {
     config.style.transform += "translateY(" + config[key] + "px) ";
   }
 
-  if (key == "a_translationY") {
-    config.animation.transform += "translateY(" + config[key] + "px) ";
-  }
-
   if (key == "translationX") {
     config.style.transform += "translateX(" + config[key] + "px) ";
-  }
-
-  if (key == "a_translationX") {
-    config.animation.transform += "translateX(" + config[key] + "px) ";
   }
 
   if (key == "scaleX") {
     config.style.transform += "scaleX(" + config[key] + ") ";
   }
 
-  if (key == "a_scaleX") {
-    config.animation.transform += "scaleX(" + config[key] + ") ";
-  }
-
   if (key == "scaleY") {
     config.style.transform += "scaleY(" + config[key] + ") ";
-  }
-
-  if (key == "a_scaleY") {
-    config.animation.transform += "scaleY(" + config[key] + ") ";
   }
 
   if (key == "rotation") {
     config.style.transform += "rotate(" + config[key] + "deg) ";
   }
 
-  if (key == "a_rotation") {
-    config.animation.transform += "rotate(" + config[key] + "deg) ";
-  }
-
   if (key == "rotationX") {
     config.style.transform += "rotateX(" + config[key] + "deg) ";
-  }
-
-  if (key == "a_rotationX") {
-    config.animation.transform += "rotateX(" + config[key] + "deg) ";
   }
 
   if (key == "rotationY") {
     config.style.transform += "rotateY(" + config[key] + "deg) ";
   }
 
-  if (key == "a_rotationY") {
-    config.animation.transform += "rotateY(" + config[key] + "deg) ";
-  }
-
   if (key == "translationZ") {
     config.style["z-index"] = config[key];
-  }
-
-  if (key == "a_duration") {
-    config.animation.transition = config[key] + 'ms all';
   }
 
   if (type == "textView" && key == "gravity" && config.gravity) {
@@ -257,14 +223,12 @@ module.exports = function (type, config, getSetType) {
 
   var keys = Object.keys(config);
 
-  for (var i = 0; i < keys.length; i++) {
-    parseLayoutProps(type, config, keys[i]);
+  if (config.style) {
+    config.style.transform = "";
   }
 
-  config.transition = "0ms all";
-
-  if (config.style.transform == "") {
-    delete config.style.transform;
+  for (var i = 0; i < keys.length; i++) {
+    parseLayoutProps(type, config, keys[i]);
   }
 
   return config;
