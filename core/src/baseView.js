@@ -75,9 +75,12 @@ class BaseView {
   resolveChildren() {
     const children = (Array.isArray(this.props.children)) ? this.props.children : this.children;
     this.props.children = null;
-    return children.map(function(child) {
-      return child.render();
-    });
+    const rendered = [];
+    for (let i = 0; i < children.length; i++) {
+      if (children[i] && children[i].render)
+        rendered.push(children[i].render());
+    }
+    return rendered;
   }
 
   findRecurse(obj, selector) {
