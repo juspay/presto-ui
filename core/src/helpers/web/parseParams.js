@@ -217,7 +217,9 @@ function setDefaults(type, config) {
 }
 
 module.exports = function (type, config, getSetType) {
-
+  const css = config.css;
+  delete config.css;
+  
   config = flattenObject(config);
   setDefaults(type, config);
 
@@ -229,6 +231,14 @@ module.exports = function (type, config, getSetType) {
 
   for (var i = 0; i < keys.length; i++) {
     parseLayoutProps(type, config, keys[i]);
+  }
+
+  if (css) {
+    for (const key in css) {
+      if (css.hasOwnProperty(key)) {
+        config.style[key] = css[key];
+      }
+    }
   }
 
   return config;

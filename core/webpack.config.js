@@ -26,7 +26,16 @@ const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 let plugins = [
-  new UglifyJsPlugin(),
+  new UglifyJsPlugin({
+    uglifyOptions: {
+      compress: {
+          drop_console: true
+      },
+      output: {
+        comments: false
+      }
+    }
+  }),
   new webpack.optimize.ModuleConcatenationPlugin(),
   new webpack.optimize.OccurrenceOrderPlugin()
 ];
