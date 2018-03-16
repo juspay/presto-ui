@@ -23,76 +23,7 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-var ViewPageAdapter = require("./ViewPageAdapter");
-var Renderer = require("./Render");
-
 module.exports = {
-  getSymbol: function (type) {
-    switch (type) {
-    case "tick":
-      return "\u2713";
-    case "rupee":
-      return "\u20B9";
-    default:
-      return "symbol";
-    }
-  },
-
-  listViewAdapter: function (id, jsx, callback, type, more) {
-    let parent = document.getElementById(id);
-    if (!parent) {
-      console.error(new Error("Listview parent null"));
-      return;
-    }
-    while (parent.firstElementChild)
-      parent.removeChild(parent.firstElementChild);
-
-    let view = JSON.parse(jsx);
-    let parentView = window.__VIEWS[parent.id];
-    view.map((x, i) => {
-      parentView.children.push(x.view);
-      parentView.type = "linearLayout";
-      Renderer.computeChildDimens(parentView);
-      parentView.type = "listView";
-      let elem = Renderer.inflateView(x.view, parent);
-      elem.addEventListener("click", function () {
-        window.callJSCallback(callback, [i]);
-      });
-      Android.runInUI(x.value);
-    });
-    if (more) {
-      let elem = document.createElement('div');
-      elem.style.width = "100%";
-      elem.style.height = "100px";
-      elem.style.borderBottom = "1px solid #eee";
-      parent.appendChild(elem);
-      let a = JSON.parse(more);
-      console.log(a, "more");
-
-      Renderer.inflateView(JSON.parse(more), elem);
-    }
-  },
-
-  callAPI: function (method, url, data, headers, type, callback) {
-
-  },
-
-  getFromSharedPrefs: function (key) {
-    return localStorage.getItem(key) || "__failed";
-  },
-
-  setInSharedPrefs: function (key, value) {
-    localStorage.setItem(key, value);
-  },
-
-  viewPagerAdapter: function (id, jsx, tabJsx, cb) {
-    ViewPageAdapter.createTabs(id, jsx, tabJsx, cb);
-  },
-
-  switchToViewPagerIndex: function (index) {
-    ViewPageAdapter.toggleView(index);
-  },
-
   getKey: function (key, defaultValue) {
     return localStorage.getItem(key) || defaultValue;
   },

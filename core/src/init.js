@@ -195,12 +195,13 @@ module.exports = (meta, main, jbridgeOverrides) => {
     let overrides = jbridgeOverrides();
     window.JBridge = merge(window.JBridge, overrides);
   }
-  containers.registerScreenMeta(meta);
 
   window.__duiShowScreen = duiShowScreen;
   window.__duiCb = null;
   window.__runDuiCallback = runDuiCallback;
   window.__setCallback = setCallback;
+
+  containers.registerScreenMeta(meta);
 
   main();
 };

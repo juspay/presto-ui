@@ -139,15 +139,7 @@ const handleScreenActions = function (data) {
   }
 
   if (data.action == "INIT_UI") {
-    window.__ROOTSCREEN = determineScreen("RootScreen", data.state);
-    const layout = window.__ROOTSCREEN.render();
-
-    if (window.__OS == "ANDROID")
-      Android.Render(JSON.stringify(layout), null);
-    else
-      Android.Render(layout, null);
-
-    return performAction(screenMeta.INIT_UI, {});
+    return performAction(screenMeta.INIT_UI, data.state);
   }
 
   if (!window.__CURR_SCREEN && !window.__PREV_SCREEN) {
@@ -179,6 +171,16 @@ const handleScreenActions = function (data) {
 
 }
 
+function renderRootscreen() {
+  window.__ROOTSCREEN = determineScreen("RootScreen", {});
+  const layout = window.__ROOTSCREEN.render();
+
+  if (window.__OS == "ANDROID")
+    Android.Render(JSON.stringify(layout), null);
+  else
+    Android.Render(layout, null);
+}
+
 function performAction(action, state) {
   handleScreenActions({action, state});
 }
@@ -202,5 +204,6 @@ module.exports = {
   },
   registerScreenMeta: (meta) => {
     screenMeta = meta;
-  }
+    renderRootscreen();
+  },
 }
