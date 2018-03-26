@@ -123,10 +123,6 @@ function parseLayoutProps(type, config, key) {
     config.style.opacity = config[key];
   }
 
-  if (key == "a_alpha") {
-    config.animation.opacity = config[key];
-  }
-
   if (key == "fontStyle") {
     let match = config.fontStyle.match(/[/-]/);
     let fontName = match ? config.fontStyle.slice(0, match.index) : config.fontStyle;
