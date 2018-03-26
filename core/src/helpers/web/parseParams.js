@@ -102,7 +102,7 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "textSize")
-    config.style.fontSize = config.textSize;
+    config.style.fontSize = config.textSize + "px";
 
   if (key == "imageUrl")
     config.attributes.src = config.imageUrl + ".png";
@@ -206,7 +206,7 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "lineHeight")
-    config.style.lineHeight = config.lineHeight;
+    config.style.lineHeight = config.lineHeight + "px";
 
 }
 
@@ -219,7 +219,7 @@ function setDefaults(type, config) {
 module.exports = function (type, config, getSetType) {
   const css = config.css;
   delete config.css;
-  
+
   config = flattenObject(config);
   setDefaults(type, config);
 

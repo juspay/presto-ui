@@ -98,10 +98,10 @@ function setAttributes(type, elem, props, firstRender) {
 
 let setDimens = function (elem, props) {
   elem.style.display = (isHidden(props)) ? "none" : "";
-  elem.style.left = props.x;
-  elem.style.top = props.y;
-  elem.style.width = props.w;
-  elem.style.height = props.h;
+  elem.style.left = props.x + "px";
+  elem.style.top = props.y + "px";
+  elem.style.width = props.w + "px";
+  elem.style.height = props.h + "px";
 }
 
 let isHorizontalScrollView = function (elem) {

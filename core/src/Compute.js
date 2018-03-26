@@ -152,9 +152,9 @@ function computeGravity(view, viewCtx, isRelative) {
     if (maxValue <= viewCtx[dimen])
       viewCtx[axis] += Math.floor((viewCtx[dimen] - maxValue) / 2);
     else
-      console.error(new Error(
-        `Childs ${dimen} + margins are greater than the parents ${dimen}, id: ${view.props.id}`
-      ));
+      console.warn("Warning: " +
+        `Childs ${dimen == "h" ? "height" : "width"} ` +
+        ` + margins are greater than the parents ${dimen == "h" ? "height" : "width"}, parentId: ${view.props.id}`);
   };
 
   if (parentProps.gravity === "center_horizontal")
@@ -332,8 +332,8 @@ function computeLinearlayout(view) {
     } else if (hasPassiveGravity) {
       let availablePassive = viewCtx[passiveDimen] - props[passiveDimen];
       if (availablePassive < 0)
-        console.error(new Error("Child " + passiveDimen +
-          " larger than the parent, id:" + parentProps.id));
+        console.warn("Warning: Child " + (passiveDimen == "h" ? "height" : "width") +
+          " larger than the parent, parentId:" + parentProps.id);
       else
         axis += availablePassive / 2;
       passiveMarginVal = margins[passiveMargin[0]] -  margins[passiveMargin[1]];
