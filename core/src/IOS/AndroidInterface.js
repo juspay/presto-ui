@@ -60,8 +60,8 @@ module.exports = {
           }
         }));
     }
-    if (typeof cb === "function")
-      cb();
+    if (cb)
+      window.callUICallback(cb);
   },
 
   addViewToParent: function (id, view, index, cb, replace) {
@@ -95,7 +95,7 @@ module.exports = {
         }
       }));
     }
-    if (typeof cb === "function")
-      cb();
+    if (cb)
+      window.callUICallback(cb);
   }
 };
