@@ -230,8 +230,12 @@ module.exports = function (type, config) {
     parseLayoutProps(type, config, keys[i]);
   }
 
-  if (config.duration || config.delay)
-    config.style.transition = `all ${config.duration || 0}ms ${config.delay || 0}ms`;
+  if (config.duration || config.delay) {
+    config.style.transitionProperty = "transform, opacity";
+    config.style.transitionDuration = (config.duration || 0) + "ms";
+    config.style.transitionDelay = (config.delay || 0) + "ms";
+    // config.style.transition = `transform, opacity ${config.duration || 0}ms ${config.delay || 0}ms`;
+  }
 
   if (css) {
     for (const key in css) {

@@ -30,7 +30,7 @@ let helper = require("../helper");
 const eventListenerHolder = {};
 const animationProps =
   ["translationX", "translationY", "rotation", "rotationX", "rotationY",
-    "scaleX", "scaleY", "alpha", "duration"
+    "scaleX", "scaleY", "alpha", "duration", "delay"
   ];
 
 function createTextElement(elem, config) {
@@ -68,9 +68,9 @@ function setAttributes(type, elem, props, firstRender) {
     }
     if (animationPropExists) {
       const parsedProps = parseParams(type, tempProps);
-      elem.style.transition = parsedProps.style.transition;
-      elem.style.transform = parsedProps.style.transform;
-      elem.style.opacity = parsedProps.style.opacity;
+      for (let i in parsedProps.style) {
+        elem.style[i] = parsedProps.style[i];
+      }
     }
   };
 
@@ -155,27 +155,14 @@ let inflateView = function (view, parentElement) {
     else if (view.type == "checkBox")
       elem = document.createElement("checkBox");
     else if (view.type == "editText") {
-      elem = document.createElement("input");
+      if (view.props.multiLine)
+        elem = document.createElement("textarea");
+      else
+        elem = document.createElement("input");
     } else
       elem = document.createElement("div");
 
-    if (view.type == "horizontalScrollView") {
-      elem.style.overflowX = "scroll";
-      elem.style.overflowY = "hidden";
-      elem.style.whiteSpace = "noWrap";
-      elem.style.position = "absolute";
-    } else if (view.type == "scrollView") {
-      elem.style.overflowY = "scroll";
-      elem.style.overflowX = "hidden";
-      elem.style.position = "absolute";
-    } else if (view.type == "listView") {
-      elem.style.overflowY = "scroll";
-      elem.style.overflowX = "hidden";
-      elem.style.position = "absolute";
-    } else {
-      elem.style.position = "absolute";
-    }
-
+    elem.style.position = "absolute";
     newInflated = true;
     if (parentElement) {
       parentElement.appendChild(elem);
