@@ -254,8 +254,8 @@ function computeLinearlayout(view) {
   }
 
   if (hasWeight && hasMatchParent) {
-    throw new Error("Render: Layout cannot have children with ",
-      activeDimen + ":match_parent and weight prop, id:" + parentProps.id);
+    throw new Error("Render: Layout cannot have children with " +
+      (activeDimen == "h" ? "height" : "width") + ":match_parent and weight prop, id:" + parentProps.id);
   }
 
   if (hasMatchParent || hasWeight) {

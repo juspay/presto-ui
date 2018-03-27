@@ -81,49 +81,45 @@ function parseColors(color) {
 }
 
 function parseLayoutProps(type, config, key) {
-  if (typeof config[key] == "undefined" || config[key] == null) {
-    delete config[key];
-    return;
-  }
-
   if (!config.style) {
     config.style = {};
     config.style.transform = "";
+    config.style.transition = "";
   }
 
   if (!config.attributes)
     config.attributes = {};
 
-  if (!config.style.className)
-    config.style.className = "";
+  if (key == "className")
+    config.attributes.class = config.className;
 
-  if (key == "onClick") {
+  else if (key == "onClick") {
     config.style.cursor = "pointer";
   }
 
-  if (key == "textSize")
+  else if (key == "textSize")
     config.style.fontSize = config.textSize + "px";
 
-  if (key == "imageUrl")
+  else if (key == "imageUrl")
     config.attributes.src = config.imageUrl + ".png";
 
-  if (key == "background") {
+  else if (key == "background") {
     config.style.background = parseColors(config.background);
   }
 
-  if (key == "color") {
+  else if (key == "color") {
     config.style.color = parseColors(config.color);
   }
 
-  if (key == "cornerRadius") {
+  else if (key == "cornerRadius") {
     config.style.borderRadius = config.cornerRadius + "px";
   }
 
-  if (key == "alpha") {
+  else if (key == "alpha") {
     config.style.opacity = config[key];
   }
 
-  if (key == "fontStyle") {
+  else if (key == "fontStyle") {
     let match = config.fontStyle.match(/[/-]/);
     let fontName = match ? config.fontStyle.slice(0, match.index) : config.fontStyle;
     config.style.fontFamily = fontName;
@@ -156,68 +152,73 @@ function parseLayoutProps(type, config, key) {
     config.style.fontWeight = type;
   }
 
-  if (key == "stroke") {
+  else if (key == "stroke") {
     let values = config.stroke.split(",");
     config.style.border = values[0] + "px solid" + values[1];
   }
 
-  if (key == "translationY") {
+  else if (key == "translationY") {
     config.style.transform += "translateY(" + config[key] + "px) ";
   }
 
-  if (key == "translationX") {
+  else if (key == "translationX") {
     config.style.transform += "translateX(" + config[key] + "px) ";
   }
 
-  if (key == "scaleX") {
+  else if (key == "scaleX") {
     config.style.transform += "scaleX(" + config[key] + ") ";
   }
 
-  if (key == "scaleY") {
+  else if (key == "scaleY") {
     config.style.transform += "scaleY(" + config[key] + ") ";
   }
 
-  if (key == "rotation") {
+  else if (key == "rotation") {
     config.style.transform += "rotate(" + config[key] + "deg) ";
   }
 
-  if (key == "rotationX") {
+  else if (key == "rotationX") {
     config.style.transform += "rotateX(" + config[key] + "deg) ";
   }
 
-  if (key == "rotationY") {
+  else if (key == "rotationY") {
     config.style.transform += "rotateY(" + config[key] + "deg) ";
   }
 
-  if (key == "translationZ") {
+  else if (key == "translationZ") {
     config.style["z-index"] = config[key];
   }
 
-  if (type == "textView" && key == "gravity" && config.gravity) {
+  else if (type == "textView" && key == "gravity" && config.gravity) {
     config.style.textAlign = config.gravity;
   }
 
-  if (key == "id") {
+  else if (key == "inputType") {
+    config.attributes.type = config.inputType;
+  }
+
+  else if (key == "hint") {
+    config.attributes.placeholder = config.hint;
+  }
+
+  else if (key == "text") {
+    config.attributes.value = config.text;
+  }
+
+  else if (key == "id") {
     config.attributes.id = config.id;
   }
 
-  if (key == "lineHeight")
+  else if (key == "lineHeight")
     config.style.lineHeight = config.lineHeight + "px";
 
 }
 
-function setDefaults(type, config) {
-  if (type == "linearLayout") {
-    config.orientation = config.orientation;
-  }
-}
-
-module.exports = function (type, config, getSetType) {
+module.exports = function (type, config) {
   const css = config.css;
   delete config.css;
 
   config = flattenObject(config);
-  setDefaults(type, config);
 
   var keys = Object.keys(config);
 
@@ -228,6 +229,9 @@ module.exports = function (type, config, getSetType) {
   for (var i = 0; i < keys.length; i++) {
     parseLayoutProps(type, config, keys[i]);
   }
+
+  if (config.duration || config.delay)
+    config.style.transition = `all ${config.duration || 0}ms ${config.delay || 0}ms`;
 
   if (css) {
     for (const key in css) {
