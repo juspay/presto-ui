@@ -81,20 +81,15 @@ function parseColors(color) {
 }
 
 function parseLayoutProps(type, config, key) {
-  if (!config.style) {
-    config.style = {};
-    config.style.transform = "";
-    config.style.transition = "";
+  if (key == "className") {
+    config.attributes.class = config.className;
   }
 
-  if (!config.attributes)
-    config.attributes = {};
-
-  if (key == "className")
-    config.attributes.class = config.className;
-
   else if (key == "onClick") {
-    config.style.cursor = "pointer";
+    if (typeof config.onClick !== "function")
+      config.style.cursor = "";
+    else
+      config.style.cursor = "pointer";
   }
 
   else if (key == "textSize")
@@ -146,8 +141,6 @@ function parseLayoutProps(type, config, key) {
       type = '700';
     else if (type.indexOf('black') != -1)
       type = '900';
-
-
 
     config.style.fontWeight = type;
   }
@@ -211,30 +204,32 @@ function parseLayoutProps(type, config, key) {
 
   else if (key == "lineHeight")
     config.style.lineHeight = config.lineHeight + "px";
-
 }
 
 module.exports = function (type, config) {
   const css = config.css;
   delete config.css;
+  delete config.attributes;
+  delete config.style;
 
   config = flattenObject(config);
 
-  var keys = Object.keys(config);
+  config.style = {
+    transform: "",
+    transition: ""
+  };
 
-  if (config.style) {
-    config.style.transform = "";
-  }
+  config.attributes = {};
 
-  for (var i = 0; i < keys.length; i++) {
-    parseLayoutProps(type, config, keys[i]);
+  for (let key in config) {
+    if (key !== "style" && key !== "attributes")
+      parseLayoutProps(type, config, key);
   }
 
   if (config.duration || config.delay) {
     config.style.transitionProperty = "transform, opacity";
     config.style.transitionDuration = (config.duration || 0) + "ms";
     config.style.transitionDelay = (config.delay || 0) + "ms";
-    // config.style.transition = `transform, opacity ${config.duration || 0}ms ${config.delay || 0}ms`;
   }
 
   if (css) {

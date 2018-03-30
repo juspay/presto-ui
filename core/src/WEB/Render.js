@@ -23,9 +23,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
  */
 
-let { computeChildDimens } = require("../compute");
-let parseParams = require("../helpers/web/parseParams");
-let helper = require("../helper");
+const { computeChildDimens } = require("../compute");
+const parseParams = require("../helpers/web/parseParams");
+const helper = require("../helper");
 
 const eventListenerHolder = {};
 const animationProps =
@@ -95,47 +95,47 @@ function setAttributes(type, elem, props, firstRender) {
           eventType
         ]);
       }
-      const resolveCb = e => (eventType == "change") ? cb(e.target.value) : cb(
-        e)
+      const resolveCb = e => (eventType == "change") ? cb(e.target.value) : cb(e);
       eventListenerHolder[props.id][eventType] = resolveCb;
       elem.addEventListener(eventType, resolveCb);
+    } else if (key.indexOf("on") == 0 && props[key] == "øDeleteø") {
+      const eventType = key.substring(2, key.length).toLowerCase();
+      if (eventListenerHolder[props.id][eventType]) {
+        elem.removeEventListener(eventType, eventListenerHolder[props.id][
+          eventType
+        ]);
+        eventListenerHolder[props.id][eventType] = null;
+      }
     }
   }
+
   if (props.style && (props.style.transform || props.style.opacity)) {
     requestAnimationFrame(() => requestAnimationFrame(afterTransition));
   } else {
     afterTransition();
   }
 
+  let className = type;
+  if (props.attributes.class) {
+    className += " " + props.attributes.class;
+  }
+  elem.setAttribute("class", className);
   delete props.style;
   delete props.attributes;
-  elem.setAttribute("class", type);
 }
 
-let setDimens = function (elem, props) {
-  elem.style.display = (isHidden(props)) ? "none" : "";
+const setDimens = function (elem, props) {
+  elem.style.display = (props.visibility === "gone") ? "none" : "";
   elem.style.left = props.x + "px";
   elem.style.top = props.y + "px";
   elem.style.width = props.w + "px";
   elem.style.height = props.h + "px";
 }
 
-let isHorizontalScrollView = function (elem) {
-  return elem && elem.classList[0] == "horizontalScrollView";
-}
-
-let isScrollView = function (elem) {
-  return elem && elem.classList[0] == "scrollView";
-}
-
-let isHidden = function (props) {
-  return props.visibility === "gone";
-}
-
 // Creates the DOM element if it has not been already inflated
 // View: Object of ReactDOM, {type, props, children}
 // parentElement: DOM Object
-let inflateView = function (view, parentElement) {
+const inflateView = function (view, parentElement) {
   let elem = document.getElementById(view.props.id);
   let newInflated = false;
   let cb = () => {
@@ -205,7 +205,7 @@ let inflateView = function (view, parentElement) {
   return elem;
 };
 
-let runInUI = function (cmd) {
+const runInUI = function (cmd) {
   if (!(cmd instanceof Array))
     cmd = [cmd];
   const pendingUpdatesOrder = [];

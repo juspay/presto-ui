@@ -709,7 +709,7 @@ function this_setHidden(hidden){
     "invokeOn": getSetType?"this":"UIView",
     "methodName":"setHidden:",
     "values":[
-      {"name": hidden, type: "i"}
+      {"name": hidden == "gone" ? "1" : "0", type: "i"}
     ]
   }
 }
@@ -959,16 +959,13 @@ module.exports = function(type, config, _getSetType) {
 
   if (config.fontStyle) {
     config.methods.push(UIFont_fontWithName(config.fontStyle, config.textSize));
-
-    // if (type == "bold")
-    // config.methods.push(UIFont_boldSystemFontOfSize(size));
-    // else if (type == "heavy")
-    //   config.methods.push(UIFont_systemFontOfSizeWeight(size, "0.5"));
-    //   else
-    // config.methods.push(UIFont_systemFontOfSize(size));
-
     config.methods.push(this_setFont());
   }
+
+  if (config.fontFamily) {
+   config.methods.push(UIFont_fontWithName(config.fontFamily, config.textSize || "16"));
+   config.methods.push(this_setFont());
+ }
 
   if (config.multipleLine) {
     config.methods.push(this_setLineBreakMode("0"));
@@ -976,8 +973,8 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_sizeToFit());
   }
 
-  if (config.hidden) {
-    let arg = rWS(cS(config.hidden));
+  if (config.visibility) {
+    let arg = rWS(cS(config.visibility));
     config.methods.push(this_setHidden(arg));
   }
 
