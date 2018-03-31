@@ -1051,6 +1051,15 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(self_setHTMLText(props));
   }
 
+  if (config.textFromHtml) {
+    //TODO: FIX THIS BRING IT OUTSIDE
+    let props = {
+        "text": config.textFromHtml,
+        "id": config.id,
+     };
+      config.methods.push(self_setHTMLText(props));
+  }
+
   // doesnt work
   if (config.bringSubViewToFront) {
     let viewTag = cS(config.viewTag);

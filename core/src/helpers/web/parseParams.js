@@ -86,10 +86,14 @@ function parseLayoutProps(type, config, key) {
   }
 
   else if (key == "onClick") {
-    if (typeof config.onClick !== "function")
+    if (typeof config.onClick !== "function") {
       config.style.cursor = "";
-    else
+      config.style.userSelect = "";
+    }
+    else {
       config.style.cursor = "pointer";
+      config.style.userSelect = "none";
+    }
   }
 
   else if (key == "textSize")
