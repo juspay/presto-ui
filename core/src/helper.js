@@ -30,10 +30,12 @@ function cacheDimen(view) {
   let dimen = {
     w: props.w,
     h: props.h,
-    stroke: props.stroke ? props.stroke.split(",")[0] * 1 : 0,
     x: props.x,
     y: props.y,
     gravity: props.gravity,
+    padding: props.padding,
+    orientation: props.orientation,
+    stroke: props.stroke ? props.stroke.split(",")[0] * 1 : 0,
   }
   window.__VIEW_DIMENSIONS[props.id] = dimen;
 }
@@ -67,8 +69,10 @@ function shouldInfateChilds(view) {
   let dimen = {
     w: props.w,
     h: props.h,
-    stroke: props.stroke ? props.stroke.split(",")[0] * 1 : 0,
     gravity: props.gravity,
+    padding: props.padding,
+    orientation: props.orientation,
+    stroke: props.stroke ? props.stroke.split(",")[0] * 1 : 0,
   };
 
   let changed = false;
