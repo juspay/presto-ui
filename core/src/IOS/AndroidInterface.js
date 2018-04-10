@@ -25,6 +25,12 @@
 
 const render = require('./Render');
 
+function clearViewExternals(view) {
+  delete window.__VIEWS[view.props.id];
+  delete window.__VIEW_DIMENSIONS[view.props.id];
+  view.children.forEach(clearViewExternals);
+}
+
 module.exports = {
   getScreenDimensions: function () {
     return JSON.stringify({
@@ -70,32 +76,58 @@ module.exports = {
         id));
     }
     let parent = window.__VIEWS[id];
+    if (replace) {
+      parent.children.forEach(clearViewExternals);
+      parent.children.splice(0);
+    }
     parent.children.splice(index, 0, view);
     view.props.parentId = id;
     render.computeChildDimens(parent);
-    view = render.inflate(view);
-    if (parent.type == "linearLayout") {
-      parent.children.forEach(child => {
-        if (child.props.id != view.props.id)
-          render.inflate(child);
-      });
-
-      if (parent.props.parentIsScroll) {
-        render.inflate(window.__VIEWS[parent.props.parentId]);
-      }
-
+    const renderedView = render.inflate(view);
+    if (parent.props.parentIsScroll) {
+      render.inflate(window.__VIEWS[parent.props.parentId]);
     }
-    if (view) {
+    if (replace) {
+      window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
+        methodName: "removeChildren",
+        parameters: {
+          parentId: id
+        }
+      }));
+    }
+    if (renderedView) {
       window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
         methodName: "addViewToParent",
         parameters: {
           index: index,
           parentId: id,
-          view: view
+          view: renderedView
         }
       }));
     }
+    parent.children.forEach(child => {
+      if (child.props.id != view.props.id)
+        render.inflate(child);
+    });
     if (cb)
       window.callUICallback(cb);
+  },
+
+  removeView: function (id) {
+    const view = window.__VIEWS[id];
+    const parent = window.__VIEWS[view.props.parentId];
+    const index = parent.children.indexOf(view);
+    parent.children.splice(index, 1);
+    clearViewExternals(view);
+    render.computeChildDimens(parent);
+    parent.children.forEach(child => {
+      render.inflate(child);
+    });
+    window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
+      methodName: "removeView",
+      parameters: {
+        id: id
+      }
+    }));
   }
 };
