@@ -59,35 +59,24 @@ module.exports = {
   },
 
   addViewToParent: function (id, view, index, cb, replace) {
-    var parent = document.getElementById(id);
-    var props = window.__VIEWS[id].props;
-    var type = parent.className;
-    var iterableChildNodes = Array.prototype.slice.call(parent.children);
-    let parentView = window.__VIEWS[id];
+    const parent = document.getElementById(id);
+    const parentView = window.__VIEWS[id];
 
     if (replace) {
-      parentView.children = [];
-      iterableChildNodes.forEach((each) => {
-        each.remove();
-      });
+      parentView.children.splice(0);
+      const iterableChildNodes = Array.prototype.slice.call(parent.children);
+      for (let i = 0, len = iterableChildNodes.length; i < len; i++) {
+        iterableChildNodes[i].remove();
+      }
     }
 
     parentView.children.splice(index, 0, view);
-    if (parentView.type == "relativeLayout") {
-      const children = parentView.children;
-      parentView.children = [view];
-      Render.computeChildDimens(parentView);
-      parentView.children = children;
-    } else {
-      Render.computeChildDimens(parentView);
-    }
+    Render.computeChildDimens(parentView);
 
-    if (parentView.type === "linearLayout")
-      parentView.children.forEach(child => {
-        Render.inflateView(child, parent);
-      });
-    else
-      Render.inflateView(view, parent);
+    const children = parentView.children;
+    for (let i = 0, len = children.length; i < len; i++) {
+        Render.inflateView(children[i], parent);
+    }
 
     if (cb)
       window.callUICallback(cb);
@@ -105,10 +94,28 @@ module.exports = {
     viewElem.remove();
 
     Render.computeChildDimens(parent);
-    if (parent.type === "linearLayout")
-      parent.children.forEach(child => {
-        Render.inflateView(child, parentElem);
-      });
+    const children = parent.children;
+    for (let i = 0, len = children.length; i < len; i++) {
+      Render.inflateView(children[i], parentElem);
+    }
+  },
+
+  moveChild: function (id, position) {
+    const viewElem = document.getElementById(id);
+    const parentElem = viewElem.parentNode;
+    const view = window.__VIEWS[id];
+    const parent = window.__VIEWS[parentElem.id];
+
+    const idx = parent.children.indexOf(view);
+    parent.children.splice(idx, 1);
+    parent.children.splice(position, 0, view);
+
+    Render.computeChildDimens(parent);
+
+    const children = parent.children;
+    for (let i = 0, len = children.length; i < len; i++) {
+      Render.inflateView(children[i], parentElem);
+    }
   },
 
   removeChildren: function (id) {
@@ -119,6 +126,6 @@ module.exports = {
       viewElem.firstChild.remove();
     }
 
-    view.children = [];
+    view.children.splice(0);
   }
 };
