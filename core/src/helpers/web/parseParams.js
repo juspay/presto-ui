@@ -81,6 +81,7 @@ function parseColors(color) {
 }
 
 function parseLayoutProps(type, config, key) {
+  const value = config[key];
   if (key == "className") {
     config.attributes.class = config.className;
   }
@@ -114,7 +115,7 @@ function parseLayoutProps(type, config, key) {
     config.style.borderRadius = config.cornerRadius + "px";
   }
 
-  else if (key == "alpha") {
+  else if (key == "alpha" && value != "") {
     config.style.opacity = config[key];
   }
 
@@ -154,40 +155,45 @@ function parseLayoutProps(type, config, key) {
     config.style.border = values[0] + "px solid" + values[1];
   }
 
-  else if (key == "translationY") {
+  else if (key == "translationY" && value != "") {
     config.style.transform += "translateY(" + config[key] + "px) ";
   }
 
-  else if (key == "translationX") {
+  else if (key == "translationX" && value != "") {
     config.style.transform += "translateX(" + config[key] + "px) ";
   }
 
-  else if (key == "scaleX") {
+  else if (key == "scaleX" && value != "") {
     config.style.transform += "scaleX(" + config[key] + ") ";
   }
 
-  else if (key == "scaleY") {
+  else if (key == "scaleY" && value != "") {
     config.style.transform += "scaleY(" + config[key] + ") ";
   }
 
-  else if (key == "rotation") {
+  else if (key == "rotation" && value != "") {
     config.style.transform += "rotate(" + config[key] + "deg) ";
   }
 
-  else if (key == "rotationX") {
+  else if (key == "rotationX" && value != "") {
     config.style.transform += "rotateX(" + config[key] + "deg) ";
   }
 
-  else if (key == "rotationY") {
+  else if (key == "rotationY" && value != "") {
     config.style.transform += "rotateY(" + config[key] + "deg) ";
   }
 
-  else if (key == "translationZ") {
+  else if (key == "translationZ" && value != "") {
     config.style["z-index"] = config[key];
   }
 
   else if (type == "textView" && key == "gravity" && config.gravity) {
     config.style.textAlign = config.gravity;
+  }
+
+  else if ((type == "textView" || type == "editText" || type == "imageView") && key == "padding") {
+    const tokens = config.padding.split(',');
+    config.style.padding = [tokens[1], tokens[2], tokens[3], tokens[0]].join('px ') + "px";
   }
 
   else if (key == "inputType") {
