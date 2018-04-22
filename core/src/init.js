@@ -107,8 +107,9 @@ window.updateLanguage = (lang) => {
 
 window.onresize = (iosData) => {
   let id = window.__ROOTSCREEN && window.__ROOTSCREEN.idSet.root;
-  if (!id)
-    return console.error(new Error("Window Resize: id `root` of rootscreen not available"));
+  if (!id) {
+    id = 1;
+  }
   if (window.__OS == "IOS") {
     let tag = iosData.tag;
     if (tag == "keyboardWillHide") {
