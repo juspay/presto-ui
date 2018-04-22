@@ -129,5 +129,17 @@ module.exports = {
         id: id
       }
     }));
-  }
+  },
+
+  moveChild: function (id, position) {
+    const view = window.__VIEWS[id];
+    const parent = window.__VIEWS[view.props.parentId];
+    const index = parent.children.indexOf(view);
+    parent.children.splice(index, 1);
+    parent.children.splice(position, 0, view);
+    render.computeChildDimens(parent);
+    parent.children.forEach(child => {
+      render.inflate(child);
+    });
+  },
 };
