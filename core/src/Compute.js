@@ -23,6 +23,13 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
+function parseMarginPadding(dimen) {
+  const tokens = dimen.split(',');
+  for (let i = 0, len = tokens.length; i < len; i++)
+    tokens[i] = Number(tokens[i]);
+  return tokens;
+}
+
 /*
   ViewContext of the Parent.
   Obj holds the available width and height of it's parent container
@@ -38,12 +45,14 @@ function viewCtxObj(view) {
     width: props.w * 1,
   };
 
-  view.children.forEach(child => {
+  const children = view.children;
+  for (let i = 0, len = children.length; i < len; i++) {
+    const child = children[i];
     child.props.w = child.props.width;
     child.props.h = child.props.height;
     child.props.x = 0;
     child.props.y = 0;
-  });
+  }
 
   if (props.stroke) {
     let stroke = props.stroke.split(",")[0];
@@ -59,7 +68,7 @@ function viewCtxObj(view) {
   if (!props.padding)
     return obj;
 
-  let padding = props.padding.split(',').map(a => a * 1);
+  let padding = parseMarginPadding(props.padding);
   obj.w -= padding[0] + padding[2];
   obj.h -= padding[1] + padding[3];
   obj.x += padding[0];
@@ -76,7 +85,7 @@ function isHidden(prop) {
   given dimension (width or height)
 */
 function hasMatchParentChild(childs, dimen) {
-  for (let i = 0; i < childs.length; i++) {
+  for (let i = 0, len = childs.length; i < len; i++) {
     let childProp = childs[i].props;
     if (isHidden(childProp))
       continue;
@@ -95,7 +104,7 @@ function hasWeightChild(type, childs) {
     return false;
   }
 
-  for (let i = 0; i < childs.length; i++) {
+  for (let i = 0, len = childs.length; i < len; i++) {
     let child = childs[i].props;
     if (isHidden(child))
       continue;
@@ -126,21 +135,24 @@ function computeGravity(view, viewCtx, isRelative) {
     let m = (dimen === "w") ? [0, 2] : [1, 3];
     let axis = (dimen === "w") ? 'x' : 'y';
     let maxValue = 0;
-    view.children.forEach(child => {
+
+    const children = view.children;
+    for (let i = 0, len = children.length; i < len; i++) {
+      const child = children[i];
       let props = child.props;
 
       if (isHidden(props))
-        return;
+        continue;
 
       let value = props[dimen] * 1;
 
       if (isRelative && props.alignParentBottom && dimen == "h") {
         maxValue = viewCtx[dimen];
-        return;
+        continue;
       }
 
       if (props.margin && (shouldAdd || isRelative)) {
-        let margins = props.margin.split(',').map(a => a * 1);
+        let margins = parseMarginPadding(props.margin)
         value += margins[m[0]] + margins[m[1]];
       }
 
@@ -148,13 +160,9 @@ function computeGravity(view, viewCtx, isRelative) {
         maxValue += value;
       else
         maxValue = (maxValue < value) ? value : maxValue;
-    });
+    };
     if (maxValue <= viewCtx[dimen])
       viewCtx[axis] += Math.floor((viewCtx[dimen] - maxValue) / 2);
-    else
-      console.warn("Warning: " +
-        `Childs ${dimen == "h" ? "height" : "width"} ` +
-        ` + margins are greater than the parents ${dimen == "h" ? "height" : "width"}, parentId: ${view.props.id}`);
   };
 
   if (parentProps.gravity === "center_horizontal")
@@ -178,18 +186,19 @@ function computeBasic(view, ignoreGravity) {
 
   let containerWidth = viewCtx.width;
 
-  children.forEach(child => {
+  for (let i = 0, len = children.length; i < len; i++) {
+    const child = children[i];
     let props = child.props;
     let margins = [0, 0, 0, 0];
 
     if (isHidden(props)) {
       props.h = "0";
       props.w = "0";
-      return;
+      continue;
     }
 
     if (props.margin)
-      margins = props.margin.split(',').map(a => a * 1);
+      margins = parseMarginPadding(props.margin)
 
     let width = viewCtx.w - margins[0] - margins[2];
     let height = viewCtx.h - margins[1] - margins[3];
@@ -214,7 +223,7 @@ function computeBasic(view, ignoreGravity) {
 
     if (window.RTL)
       props.x = containerWidth - props.x - props.w;
-  });
+  };
 }
 
 function computeLinearlayout(view) {
@@ -254,17 +263,18 @@ function computeLinearlayout(view) {
   }
 
   if (hasWeight && hasMatchParent) {
-    console.warn("Render: Layout cannot have children with " +
-      (activeDimen == "h" ? "height" : "width") + ":match_parent and weight prop, id:" + parentProps.id);
+    console.warn("LinearLayout cannot have children with " +
+      (activeDimen == "h" ? "height" : "width") + ":match_parent and weight. id:" + parentProps.id);
     return;
   }
 
   if (hasMatchParent || hasWeight) {
-    children.forEach(child => {
+    for (let i = 0, len = children.length; i < len; i++) {
+      const child = children[i];
       let props = child.props;
 
       if (isHidden(props))
-        return;
+        continue;
 
       let weight = props["weight"] * 1;
 
@@ -272,19 +282,20 @@ function computeLinearlayout(view) {
         weightSum += weight;
 
       if (props.margin) {
-        let margins = props.margin.split(',').map(a => a * 1);
+        let margins = parseMarginPadding(props.margin);
         viewCtx[activeDimen] -= margins[activeMargin[0]] + margins[
           activeMargin[1]];
       }
 
       viewCtx[activeDimen] -= props[activeDimen] * 1 || 0;
-    });
+    };
   }
 
   if (hasActiveGravity)
     computeGravity(view, viewCtx);
 
-  children.forEach(child => {
+  for (let i = 0, len = children.length; i < len; i++) {
+    const child = children[i];
     let props = child.props;
     let axis = viewCtx[activeAxis];
     let margins = [0, 0, 0, 0];
@@ -293,11 +304,11 @@ function computeLinearlayout(view) {
     if (isHidden(props)) {
       props.w = "0";
       props.h = "0";
-      return;
+      continue;
     }
 
     if (props.margin)
-      margins = props.margin.split(',').map(a => a * 1);
+      margins = parseMarginPadding(props.margin);
 
     // Active Dimension
     if (props[activeDimen] === "match_parent") {
@@ -332,10 +343,7 @@ function computeLinearlayout(view) {
       props[passiveDimen] += '';
     } else if (hasPassiveGravity) {
       let availablePassive = viewCtx[passiveDimen] - props[passiveDimen];
-      if (availablePassive < 0)
-        console.warn("Warning: Child " + (passiveDimen == "h" ? "height" : "width") +
-          " larger than the parent, parentId:" + parentProps.id);
-      else
+      if (availablePassive > 0)
         axis += availablePassive / 2;
       passiveMarginVal = margins[passiveMargin[0]] -  margins[passiveMargin[1]];
     }
@@ -344,15 +352,13 @@ function computeLinearlayout(view) {
 
     if (window.RTL)
       props.x = containerWidth - props.x - props.w;
-  });
+  };
 }
 
 function computeChildDimens(view) {
-  if (view.type == "linearLayout")
+  if (view.type == "linearLayout") {
     computeLinearlayout(view);
-  else if (view.type === "relativeLayout")
-    computeBasic(view, false);
-  else if (view.type.toLocaleLowerCase().indexOf("scroll") != -1) {
+  } else if (view.type.toLocaleLowerCase().indexOf("scroll") != -1) {
     computeBasic(view, true);
   } else if (view.type == "listView") {
     view.orientation = "vertical";
