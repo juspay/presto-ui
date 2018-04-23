@@ -38,8 +38,8 @@ function createTextElement(elem, config) {
   let span = elem.childNodes.length ? elem.childNodes[0] : document.createElement(
     'span');
 
-  elem.style.whiteSpace = "initial";
-  elem.innerHTML = config.text;
+  elem.style.whiteSpace = "pre-line";
+  elem.textContent = config.text;
   elem.style.wordBreak = "break-word"
 }
 
@@ -57,9 +57,9 @@ function setAttributes(type, elem, props, firstRender) {
     for (let i in animationProps) {
       const name = animationProps[i];
       const aName = "a_" + name;
-      if (p.hasOwnProperty(name))
+      if (p[name] != undefined)
         tempProps[name] = p[name];
-      if (!p.hasOwnProperty(aName))
+      if (p[aName] == undefined)
         continue;
       animationPropExists = true;
       p[name] = p[aName];
@@ -88,20 +88,25 @@ function setAttributes(type, elem, props, firstRender) {
       for (let innerKey in props.attributes)
         elem.setAttribute(innerKey, props.attributes[innerKey]);
     } else if (props[key] && typeof props[key] == "function") {
-      const eventType = key.substring(2, key.length).toLowerCase();
+      var eventType = key.substring(2, key.length).toLowerCase();
+      var element = elem;
+      if (eventType == "change")
+        eventType = "input";
+      else if (eventType == "resize")
+        element = window;
       const cb = props[key];
       if (eventListenerHolder[props.id][eventType]) {
-        elem.removeEventListener(eventType, eventListenerHolder[props.id][
+        element.removeEventListener(eventType, eventListenerHolder[props.id][
           eventType
         ]);
       }
-      const resolveCb = e => (eventType == "change") ? cb(e.target.value) : cb(e);
+      const resolveCb = e => (eventType == "input") ? cb(e.target.value) : cb(e);
       eventListenerHolder[props.id][eventType] = resolveCb;
-      elem.addEventListener(eventType, resolveCb);
+      element.addEventListener(eventType, resolveCb);
     } else if (key.indexOf("on") == 0 && props[key] == "øDeleteø") {
       const eventType = key.substring(2, key.length).toLowerCase();
       if (eventListenerHolder[props.id][eventType]) {
-        elem.removeEventListener(eventType, eventListenerHolder[props.id][
+        element.removeEventListener(eventType, eventListenerHolder[props.id][
           eventType
         ]);
         eventListenerHolder[props.id][eventType] = null;
@@ -192,7 +197,7 @@ const inflateView = function (view, parentElement) {
 
   computeChildDimens(view);
 
-  for (let i = 0; i < view.children.length; i++) {
+  for (let i = 0, len = view.children.length; i < len; i++) {
     let child = view.children[i];
     if (child) {
       inflateView(child, elem);
@@ -208,29 +213,36 @@ const inflateView = function (view, parentElement) {
 const runInUI = function (cmd) {
   if (!(cmd instanceof Array))
     cmd = [cmd];
-  const pendingUpdatesOrder = [];
   const pendingUpdates = {};
-  cmd.forEach(function (each) {
+
+  for (let i = 0, len = cmd.length; i < len; i++) {
+    const each = cmd[i];
     let elem = document.getElementById(each.id);
-    if (!elem)
-      return console.warn("runInUI (Id NULL) CMD:", each);
+    if (!elem) {
+      console.warn("runInUI (Id NULL) CMD:", each);
+      continue;
+    }
     let parentDom = elem.parentNode;
     let view = window.__VIEWS[elem.id];
     let parentView = window.__VIEWS[parentDom.id];
     view.props = parseParams(view.type, helper.merge(view.props, each));
     setAttributes(view.type, elem, view.props, false);
-    if (!pendingUpdates.hasOwnProperty(parentDom.id)) {
-      pendingUpdatesOrder.push(parentDom.id);
+    if (pendingUpdates[parentDom.id] == undefined) {
+      pendingUpdates[parentDom.id] = true;
     }
-  });
-  pendingUpdatesOrder.forEach(parentId => {
+  };
+
+  for (let id in pendingUpdates) {
+    const parentId = id;
     const parentView = window.__VIEWS[parentId];
     const parentDom = document.getElementById(parentId);
     computeChildDimens(parentView);
-    parentView.children.forEach(child => {
+    const children = parentView.children;
+    for (let i = 0, len = children.length; i < len; i++) {
+      const child = children[i];
       inflateView(child, parentDom);
-    });
-  });
+    };
+  };
 };
 
 module.exports = {
