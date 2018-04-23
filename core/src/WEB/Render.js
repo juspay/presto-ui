@@ -105,6 +105,9 @@ function setAttributes(type, elem, props, firstRender) {
       element.addEventListener(eventType, resolveCb);
     } else if (key.indexOf("on") == 0 && props[key] == "øDeleteø") {
       const eventType = key.substring(2, key.length).toLowerCase();
+      var element = elem;
+      if (eventType == "resize")
+        element = window;
       if (eventListenerHolder[props.id][eventType]) {
         element.removeEventListener(eventType, eventListenerHolder[props.id][
           eventType
