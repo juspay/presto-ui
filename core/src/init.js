@@ -124,7 +124,11 @@ window.onresize = (iosData) => {
     window.__HEIGHT = window.__DEVICE_DETAILS.screen_height;
   }
   if (window.__OS == "ANDROID") {
-    Android.Render(window.__VIEWS[id], null, "false");
+    if(typeof Android.getNewID == "function") {
+      Android.Render(JSON.stringify(layout), null, "false");
+    } else {
+      Android.Render(JSON.stringify(layout), null);
+    }
   } else {
     Android.Render(window.__VIEWS[id], null);
   }
