@@ -65,7 +65,7 @@ if (!window.__ENV) {
 window.callJSCallback = require("./helpers").android.callbackMapper.callJSCallback;
 window.__WIDTH = window.__DEVICE_DETAILS.screen_width;
 window.__HEIGHT = window.__DEVICE_DETAILS.screen_height;
-window.__ID = 1;
+window.__ID = (typeof Android.getNewID == "function")? Android.getNewID() : 1;
 window.__NODE_ID = 1;
 window.__SCREEN_INDEX = -1;
 window.__IOS_VIEWS = {};
@@ -123,7 +123,11 @@ window.onresize = (iosData) => {
     window.__WIDTH = window.__DEVICE_DETAILS.screen_width;
     window.__HEIGHT = window.__DEVICE_DETAILS.screen_height;
   }
-  Android.Render(window.__VIEWS[id], null);
+  if (window.__OS == "ANDROID") {
+    Android.Render(window.__VIEWS[id], null, "false");
+  } else {
+    Android.Render(window.__VIEWS[id], null);
+  }
 }
 
 window.callUICallback = function () {

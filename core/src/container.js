@@ -143,7 +143,7 @@ const handleScreenActions = function (data) {
     const layout = window.__ROOTSCREEN.render();
 
     if (window.__OS == "ANDROID")
-      Android.Render(JSON.stringify(layout), null);
+      Android.Render(JSON.stringify(layout), null, "false");
     else
       Android.Render(layout, null);
 

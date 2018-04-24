@@ -108,7 +108,7 @@ class BaseView {
 
   id(name) {
     if (!this.idSet[name]) {
-      window.__ID++;
+      window.__ID = (typeof Android.getNewID == "function")? Android.getNewID() : (window.__ID + 1);
       this.idSet[name] = window.__ID;
     }
     return this.idSet[name];
@@ -120,7 +120,7 @@ class BaseView {
 
     for (var i = 0; i < arr.length; i++) {
       if (!this.idSet[arr[i]]) {
-        window.__ID++;
+        window.__ID = (typeof Android.getNewID == "function")? Android.getNewID() : (window.__ID + 1);
         this.idSet[arr[i]] = window.__ID + '';
       }
     }
