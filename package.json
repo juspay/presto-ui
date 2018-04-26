@@ -1,0 +1,38 @@
+{
+  "name": "presto-ui",
+  "version": "v1.0.1",
+  "description": "Javascript framework for building platform independent apps.",
+  "main": "lib/index.js",
+  "dependencies": {
+    "ramda": "latest",
+    "axios": "latest",
+    "babel-plugin-transform-function-source": "^1.0.0",
+    "promise": "^7.1.1",
+    "immu": "^2.0.1",
+    "object-assign": "^4.1.0"
+  },
+  "devDependencies": {
+    "bluebird": "latest",
+    "es6-promise": "latest",
+    "async": "latest",
+    "babel-core": "^6.9.1",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-transform-react-jsx": "^6.8.0",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "uglifyjs-webpack-plugin": "^1.1.6",
+    "webpack": "^3.5.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "webpack --progress --colors"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:juspay/presto-ui.git"
+  },
+  "author": "JUSPAY Technologies <info@juspay.in>",
+  "license": "AGPL-3.0",
+  "homepage": "https://github.com/juspay/presto-ui"
+}
