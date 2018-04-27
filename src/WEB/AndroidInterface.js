@@ -24,6 +24,7 @@
  */
 
 var Render = require("./Render");
+var helper = require('../helper');
 const R = require('ramda');
 
 module.exports = {
@@ -63,6 +64,7 @@ module.exports = {
     if (parentElement.childElementCount > 1) {
       var iterableChildNodes = Array.prototype.slice.call(parentElement.children);
       iterableChildNodes.forEach((each) => {
+        helper.clearViewExternals(window.__VIEWS[each.id]);
         each.remove();
       });
       parentElement.appendChild(elem);
@@ -77,6 +79,7 @@ module.exports = {
     let parentView = window.__VIEWS[id];
 
     if (replace) {
+      helper.clearViewExternals(window.__VIEWS[each.id]);
       parentView.children = [];
       iterableChildNodes.forEach((each) => {
         each.remove();
@@ -97,8 +100,31 @@ module.exports = {
     let view = window.__VIEWS[id];
     let parent = window.__VIEWS[parentid];
     let idx = parent.children.indexOf(view);
+    helper.clearViewExternals(view);
     parent.children.splice(idx, 1);
     viewElem.remove();
+    this.recompute();
+  },
+
+  replaceView: function (view, id) {
+    let viewElem = document.getElementById(id);
+    let parentid = viewElem.parentNode.id;
+    let parentElem = document.getElementById(parentid);
+    parentElem.removeChild(viewElem);
+
+    let oldview = window.__VIEWS[id];
+    let oldchildren = oldview.children;
+    var iterableChildNodes = Array.prototype.slice.call(viewElem.children);
+
+    oldview.props = view.props;
+    oldview.children = [];
+    this.recompute();
+
+    oldview.children = oldchildren;
+    viewElem = document.getElementById(id);
+    iterableChildNodes.forEach((each) => {
+      viewElem.appendChild(each);
+    });
     this.recompute();
   },
 

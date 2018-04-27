@@ -77,10 +77,20 @@ function merge(a, b) {
   return a;
 }
 
+function clearViewExternals(view) {
+  if (!view)
+    return;
+  delete window.__VIEWS[view.props.id];
+  delete window.__VIEW_DIMENSIONS[view.props.id];
+  view.children.forEach(clearViewExternals);
+}
+
+
 module.exports = {
   shouldInfateChilds,
   shouldMove,
   cacheDimen,
   getOS,
   merge,
+  clearViewExternals,
 }

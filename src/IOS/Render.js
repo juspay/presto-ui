@@ -24,7 +24,7 @@
 */
 
 const parseParams = require('../helpers/ios/parseParams');
-const {computeChildDimens} = require('../compute');
+const {computeChildDimens} = require('../computeIOS');
 const helper = require('../helper');
 const R = require('ramda');
 
