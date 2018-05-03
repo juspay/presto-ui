@@ -239,6 +239,11 @@ function parseLayoutProps(type, config, key) {
     config.attributes.id = config.id;
   }
 
+
+  if (key == "inputType") {
+    config.attributes.type = config.inputType;
+  }
+  
   if (key == "lineHeight")
     config.style.lineHeight = config.lineHeight;
 
