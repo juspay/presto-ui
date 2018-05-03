@@ -249,8 +249,17 @@ function parseColor(color, setterName) {
 }
 
 function mashThis(attrs, obj, belongsTo, transformFn) {
-  if (attrs.key == "width" || attrs.key == "height")
-  return '';
+  if (getSetType == "get" && (attrs.key == "width" || attrs.key == "height")) {
+    // get case i.e during patch
+    if(!isNaN(attrs.value * 1)) {
+      return 'get_PARAMS->' + obj.varName + ':dp_' + attrs.value + ';get_view->setLayoutParams:get_PARAMS ';
+    } else {
+      return 'get_PARAMS->' + obj.varName + ':i_' + mapParams[attrs.key].values[0][attrs.value] + ';get_view->setLayoutParams:get_PARAMS ';
+    }
+  } else if(attrs.key == "width" || attrs.key == "height") {
+    // set case i.e first render
+    return '';
+  }
 
   var beforeCmd = "";
   var afterCmd = "";
