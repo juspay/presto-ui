@@ -107,13 +107,10 @@ function setAttributes(type, elem, props, firstRender) {
       for (let innerKey in props.attributes)
         elem.setAttribute(innerKey, props.attributes[innerKey]);
     } else if (props[key] && typeof props[key] == "function") {
-      if (!firstRender)
-        continue;
       let eventType = key.substring(2, key.length).toLowerCase();
       let cb = props[key];
       elem.style.userSelect = 'none';
-      elem.addEventListener(eventType, e =>
-        (eventType == "change") ? cb(e.target.value) : cb(e));
+      elem['on' + eventType] = e => {(eventType == "change") ? cb(e.target.value) : cb(e)};
     }
   }
 

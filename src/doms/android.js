@@ -73,6 +73,15 @@ Array.prototype.flatten = function() {
 
 var parseParams = require('../helpers/android').parseParams;
 
+function setAutogenId(props) {
+    props.node_id = window.__NODE_ID + '';
+    window.__NODE_ID++;
+
+    if (!props.__filename)
+      props.__filename = "filename not added";
+  return props;
+}
+
 module.exports = function(type, props, ...children) {
   var paramType;
 
@@ -81,15 +90,25 @@ module.exports = function(type, props, ...children) {
   if (!props)
     props = {};
 
-  if (typeof type === "string") {
+  if(typeof type === "object") {
+
+    paramType = getCtr(type.parentType);
+    props = parseParams(type.elemType, props, "set");
+    props = setAutogenId(props);
+    props.runInUI = props.runInUI.replace('PARAM_CTR_HOLDER', paramType);
+    var finalType = type.elemType;
+    finalType = finalType[0].toUpperCase() + finalType.substr(1, finalType.length);
+    for (var excludedType in excluded) {
+      if (excludedType === finalType) {
+        return { type: excluded[excludedType] + finalType, props: props, children: children }
+      }
+    }
+    return {type: "android.widget." + finalType, props: props, children: children}
+  } else if (typeof type === "string") {
     paramType = getCtr(type);
     props = parseParams(type, props, "set");
 
-    props.node_id = window.__NODE_ID + '';
-    window.__NODE_ID++;
-
-    if (!props.__filename)
-      props.__filename = "filename not added";
+    props = setAutogenId(props);
 
     for (let j = 0; j < children.length; j++) {
       if (children[j].props.runInUI) {
