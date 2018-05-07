@@ -24,170 +24,96 @@
 */
 
 const parseParams = require('../helpers/ios/parseParams');
-const {computeChildDimens} = require('../computeIOS');
+const {computeChildDimens} = require('../compute');
 const helper = require('../helper');
 const R = require('ramda');
 
-function scrollHelper(view) {
-  let isScroll = (view.type.toLocaleLowerCase().indexOf("scroll") != -1) ? view.type : false;
-
-  if (!isScroll)
-    return false;
-
-  if (view.children.length > 1) {
-    console.error(new Error(
-      "(Horizontal)ScrollView must have only one child"
-    ));
-  }
-
-  if (view.children.length == 1) {
-    view.children[0].props.parentIsScroll = isScroll;
-    return true;
-  }
-
-  return false;
-}
-
 function sumChildDimens(view) {
-  let isVertical = view.props.orientation == "vertical";
-  let dimenKey = (!isVertical) ? "w" : "h";
-  let axisKey = (!isVertical) ? "x" : "y";
-  let index = (!isVertical) ? 3: 2;
-  if (view.children.length == 0) {
-    view.props[dimenKey] = '0';
-    return;
-  }
+  const isVertical = view.props.orientation == "vertical";
+  const dimenKey = (!isVertical) ? "w" : "h";
+  const axisKey = (!isVertical) ? "x" : "y";
+  const contentKey = (!isVertical) ? "contentWidth" : "contentHeight";
+  const index = (!isVertical) ? 3: 2;
   let lastChild;
-  for (let i=view.children.length -1; i >= 0 ; i--) {
+
+  view.props.contentWidth = view.props.w;
+  view.props.contentHeight = view.props.h;
+
+  for (let i = view.children.length - 1; i >= 0 ; i--) {
     lastChild = view.children[i];
-    if (lastChild.props.visibility!="gone")
+    if (lastChild.props.visibility != "gone")
       break;
     lastChild = null;
   }
 
   if (!lastChild) {
-    view.props[dimenKey] = '0';
     return;
   }
-  let margin = lastChild.props.margin ? lastChild.props.margin.split(',').map(a => a*1):[0,0,0,0];
-  let padding = view.props.padding ? view.props.padding.split(',').map(a => a*1):[0,0,0,0];
-  let dimen = lastChild.props[axisKey] * 1 + lastChild.props[dimenKey] * 1 + margin[index] + padding[index];
-  view.props[dimenKey] = dimen + '';
-}
 
-function setContentDimension(view, children) {
-  if (children.length == 0)
-    return;
-  let container = children[0];
-  let isVertical = container.props.orientation == "vertical";
-  let margin = container.props.margin ? container.props.margin.split(',').map(a => a*1):[0,0,0,0];
-  let padding = view.props.padding ? view.props.padding.split(',').map(a => a*1):[0,0,0,0];
-  let height = container.props.h * 1;
-  let width = container.props.w * 1;
-  if (!isVertical) {
-    width += padding[0] + padding[2] + margin[0] + margin[2];
-  } else {
-    height += padding[1] + padding[3] + margin[1] + margin[3];
-  }
-  view.props.contentWidth = width + '';
-  view.props.contentHeight = height + '';
-}
-
-function getContentDimensionsCmd(view) {
-  sumChildDimens(view.children[0]);
-  setContentDimension(view, view.children);
-  let cmd = [];
-  cmd.push([view.type, {
-    id: view.props.id,
-    contentWidth: view.props.contentWidth,
-    contentHeight: view.props.contentHeight
-  }]);
-  cmd.push([view.children[0].type, {
-    id: view.children[0].props.id,
-    w: view.children[0].props.w,
-    h: view.children[0].props.h,
-    x: view.children[0].props.x,
-    y: view.children[0].props.y,
-  }]);
-  return cmd;
+  const margin = lastChild.props.margin ? lastChild.props.margin.split(',').map(a => a*1):[0,0,0,0];
+  const padding = view.props.padding ? view.props.padding.split(',').map(a => a*1):[0,0,0,0];
+  const dimen = lastChild.props[axisKey] * 1 + lastChild.props[dimenKey] * 1 + margin[index] + padding[index];
+  view.props[contentKey] = dimen + '';
 }
 
 function inflate(view) {
-  let id = view.props.id;
-  let alreadyRendered = false;
-  let isScroll = scrollHelper(view);
-  let parentIsScroll = typeof view.props.parentIsScroll !== "undefined"
-  if (!id)
-    return console.error(new Error("A view should have a valid ID"));
+  const id = view.props.id;
+  const isScroll = view.type.toLocaleLowerCase().indexOf("scroll") != -1;
 
-  if (window.__VIEWS.hasOwnProperty(id))
-    alreadyRendered = true;
-
-  if (!alreadyRendered) {
+  if (!window.__VIEWS.hasOwnProperty(id)) {
     computeChildDimens(view);
-    if (parentIsScroll)
+    if (isScroll) {
       sumChildDimens(view);
+    }
     helper.cacheDimen(view);
     window.__VIEWS[id] = view;
-    let newView = R.clone(view);
+    const newView = R.clone(view);
     view.children.forEach((child, i) => {
       newView.children[i] = inflate(child);
     });
-    if (isScroll) {
-      setContentDimension(newView, view.children);
-    }
-    let obj = parseParams(newView.type, newView.props, "set");
+    const obj = parseParams(newView.type, newView.props, "set");
     newView.props = obj.config;
     newView.type = obj.type[0].toUpperCase() + obj.type.substr(1, obj.type.length);
     return newView;
   }
 
-  let move = helper.shouldMove(view);
-  let inflateChilds = helper.shouldInfateChilds(view);
+  const move = helper.shouldMove(view);
+  const inflateChilds = helper.shouldInfateChilds(view);
   helper.cacheDimen(view);
 
   if (move) {
+    move.id = id;
     runInUIHelper(view.type, move);
   }
 
+  computeChildDimens(view)
+  view.children.forEach(inflate);
+
   if (isScroll) {
-    return getContentDimensionsCmd(view).forEach(tuple => runInUIHelper(tuple[0], tuple[1]));
+    sumChildDimens(view);
+    const cmd = {
+      id,
+      contentWidth: view.props.contentWidth,
+      contentHeight: view.props.contentHeight,
+    };
+    runInUI(cmd);
   }
-
-  if (inflateChilds) {
-    computeChildDimens(view)
-    view.children.forEach(inflate);
-  }
-
-  return null;
 }
 
-let runInUI = function (cmd) {
+function runInUI(cmd) {
   if (!(cmd instanceof Array))
     cmd = [cmd];
 
   cmd.forEach(function (each) {
-    let id = each.id;
-
-    if (!window.__VIEWS.hasOwnProperty(id))
-      return console.error(new Error("Invalid ID: " + id));
-
-    let view = window.__VIEWS[id];
-    let parentView = window.__VIEWS[view.props.parentId];
+    const id = each.id;
+    const view = window.__VIEWS[id];
     view.props = R.merge(view.props, each);
-    computeChildDimens(parentView);
-    runInUIHelper(view.type, each);
-    parentView.children.forEach(child => inflate(child));
-
-    if (parentView.props.parentIsScroll) {
-      let scrollView = window.__VIEWS[parentView.props.parentId];
-      getContentDimensionsCmd(scrollView).forEach(tuple => runInUIHelper(tuple[0], tuple[1]));
-    }
+    runInUIHelper(view.type, view.props);
   });
 };
 
-let runInUIHelper = function (type, obj) {
-  let cmd = parseParams(type, obj, "get").config.methods;
+function runInUIHelper(type, obj) {
+  const cmd = parseParams(type, obj, "get").config.methods;
   window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
     methodName: "runInUI",
     parameters: cmd

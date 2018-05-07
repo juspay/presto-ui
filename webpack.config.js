@@ -26,7 +26,7 @@ const webpack = require('webpack');
 
 let development = {
   name: "development",
-  devtool: "inline-source-map",
+  // devtool: "inline-source-map",
   entry: "./index.js",
   output: {
     path: __dirname +  "/lib",

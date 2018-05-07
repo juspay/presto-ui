@@ -144,7 +144,7 @@ window.callUICallback = function () {
     currTime = getCurrTime();
     timeDiff = currTime - window.__LAST_FN_CALLED.timeStamp;
 
-    if (timeDiff >= 2000) {
+    if (timeDiff >= 300) {
       console.log("BUTTON_CLICKED_" + window.__CURR_SCREEN);
       JBridge.trackEvent("BUTTON_CLICKED", "BUTTON_CLICKED_" + window.__CURR_SCREEN);
       window.__PROXY_FN[fName].call(null, ...functionArgs);

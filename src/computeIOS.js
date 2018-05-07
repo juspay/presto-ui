@@ -338,15 +338,16 @@ function computeLinearlayout(view) {
 }
 
 function computeChildDimens(view) {
-  if (view.type == "linearLayout")
+  if (view.type == "linearLayout") {
     computeLinearlayout(view);
-  else if (view.type === "relativeLayout")
-    computeBasic(view, false);
-  else if (view.type.toLocaleLowerCase().indexOf("scroll") != -1) {
-    computeBasic(view, true);
+  } else if (view.type == "scrollView" || view.type == "listView") {
+    view.props.orientation = "vertical";
+    computeLinearlayout(view);
+  } else if (view.type == "horizontalScrollView") {
+    view.props.orientation = "horizontal";
+    computeLinearlayout(view);
   } else if (view.type == "listView") {
-    view.orientation = "vertical";
-    computeLinearlayout(view);
+    computeBasic(view, false);
   } else {
     computeBasic(view, false);
   }

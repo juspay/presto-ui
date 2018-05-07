@@ -58,6 +58,7 @@ module.exports = {
 
     Render.computeChildDimens(parentView);
     const elem = Render.inflateView(view, parentElement);
+
     if (cb)
       window.callUICallback(cb);
 

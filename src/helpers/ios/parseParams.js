@@ -814,6 +814,10 @@ function generateType(type){
     generatedType = "uILabel";
   } else if (type == "scrollView" || type == "horizontalScrollView") {
     generatedType = "uIScrollView";
+  } else if (type == "viewPager") {
+    generatedType = "collectionView";
+  } else if (type == "listView") {
+    generatedType = "tableView";
   } else if (type == "collectionView" || type == "tableView") {
     generatedType = type;
   } else {

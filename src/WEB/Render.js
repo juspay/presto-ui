@@ -178,19 +178,12 @@ let inflateView = function (view, parentElement) {
     if (view.type == "horizontalScrollView") {
       elem.style.overflowX = "scroll";
       elem.style.overflowY = "hidden";
-      elem.style.whiteSpace = "noWrap";
-      elem.style.position = "absolute";
-    } else if (view.type == "scrollView") {
+    } else if (view.type == "listView" || view.type == "scrollView") {
       elem.style.overflowY = "scroll";
       elem.style.overflowX = "hidden";
-      elem.style.position = "absolute";
-    } else if (view.type == "listView") {
-      elem.style.overflowY = "scroll";
-      elem.style.overflowX = "hidden";
-      elem.style.position = "absolute";
-    } else {
-      elem.style.position = "absolute";
     }
+
+    elem.style.position = "absolute";
 
     newInflated = true;
     if (parentElement) {

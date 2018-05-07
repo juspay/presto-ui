@@ -25,6 +25,14 @@
 
 const render = require('./Render');
 
+let rootid;
+
+function clearViewExternals(view) {
+  delete window.__VIEWS[view.props.id];
+  delete window.__VIEW_DIMENSIONS[view.props.id];
+  view.children.forEach(clearViewExternals);
+}
+
 module.exports = {
   getScreenDimensions: function () {
     return JSON.stringify({
@@ -33,14 +41,26 @@ module.exports = {
     });
   },
 
-  runInUI: function (cmd) {
-    if (typeof cmd == "string")
-      return;
-
-    render.runInUI(cmd);
+  recompute: function () {
+    const rootview = window.__VIEWS[rootid];
+    let obj = {
+      type: "linearLayout",
+      props: {
+        h: window.__HEIGHT,
+        w: window.__WIDTH
+      },
+      children: [rootview]
+    };
+    render.computeChildDimens(obj);
+    render.inflate(rootview);
   },
 
-  Render: function (view, cb) {
+  runInUI: function (cmd) {
+    render.runInUI(cmd);
+    this.recompute();
+  },
+
+  Render: function (view) {
     let obj = {
       type: "linearLayout",
       props: {
@@ -49,6 +69,7 @@ module.exports = {
       },
       children: [view]
     };
+    rootid = view.props.id;
     render.computeChildDimens(obj);
     view = render.inflate(view);
     if (view) {
@@ -58,44 +79,47 @@ module.exports = {
           parameters: {
             view: view
           }
-        }));
+      }));
     }
-    if (typeof cb === "function")
-      cb();
   },
 
-  addViewToParent: function (id, view, index, cb, replace) {
+  addViewToParent: function (id, view, index) {
     if (!window.__VIEWS[id]) {
       return console.error(new Error("AddViewToParent: Invalid parent ID: " +
         id));
     }
-    let parent = window.__VIEWS[id];
+    const parent = window.__VIEWS[id];
     parent.children.splice(index, 0, view);
     view.props.parentId = id;
     render.computeChildDimens(parent);
-    view = render.inflate(view);
-    if (parent.type == "linearLayout") {
-      parent.children.forEach(child => {
-        if (child.props.id != view.props.id)
-          render.inflate(child);
-      });
+    const renderedView = render.inflate(view);
 
-      if (parent.props.parentIsScroll) {
-        render.inflate(window.__VIEWS[parent.props.parentId]);
-      }
-
-    }
-    if (view) {
+    if (renderedView) {
+      console.log("here:", renderedView);
       window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
         methodName: "addViewToParent",
         parameters: {
           index: index,
           parentId: id,
-          view: view
+          view: renderedView
         }
       }));
     }
-    if (typeof cb === "function")
-      cb();
-  }
+    this.recompute();
+  },
+
+  removeView: function (id) {
+    const view = window.__VIEWS[id];
+    const parent = window.__VIEWS[view.props.parentId];
+    const index = parent.children.indexOf(view);
+    parent.children.splice(index, 1);
+    clearViewExternals(view);
+    window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
+      methodName: "removeView",
+      parameters: {
+        id: id
+      }
+    }));
+    this.recompute();
+  },
 };
