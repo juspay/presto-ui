@@ -52,13 +52,10 @@ function sumChildDimens(view) {
   let dimenKey = (!isVertical) ? "w" : "h";
   let axisKey = (!isVertical) ? "x" : "y";
   let index = (!isVertical) ? 3: 2;
-  const prop = {
-    id: view.props.id,
-    w: view.props.w,
-    h: view.props.h,
-    x: view.props.x,
-    y: view.props.y
-  };
+  if (view.children.length == 0) {
+    view.props[dimenKey] = '0';
+    return;
+  }
   let lastChild;
   for (let i=view.children.length -1; i >= 0 ; i--) {
     lastChild = view.children[i];
@@ -67,15 +64,14 @@ function sumChildDimens(view) {
     lastChild = null;
   }
 
-  if (view.children.length == 0) {
-    prop[dimenKey] = '0';
-    return prop;
+  if (!lastChild) {
+    view.props[dimenKey] = '0';
+    return;
   }
   let margin = lastChild.props.margin ? lastChild.props.margin.split(',').map(a => a*1):[0,0,0,0];
   let padding = view.props.padding ? view.props.padding.split(',').map(a => a*1):[0,0,0,0];
   let dimen = lastChild.props[axisKey] * 1 + lastChild.props[dimenKey] * 1 + margin[index] + padding[index];
-  prop[dimenKey] = dimen + '';
-  return prop;
+  view.props[dimenKey] = dimen + '';
 }
 
 function setContentDimension(view, children) {
@@ -92,19 +88,26 @@ function setContentDimension(view, children) {
   } else {
     height += padding[1] + padding[3] + margin[1] + margin[3];
   }
-  return {
-    id: view.props.id,
-    contentWidth: width + '',
-    contentHeight: height + ''
-  }
+  view.props.contentWidth = width + '';
+  view.props.contentHeight = height + '';
 }
 
 function getContentDimensionsCmd(view) {
-  const child = sumChildDimens(view.children[0]);
-  const parent = setContentDimension(view, view.children);
+  sumChildDimens(view.children[0]);
+  setContentDimension(view, view.children);
   let cmd = [];
-  cmd.push([view.type, parent]);
-  cmd.push([view.children[0].type, child]);
+  cmd.push([view.type, {
+    id: view.props.id,
+    contentWidth: view.props.contentWidth,
+    contentHeight: view.props.contentHeight
+  }]);
+  cmd.push([view.children[0].type, {
+    id: view.children[0].props.id,
+    w: view.children[0].props.w,
+    h: view.children[0].props.h,
+    x: view.children[0].props.x,
+    y: view.children[0].props.y,
+  }]);
   return cmd;
 }
 
