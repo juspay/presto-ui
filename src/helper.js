@@ -47,7 +47,19 @@ function shouldMove(view) {
     x: props.x,
     y: props.y
   };
-  return R.clone(dimen);
+  let cachedDimen = window.__VIEW_DIMENSIONS[props.id];
+  let changed = false;
+  if (!cachedDimen)
+    return dimen;
+  for (let key in dimen) {
+    if (cachedDimen[key] != dimen[key]) {
+      dimen.id = props.id;
+      changed = true;
+    }
+  }
+  if (changed)
+    return dimen;
+  return null;
 }
 
 function shouldInfateChilds(view) {

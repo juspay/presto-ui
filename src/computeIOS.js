@@ -340,14 +340,12 @@ function computeLinearlayout(view) {
 function computeChildDimens(view) {
   if (view.type == "linearLayout") {
     computeLinearlayout(view);
-  } else if (view.type == "scrollView" || view.type == "listView") {
+  } else if (view.type == "scrollView") {
     view.props.orientation = "vertical";
     computeLinearlayout(view);
   } else if (view.type == "horizontalScrollView") {
     view.props.orientation = "horizontal";
     computeLinearlayout(view);
-  } else if (view.type == "listView") {
-    computeBasic(view, false);
   } else {
     computeBasic(view, false);
   }

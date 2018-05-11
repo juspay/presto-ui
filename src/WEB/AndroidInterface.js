@@ -114,6 +114,15 @@ module.exports = {
     parentElem.removeChild(viewElem);
 
     let oldview = window.__VIEWS[id];
+    let parentView = window.__VIEWS[parentid];
+
+    for (var i = 0; i < parentView.children.length; i++) {
+      const child = parentView.children[i];
+      if (child.props.id == oldview.props.id) {
+        parentView.children[i] = oldview;
+        break;
+      }
+    }
     let oldchildren = oldview.children;
     var iterableChildNodes = Array.prototype.slice.call(viewElem.children);
 
