@@ -108,22 +108,23 @@ module.exports = {
   },
 
   replaceView: function (view, id) {
-    let viewElem = document.getElementById(id);
-    let parentid = viewElem.parentNode.id;
-    let parentElem = document.getElementById(parentid);
+    var viewElem = document.getElementById(id);
+    var parentid = viewElem.parentNode.id;
+    var parentElem = document.getElementById(parentid);
     parentElem.removeChild(viewElem);
 
-    let oldview = window.__VIEWS[id];
-    let parentView = window.__VIEWS[parentid];
+    var oldview;
+    var parentView = window.__VIEWS[parentid];
 
     for (var i = 0; i < parentView.children.length; i++) {
-      const child = parentView.children[i];
-      if (child.props.id == oldview.props.id) {
-        parentView.children[i] = oldview;
+      var child = parentView.children[i];
+      if (child.props.id == id) {
+        oldview = parentView.children[i];
         break;
       }
     }
-    let oldchildren = oldview.children;
+
+    var oldchildren = oldview.children;
     var iterableChildNodes = Array.prototype.slice.call(viewElem.children);
 
     oldview.props = view.props;
@@ -132,9 +133,11 @@ module.exports = {
 
     oldview.children = oldchildren;
     viewElem = document.getElementById(id);
-    iterableChildNodes.forEach((each) => {
-      viewElem.appendChild(each);
-    });
+    if (view.type != "textView") {
+      iterableChildNodes.forEach(function (each) {
+        viewElem.appendChild(each);
+      });
+    }
     this.recompute();
   },
 

@@ -110,7 +110,7 @@ function setAttributes(type, elem, props, firstRender) {
       let eventType = key.substring(2, key.length).toLowerCase();
       let cb = props[key];
       elem.style.userSelect = 'none';
-      elem['on' + eventType] = e => {(eventType == "change") ? cb(e.target.value) : cb(e)};
+      elem['on' + eventType] = e => {e.stopPropagation(); (eventType == "change") ? cb(e.target.value) : cb(e);};
     }
   }
 
