@@ -30,6 +30,7 @@ let R = require('ramda');
 
 var globalObjMap = {};
 var command = "";
+var elementType;
 var getSetType;
 
 function attachFeedback(config, keys, i) {
@@ -388,6 +389,12 @@ function mashThis(attrs, obj, belongsTo, transformFn) {
     afterCmd =  "set_win=ctx->getWindow;get_win->setSoftInputMode:5;";
   }
 
+  if (attrs.key == "text" && elementType == "editText") {
+    if(getSetType == "get") {
+      return "set_pos=get_view->getSelectionEnd;get_view->setText:cs_" + attrs.value + ";get_view->setSelection:get_pos;"
+    }
+  }
+
   if (attrs.key == "shadowLayer") {
     color = attrs.value.split(',')[3];
     arr = appendArgs(attrs,obj).split(',');
@@ -560,6 +567,7 @@ var flattenObject = function(ob) {
 module.exports = function(type, config, _getSetType) {
   config = flattenObject(config);
   getSetType = _getSetType;
+  elementType = type;
 
   var groups =  getConfigGroups(config);
 
