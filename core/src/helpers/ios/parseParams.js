@@ -797,23 +797,23 @@ function transformKeys(config) {
   return config;
 }
 
-function generateType(type){
+function generateType(type) {
   var generatedType = "uIView";
 
-  if (type == "customTextField") {
-    return "customTextField";
-  }
-
   if (type == "editText") {
-    generatedType = "customTextField";
-  } else if (type=="imageView") {
+    generatedType = "mJPTextField";
+  } else if (type == "imageView") {
     generatedType = "uIImageView";
-  } else if (type=="textView") {
+  } else if (type == "textView") {
     generatedType = "uILabel";
   } else if (type == "scrollView" || type == "horizontalScrollView") {
-    generatedType = "uIScrollView";
-  } else if (type == "collectionView" || type == "tableView") {
-    generatedType = type;
+    generatedType = "mJPScrollView";
+  } else if (type == "collectionView") {
+    generatedType = "mJPCollectionView";
+  } else if (type == "tableView") {
+    generatedType = "mJPTableView";
+  } else if (type == "progressBar") {
+    generatedType = "mJPActivityIndicator";
   } else {
     generatedType = "uIView";
   }
