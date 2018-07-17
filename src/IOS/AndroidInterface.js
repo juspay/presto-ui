@@ -24,6 +24,8 @@
 */
 
 const render = require('./Render');
+let helper = require('../helper');
+const R = require('ramda');
 
 let rootid;
 
@@ -105,6 +107,29 @@ module.exports = {
         }
       }));
     }
+    this.recompute();
+  },
+
+  replaceView: function (newView, id) {
+    if (!window.__VIEWS[id]) {
+      return console.error(new Error("AddViewToParent: Invalid parent ID: " + id));
+    }
+    var view = window.__VIEWS[id];
+    newView.props.parentId = view.props.parentId;
+    view.props = R.clone(newView.props);
+    var props = parseParams(newView.type, newView.props, "set");
+    window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
+      methodName: "replaceView",
+      parameters: {
+        id: id,
+        parentId: view.props.parentId,
+        view: {
+          type: newView.type,
+          props: props,
+          children: []
+        }
+      }
+    }));
     this.recompute();
   },
 
