@@ -511,12 +511,15 @@ function UIFont_fontWithName(name, size) {
 function this_setFont() {
   return {
     "return": "false",
-    "invokeOn": getSetType?"this":"UIView",
-    "methodName":"setFont:",
-    "values":[
-      {"name": "font" + window.__FONT_INDEX, "computed": "true"}
-    ]
-  }
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName": "setFont:",
+    "values": [{
+      "name": "font" + window.__FONT_INDEX,
+      "computed": "true"
+    }]
+  };
 }
 
 function this_sizeToFit() {

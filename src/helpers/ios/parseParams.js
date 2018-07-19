@@ -482,12 +482,15 @@ function UIFont_fontWithName(name, size) {
 function this_setFont() {
   return {
     "return": "false",
-    "invokeOn": getSetType?"this":"UIView",
-    "methodName":"setFont:",
-    "values":[
-      {"name": "font" + window.__FONT_INDEX, "computed": "true"}
-    ]
-  }
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName": "setFont:",
+    "values": [{
+      "name": "font" + window.__FONT_INDEX,
+      "computed": "true"
+    }]
+  };
 }
 
 function this_sizeToFit() {
@@ -965,6 +968,11 @@ module.exports = function(type, config, _getSetType) {
     //   else
     // config.methods.push(UIFont_systemFontOfSize(size));
 
+    config.methods.push(this_setFont());
+  }
+
+  if (config.fontFamily) {
+    config.methods.push(UIFont_systemFontOfSizeWeight((config.textSize || "14") + "", config.fontFamily || "0.0"));
     config.methods.push(this_setFont());
   }
 
