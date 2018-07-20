@@ -714,7 +714,7 @@ function this_setHidden(hidden){
     "invokeOn": getSetType?"this":"UIView",
     "methodName":"setHidden:",
     "values":[
-      {"name": hidden, type: "i"}
+      {"name": (hidden === "gone" ? "1" : "0"), type: "i"}
     ]
   }
 }
@@ -982,9 +982,8 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_sizeToFit());
   }
 
-  if (config.hidden) {
-    let arg = rWS(cS(config.hidden));
-    config.methods.push(this_setHidden(arg));
+  if (config.visibility) {
+    config.methods.push(this_setHidden(config.visibility));
   }
 
   if (config.translationX) {
