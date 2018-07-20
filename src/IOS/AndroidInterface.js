@@ -24,8 +24,9 @@
 */
 
 const render = require('./Render');
-let helper = require('../helper');
+const helper = require('../helper');
 const R = require('ramda');
+const parseParams = require('../helpers').ios.parseParams;
 
 let rootid;
 
