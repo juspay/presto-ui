@@ -923,6 +923,22 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(_UILabelLayer_setBorderWidth("1"));
   }
 
+  if (config.shadow) {
+    let shadowValues = config.shadow.split(',');
+    let shadowOpacity = rWS(cS(shadowValues[2]));
+    let shadowRadius = rWS(cS(shadowValues[3]));
+    let shadowColor = rWS(cS(shadowValues[4]));
+    let shadowOffset = {
+      x: rWS(cS(shadowValues[0])),
+      y: rWS(cS(shadowValues[1]))
+    };
+
+    config.methods.push(this_layer());
+
+    // do something here
+
+  }
+
   // make child fullWidth and height of parent
   if (config.fillParent) {
     config.methods.push(this_superview());
