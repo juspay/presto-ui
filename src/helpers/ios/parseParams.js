@@ -667,6 +667,24 @@ function _UILabelLayer_setBorderColor() {
   }
 }
 
+function this_setShadow(id, shadowOffset, shadowBlur, shadowSpread, shadowColor, shadowOpacity) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "self" : "UIView",
+    "methodName": "setShadow:",
+    "values": [{
+      "viewId": id,
+      "color": shadowColor,
+      "blur": shadowBlur,
+      "opacity": shadowOpacity,
+      "offset": shadowOffset,
+      "spread": shadowSpread
+    }]
+  };
+}
+
 function _UILabelLayer_setMasksToBounds() {
   return {
     "return": "false",
@@ -924,19 +942,38 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (config.shadow) {
-    let shadowValues = config.shadow.split(',');
-    let shadowOpacity = rWS(cS(shadowValues[2]));
-    let shadowRadius = rWS(cS(shadowValues[3]));
-    let shadowColor = rWS(cS(shadowValues[4]));
-    let shadowOffset = {
+    var shadowValues = config.shadow.split(',');
+    var shadowBlur = rWS(cS(shadowValues[2]));
+    var shadowSpread = rWS(cS(shadowValues[3]));
+    var shadowOpacity = rWS(cS(shadowValues[5]));
+    var shadowOffset = {
       x: rWS(cS(shadowValues[0])),
       y: rWS(cS(shadowValues[1]))
     };
+    var color = rWS(cS(shadowValues[4]));
 
-    config.methods.push(this_layer());
+    var values;
+    var alpha = "1.00";
 
-    // do something here
+    if (color.length >= 8) {
+      alpha = parseInt(color.substring(1, 3), 16);
+      alpha = (alpha / 255).toFixed(2);
+      color = color.substring(3, 9);
+    } else {
+      color = color.substring(1, color.length);
+    }
 
+    color = convertHexToRgb(rWS(color));
+    values = color.split(',');
+
+    var shadowColor = {
+      r: rWS(values[0]),
+      g: rWS(values[1]),
+      b: rWS(values[2]),
+      a: alpha
+    };
+
+    config.methods.push(this_setShadow(config.id, shadowOffset, shadowBlur, shadowSpread, shadowColor, shadowOpacity));
   }
 
   // make child fullWidth and height of parent
