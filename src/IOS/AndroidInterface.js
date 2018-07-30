@@ -36,6 +36,18 @@ function clearViewExternals(view) {
   view.children.forEach(clearViewExternals);
 }
 
+function getSerializeableView(view, recurse) {
+  var obj = parseParams(view.type, R.clone(view.props), "set");
+  var newView = {};
+  newView.props = obj.config;
+  newView.type = obj.type[0].toUpperCase() + obj.type.substr(1, obj.type.length);
+  if (recurse)
+    newView.children = view.children.map(getSerializeableView);
+  else
+    newView.children = [];
+  return newView;
+}
+
 module.exports = {
   getScreenDimensions: function () {
     return JSON.stringify({
@@ -98,7 +110,6 @@ module.exports = {
     const renderedView = render.inflate(view);
 
     if (renderedView) {
-      console.log("here:", renderedView);
       window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
         methodName: "addViewToParent",
         parameters: {
@@ -111,27 +122,27 @@ module.exports = {
     this.recompute();
   },
 
-  replaceView: function (newView, id) {
+  replaceView: function (view, id) {
     if (!window.__VIEWS[id]) {
       return console.error(new Error("AddViewToParent: Invalid parent ID: " + id));
     }
-    var view = window.__VIEWS[id];
-    newView.props.parentId = view.props.parentId;
-    view.props = R.clone(newView.props);
-    var props = parseParams(newView.type, newView.props, "set");
-    window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
-      methodName: "replaceView",
-      parameters: {
-        id: id,
-        parentId: view.props.parentId,
-        view: {
-          type: newView.type,
-          props: props,
-          children: []
-        }
-      }
-    }));
+    var oldview = window.__VIEWS[id];
+    var parentid = oldview.props.parentId;
+    oldview.props = R.clone(view.props);
+    oldview.props.parentId = parentid;
+    var parent = window.__VIEWS[parentid];
+    var index = parent.children.indexOf(oldview);
     this.recompute();
+    var newView = getSerializeableView(oldview);
+    window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
+        methodName: "replaceView",
+        parameters: {
+            id: id,
+            view: newView,
+            parentId: parentid,
+            index: index
+        }
+    }));
   },
 
   removeView: function (id) {
