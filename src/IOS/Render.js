@@ -96,19 +96,36 @@ function inflate(view) {
       contentWidth: view.props.contentWidth,
       contentHeight: view.props.contentHeight,
     };
-    runInUI(cmd);
+    runInUI(cmd, true);
   }
 }
 
-function runInUI(cmd) {
+function runInUI(cmd, fromInflate) {
   if (!(cmd instanceof Array))
     cmd = [cmd];
 
   cmd.forEach(function (each) {
     const id = each.id;
     const view = window.__VIEWS[id];
+    const parent = window.__VIEWS[view.props.parentId];
     view.props = R.merge(view.props, each);
-    runInUIHelper(view.type, view.props);
+    if (each.visibility !== "visible") {
+      runInUIHelper(view.type, view.props);
+    }
+    if (parent && !fromInflate) {
+      const view = parent;
+      if (view.type.indexOf("scroll") != -1) {
+        inflate(view);
+      }
+      computeChildDimens(view);
+      const children = view.children;
+      for (let i = 0, len = children.length; i < len; i++) {
+          inflate(children[i]);
+      }
+    }
+    if (each.visibility === "visible") {
+      runInUIHelper(view.type, view.props);
+    }
   });
 };
 

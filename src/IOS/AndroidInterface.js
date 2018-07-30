@@ -56,6 +56,17 @@ module.exports = {
     });
   },
 
+  recomputeView: function (view) {
+    if (view.type.indexOf("scroll") != -1) {
+      render.inflate(view);
+    }
+    render.computeChildDimens(view);
+    const children = view.children;
+    for (let i = 0, len = children.length; i < len; i++) {
+        render.inflate(children[i]);
+    }
+  },
+
   recompute: function () {
     const rootview = window.__VIEWS[rootid];
     let obj = {
@@ -72,7 +83,6 @@ module.exports = {
 
   runInUI: function (cmd) {
     render.runInUI(cmd);
-    this.recompute();
   },
 
   Render: function (view) {
@@ -106,9 +116,7 @@ module.exports = {
     const parent = window.__VIEWS[id];
     parent.children.splice(index, 0, view);
     view.props.parentId = id;
-    render.computeChildDimens(parent);
     const renderedView = render.inflate(view);
-
     if (renderedView) {
       window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
         methodName: "addViewToParent",
@@ -119,7 +127,7 @@ module.exports = {
         }
       }));
     }
-    this.recompute();
+    this.recomputeView(parent);
   },
 
   replaceView: function (view, id) {
@@ -132,7 +140,7 @@ module.exports = {
     oldview.props.parentId = parentid;
     var parent = window.__VIEWS[parentid];
     var index = parent.children.indexOf(oldview);
-    this.recompute();
+    this.recomputeView(parent);
     var newView = getSerializeableView(oldview);
     window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
         methodName: "replaceView",
@@ -157,6 +165,6 @@ module.exports = {
         id: id
       }
     }));
-    this.recompute();
+    this.recomputeView(parent);
   },
 };

@@ -32,9 +32,12 @@ function cacheDimen(view) {
   let dimen = {
     w: props.w,
     h: props.h,
-    stroke: props.stroke ? props.stroke.split(",")[0] * 1 : 0,
     x: props.x,
-    y: props.y
+    y: props.y,
+    gravity: props.gravity,
+    padding: props.padding,
+    orientation: props.orientation,
+    stroke: props.stroke ? props.stroke.split(",")[0] * 1 : 0,
   }
   window.__VIEW_DIMENSIONS[props.id] = dimen;
 }
@@ -63,7 +66,30 @@ function shouldMove(view) {
 }
 
 function shouldInfateChilds(view) {
-  return true;
+  let props = view.props;
+
+  let dimen = {
+    w: props.w,
+    h: props.h,
+    gravity: props.gravity,
+    padding: props.padding,
+    orientation: props.orientation,
+    stroke: props.stroke ? props.stroke.split(",")[0] * 1 : 0,
+  };
+
+  let changed = false;
+  let cachedDimen = window.__VIEW_DIMENSIONS[props.id];
+  if (!cachedDimen)
+    return true;
+  if (props.visibility == "gone")
+    return null;
+  for (let key in dimen) {
+    if (cachedDimen[key] != dimen[key]) {
+      changed = true;
+      break;
+    }
+  }
+  return changed;
 }
 
 function getOS() {
