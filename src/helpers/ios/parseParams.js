@@ -737,6 +737,19 @@ function this_setHidden(hidden){
   }
 }
 
+function this_setUserInteraction(hidden){
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setUserInteractionEnabled:",
+    "values":[
+      {"name": (hidden === "true" ? "1" : "0"), type: "i"}
+    ]
+  }
+}
+
 function UIView_bounds() {
   window.__RECT_INDEX++;
 
@@ -1039,6 +1052,10 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setHidden(config.visibility));
   }
 
+  if (config.userInteraction) {
+    config.methods.push(this_setUserInteraction(config.userInteraction));
+  }
+
   if (config.translationX) {
     let props = {
       'x': '' + config.translationX,
@@ -1146,8 +1163,8 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(this_setEnabled(enabled));
   }
 
-  if (config.keyboardType) {
-    let keyboardType = cS(config.keyboardType);
+  if (config.inputTypeI) {
+    let keyboardType = cS(config.inputTypeI);
       config.methods.push(this_setKeyboardType(keyboardType));
   }
 
