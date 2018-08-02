@@ -724,6 +724,20 @@ function self_getViewFromTag(tag){
   }
 }
 
+function this_setImageURL(id,url,placeholder) {
+  return {
+    "return": "false",
+    "invokeOn": "self",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "methodName":"setImageWithUrl::::",
+    "values":[
+      {"name": "" + id, "type": "s"},
+      {"name": url, "type": "s"},
+      {"name": placeholder, "type": "s"}
+    ]
+  };
+}
+
 function this_setHidden(hidden){
   return {
     "return": "false",
@@ -833,21 +847,25 @@ function transformKeys(config) {
   return config;
 }
 
-function generateType(type){
+function generateType(type) {
   var generatedType = "uIView";
 
   if (type == "editText") {
     generatedType = "mJPTextField";
-  } else if (type=="imageView") {
+  } else if (type == "imageView") {
     generatedType = "uIImageView";
-  } else if (type=="textView") {
+  } else if (type == "textView") {
     generatedType = "uILabel";
   } else if (type == "scrollView" || type == "horizontalScrollView") {
     generatedType = "mJPScrollView";
-  } else if (type == "viewPager") {
+  } else if (type == "collectionView") {
     generatedType = "mJPCollectionView";
-  } else if (type == "listView") {
+  } else if (type == "tableView") {
     generatedType = "mJPTableView";
+  } else if (type == "progressBar") {
+    generatedType = "mJPActivityIndicator";
+  } else {
+    generatedType = "uIView";
   }
 
   return generatedType;
@@ -997,14 +1015,9 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (config.imageNamed) {
-    let arg = rWS(cS(config.imageNamed));
-    let x = rWS(cS(config.x)) ||  "0";
-      let y =  rWS(cS(config.y))|| "0";
-      let width = rWS(cS(config.w)) || "100";
-      let height = rWS(cS(config.h)) || "100";
-      let frame = JSON.stringify({'x':x,'y':y,'width':width,'height':height});
-    config.methods.push(UIImage_imageNamed(arg));
-    config.methods.push(this_setImage());
+      var id = cS(config.id);
+      var placeholder = config.placeHolder || "";
+      config.methods.push(this_setImageURL(id,config.imageNamed,placeholder));
   }
 
   if (config.text) {
