@@ -22,22 +22,29 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
-const webpack = require('webpack');
+const path = require('path');
 
-let development = {
-  name: "development",
-  // devtool: "inline-source-map",
+let config = {
+  devtool: "inline-cheap-module-source-map",
   entry: "./index.js",
   output: {
-    path: __dirname +  "/lib",
+    path: path.join(__dirname,"/lib"),
     filename: "index.js",
     libraryTarget: 'commonjs2'
   },
   module: {
-    loaders: [
-      {test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"},
+    rules: [
+      { test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            compact: true
+          }
+        }
+      },
     ]
   },
 };
 
-module.exports = [development];
+module.exports = config;
