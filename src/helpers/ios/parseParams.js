@@ -1230,14 +1230,10 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (config.animation) {
-    //let animConf = JSON.parse(config.animation).map((anim) => {
-      //return JSON.stringify(anim)
-    //})
     let animProps = {
       viewTag: config.id,
       json: config.animation
     }
-    console.log(config.animation)
     config.methods.push(self_animateNew(animProps));
   }
 
