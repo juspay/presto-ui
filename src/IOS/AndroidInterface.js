@@ -167,4 +167,24 @@ module.exports = {
     }));
     this.recomputeView(parent);
   },
+
+  startAnim: function(id, cbName) {
+    // TODO implement native side with callback
+    // Thus, currently not providing on complete hook
+    // onEnd property can still be used for chaining animations
+    window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
+      methodName: "startAnimation",
+      parameters: {
+        animId: id
+      }
+    }));
+  },
+
+  cancelAnim: function() {
+    // TODO implement native side
+  },
+
+  updateAnim: function() {
+    // TODO implement native side
+  }
 };

@@ -1229,6 +1229,23 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(this_setSecureTextEntry(enabled));
   }
 
+  if (config.animation) {
+    let animProps = {
+      viewTag: config.id,
+      json: config.animation
+    }
+    config.methods.push(self_animateNew(animProps));
+  }
+
   config.currChildOffset = 0;
   return {config: transformKeys(config), type: type};
+}
+
+function self_animateNew(props) {
+  return {
+    "return": "false",
+    "invokeOn": "self",
+    "methodName":"animate:",
+    "values": [props]
+  };
 }
