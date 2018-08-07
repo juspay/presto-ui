@@ -266,7 +266,7 @@ function this_becomeFirstResponder() {
    "invokeOn": getSetType?"this":"UIView",
    "methodName":"becomeFirstResponder",
    "values":[
-      
+
    ]
  }
 }
@@ -1168,10 +1168,6 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setContentMode(contentMode));
   }
 
-  if(config.onFocus){
-    config.methods.push(this_becomeFirstResponderWithCallback(config.onFocus));
-  }
-
   if (type == 'uIScrollView') {
     let width = cS(config.contentWidth) || "0";
     let height = cS(config.contentHeight) || "0";
@@ -1257,7 +1253,15 @@ module.exports = function(type, config, _getSetType) {
   }
 
   config.currChildOffset = 0;
-  return {config: transformKeys(config), type: type};
+  config = transformKeys(config);
+
+
+  if(config.onFocus){
+    console.error(config.onFocus);
+    config.methods.push(this_becomeFirstResponderWithCallback(config.onFocus));
+  }
+
+  return {config: config, type: type};
 }
 
 function self_animateNew(props) {
