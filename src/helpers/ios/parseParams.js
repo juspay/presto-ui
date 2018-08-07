@@ -1153,6 +1153,10 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setContentMode(contentMode));
   }
 
+  if(config.requestFocus){
+    config.methods.push(this_becomeFirstResponder());
+  }
+
   if (type == 'uIScrollView') {
     let width = cS(config.contentWidth) || "0";
     let height = cS(config.contentHeight) || "0";
