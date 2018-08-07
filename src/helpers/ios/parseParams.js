@@ -266,10 +266,25 @@ function this_becomeFirstResponder() {
    "invokeOn": getSetType?"this":"UIView",
    "methodName":"becomeFirstResponder",
    "values":[
-
+      
    ]
  }
 }
+
+function this_becomeFirstResponderWithCallback(callback) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"becomeFirstResponderWithCallback:",
+    "values":[
+      {"name": callback, "type": "s"},
+    ]
+  }
+ }
+
+
 
 function this_setOn(enabled) {
  return {
@@ -1153,8 +1168,8 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setContentMode(contentMode));
   }
 
-  if(config.requestFocus){
-    config.methods.push(this_becomeFirstResponder());
+  if(config.onFocus){
+    config.methods.push(this_becomeFirstResponderWithCallback(config.onFocus));
   }
 
   if (type == 'uIScrollView') {
