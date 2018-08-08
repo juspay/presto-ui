@@ -271,20 +271,18 @@ function this_becomeFirstResponder() {
  }
 }
 
-function this_becomeFirstResponderWithCallback(callback) {
+function this_setOnFocusCallback(callback) {
   return {
     "return": "false",
     "fromStore": getSetType?"false":"true",
     "storeKey": "view" + window.__VIEW_INDEX,
     "invokeOn": getSetType?"this":"UIView",
-    "methodName":"becomeFirstResponderWithCallback:",
+    "methodName":"setOnFocusCallback:",
     "values":[
       {"name": callback, "type": "s"},
     ]
   }
  }
-
-
 
 function this_setOn(enabled) {
  return {
@@ -873,9 +871,9 @@ function generateType(type) {
     generatedType = "uILabel";
   } else if (type == "scrollView" || type == "horizontalScrollView") {
     generatedType = "mJPScrollView";
-  } else if (type == "collectionView") {
+  } else if (type == "collectionView" || type == "viewPager") {
     generatedType = "mJPCollectionView";
-  } else if (type == "tableView") {
+  } else if (type == "tableView" || type == "listView") {
     generatedType = "mJPTableView";
   } else if (type == "progressBar") {
     generatedType = "mJPActivityIndicator";
@@ -1257,8 +1255,7 @@ module.exports = function(type, config, _getSetType) {
 
 
   if(config.onFocus){
-    console.error(config.onFocus);
-    config.methods.push(this_becomeFirstResponderWithCallback(config.onFocus));
+    config.methods.push(this_setOnFocusCallback(config.onFocus));
   }
 
   return {config: config, type: type};
