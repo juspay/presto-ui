@@ -428,6 +428,8 @@ var map = {
   },
   "textSize": {
     values: [{
+      type: 'i'
+    }, {
       type: 'f',
     }],
     'dontMap': true,
