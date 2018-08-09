@@ -851,7 +851,7 @@ function transformKeys(config) {
           keys[i]!== "__filename" &&
           keys[i]!== "currChildOffset" &&
           keys[i]  !== "methods"  &&
-          keys[i]  !== "collectionView" &&
+          keys[i]  !== "viewPager" &&
           keys[i] !== "tableView") {
 
         delete config[keys[i]];
@@ -873,9 +873,9 @@ function generateType(type) {
     generatedType = "uILabel";
   } else if (type == "scrollView" || type == "horizontalScrollView") {
     generatedType = "mJPScrollView";
-  } else if (type == "collectionView") {
+  } else if (type == "viewPager") {
     generatedType = "mJPCollectionView";
-  } else if (type == "tableView") {
+  } else if (type == "listView") {
     generatedType = "mJPTableView";
   } else if (type == "progressBar") {
     generatedType = "mJPActivityIndicator";
@@ -1196,7 +1196,7 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (config.inputTypeI) {
-    let keyboardType = cS(config.inputTypeI);
+      let keyboardType = cS(config.inputTypeI);
       config.methods.push(this_setKeyboardType(keyboardType));
   }
 
