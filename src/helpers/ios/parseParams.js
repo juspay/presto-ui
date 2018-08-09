@@ -1162,7 +1162,7 @@ module.exports = function(type, config, _getSetType) {
 
   // doesnt work
   if (config.bringSubViewToFront) {
-    let viewTag = cS(config.viewTag);
+    let viewTag = cS(config.id);
     config.methods.push(this_bringSubViewToFront(viewTag));
   }
 
