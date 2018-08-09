@@ -764,6 +764,21 @@ function this_setHidden(hidden){
   }
 }
 
+function this_setAttributedText(id, text, letterSpacing) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "self" : "UILabel",
+    "methodName": "setAttributedText:",
+    "values": [{
+      "viewId": id,
+      "name": text,
+      "letterSpacing": letterSpacing
+    }]
+  };
+}
+
 function this_setUserInteraction(hidden){
   return {
     "return": "false",
@@ -1027,14 +1042,17 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setFrame());
   }
 
-  if (config.imageNamed) {
-      var id = cS(config.id);
-      var placeholder = config.placeHolder || "";
-      config.methods.push(this_setImageURL(id,config.imageNamed,placeholder));
-  }
+ if (config.imageNamed) {
+   let id = cS(config.id);
+   let placeholder = config.placeholder || "";
+   config.methods.push(this_setImageURL(id, config.imageNamed, placeholder));
+ }
 
   if (config.text) {
-    config.methods.push(this_setText(cS(config.text)));
+    if (config.letterSpacing)
+      config.methods.push(this_setAttributedText(config.id, cS(config.text), config.letterSpacing));
+    else
+      config.methods.push(this_setText(cS(config.text)));
   }
 
   if (config.hint) {
