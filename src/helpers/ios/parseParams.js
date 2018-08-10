@@ -266,7 +266,7 @@ function this_becomeFirstResponder() {
    "invokeOn": getSetType?"this":"UIView",
    "methodName":"becomeFirstResponder",
    "values":[
-      
+
    ]
  }
 }
@@ -283,8 +283,6 @@ function this_setOnFocusCallback(callback) {
     ]
   }
  }
-
-
 
 function this_setOn(enabled) {
  return {
@@ -766,6 +764,21 @@ function this_setHidden(hidden){
   }
 }
 
+function this_setAttributedText(id, text, letterSpacing) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "self" : "UILabel",
+    "methodName": "setAttributedText:",
+    "values": [{
+      "viewId": id,
+      "name": text,
+      "letterSpacing": letterSpacing
+    }]
+  };
+}
+
 function this_setUserInteraction(hidden){
   return {
     "return": "false",
@@ -873,9 +886,9 @@ function generateType(type) {
     generatedType = "uILabel";
   } else if (type == "scrollView" || type == "horizontalScrollView") {
     generatedType = "mJPScrollView";
-  } else if (type == "viewPager") {
+  } else if (type == "collectionView" || type == "viewPager") {
     generatedType = "mJPCollectionView";
-  } else if (type == "listView") {
+  } else if (type == "tableView" || type == "listView") {
     generatedType = "mJPTableView";
   } else if (type == "progressBar") {
     generatedType = "mJPActivityIndicator";
@@ -1029,14 +1042,17 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setFrame());
   }
 
-  if (config.imageNamed) {
-      var id = cS(config.id);
-      var placeholder = config.placeHolder || "";
-      config.methods.push(this_setImageURL(id,config.imageNamed,placeholder));
-  }
+ if (config.imageNamed) {
+   let id = cS(config.id);
+   let placeholder = config.placeholder || "";
+   config.methods.push(this_setImageURL(id, config.imageNamed, placeholder));
+ }
 
   if (config.text) {
-    config.methods.push(this_setText(cS(config.text)));
+    if (config.letterSpacing)
+      config.methods.push(this_setAttributedText(config.id, cS(config.text), config.letterSpacing));
+    else
+      config.methods.push(this_setText(cS(config.text)));
   }
 
   if (config.hint) {
@@ -1159,7 +1175,7 @@ module.exports = function(type, config, _getSetType) {
 
   // doesnt work
   if (config.bringSubViewToFront) {
-    let viewTag = cS(config.viewTag);
+    let viewTag = cS(config.id);
     config.methods.push(this_bringSubViewToFront(viewTag));
   }
 
@@ -1168,10 +1184,13 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setContentMode(contentMode));
   }
 
+<<<<<<< HEAD
   if(config.onFocus){
     config.methods.push(this_setOnFocusCallback(config.onFocus));
   }
 
+=======
+>>>>>>> f96168bd3aad82efaf6704a85fc6ceb639c2edad
   if (type == 'uIScrollView') {
     let width = cS(config.contentWidth) || "0";
     let height = cS(config.contentHeight) || "0";
@@ -1193,6 +1212,10 @@ module.exports = function(type, config, _getSetType) {
   if (config.enabled) {
     let enabled = cS(config.enabled);
       config.methods.push(this_setEnabled(enabled));
+  }
+
+  if(attr.key == "letterSpacing"){
+    attr.value = (attr.value / 9) + "";
   }
 
   if (config.inputTypeI) {
@@ -1257,7 +1280,14 @@ module.exports = function(type, config, _getSetType) {
   }
 
   config.currChildOffset = 0;
-  return {config: transformKeys(config), type: type};
+  config = transformKeys(config);
+
+
+  if(config.onFocus){
+    config.methods.push(this_setOnFocusCallback(config.onFocus));
+  }
+
+  return {config: config, type: type};
 }
 
 function self_animateNew(props) {
