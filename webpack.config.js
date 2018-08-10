@@ -39,7 +39,7 @@ let config = {
         use: {
           loader: "babel-loader",
           options: {
-            compact: true
+            compact: false
           }
         }
       },

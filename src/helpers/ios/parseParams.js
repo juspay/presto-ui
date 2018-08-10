@@ -1175,7 +1175,7 @@ module.exports = function(type, config, _getSetType) {
 
   // doesnt work
   if (config.bringSubViewToFront) {
-    let viewTag = cS(config.viewTag);
+    let viewTag = cS(config.id);
     config.methods.push(this_bringSubViewToFront(viewTag));
   }
 
@@ -1205,6 +1205,10 @@ module.exports = function(type, config, _getSetType) {
   if (config.enabled) {
     let enabled = cS(config.enabled);
       config.methods.push(this_setEnabled(enabled));
+  }
+
+  if(attr.key == "letterSpacing"){
+    attr.value = (attr.value / 9) + "";
   }
 
   if (config.inputTypeI) {
