@@ -864,7 +864,7 @@ function transformKeys(config) {
           keys[i]!== "__filename" &&
           keys[i]!== "currChildOffset" &&
           keys[i]  !== "methods"  &&
-          keys[i]  !== "collectionView" &&
+          keys[i]  !== "viewPager" &&
           keys[i] !== "tableView") {
 
         delete config[keys[i]];
@@ -1184,6 +1184,10 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setContentMode(contentMode));
   }
 
+  if(config.onFocus){
+    config.methods.push(this_setOnFocusCallback(config.onFocus));
+  }
+
   if (type == 'uIScrollView') {
     let width = cS(config.contentWidth) || "0";
     let height = cS(config.contentHeight) || "0";
@@ -1212,7 +1216,7 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (config.inputTypeI) {
-    let keyboardType = cS(config.inputTypeI);
+      let keyboardType = cS(config.inputTypeI);
       config.methods.push(this_setKeyboardType(keyboardType));
   }
 
@@ -1274,11 +1278,6 @@ module.exports = function(type, config, _getSetType) {
 
   config.currChildOffset = 0;
   config = transformKeys(config);
-
-
-  if(config.onFocus){
-    config.methods.push(this_setOnFocusCallback(config.onFocus));
-  }
 
   return {config: config, type: type};
 }
