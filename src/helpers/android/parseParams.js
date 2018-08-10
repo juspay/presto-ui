@@ -315,7 +315,7 @@ function mashThis(attrs, obj, belongsTo, transformFn) {
   }
 
   if (attrs.key == "letterSpacing") {
-    attrs.value = (attr.value/9) + "";
+    attrs.value = (attrs.value/9) + "";
   }
 
   if (attrs.key == "dividerDrawable") {
