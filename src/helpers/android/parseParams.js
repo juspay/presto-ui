@@ -310,6 +310,10 @@ function mashThis(attrs, obj, belongsTo, transformFn) {
     currTransVal = "get_type";
   }
 
+  if (attrs.key == "letterSpacing") {
+    attrs.value = (attr.value/9) + "";
+  }
+
   if (attrs.key == "dividerDrawable") {
     prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_"+  attrs.value +",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;"
     currTransVal = "get_482380";
