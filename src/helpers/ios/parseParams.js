@@ -1184,13 +1184,10 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setContentMode(contentMode));
   }
 
-<<<<<<< HEAD
   if(config.onFocus){
     config.methods.push(this_setOnFocusCallback(config.onFocus));
   }
 
-=======
->>>>>>> f96168bd3aad82efaf6704a85fc6ceb639c2edad
   if (type == 'uIScrollView') {
     let width = cS(config.contentWidth) || "0";
     let height = cS(config.contentHeight) || "0";
@@ -1281,11 +1278,6 @@ module.exports = function(type, config, _getSetType) {
 
   config.currChildOffset = 0;
   config = transformKeys(config);
-
-
-  if(config.onFocus){
-    config.methods.push(this_setOnFocusCallback(config.onFocus));
-  }
 
   return {config: config, type: type};
 }
