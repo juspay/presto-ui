@@ -1211,9 +1211,6 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(this_setEnabled(enabled));
   }
 
-  if(attr.key == "letterSpacing"){
-    attr.value = (attr.value / 9) + "";
-  }
 
   if (config.inputTypeI) {
       let keyboardType = cS(config.inputTypeI);
