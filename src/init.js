@@ -110,9 +110,11 @@ window.onresize = (iosData) => {
   if (window.__OS == "IOS") {
     let tag = iosData.tag;
     if (tag == "keyboardWillHide") {
-      if (window.__OLD_HEIGHT)
+      if (window.__OLD_HEIGHT) {
         window.__HEIGHT = window.__OLD_HEIGHT;
-    } else {
+        delete window.__OLD_HEIGHT;
+      }
+    } else if (!window.__OLD_HEIGHT) {
       window.__OLD_HEIGHT = window.__HEIGHT;
       window.__HEIGHT = window.__HEIGHT * 1 - iosData.data.height * 1 + '';
     }
