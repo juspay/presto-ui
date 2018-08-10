@@ -32,7 +32,14 @@ var map = {
     fnName: 'setText',
     inVokedIn: 'VIEW',
   },
-
+  baseAlign: {
+    values: [{
+      type: 'b'
+    }],
+    dontMap: true,
+    inVokedIn: 'VIEW',
+    fnName: "setBaselineAligned",
+  },
   showDividers: {
     values: [{
       type: 'i',
@@ -428,6 +435,8 @@ var map = {
   },
   "textSize": {
     values: [{
+      type: 'i'
+    }, {
       type: 'f',
     }],
     'dontMap': true,

@@ -277,6 +277,10 @@ function mashThis(attrs, obj, belongsTo, transformFn) {
   var color1;
   attrs.value += '';
 
+  if (attrs.key == "textSize") {
+    attrs.value = "1," + (attrs.value - 1);
+  }
+
 //todo:tabTextColors
   if (attrs.key == "foreground" ||
     attrs.key == "tabTextColors" ||
@@ -391,12 +395,6 @@ function mashThis(attrs, obj, belongsTo, transformFn) {
 
   if(attrs.key=="focus") {
     afterCmd =  "set_win=ctx->getWindow;get_win->setSoftInputMode:5;";
-  }
-
-  if (attrs.key == "text" && elementType == "editText") {
-    if(getSetType == "get") {
-      return "set_pos=get_view->getSelectionEnd;get_view->setText:cs_" + attrs.value + ";get_view->setSelection:get_pos;"
-    }
   }
 
   if (attrs.key == "shadowLayer") {

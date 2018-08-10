@@ -24,6 +24,7 @@
 */
 
 const containers = require('./container');
+const iosAndroidInterface = require('./IOS/AndroidInterface');
 const getOS = require('./helper').getOS;
 const merge = require('./helper').merge;
 
@@ -106,9 +107,6 @@ window.updateLanguage = (lang) => {
 };
 
 window.onresize = (iosData) => {
-  let id = window.__ROOTSCREEN && window.__ROOTSCREEN.idSet.root;
-  if (!id)
-    return console.error(new Error("Window Resize: id `root` of rootscreen not available"));
   if (window.__OS == "IOS") {
     let tag = iosData.tag;
     if (tag == "keyboardWillHide") {
@@ -118,12 +116,8 @@ window.onresize = (iosData) => {
       window.__OLD_HEIGHT = window.__HEIGHT;
       window.__HEIGHT = window.__HEIGHT * 1 - iosData.data.height * 1 + '';
     }
-  } else {
-    window.__DEVICE_DETAILS = getScreenDetails();
-    window.__WIDTH = window.__DEVICE_DETAILS.screen_width;
-    window.__HEIGHT = window.__DEVICE_DETAILS.screen_height;
+    iosAndroidInterface.recompute()
   }
-  Android.Render(window.__VIEWS[id], null);
 }
 
 window.callUICallback = function () {

@@ -24,7 +24,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "webpack --mode production --config webpack.config.js --progress --colors",
+    "compile": "webpack --mode development --config webpack.config.js --progress --colors",
     "watch": "webpack --mode development --config webpack.config.js --watch --progress --colors"
   },
   "repository": {
