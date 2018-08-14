@@ -1223,6 +1223,24 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(this_setKeyboardType(keyboardType));
   }
 
+  if (config.inputType) {
+    let keyboardType = config.inputType;
+    if (keyboardType == "numeric") {
+      config.inputType = 4;
+    } else if (keyboardType == "email") {
+      config.inputType = 7;
+    } else if (keyboardType == "numericPassword") {
+      config.inputType = 4;
+      config.methods.push(this_setSecureTextEntry("1"));
+    } else if (keyboardType == "password") {
+      config.inputType = 0;
+      config.methods.push(this_setSecureTextEntry("1"));
+    } else {
+      config.inputType = 0;
+    }
+    config.methods.push(this_setKeyboardType(cS(config.inputType)));
+  }
+
   if (config.autocapitalizationType) {
       let keyboardType = cS(config.autocapitalizationType);
       config.methods.push(this_setAutocapitalizationType(keyboardType));
