@@ -335,6 +335,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
     } else {
       window.shadowObject[tag]["level"] = parseInt(arr[0]);
     }
+		return "";
   }
   //  -- int dx, int dy, int blurValue,  String shadowColor,  int spread, elevatiuon, float factor)
   if (attrs.key == "androidShadow") {
