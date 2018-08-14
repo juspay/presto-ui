@@ -861,10 +861,11 @@ function transformKeys(config) {
       config[keys[i]] = callbackMapper.map(config[keys[i]]);
     } else {
       if (keys[i] !== "id" &&
-          keys[i]!== "__filename" &&
-          keys[i]!== "currChildOffset" &&
-          keys[i]  !== "methods"  &&
-          keys[i]  !== "viewPager" &&
+          keys[i] !== "__filename" &&
+          keys[i] !== "currChildOffset" &&
+          keys[i] !== "methods"  &&
+          keys[i] !== "swipeEnable" &&
+          keys[i] !== "viewPager" &&
           keys[i] !== "tableView") {
 
         delete config[keys[i]];
