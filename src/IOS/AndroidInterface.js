@@ -162,7 +162,8 @@ module.exports = {
     window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
       methodName: "removeView",
       parameters: {
-        id: id
+        id: id,
+        index,
       }
     }));
     this.recomputeView(parent);
