@@ -249,7 +249,7 @@ function parseColor(color, setterName) {
   return setterName + '=android.graphics.Color->parseColor:s_' + color + ';';
 }
 
-function mashThis(attrs, obj, belongsTo, transformFn) {
+function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
   if (getSetType == "get" && (attrs.key == "width" || attrs.key == "height")) {
     // get case i.e during patch
     if(!isNaN(attrs.value * 1)) {
@@ -312,6 +312,73 @@ function mashThis(attrs, obj, belongsTo, transformFn) {
   if (attrs.key == "fontStyle") {
     prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + attrs.value + "\.ttf;";
     currTransVal = "get_type";
+  }
+
+  // shadowTag : level,tag
+  if (attrs.key == "shadowTag") {
+    var arr = attrs.value.split(",");
+    var tag = arr[1];
+		console.warn("YOOOO Shadow", arr);
+
+    if (!window.shadowObject[tag]) {
+      window.shadowObject[tag] =
+        { level : parseInt(arr[0]),
+          viewId : [],
+          backgroundColor : [],
+          blurValue : [],
+          shadowColor : [],
+          dx : [],
+          dy : [],
+          spread : [],
+          factor : []
+        }
+    } else {
+      window.shadowObject[tag]["level"] = parseInt(arr[0]);
+    }
+  }
+  //  -- int dx, int dy, int blurValue,  String shadowColor,  int spread, elevatiuon, float factor)
+  if (attrs.key == "androidShadow") {
+    var arr = attrs.value.split(",");
+
+    var tag = arr[6];
+
+    var __background = "#ffffff";
+    var __id = "";
+
+    for (var i =0 ;i<allProps.length; i++) {
+      if (allProps[i].key == "background") {
+        __background = allProps[i].value;
+      } else if (allProps[i].key == "id") {
+        __id = allProps[i].value;
+      }
+    }
+    //   (viewId, backgroundColor, int blurValue,hadowColor, int dx, int dy, int spread, float factor)
+
+    if (!window.shadowObject[tag]) {
+      window.shadowObject[tag] =
+        { level : -1,
+          viewId : [__id],
+          backgroundColor : [__background],
+          blurValue : [arr[2]],
+          shadowColor : [arr[3]],
+          dx : [arr[0]],
+          dy : [arr[1]],
+          spread : [arr[4]],
+          factor : [arr[5]]
+        }
+    } else {
+      window.shadowObject[tag]["viewId"].push(__id);
+      window.shadowObject[tag]["backgroundColor"].push(__background);
+      window.shadowObject[tag]["blurValue"].push(arr[2]);
+      window.shadowObject[tag]["shadowColor"].push(arr[3]);
+      window.shadowObject[tag]["dx"].push(arr[0]);
+      window.shadowObject[tag]["dy"].push(arr[1]);
+      window.shadowObject[tag]["spread"].push(arr[4]);
+      window.shadowObject[tag]["factor"].push(arr[5]);
+
+    }
+
+		return "";
   }
 
   if (attrs.key == "letterSpacing") {
@@ -458,7 +525,7 @@ function parseAttrs(attrs, belongsTo, transformFn) {
   for (var i =0 ;i<attrs.length; i++) {
     obj = mapParams[attrs[i].key];
     if (obj) {
-      cmd += mashThis(attrs[i], obj, belongsTo, transformFn);
+      cmd += mashThis(attrs[i], obj, belongsTo, transformFn, attrs);
     }
   }
 

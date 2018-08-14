@@ -397,6 +397,22 @@ var map = {
     fnName: 'setMaxWidth',
     inVokedIn: 'VIEW',
   },
+  "shadowTag": {
+      values: [{
+            type: 'cs',
+          }],
+      'dontMap': true,
+      fnName: 'shadowTag',
+      inVokedIn: 'VIEW',
+    },
+  "androidShadow": {
+      values: [{
+            type: 'cs',
+          }],
+      'dontMap': true,
+      fnName: 'androidShadow',
+      inVokedIn: 'VIEW',
+    },
   "letterSpacing": {
     values: [{
       type: 'f',
