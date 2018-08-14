@@ -1049,7 +1049,7 @@ module.exports = function(type, config, _getSetType) {
 
  if (config.imageNamed) {
    let id = cS(config.id);
-   let placeholder = config.placeholder || "";
+   let placeholder = config.placeHolder || "";
    config.methods.push(this_setImageURL(id, config.imageNamed, placeholder));
  }
 
