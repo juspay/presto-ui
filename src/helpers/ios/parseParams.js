@@ -685,16 +685,21 @@ function this_setShadow(id, shadowOffset, shadowBlur, shadowSpread, shadowColor,
     "return": "false",
     "fromStore": getSetType ? "false" : "true",
     "storeKey": "view" + window.__VIEW_INDEX,
-    "invokeOn": getSetType ? "self" : "UIView",
+    "invokeOn": getSetType ? "this" : "UIView",
     "methodName": "setShadow:",
-    "values": [{
-      "viewId": id,
-      "color": shadowColor,
-      "blur": shadowBlur,
-      "opacity": shadowOpacity,
-      "offset": shadowOffset,
-      "spread": shadowSpread
-    }]
+    "values": [
+      {
+        "name": JSON.stringify({
+        "viewId": id,
+        "color": shadowColor,
+        "blur": shadowBlur,
+        "opacity": shadowOpacity,
+        "offset": shadowOffset,
+        "spread": shadowSpread
+        }), 
+        "type": "s"
+      }
+    ]
   };
 }
 
@@ -893,7 +898,7 @@ function generateType(type) {
   } else if (type == "progressBar") {
     generatedType = "mJPActivityIndicator";
   } else {
-    generatedType = "uIView";
+    generatedType = "mJPView";
   }
 
   return generatedType;
