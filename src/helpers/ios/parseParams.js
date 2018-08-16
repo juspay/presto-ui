@@ -769,18 +769,15 @@ function this_setHidden(hidden){
   }
 }
 
-function this_setAttributedText(id, text, letterSpacing) {
+function this_setTextProperties(data) {
   return {
     "return": "false",
     "fromStore": getSetType ? "false" : "true",
     "storeKey": "view" + window.__VIEW_INDEX,
-    "invokeOn": getSetType ? "self" : "UILabel",
-    "methodName": "setAttributedText:",
-    "values": [{
-      "viewId": id,
-      "name": text,
-      "letterSpacing": letterSpacing
-    }]
+    "invokeOn": getSetType ? "this" : "MJPLabel",
+    "methodName": "setTextProperties:",
+    "values": [
+      {"name": data,"type": "s"}]
   };
 }
 
@@ -866,10 +863,11 @@ function transformKeys(config) {
       config[keys[i]] = callbackMapper.map(config[keys[i]]);
     } else {
       if (keys[i] !== "id" &&
-          keys[i]!== "__filename" &&
-          keys[i]!== "currChildOffset" &&
-          keys[i]  !== "methods"  &&
-          keys[i]  !== "viewPager" &&
+          keys[i] !== "__filename" &&
+          keys[i] !== "currChildOffset" &&
+          keys[i] !== "methods"  &&
+          keys[i] !== "swipeEnable" &&
+          keys[i] !== "viewPager" &&
           keys[i] !== "tableView") {
 
         delete config[keys[i]];
@@ -881,14 +879,14 @@ function transformKeys(config) {
 }
 
 function generateType(type) {
-  var generatedType = "uIView";
+  var generatedType = "mJPView";
 
   if (type == "editText") {
     generatedType = "mJPTextField";
   } else if (type == "imageView") {
     generatedType = "uIImageView";
   } else if (type == "textView") {
-    generatedType = "uILabel";
+    generatedType = "mJPLabel";
   } else if (type == "scrollView" || type == "horizontalScrollView") {
     generatedType = "mJPScrollView";
   } else if (type == "collectionView" || type == "viewPager") {
@@ -1049,15 +1047,18 @@ module.exports = function(type, config, _getSetType) {
 
  if (config.imageNamed) {
    let id = cS(config.id);
-   let placeholder = config.placeholder || "";
+   let placeholder = config.placeHolder || "";
    config.methods.push(this_setImageURL(id, config.imageNamed, placeholder));
  }
 
   if (config.text) {
-    if (config.letterSpacing)
-      config.methods.push(this_setAttributedText(config.id, cS(config.text), config.letterSpacing));
-    else
+    if (config.letterSpacing){
+      var data = JSON.stringify({'text':cS(config.text), 'letterSpacing':config.letterSpacing});
+      config.methods.push(this_setTextProperties(data));
+    }
+    else{
       config.methods.push(this_setText(cS(config.text)));
+    }
   }
 
   if (config.hint) {
