@@ -64,6 +64,18 @@ function self_sizeFromDictionary(width, height) {
   };
 }
 
+function self_setCursorPosition(id, position) {
+  return {
+    "return": "false",
+    "invokeOn": "self",
+    "methodName": "setCursorPosition:",
+    "values": {
+      "viewId": id,
+      "position": position
+    }
+  };
+}
+
 function this_setContentSize() {
   return  {
     "return": "false",
@@ -1063,6 +1075,10 @@ module.exports = function(type, config, _getSetType) {
 
   if (config.hint) {
     config.methods.push(this_setPlaceholder(cS(config.hint)));
+  }
+
+  if(config.cursorPosition) {
+    config.methods.push(self_setCursorPosition(cS(config.id), cS(config.cursorPosition)));
   }
 
   if (config.textAlignment) {
