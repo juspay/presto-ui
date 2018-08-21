@@ -208,6 +208,17 @@ function this_setEnabled(mode) {
  }
 }
 
+function this_scrollEnabled(status) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName": "setScrollEnabled:",
+    "values": [{ "name": status, "type": "s" }]
+  };
+}
+
 function this_setAutoCorrectionType(mode) {
  return {
    "return": "false",
@@ -1075,15 +1086,12 @@ module.exports = function(type, config, _getSetType) {
 
   if (config.fontStyle) {
     config.methods.push(UIFont_fontWithName(config.fontStyle, config.textSize));
-
-    // if (type == "bold")
-    // config.methods.push(UIFont_boldSystemFontOfSize(size));
-    // else if (type == "heavy")
-    //   config.methods.push(UIFont_systemFontOfSizeWeight(size, "0.5"));
-    //   else
-    // config.methods.push(UIFont_systemFontOfSize(size));
-
     config.methods.push(this_setFont());
+  }
+
+  if (config.scrollEnabled){
+    var scrollEnabled = cS(config.scrollEnabled);
+    config.methods.push(this_scrollEnabled(scrollEnabled));
   }
 
   if (config.fontFamily) {
@@ -1256,10 +1264,16 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(this_setTextLengthLimit(enabled));
   }
 
+  if (config.pattern) {
+      let enabled = cS(config.pattern);
+      config.methods.push(this_setRegularExpression(enabled));
+  }
+
   if (config.regExp) {
     let enabled = cS(config.regExp);
       config.methods.push(this_setRegularExpression(enabled));
   }
+  
   if (config.removeCell) {
     let cellIndex = cS(config.removeCell);
       config.methods.push(this_removeCell(cellIndex));
