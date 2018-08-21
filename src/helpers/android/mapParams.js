@@ -418,7 +418,7 @@ var map = {
       type: 'i',
       password: '129',
       numeric: '2',
-      numericPassword: '12',
+      numericPassword: '18',
       disabled: '0',
       text: '1'
     }],

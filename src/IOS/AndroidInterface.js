@@ -116,6 +116,7 @@ module.exports = {
     const parent = window.__VIEWS[id];
     parent.children.splice(index, 0, view);
     view.props.parentId = id;
+    render.computeChildDimens(parent);
     const renderedView = render.inflate(view);
     if (renderedView) {
       window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
@@ -127,7 +128,6 @@ module.exports = {
         }
       }));
     }
-    this.recomputeView(parent);
   },
 
   replaceView: function (view, id) {
@@ -162,7 +162,8 @@ module.exports = {
     window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
       methodName: "removeView",
       parameters: {
-        id: id
+        id: id,
+        index,
       }
     }));
     this.recomputeView(parent);

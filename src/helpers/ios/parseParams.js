@@ -64,6 +64,18 @@ function self_sizeFromDictionary(width, height) {
   };
 }
 
+function self_setCursorPosition(id, position) {
+  return {
+    "return": "false",
+    "invokeOn": "self",
+    "methodName": "setCursorPosition:",
+    "values": [{
+      "viewId": id,
+      "position": position
+    }]
+  };
+}
+
 function this_setContentSize() {
   return  {
     "return": "false",
@@ -707,7 +719,7 @@ function this_setShadow(id, shadowOffset, shadowBlur, shadowSpread, shadowColor,
         "opacity": shadowOpacity,
         "offset": shadowOffset,
         "spread": shadowSpread
-        }), 
+        }),
         "type": "s"
       }
     ]
@@ -874,10 +886,11 @@ function transformKeys(config) {
       config[keys[i]] = callbackMapper.map(config[keys[i]]);
     } else {
       if (keys[i] !== "id" &&
-          keys[i]!== "__filename" &&
-          keys[i]!== "currChildOffset" &&
-          keys[i]  !== "methods"  &&
-          keys[i]  !== "viewPager" &&
+          keys[i] !== "__filename" &&
+          keys[i] !== "currChildOffset" &&
+          keys[i] !== "methods"  &&
+          keys[i] !== "swipeEnable" &&
+          keys[i] !== "viewPager" &&
           keys[i] !== "tableView") {
 
         delete config[keys[i]];
@@ -1061,7 +1074,7 @@ module.exports = function(type, config, _getSetType) {
    config.methods.push(this_setImageURL(id, config.imageNamed, placeholder));
  }
 
-  if (config.text) {
+  if (config.hasOwnProperty("text")) {
     if (config.letterSpacing){
       var data = JSON.stringify({'text':cS(config.text), 'letterSpacing':config.letterSpacing});
       config.methods.push(this_setTextProperties(data));
@@ -1073,6 +1086,10 @@ module.exports = function(type, config, _getSetType) {
 
   if (config.hint) {
     config.methods.push(this_setPlaceholder(cS(config.hint)));
+  }
+
+  if(config.cursorPosition) {
+    config.methods.push(self_setCursorPosition(cS(config.id), cS(config.cursorPosition)));
   }
 
   if (config.textAlignment) {
@@ -1228,6 +1245,24 @@ module.exports = function(type, config, _getSetType) {
   if (config.inputTypeI) {
       let keyboardType = cS(config.inputTypeI);
       config.methods.push(this_setKeyboardType(keyboardType));
+  }
+
+  if (config.inputType) {
+    let keyboardType = config.inputType;
+    if (keyboardType == "numeric") {
+      config.inputType = 4;
+    } else if (keyboardType == "email") {
+      config.inputType = 7;
+    } else if (keyboardType == "numericPassword") {
+      config.inputType = 4;
+      config.methods.push(this_setSecureTextEntry("1"));
+    } else if (keyboardType == "password") {
+      config.inputType = 0;
+      config.methods.push(this_setSecureTextEntry("1"));
+    } else {
+      config.inputType = 0;
+    }
+    config.methods.push(this_setKeyboardType(cS(config.inputType)));
   }
 
   if (config.autocapitalizationType) {
