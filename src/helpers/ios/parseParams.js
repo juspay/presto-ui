@@ -225,7 +225,7 @@ function this_scrollEnabled(status) {
     "return": "false",
     "fromStore": getSetType ? "false" : "true",
     "storeKey": "view" + window.__VIEW_INDEX,
-    "invokeOn": getSetType ? "this" : "UIView",
+    "invokeOn": getSetType ? "this" : "MJPTableView",
     "methodName": "setScrollEnabled:",
     "values": [{ "name": status, "type": "s" }]
   };
