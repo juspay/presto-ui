@@ -435,6 +435,11 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
     prePend = "set_Setting=this->getSettings;get_Setting->setJavaScriptEnabled:b_true;get_Setting->setDomStorageEnabled:b_true;";
     currTransVal = appendArgs(attrs, obj);
   }
+  
+  if (attrs.key == "packageIcon") {
+    prePend = "set_PM=ctx->getPackageManager;set_AI=get_PM->getApplicationInfo:s_" + attrs.value + ",i_0;set_11747=get_AI->loadIcon:get_PM;";
+    currTransVal = "get_11747";
+  }
 
   if (attrs.key == "imageUrl") {
     prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_"+  attrs.value +",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;"

@@ -311,6 +311,14 @@ var map = {
     fnName: 'setImageDrawable',
     inVokedIn: 'VIEW',
   },
+  "packageIcon": {
+    values: [{
+      type: 's'
+    }],
+    'dontMap': true,
+    fnName: 'setImageDrawable',
+    inVokedIn: 'VIEW'
+  },
   "url": {
     values: [{
       type: 's',

@@ -281,17 +281,15 @@ function this_setStatusBarStyle(mode) {
  }
 }
 
-function this_becomeFirstResponder() {
- return {
-   "return": "false",
-   "fromStore": getSetType?"false":"true",
-   "storeKey": "view" + window.__VIEW_INDEX,
-   "invokeOn": getSetType?"this":"UIView",
-   "methodName":"becomeFirstResponder",
-   "values":[
-
-   ]
- }
+function this_becomeFirstResponder(mode) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName": "focus:",
+    "values": [{"name": mode, "type": "s"}]
+  };
 }
 
 function this_setOnFocusCallback(callback) {
@@ -302,7 +300,7 @@ function this_setOnFocusCallback(callback) {
     "invokeOn": getSetType?"this":"UIView",
     "methodName":"setOnFocusCallback:",
     "values":[
-      {"name": callback, "type": "s"},
+      { "name": callbackMapper.map(callback), "type": "s" },
     ]
   }
  }
@@ -485,7 +483,18 @@ function this_setPlaceholder(text) {
     "values":[
           {"name": text, "type": "s"}
      ]
-  }
+  };
+}
+
+function this_setPlaceholderProperties(data) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "MJPLabel",
+    "methodName": "setPlaceholderProperties:",
+    "values": [{"name": data, "type": "s"}]
+  };
 }
 
 function UIFont_systemFontOfSize(size) {
@@ -804,6 +813,29 @@ function this_setTextProperties(data) {
   };
 }
 
+
+function this_setLetterSpacing(data) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "MJPTextField",
+    "methodName": "setLetterSpacing:",
+    "values": [{ "name": data, "type": "s" }]
+  };
+}
+
+function this_scrollTo(value) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "MJPTableView",
+    "methodName": "scrollTo:",
+    "values": [{"name": value, "type": "s"}]
+  };
+}
+
 function this_setUserInteraction(hidden){
   return {
     "return": "false",
@@ -831,13 +863,11 @@ function UIView_bounds() {
 
 function this_bringSubViewToFront(params){
   return {
-  "return": "false",
+    "return": "false",
     "invokeOn": "self",
     "methodName":"bringSubViewToFront:",
-    "values": [
-        {"name": params, type: "s"}
-      ]
-  }
+    "values": [{"name": params, type: "s"}]
+  };
 }
 
 function this_setContentMode(mode) {
@@ -847,10 +877,18 @@ function this_setContentMode(mode) {
     "storeKey": "view" + window.__VIEW_INDEX,
     "invokeOn": getSetType?"this":"UIView",
     "methodName":"setContentMode:",
-    "values":[
-      {"name": mode, type: "i"}
-    ]
-  }
+    "values":[{"name": mode, type: "i"}]
+  };
+}
+
+function self_setPopupMenu(popupMenu, onMenuItemClick) {
+  var callback = callbackMapper.map(onMenuItemClick);
+  return {
+    "return": "false",
+    "invokeOn": "self",
+    "methodName": "createActionSheetWithTitles::",
+    "values": [{ "name": popupMenu, "type": "s" }, { "name": callback, "type": "s" }]
+  };
 }
 
 function UIColor_setColor(color) {
@@ -918,6 +956,8 @@ function generateType(type) {
     generatedType = "mJPTableView";
   } else if (type == "progressBar") {
     generatedType = "mJPActivityIndicator";
+  } else if (type == "switch") {
+    generatedType = "mJPSwitch";
   } else {
     generatedType = "mJPView";
   }
@@ -993,6 +1033,10 @@ module.exports = function(type, config, _getSetType) {
 
     config.methods.push(self_rectFromDictionary(x,y,width,height));
     config.methods.push(this_setFrame());
+  }
+
+  if (config.letterSpacing && !config.hasOwnProperty("text")) {
+    config.methods.push(this_setLetterSpacing(config.letterSpacing));
   }
 
   // background
@@ -1075,17 +1119,33 @@ module.exports = function(type, config, _getSetType) {
  }
 
   if (config.hasOwnProperty("text")) {
-    if (config.letterSpacing){
-      var data = JSON.stringify({'text':cS(config.text), 'letterSpacing':config.letterSpacing});
+    if (config.letterSpacing) {
+      var data = JSON.stringify({
+        'text': cS(config.text),
+        'letterSpacing': config.letterSpacing
+      });
       config.methods.push(this_setTextProperties(data));
-    }
-    else{
+    } else {
       config.methods.push(this_setText(cS(config.text)));
     }
   }
 
   if (config.hint) {
-    config.methods.push(this_setPlaceholder(cS(config.hint)));
+    if (config.letterSpacing) {
+      var data = JSON.stringify({
+        'hint': cS(config.hint),
+        'letterSpacing': config.letterSpacing
+      });
+      config.methods.push(this_setPlaceholderProperties(data));
+    } else {
+      config.methods.push(this_setPlaceholder(cS(config.hint)));
+    }
+  }
+
+  if (config.scrollTo) {
+    var data = config.scrollTo.split(",");
+    var parsedData = JSON.stringify({"x": data[0], "y": data[1]});
+    config.methods.push(this_scrollTo(cS(parsedData)));
   }
 
   if(config.cursorPosition) {
@@ -1299,9 +1359,18 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(this_setTextLengthLimit(enabled));
   }
 
+  if (config.focus) {
+    config.methods.push(this_becomeFirstResponder(cS(config.focus)));
+  }
+
   if (config.pattern) {
-      let enabled = cS(config.pattern);
-      config.methods.push(this_setRegularExpression(enabled));
+    var patStr = cS(config.pattern);
+    var patArr = patStr.split(",");
+    var patLen = patArr[patArr.length - 1];
+    patStr = patArr.slice(0, patArr.length - 1).join(",");
+
+    config.methods.push(this_setRegularExpression(cS(patStr)));
+    config.methods.push(this_setTextLengthLimit(cS(patLen)));
   }
 
   if (config.regExp) {
@@ -1319,11 +1388,19 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(this_setSecureTextEntry(enabled));
   }
 
+  if (config.hasOwnProperty('checked')) {
+    config.methods.push(this_setOn(config.checked));
+  }
+
+  if (config.popupMenu) {
+    config.methods.push(self_setPopupMenu(config.popupMenu, config.onMenuItemClick));
+  }
+
   if (config.animation) {
     let animProps = {
       viewTag: config.id,
       json: config.animation
-    }
+    };
     config.methods.push(self_animateNew(animProps));
   }
 
@@ -1331,7 +1408,7 @@ module.exports = function(type, config, _getSetType) {
   config = transformKeys(config);
 
   return {config: config, type: type};
-}
+};
 
 function self_animateNew(props) {
   return {
