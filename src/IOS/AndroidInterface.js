@@ -108,6 +108,18 @@ module.exports = {
     }
   },
 
+  moveView: function moveView(id, index) {
+    if (!window.__VIEWS[id]) {
+      return console.error(new Error("MoveView: Invalid view ID: " + id));
+    }
+    const view = window.__VIEWS[id];
+    const parent = window.__VIEWS[view.props.parentId];
+    const children = parent.children;
+    children.splice(children.indexOf(view), 1);
+    children.splice(index, 0, view);
+    this.recomputeView(parent);
+  },
+
   addViewToParent: function (id, view, index) {
     if (!window.__VIEWS[id]) {
       return console.error(new Error("AddViewToParent: Invalid parent ID: " +
