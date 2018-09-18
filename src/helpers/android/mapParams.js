@@ -319,6 +319,17 @@ var map = {
     fnName: 'setImageDrawable',
     inVokedIn: 'VIEW'
   },
+  "scrollTo": {
+    values: [{
+      type: 'i'
+    },
+    {
+      type: 'i'
+    }],
+    'dontMap': true,
+    fnName: 'smoothScrollTo',
+    inVokedIn: 'VIEW'
+  },
   "url": {
     values: [{
       type: 's',
