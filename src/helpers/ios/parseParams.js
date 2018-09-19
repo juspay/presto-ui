@@ -788,6 +788,19 @@ function this_setImageURL(id,url,placeholder) {
   };
 }
 
+function self_setAlpha(alpha){
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setAlpha:",
+    "values":[
+      {"name": String(alpha), type: "f"}
+    ]
+  }
+}
+
 function this_setHidden(hidden){
   return {
     "return": "false",
@@ -1377,7 +1390,7 @@ module.exports = function(type, config, _getSetType) {
     let enabled = cS(config.regExp);
       config.methods.push(this_setRegularExpression(enabled));
   }
-  
+
   if (config.removeCell) {
     let cellIndex = cS(config.removeCell);
       config.methods.push(this_removeCell(cellIndex));
@@ -1394,6 +1407,10 @@ module.exports = function(type, config, _getSetType) {
 
   if (config.popupMenu) {
     config.methods.push(self_setPopupMenu(config.popupMenu, config.onMenuItemClick));
+  }
+
+  if (config.hasOwnProperty("alpha")) {
+    config.methods.push(self_setAlpha(config.alpha));
   }
 
   if (config.animation) {
