@@ -133,26 +133,29 @@ function self_animate_rotation(obj, props) {
   return obj;
 }
 
+function this_setTranslationZ(params) {
+    return {
+      "return": "false",
+      "fromStore": getSetType ? "false" : "true",
+      "storeKey": "view" + window.__VIEW_INDEX,
+      "invokeOn": getSetType ? "this" : "UIView",
+      "methodName": "translationZ:",
+      "values": [{ "name": params, type: "s" }]
+  };
+}
+
 function self_animate(props) {
-  let obj = {
+  return {
     "return": "false",
     "invokeOn": "self",
     "methodName":"animate:",
     "values": [
       {
-        "duration": props.duration,
+        "json": props.json,
         "viewTag": props.id,
-        "type": props.type,
-        "delay": props.delay,
-        "option": props.option
       }
     ]
   };
-
-  if (props.type == "translation")
-  return self_animate_translation(obj, props);
-  else if (props.type == "rotation")
-  return self_animate_rotation(obj, props);
 }
 
 function this_setBackgroundColor() {
@@ -1155,6 +1158,10 @@ module.exports = function(type, config, _getSetType) {
     }
   }
 
+   if (config.translationZ){
+     config.methods.push(this_setTranslationZ(cS(config.translationZ)));
+   }
+
   if (config.scrollTo) {
     var data = config.scrollTo.split(",");
     var parsedData = JSON.stringify({"x": data[0], "y": data[1]});
@@ -1204,55 +1211,31 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (config.translationX) {
-    let props = {
-      'x': '' + config.translationX,
-      'id': config.id,
+    let props = [{
+      'id': '' + Math.random().toString(36).substring(2),
       'type': 'translation',
+      'runOnRender' : 'true',
+      'easing' : 'linear',
       'delay': '0',
-      'duration': '0'
-    };
+      'duration': '0',
+      'props' : JSON.stringify([{'to': '' + config.translationX, 'prop':'x', 'from':'0'}])
+    }];
 
-    let animate = self_animate(props);
-    config.methods.push(self_animate(props));
+    config.methods.push(self_animate({'id':''+config.id,'json':JSON.stringify(props)}));
   }
 
   if (config.translationY) {
-    let props = {
-      'y': '' + config.translationY,
-      'id': config.id,
+    let props = [{
+      'id': '' + Math.random().toString(36).substring(2),
       'type': 'translation',
+      'runOnRender' : 'true',
+      'easing' : 'linear',
       'delay': '0',
-      'duration': '0'
-    };
+      'duration': '0',
+      'props' : JSON.stringify([{'to': '' + config.translationY,'prop':'y','from':'0'}])
+    }];
 
-    config.methods.push(self_animate(props));
-  }
-
-  if (config.a_translationX) {
-    let props = {
-      "x": config.a_translationX,
-      "duration": config.a_duration || '0',
-      "id": config.id,
-      "delay": config.a_delay,
-      "option": config.a_option,
-      "type": "translation",
-    };
-
-    let animate = self_animate(props);
-    config.methods.push(self_animate(props));
-  }
-
-  if (config.a_translationY) {
-    let props = {
-      "y": config.a_translationY,
-      "duration": config.a_duration || '0',
-      "id": config.id,
-      "delay": config.a_delay,
-      "option": config.a_option,
-      "type": "translation",
-    };
-
-    config.methods.push(self_animate(props));
+    config.methods.push(self_animate({'id':''+config.id,'json':JSON.stringify(props)}));
   }
 
   if (config.a_rotate) {
@@ -1297,11 +1280,6 @@ module.exports = function(type, config, _getSetType) {
 
     config.methods.push(self_sizeFromDictionary(width, height));
     config.methods.push(this_setContentSize());
-  }
-
-  if (config.bringSubViewToFront) {
-    let enabled = cS(config.enabled);
-      config.methods.push(this_setEnabled(enabled));
   }
 
   if (config.statusBarStyle) {
@@ -1415,7 +1393,7 @@ module.exports = function(type, config, _getSetType) {
 
   if (config.animation) {
     let animProps = {
-      viewTag: config.id,
+      viewTag: '' + config.id,
       json: config.animation
     };
     config.methods.push(self_animateNew(animProps));

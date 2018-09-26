@@ -205,6 +205,10 @@ function computeBasic(view, ignoreGravity) {
       props.y += Math.floor(extraHeight / 2);
     }
 
+    if (props.translationY){
+      props.y += props.translationY;
+    }
+
     if (window.RTL)
       props.x = containerWidth - props.x - props.w;
   });

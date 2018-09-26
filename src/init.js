@@ -107,6 +107,7 @@ window.updateLanguage = (lang) => {
 };
 
 window.onresize = (iosData) => {
+  return;
   if (window.__OS == "IOS") {
     let tag = iosData.tag;
     if (tag == "keyboardWillHide") {
