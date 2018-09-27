@@ -1092,7 +1092,7 @@ module.exports = function(type, config, _getSetType) {
   }
 
   // background
-  if (config.background) {
+  if (config.background || config.gradient) {
     if (config.hasOwnProperty("gradient")) {
       var gradient = JSON.parse(config.gradient);
       var gradientType = gradient.type;
