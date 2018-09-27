@@ -812,7 +812,7 @@ function this_setHidden(hidden){
     "invokeOn": getSetType?"this":"UIView",
     "methodName":"setHidden:",
     "values":[
-      {"name": (hidden === "gone" ? "1" : "0"), type: "i"}
+      {"name": ((hidden === "gone" || hidden === "invisible") ? "1" : "0"), type: "i"}
     ]
   }
 }
@@ -1218,7 +1218,7 @@ module.exports = function(type, config, _getSetType) {
       'easing' : 'linear',
       'delay': '0',
       'duration': '0',
-      'props' : JSON.stringify([{'to': '' + config.translationX, 'prop':'x', 'from':'0'}])
+      'props' : JSON.stringify([{'to': '' + config.translationX, 'prop':'translationX', 'from':'0'}])
     }];
 
     config.methods.push(self_animate({'id':''+config.id,'json':JSON.stringify(props)}));
@@ -1232,7 +1232,7 @@ module.exports = function(type, config, _getSetType) {
       'easing' : 'linear',
       'delay': '0',
       'duration': '0',
-      'props' : JSON.stringify([{'to': '' + config.translationY,'prop':'y','from':'0'}])
+      'props' : JSON.stringify([{'to': '' + config.translationY,'prop':'translationY','from':'0'}])
     }];
 
     config.methods.push(self_animate({'id':''+config.id,'json':JSON.stringify(props)}));
