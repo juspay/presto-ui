@@ -432,6 +432,14 @@ var map = {
       fnName: 'androidShadow',
       inVokedIn: 'VIEW',
     },
+  "gradient": {
+      values: [{
+            type: 'cs',
+          }],
+      'dontMap': true,
+      fnName: 'setBackground',
+      inVokedIn: 'VIEW',
+    },
   "letterSpacing": {
     values: [{
       type: 'f',

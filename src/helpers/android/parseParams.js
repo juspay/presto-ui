@@ -314,6 +314,30 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
     currTransVal = "get_type";
   }
 
+  if (attrs.key == "gradient") {
+    var gradientObj = JSON.parse(attrs.value)
+    var orientation = ""
+    if(gradientObj.type == "linear") {
+      // orientation += "set_o=setOrientation:"
+    } else {
+
+    }
+
+    var intClass = "set_cc=java.lang.Class->forName:s_java.lang.Integer;"
+    var arrList = "set_arr=java.util.ArrayList->new;"
+
+    prePend += gradientObj.values.map((color, i) => parseColor(color, "set_color" + i)).join("")
+
+    arrList += gradientObj.values.map((color, i) => "get_arr->add:get_color"+i).join(";")
+
+    prePend += "set_gd=android.graphics.drawable.GradientDrawable->new;"
+    prePend += (arrList + ";")
+    prePend += "set_c=java.lang.Class->forName:s_java.lang.Integer;"
+    prePend += "in.juspay.mystique.InflateView->convertAndStoreArray:get_arr,get_c,s_pArr,b_true;"
+    prePend += "get_gd->setColors:get_pArr;"
+    currTransVal = "get_gd"
+  }
+
   // shadowTag : level,tag
   if (attrs.key == "shadowTag") {
     var arr = attrs.value.split(",");
@@ -435,7 +459,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
     prePend = "set_Setting=this->getSettings;get_Setting->setJavaScriptEnabled:b_true;get_Setting->setDomStorageEnabled:b_true;";
     currTransVal = appendArgs(attrs, obj);
   }
-  
+
   if (attrs.key == "packageIcon") {
     prePend = "set_PM=ctx->getPackageManager;set_AI=get_PM->getApplicationInfo:s_" + attrs.value + ",i_0;set_11747=get_AI->loadIcon:get_PM;";
     currTransVal = "get_11747";
@@ -517,7 +541,6 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
     console.log(beforeCmd  + prePend + _cmd + afterCmd);
     return finalCmd;
   }
-
 
   return beforeCmd  + prePend + _cmd + afterCmd
 }
