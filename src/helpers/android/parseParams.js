@@ -164,6 +164,15 @@ function getCtr(viewGroup) {
   return  viewGroupMap[viewGroup];
 }
 
+function isURL(str) {
+  try {
+    var url = new URL(str);
+    return true;
+  } catch(err) {
+    return false;
+  }
+}
+
 function handleSpecialChars(value) {
   value =  value.indexOf(',')>-1?value.replace(/\,/g, '\\\\,'):value;
   value =  value.indexOf(':')>-1?value.replace(/\:/g, '\\\\:'):value;
@@ -466,8 +475,50 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
   }
 
   if (attrs.key == "imageUrl") {
+    if(isURL(attrs.value)) {
+      if(typeof window.__BOOT_LOADER == "undefined") {
+        window.__BOOT_LOADER = {};
+      }
+
+      var image = attrs.value.substr(attrs.value.lastIndexOf('/') + 1)
+      var callback = "onImage" + image.substr(0, image.indexOf('.'))
+
+      var filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(image);
+
+      if(!filePresent) {
+        window.__BOOT_LOADER[callback] = function(isNew) {
+          console.log("veera: status: " + isNew);
+        }
+        top.__BOOT_LOADER = window.__BOOT_LOADER;
+        JBridge.renewFile(attrs.value, image, callback);
+      } else {
+        prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
+        "set_resolvedName=in.juspay.android_lib.data.FileProvider->appendSdkNameAndVersion:s_" + image + ";" +
+        "set_resolvedFile=java.io.File->new:get_directory,get_resolvedName;" +
+        "set_resolvedPath=get_resolvedFile->toString;" + 
+        "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;";
+
+        currTransVal = "get_dimage"; 
+      }
+    } else {
+      prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_"+  attrs.value +",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;"
+      currTransVal = "get_482380";
+    }
+  }
+
+  if (attrs.key == "defaultImage") {
     prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_"+  attrs.value +",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;"
     currTransVal = "get_482380";
+  }
+
+  if (attrs.key == "dynamicUrl") {
+    prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
+    "set_resolvedName=in.juspay.android_lib.data.FileProvider->appendSdkNameAndVersion:s_" + attrs.value + ";" +
+    "set_resolvedFile=java.io.File->new:get_directory,get_resolvedName;" +
+    "set_resolvedPath=get_resolvedFile->toString;" + 
+    "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;";
+
+    currTransVal = "get_dimage";
   }
 
   if (attrs.key == "backgroundDrawable") {
