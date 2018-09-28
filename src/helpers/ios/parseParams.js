@@ -1141,7 +1141,7 @@ module.exports = function(type, config, _getSetType) {
 
   if (config.backgroundDrawable) {
     // console.log("Config-",JSON.stringify(config.w));
-    
+
   }
 
   // borderColor, radius and width
@@ -1178,7 +1178,7 @@ module.exports = function(type, config, _getSetType) {
       x: rWS(cS(shadowValues[0])),
       y: rWS(cS(shadowValues[1]))
     };
-    
+
     var shadowColor = convertColorToRgba(shadowValues[4]);
 
     config.methods.push(this_setShadow(config.id, shadowOffset, shadowBlur, shadowSpread, shadowColor, shadowOpacity));
@@ -1280,7 +1280,7 @@ module.exports = function(type, config, _getSetType) {
       'runOnRender' : 'true',
       'easing' : 'linear',
       'delay': '0',
-      'duration': '0',
+      'duration': '1',
       'props' : JSON.stringify([{'to': '' + config.translationX, 'prop':'translationX', 'from':'0'}])
     }];
 
@@ -1294,7 +1294,7 @@ module.exports = function(type, config, _getSetType) {
       'runOnRender' : 'true',
       'easing' : 'linear',
       'delay': '0',
-      'duration': '0',
+      'duration': '1',
       'props' : JSON.stringify([{'to': '' + config.translationY,'prop':'translationY','from':'0'}])
     }];
 
