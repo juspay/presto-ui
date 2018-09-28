@@ -777,6 +777,23 @@ function this_setGradient(data) {
   };
 }
 
+function this_setBackgroundImage(data) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": "MJPView",
+    "methodName": "setBackgroundImage::",
+    "values": [{
+      "name": "image" + window.__IMAGE_INDEX,
+      "computed": "true"
+    }, {
+      "name": data,
+      "type": "s"
+    }]
+  };
+}
+
 function _UILabelLayer_setMasksToBounds() {
   return {
     "return": "false",
@@ -1095,7 +1112,7 @@ module.exports = function(type, config, _getSetType) {
   }
 
   // background
-  if (config.background || config.gradient) {
+  if (config.background || config.gradient || config.backgroundDrawable) {
     if (config.hasOwnProperty("gradient")) {
       var gradient = JSON.parse(config.gradient);
       var gradientType = gradient.type;
@@ -1112,10 +1129,19 @@ module.exports = function(type, config, _getSetType) {
         angle: gradientAngle
       });
       config.methods.push(this_setGradient(gradient));
+    } else if (config.hasOwnProperty("backgroundDrawable")) {
+      config.methods.push(UIImage_imageNamed(config.backgroundDrawable));
+      var frame = { "width": config.w, "height": config.h };
+      config.methods.push(this_setBackgroundImage(JSON.stringify(frame)));
     } else {
       config.methods.push(UIColor_setColor(config.background));
       config.methods.push(this_setBackgroundColor());
     }
+  }
+
+  if (config.backgroundDrawable) {
+    // console.log("Config-",JSON.stringify(config.w));
+    
   }
 
   // borderColor, radius and width
