@@ -32,6 +32,31 @@ var callbackMapper  = require("./callbackMapper");
 
 let getSetType = 1;
 
+function convertColorToRgba(color){
+  color = rWS(cS(color));
+
+  var values;
+  var alpha = "1.00";
+
+  if (color.length >= 8) {
+    alpha = parseInt(color.substring(1, 3), 16);
+    alpha = (alpha / 255).toFixed(2);
+    color = color.substring(3, 9);
+  } else {
+    color = color.substring(1, color.length);
+  }
+
+  color = convertHexToRgb(rWS(color));
+  values = color.split(',');
+
+  return {
+    r: rWS(values[0]),
+    g: rWS(values[1]),
+    b: rWS(values[2]),
+    a: alpha
+  };
+}
+
 function convertHexToRgb(hex) {
   var r = (parseInt(hex.substring(0,2), 16)/255).toFixed(2);
   var g = (parseInt(hex.substring(2,4), 16)/255).toFixed(2);
@@ -738,6 +763,20 @@ function this_setShadow(id, shadowOffset, shadowBlur, shadowSpread, shadowColor,
   };
 }
 
+function this_setGradient(data) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName": "setGradient:",
+    "values": [{
+      "name": data,
+      "type": "s"
+    }]
+  };
+}
+
 function _UILabelLayer_setMasksToBounds() {
   return {
     "return": "false",
@@ -1056,9 +1095,27 @@ module.exports = function(type, config, _getSetType) {
   }
 
   // background
-  if (config.background) {
-    config.methods.push(UIColor_setColor(config.background));
-    config.methods.push(this_setBackgroundColor());
+  if (config.background || config.gradient) {
+    if (config.hasOwnProperty("gradient")) {
+      var gradient = JSON.parse(config.gradient);
+      var gradientType = gradient.type;
+      var gradientAngle = gradient.angle;
+      var colours = [];
+
+      gradient.values.forEach(color => {
+        colours.push(convertColorToRgba(color));
+      });
+
+      gradient = JSON.stringify({
+        colors: colours,
+        type: gradientType,
+        angle: gradientAngle
+      });
+      config.methods.push(this_setGradient(gradient));
+    } else {
+      config.methods.push(UIColor_setColor(config.background));
+      config.methods.push(this_setBackgroundColor());
+    }
   }
 
   // borderColor, radius and width
@@ -1095,28 +1152,8 @@ module.exports = function(type, config, _getSetType) {
       x: rWS(cS(shadowValues[0])),
       y: rWS(cS(shadowValues[1]))
     };
-    var color = rWS(cS(shadowValues[4]));
-
-    var values;
-    var alpha = "1.00";
-
-    if (color.length >= 8) {
-      alpha = parseInt(color.substring(1, 3), 16);
-      alpha = (alpha / 255).toFixed(2);
-      color = color.substring(3, 9);
-    } else {
-      color = color.substring(1, color.length);
-    }
-
-    color = convertHexToRgb(rWS(color));
-    values = color.split(',');
-
-    var shadowColor = {
-      r: rWS(values[0]),
-      g: rWS(values[1]),
-      b: rWS(values[2]),
-      a: alpha
-    };
+    
+    var shadowColor = convertColorToRgba(shadowValues[4]);
 
     config.methods.push(this_setShadow(config.id, shadowOffset, shadowBlur, shadowSpread, shadowColor, shadowOpacity));
   }
