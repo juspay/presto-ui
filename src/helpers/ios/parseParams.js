@@ -1269,8 +1269,8 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setHidden(config.visibility));
   }
 
-  if (config.userInteraction) {
-    config.methods.push(this_setUserInteraction(config.userInteraction));
+  if (config.hasOwnProperty("userInteraction")) {
+    config.methods.push(this_setUserInteraction(rWS(cS(config.userInteraction))));
   }
 
   if (config.translationX) {
