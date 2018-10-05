@@ -85,7 +85,7 @@ module.exports = {
     render.runInUI(cmd);
   },
 
-  Render: function (view) {
+  Render: function (view, cb) {
     let obj = {
       type: "linearLayout",
       props: {
@@ -106,6 +106,8 @@ module.exports = {
           }
       }));
     }
+    if (cb)
+      window.callUICallback(cb);
   },
 
   moveView: function moveView(id, index) {
@@ -120,7 +122,7 @@ module.exports = {
     this.recomputeView(parent);
   },
 
-  addViewToParent: function (id, view, index) {
+  addViewToParent: function (id, view, index, cb) {
     if (!window.__VIEWS[id]) {
       return console.error(new Error("AddViewToParent: Invalid parent ID: " +
         id));
@@ -141,6 +143,8 @@ module.exports = {
       }));
     }
     this.recomputeView(parent);
+    if (cb)
+      window.callUICallback(cb);
   },
 
   replaceView: function (view, id) {
