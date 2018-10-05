@@ -75,6 +75,7 @@ function shouldInfateChilds(view) {
     padding: props.padding,
     orientation: props.orientation,
     stroke: props.stroke ? props.stroke.split(",")[0] * 1 : 0,
+    bacche: view.children.length
   };
 
   let changed = false;
