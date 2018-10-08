@@ -138,13 +138,12 @@ module.exports = {
         parameters: {
           index: index,
           parentId: id,
-          view: renderedView
+          view: renderedView,
+          afterRender : cb+""
         }
       }));
     }
     this.recomputeView(parent);
-    if (cb)
-      window.callUICallback(cb);
   },
 
   replaceView: function (view, id) {
