@@ -485,13 +485,24 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
 
       var filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(image);
 
-      if(!filePresent) {
-        window.__BOOT_LOADER[callback] = function(isNew) {
-          console.log("image " + image + " status: " + isNew);
-        }
+
+      if (!filePresent) {
+        window.__BOOT_LOADER[callback] = function (isNew) {
+          const id = allProps.find(a => a.key === "id");
+          if (!id) return;
+          window.updateProperty({
+            type: "imageView",
+            __ref: {
+              __id: id.value
+            },
+            props: {}
+          }, {value0: "imageUrl", value1: attrs.value});
+        };
         top.__BOOT_LOADER = window.__BOOT_LOADER;
         JBridge.renewFile(attrs.value, image, callback);
-      } 
+      }
+
+
       prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
       "set_resolvedName=in.juspay.android_lib.data.FileProvider->appendSdkNameAndVersion:s_" + image + ";" +
       "set_resolvedFile=java.io.File->new:get_directory,get_resolvedName;" +
