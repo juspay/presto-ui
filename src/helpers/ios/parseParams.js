@@ -1063,11 +1063,26 @@ function changeKeys(config, type) {
 
   if (type == "textView" && config.gravity) {
     let value = config.gravity;
-    let alignMent = 0;
+    let alignment = 0;
 
-    alignMent = (value == "left" ? "0" : (value == "center" ?  "1" : "2"));
+    //Updated to handle all cases for textAlignment
+    switch (value) {
+      case "left":
+          alignment = 0;
+          break;
+      case "right":
+          alignment = 2;
+          break;
+      case "center":
+          alignment = 1;
+          break;
+  
+      default:
+          alignment = 0;
+          break;
+    }
 
-    config.textAlignment = alignMent;
+    config.textAlignment = alignment;
     delete config.gravity;
   }
 
@@ -1235,8 +1250,9 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(self_setCursorPosition(cS(config.id), cS(config.cursorPosition)));
   }
 
-  if (config.textAlignment) {
-    config.methods.push(this_setTextAlignment(rWS(cS(config.textAlignment))));
+  //Updated to handle 0 being passed for default alignment
+  if (config.hasOwnProperty("textAlignment")) {
+      config.methods.push(this_setTextAlignment(rWS(cS(config.textAlignment))));
   }
 
   if (config.textColor) {
@@ -1262,7 +1278,8 @@ module.exports = function(type, config, _getSetType) {
   if (config.multipleLine) {
     config.methods.push(this_setLineBreakMode("0"));
     config.methods.push(this_setNumberOfLines("0"));
-    config.methods.push(this_sizeToFit());
+    //Not required right now. This case handled in native.
+    // config.methods.push(this_sizeToFit());
   }
 
   if (config.visibility) {
