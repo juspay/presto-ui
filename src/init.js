@@ -136,15 +136,14 @@ window.callUICallback = function () {
   }
 
   if (window.__THROTTELED_ACTIONS.indexOf(fName) == -1) {
-    window.__PROXY_FN[fName].call(null, ...functionArgs);
+    window.__PROXY_FN[fName].call(null, functionArgs);
   } else if (window.__LAST_FN_CALLED && (fName == window.__LAST_FN_CALLED.fName)) {
     currTime = getCurrTime();
     timeDiff = currTime - window.__LAST_FN_CALLED.timeStamp;
 
     if (timeDiff >= 300) {
-      console.log("BUTTON_CLICKED_" + window.__CURR_SCREEN);
       JBridge.trackEvent("BUTTON_CLICKED", "BUTTON_CLICKED_" + window.__CURR_SCREEN);
-      window.__PROXY_FN[fName].call(null, ...functionArgs);
+      window.__PROXY_FN[fName].call(null, functionArgs);
       window.__LAST_FN_CALLED.timeStamp = currTime;
     } else {
       console.warn("function throtteled", fName);
@@ -152,7 +151,7 @@ window.callUICallback = function () {
     }
   } else {
     JBridge.trackEvent("BUTTON_CLICKED", "BUTTON_CLICKED_" + window.__CURR_SCREEN);
-    window.__PROXY_FN[fName].call(null, ...functionArgs);
+    window.__PROXY_FN[fName].call(null, functionArgs);
     window.__LAST_FN_CALLED = {
       timeStamp: (new Date()).getTime(),
       fName: fName
