@@ -131,6 +131,9 @@ window.callUICallback = function () {
   var currTime;
   var timeDiff;
 
+  // backward compatibility for single arg events in presto-dom
+  functionArgs = functionArgs.length == 1 ? functionArgs[0] : functionArgs
+
   if (window.__ALL_ONCLICKS.indexOf(fName) != -1 && args[2] == "feedback") {
     return JBridge.setClickFeedback(args[1]);
   }
