@@ -1076,7 +1076,7 @@ function changeKeys(config, type) {
       case "center":
           alignment = 1;
           break;
-  
+
       default:
           alignment = 0;
           break;
@@ -1212,18 +1212,6 @@ module.exports = function(type, config, _getSetType) {
    config.methods.push(this_setImageURL(id, config.imageNamed, placeholder));
  }
 
-  if (config.hasOwnProperty("text")) {
-    if (config.letterSpacing) {
-      var data = JSON.stringify({
-        'text': cS(config.text),
-        'letterSpacing': config.letterSpacing
-      });
-      config.methods.push(this_setTextProperties(data));
-    } else {
-      config.methods.push(this_setText(cS(config.text)));
-    }
-  }
-
   if (config.hint) {
     if (config.letterSpacing) {
       var data = JSON.stringify({
@@ -1244,10 +1232,6 @@ module.exports = function(type, config, _getSetType) {
     var data = config.scrollTo.split(",");
     var parsedData = JSON.stringify({"x": data[0], "y": data[1]});
     config.methods.push(this_scrollTo(cS(parsedData)));
-  }
-
-  if(config.cursorPosition) {
-    config.methods.push(self_setCursorPosition(cS(config.id), cS(config.cursorPosition)));
   }
 
   //Updated to handle 0 being passed for default alignment
@@ -1477,6 +1461,22 @@ module.exports = function(type, config, _getSetType) {
       json: config.animation
     };
     config.methods.push(self_animateNew(animProps));
+  }
+
+  if (config.hasOwnProperty("text")) {
+    if (config.letterSpacing) {
+      var data = JSON.stringify({
+        'text': cS(config.text),
+        'letterSpacing': config.letterSpacing
+      });
+      config.methods.push(this_setTextProperties(data));
+    } else {
+      config.methods.push(this_setText(cS(config.text)));
+    }
+  }
+
+  if(config.cursorPosition) {
+    config.methods.push(self_setCursorPosition(cS(config.id), cS(config.cursorPosition)));
   }
 
   config.currChildOffset = 0;
