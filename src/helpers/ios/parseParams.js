@@ -1465,14 +1465,9 @@ module.exports = function(type, config, _getSetType) {
 
   if (config.hasOwnProperty("text")) {
     if (config.letterSpacing) {
-      var data = JSON.stringify({
-        'text': cS(config.text),
-        'letterSpacing': config.letterSpacing
-      });
-      config.methods.push(this_setTextProperties(data));
-    } else {
-      config.methods.push(this_setText(cS(config.text)));
+      config.methods.push(this_setLetterSpacing(cS(config.letterSpacing)));
     }
+    config.methods.push(this_setText(cS(config.text)));
   }
 
   if(config.cursorPosition) {
