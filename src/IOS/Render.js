@@ -109,6 +109,11 @@ function runInUI(cmd, fromInflate) {
     const view = window.__VIEWS[id];
     const parent = window.__VIEWS[view.props.parentId];
     view.props = R.merge(view.props, each);
+    //Adding as stop gag solution for editText in ios where text 
+    //was getting set empty in case other properties were modified.
+    if (!each.hasOwnProperty('text')){
+      delete view.props.text;
+    }
     if (each.visibility !== "visible") {
       runInUIHelper(view.type, view.props);
     }
