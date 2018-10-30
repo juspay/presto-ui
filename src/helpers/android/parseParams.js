@@ -476,8 +476,8 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
 
   if (attrs.key == "imageUrl") {
     if(isURL(attrs.value)) {
-      if(typeof window.__BOOT_LOADER == "undefined") {
-        window.__BOOT_LOADER = {};
+      if(typeof top.__BOOT_LOADER == "undefined") {
+        top.__BOOT_LOADER = {};
       }
 
       var image = attrs.value.substr(attrs.value.lastIndexOf('/') + 1)
@@ -487,7 +487,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
 
 
       if (!filePresent) {
-        window.__BOOT_LOADER[callback] = function (isNew) {
+        top.__BOOT_LOADER[callback] = function (isNew) {
           const id = allProps.find(a => a.key === "id");
           if (!id) return;
           window.updateProperty({
@@ -498,7 +498,6 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
             props: {}
           }, {value0: "imageUrl", value1: attrs.value});
         };
-        top.__BOOT_LOADER = window.__BOOT_LOADER;
         JBridge.renewFile(attrs.value, image, callback);
       }
 
