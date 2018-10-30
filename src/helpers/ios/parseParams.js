@@ -921,6 +921,28 @@ function this_setUserInteraction(hidden){
   }
 }
 
+function this_setSeparator(value) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName": "setSeparator:",
+    "values": [{ "name": value, type: "s" }]
+  };
+}
+
+function this_setSeparatorRepeat(value) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName": "setSeparatorRepeat:",
+    "values": [{ "name": value, type: "s" }]
+  };
+}
+
 function UIView_bounds() {
   window.__RECT_INDEX++;
 
@@ -1219,6 +1241,16 @@ module.exports = function(type, config, _getSetType) {
     } else {
       config.methods.push(this_setPlaceholder(cS(config.hint)));
     }
+  }
+
+  if (config.hasOwnProperty("separator")) {
+    var _enabled6 = cS(config.separator);
+    config.methods.push(this_setSeparator(_enabled6));
+  }
+
+  if (config.hasOwnProperty("separatorRepeat")) {
+    var _enabled6 = cS(config.separatorRepeat);
+    config.methods.push(this_setSeparatorRepeat(_enabled6));
   }
 
    if (config.translationZ){
