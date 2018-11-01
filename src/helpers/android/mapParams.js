@@ -520,6 +520,14 @@ var map = {
     fnName: 'setAllCaps',
     inVokedIn: 'VIEW',
   },
+  "swypeEnabled": {
+    values: [{
+      type: 'b'
+    }],
+    'dontMap': true,
+    fnName: 'setSwypeEnabled',
+    inVokedIn: 'VIEW'
+  },
   toast: {
     values: [{
       type: 'cs',
