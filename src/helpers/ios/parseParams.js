@@ -908,6 +908,17 @@ function this_scrollTo(value) {
   };
 }
 
+function this_setSwype(value) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "MJPTableView",
+    "methodName": "setSwype:",
+    "values": [{ "name": value ? "true" : "false", "type": "s" }]
+  };
+}
+
 function this_setUserInteraction(hidden){
   return {
     "return": "false",
@@ -1443,6 +1454,10 @@ module.exports = function(type, config, _getSetType) {
   if (config.lengthLimit) {
     let enabled = cS(config.lengthLimit);
       config.methods.push(this_setTextLengthLimit(enabled));
+  }
+
+  if (config.hasOwnProperty("swypeEnabled")) {
+    config.methods.push(this_setSwype(config.swypeEnabled));
   }
 
   if (config.focus) {
