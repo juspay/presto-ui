@@ -39,6 +39,7 @@ var excluded = {
   "PagerTitleStrip": "android.support.v4.view.",
   "TabLayout": "in.org.npci.upiapp.",
   "ShimmerFrameLayout": "com.facebook.shimmer.",
+  "LottieAnimationView": "com.airbnb.lottie."
 }
 
 function getCtr(viewGroup) {
