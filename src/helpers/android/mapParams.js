@@ -980,6 +980,22 @@ var map = {
     fnName: 'setClickable',
     inVokedIn: 'VIEW',
   },
+  "cursor": {
+    values: [{
+      type: 'b'
+    }],
+    'dontMap': true,
+    fnName: 'setCursorVisible',
+    inVokedIn: 'VIEW'
+  },
+  "longClickable": {
+    values: [{
+      type: 'b'
+    }],
+    'dontMap': true,
+    fnName: 'setLongClickable',
+    inVokedIn: 'VIEW'
+  },
   "focusable": {
     values: [{
       type: 'b',
