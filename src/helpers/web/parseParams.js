@@ -251,6 +251,9 @@ function parseLayoutProps(type, config, key) {
   if (key == "lineHeight")
     config.style.lineHeight = config.lineHeight;
 
+  if (key == "objectFit") 
+    config.style.objectFit = config.objectFit;
+
 }
 
 function setDefaults(type, config) {

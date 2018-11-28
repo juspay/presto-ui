@@ -140,10 +140,6 @@ let isScrollView = function (elem) {
   return elem && elem.classList[0] == "scrollView";
 }
 
-let isHidden = function (props) {
-  return props.visibility === "gone";
-}
-
 // Creates the DOM element if it has not been already inflated
 // View: Object of ReactDOM, {type, props, children}
 // parentElement: DOM Object
