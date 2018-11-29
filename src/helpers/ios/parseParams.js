@@ -1396,7 +1396,7 @@ module.exports = function(type, config, _getSetType) {
 
   if (config.inputType) {
     let keyboardType = config.inputType;
-    if (keyboardType == "numeric") {
+    if (keyboardType == "numeric" || keyboardType == "numericWithoutSuggestion") {
       config.inputType = 4;
     } else if (keyboardType == "email") {
       config.inputType = 7;

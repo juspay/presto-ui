@@ -470,6 +470,7 @@ var map = {
       password: '129',
       numeric: '2',
       numericPassword: '18',
+      numericWithoutSuggestion: '524291',
       disabled: '0',
       text: '1'
     }],
