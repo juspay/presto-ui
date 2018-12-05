@@ -107,6 +107,12 @@ window.updateLanguage = (lang) => {
 };
 
 window.onresize = (iosData) => {
+  if (window.__OS == "WEB") {
+    const content = document.getElementById('content');
+    const id = content.firstElementChild.id;
+    const view = __VIEWS[id];
+    Android.recompute(view);
+  }
   return;
   if (window.__OS == "IOS") {
     let tag = iosData.tag;

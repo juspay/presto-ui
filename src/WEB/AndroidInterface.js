@@ -45,6 +45,20 @@ module.exports = {
     this.recompute();
   },
 
+  recompute: function (view, cb) {
+    var parentElement = document.getElementById("content");
+    let parentView = {
+      type: "linearLayout",
+      props: {
+        "h": parentElement.clientHeight,
+        "w": parentElement.clientWidth,
+      },
+      children: [view]
+    };
+    Render.computeChildDimens(parentView);
+    Render.inflateView(view, parentElement);
+  },
+
   Render: function (view, cb) {
     var parentElement = document.getElementById("content");
     let parentView = {
