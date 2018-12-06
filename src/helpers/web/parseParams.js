@@ -233,6 +233,13 @@ function parseLayoutProps(type, config, key) {
 
   if (type == "textView" && key == "gravity" && config.gravity) {
     config.style.textAlign = config.gravity;
+    if (config.gravity == "center_vertical") {
+      config.style["align-items"] = "center";
+      config.style.display = "flex";
+    } else if (config.gravity == "center_horizontal") {
+      config.style.display = "flex";
+      config.style["justify-content"] = "center";
+    }
   }
 
   if (key == "id") {
@@ -243,15 +250,15 @@ function parseLayoutProps(type, config, key) {
   if (key == "inputType") {
     config.attributes.type = config.inputType;
   }
-  
+
   if (key == "myAttr") {
    config.attributes["myAttr"] = config.myAttr;
   }
-  
+
   if (key == "lineHeight")
     config.style.lineHeight = config.lineHeight;
 
-  if (key == "objectFit") 
+  if (key == "objectFit")
     config.style.objectFit = config.objectFit;
 
 }
