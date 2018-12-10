@@ -107,13 +107,36 @@ function setAttributes(type, elem, props, firstRender) {
       for (let innerKey in props.attributes)
         elem.setAttribute(innerKey, props.attributes[innerKey]);
     } else if (props[key] && typeof props[key] == "function") {
-      let eventType = key.substring(2, key.length).toLowerCase();
-      let cb = props[key];
+      var eventType = key.substring(2, key.length).toLowerCase();
+      var cb = props[key];
       elem.style.userSelect = 'none';
       if (eventType == "change") {
         eventType = "input";
       }
-      elem['on' + eventType] = e => {e.stopPropagation(); (eventType == "input") ? cb(e.target.value) : cb(e);};
+
+      if (props.label) {
+
+        elem.addEventListener('blur', function() {
+          var inputValue = elem.value;
+          if (inputValue == "") {
+            elem.classList.remove("filled");
+            elem.parentNode.classList.remove('focused');
+          } else {
+            elem.classList.add('filled');
+          }
+        });
+
+        elem['onfocus'] = function (e) {
+          elem.parentNode.classList.add('focused');
+          if (eventType == "focus")
+            e.stopPropagation(); cb(e);
+        };
+      }
+      if (!(props.label && eventType == "focus")) {
+        elem['on' + eventType] = function (e) {
+          e.stopPropagation();eventType == "input" ? cb(e.target.value) : cb(e);
+        };
+      }
     }
   }
 
@@ -168,7 +191,24 @@ let inflateView = function (view, parentElement) {
     else if (view.type == "editText") {
       elem = document.createElement("input");
       elem.value = view.props.text || "";
-      elem.placeholder = view.props.hint || "";
+      if (view.props.label) {
+        var inputView = elem;
+        inputView.style.margin = "10px 0 0";
+        inputView.style.width = '100%';
+        setAttributes(view.type, inputView, view.props, true);
+        inputView.setAttribute("id", view.props.id + "_input");
+        var l = document.createElement("label");
+        l.setAttribute("for", view.props.id + "_input");
+        l.innerHTML = view.props.label;
+        l.classList.add('input-label');
+        elem = document.createElement("div");
+        elem.classList.add('input-group');
+        elem.appendChild(l);
+        elem.appendChild(inputView);
+        delete view.props.label;
+      } else if (view.props.hint) {
+        elem.placeholder = view.props.hint || "";
+      }
     } else
       elem = document.createElement("div");
 
