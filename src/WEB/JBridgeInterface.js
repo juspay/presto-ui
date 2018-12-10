@@ -78,11 +78,18 @@ module.exports = {
   },
 
   callAPI: function (method, url, data, headers, type, callback) {
+    function parseJson(str) {
+      try {
+        return JSON.parse(str);
+      } catch(e) {
+        return {};
+      }
+    }
     axios({
       method: method,
       url: url,
-      data: JSON.parse(data),
-      headers: JSON.parse(headers),
+      data: parseJson(data),
+      headers: parseJson(headers),
     }).then(function (resp) {
       window.callJSCallback(callback, "success",
         btoa(JSON.stringify(resp.data)), resp.status);
