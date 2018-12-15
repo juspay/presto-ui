@@ -29,6 +29,15 @@ var Renderer = require("./Render");
 const es6promise = require('es6-promise');
 const immu = require('immu');
 const assign = require('object-assign');
+const qs = require("qs")
+
+function parseJson(str) {
+  try {
+    return JSON.parse(str);
+  } catch (e) {
+    return {};
+  }
+}
 
 module.exports = {
   getSymbol: function (type) {
@@ -77,25 +86,21 @@ module.exports = {
     }
   },
 
-  callAPI: function (method, url, data, headers, type, callback) {
-    function parseJson(str) {
-      try {
-        return JSON.parse(str);
-      } catch(e) {
-        return {};
-      }
-    }
+
+  callAPI: function callAPI(method, url, data, headers, type, callback) {
+    headers = parseJson(headers)
+    data = parseJson(data)
     axios({
       method: method,
       url: url,
-      data: parseJson(data),
-      headers: parseJson(headers),
+      data:  headers["Content-Type"] === "application/x-www-form-urlencoded" ? qs.stringify(data): data,
+      headers: headers
     }).then(function (resp) {
-      window.callJSCallback(callback, "success",
-        btoa(JSON.stringify(resp.data)), resp.status);
+      window.callJSCallback(callback, "success", btoa(JSON.stringify(resp.data)), resp.status);
     }).catch(function (err) {
       console.log(err);
-    })
+      window.callJSCallback(callback, "failure", btoa("{}"), 50);
+    });
   },
 
   getFromSharedPrefs: function (key) {
@@ -127,4 +132,43 @@ module.exports = {
     if (es6promise)
       es6promise(immu(key)).then(value);
   }
+
+
+
+  getResourceByName: function getResourceByName(tag) {
+    return -1;
+  },
+
+  getSessionAttribute: function getSessionAttribute(v1, v2) {
+    return { a: v1};
+  },
+
+  setAnalyticsEndPoint: function setAnalyticsEndPoint(url) {
+    return;
+  },
+
+  getSessionInfo: function getSessionInfo() {
+    return JSON.stringify({});
+  },
+
+  attach: function attach() {
+    return;
+  },
+
+  addToLogList: function aaddToLogList() {
+    return;
+  },
+
+  getLogList: function getLogList() {
+    return JSON.stringify({});
+  },
+
+  updateLogList: function updateLogList() {
+    return JSON.stringify({});
+  },
+
+  isOnline: function isOnline() {
+    return true;
+  }
+
 }

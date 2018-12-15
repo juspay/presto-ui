@@ -4,11 +4,12 @@
   "description": "Javascript framework for building platform independent apps.",
   "main": "lib/index.js",
   "dependencies": {
-    "ramda": "latest",
     "axios": "latest",
-    "promise": "^7.1.1",
     "immu": "^2.0.1",
-    "object-assign": "^4.1.0"
+    "object-assign": "^4.1.0",
+    "promise": "^7.1.1",
+    "qs": "^6.6.0",
+    "ramda": "latest"
   },
   "devDependencies": {
     "async": "latest",
