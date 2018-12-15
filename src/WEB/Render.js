@@ -37,6 +37,8 @@ function createTextElement(elem, config) {
   elem.style.whiteSpace = "initial";
   span.innerText = config.text;
   span.style.wordBreak = "break-word"
+  if (config.letterSpacing)
+    elem["style"]["letter-spacing"] = config.letterSpacing;
   elem.appendChild(span);
 }
 
@@ -195,9 +197,11 @@ let inflateView = function (view, parentElement) {
     else if (view.type == "editText") {
       elem = document.createElement("input");
       elem.value = view.props.text || "";
+      if (view.props.letterSpacing) {
+        elem["style"]["letter-spacing"] = view.props.letterSpacing;
+      }
       if (view.props.label) {
         var inputView = elem;
-        inputView.style.margin = "10px 0 0";
         inputView.style.width = '100%';
         setAttributes(view.type, inputView, view.props, true);
         inputView.setAttribute("id", view.props.id + "_input");
@@ -205,10 +209,16 @@ let inflateView = function (view, parentElement) {
         l.setAttribute("for", view.props.id + "_input");
         l.innerHTML = view.props.label;
         l.classList.add('input-label');
+
+        if (view.props.letterSpacing) {
+          l["style"]["letter-spacing"] = view.props.letterSpacing;
+        }
+
         elem = document.createElement("div");
         elem.classList.add('input-group');
         elem.appendChild(l);
         elem.appendChild(inputView);
+        setAttributes(view.type, elem, view.props, true);
         delete view.props.label;
       } else if (view.props.hint) {
         elem.placeholder = view.props.hint || "";
