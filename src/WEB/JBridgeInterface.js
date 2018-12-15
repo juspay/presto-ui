@@ -131,7 +131,7 @@ module.exports = {
     var value = assign(value, {});
     if (es6promise)
       es6promise(immu(key)).then(value);
-  }
+  },
 
 
 
