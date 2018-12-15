@@ -71,6 +71,7 @@ function popup(elem, props) {
 }
 
 function setAttributes(type, elem, props, firstRender) {
+  elem.className = type;
   if (type == "horizontalScrollView" || type == "scrollView")
     elem.style.overflow = "auto";
 
@@ -100,6 +101,10 @@ function setAttributes(type, elem, props, firstRender) {
       for (let innerKey in props.style) {
         if (innerKey == "className")
           elem.className += props.style[innerKey];
+        else if (innerKey == "classList")
+          props.style[innerKey].forEach(function(obj) {
+            elem.classList.add(obj);
+          });
         else
           elem.style[innerKey] = props.style[innerKey];
       }
@@ -146,7 +151,6 @@ function setAttributes(type, elem, props, firstRender) {
     afterTransition();
   }
 
-  elem.setAttribute("class", type);
 }
 
 let setDimens = function (elem, props) {
