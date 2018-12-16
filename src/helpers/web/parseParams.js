@@ -99,9 +99,6 @@ function parseLayoutProps(type, config, key) {
   if (!config.style.className)
     config.style.className = "";
 
-  if (!config.style.classList)
-    config.style.classList = [];
-
   if (key == "onClick") {
     config.style.cursor = "pointer";
   }
@@ -272,12 +269,6 @@ function parseLayoutProps(type, config, key) {
 
   if (key == "objectFit")
     config.style.objectFit = config.objectFit;
-
-  if (key == "className")
-    config.style.classList.push(config.className)
-
-  if (key == "classList")
-    config.style.classList = config.style.classList.concat(JSON.parse(config.classList));
 }
 
 function convertColorToRgba(color) {

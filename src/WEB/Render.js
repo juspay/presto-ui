@@ -103,16 +103,18 @@ function setAttributes(type, elem, props, firstRender) {
       for (let innerKey in props.style) {
         if (innerKey == "className")
           elem.className += props.style[innerKey];
-        else if (innerKey == "classList")
-          props.style[innerKey].forEach(function(obj) {
-            elem.classList.add(obj);
-          });
         else
           elem.style[innerKey] = props.style[innerKey];
       }
     } else if (key == "attributes") {
       for (let innerKey in props.attributes)
         elem.setAttribute(innerKey, props.attributes[innerKey]);
+    } else if (key == "className") {
+        elem.classList.add(props[key]);
+    } else if (key == "classList") {
+      JSON.parse(props[key]).forEach(function(obj) {
+        elem.classList.add(obj);
+      });
     } else if (props[key] && typeof props[key] == "function") {
       var eventType = key.substring(2, key.length).toLowerCase();
       var cb = props[key];
