@@ -269,6 +269,10 @@ function parseLayoutProps(type, config, key) {
 
   if (key == "objectFit")
     config.style.objectFit = config.objectFit;
+
+  if (key == "clickable") {
+    config.style.pointerEvents = config.clickable ? "auto" : "none";
+  }
 }
 
 function convertColorToRgba(color) {
