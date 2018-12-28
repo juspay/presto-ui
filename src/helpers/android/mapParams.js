@@ -520,6 +520,62 @@ var map = {
     fnName: 'setAllCaps',
     inVokedIn: 'VIEW',
   },
+  "expand": {
+    values: [{
+      type: 'b'
+    }],
+    'dontMap': true,
+    fnName: 'setExpand',
+    inVokedIn: 'VIEW'
+  },
+  "focusableInTouchMode": {
+    values: [{
+      type: 'b'
+    }],
+    'dontMap': true,
+    fnName: 'setFocusableInTouchMode',
+    inVokedIn: 'VIEW'
+  },
+  "descendantFocusability": {
+    values: [{
+      type: 'i'
+    }],
+    'dontMap': true,
+    fnName: 'setDescendantFocusability',
+    inVokedIn: 'VIEW'
+  },
+  "expandDuration": {
+    values: [{
+      type: 'i'
+    }],
+    'dontMap': true,
+    fnName: 'setExpandDuration',
+    inVokedIn: 'VIEW'
+  },
+  "expandScrollParent": {
+    values: [{
+      type: 'i'
+    }],
+    'dontMap': true,
+    fnName: 'setScrollParent',
+    inVokedIn: 'VIEW'
+  },
+  "expandAlpha": {
+    values: [{
+      type: 'f'
+    }],
+    'dontMap': true,
+    fnName: 'setExpandAlpha',
+    inVokedIn: 'VIEW'
+  },
+  "defaultExpand": {
+    values: [{
+      type: 'b'
+    }],
+    'dontMap': true,
+    fnName: 'setDefaultExpand',
+    inVokedIn: 'VIEW'
+  },
   "swypeEnabled": {
     values: [{
       type: 'b'
