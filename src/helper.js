@@ -66,6 +66,7 @@ function shouldMove(view) {
 }
 
 function shouldInfateChilds(view) {
+  return true;
   let props = view.props;
 
   let dimen = {
