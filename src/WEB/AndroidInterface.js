@@ -98,9 +98,9 @@ module.exports = {
     var children = parent.children;
     children.splice(children.indexOf(view), 1);
     children.splice(index, 0, view);
-    _Render.computeChildDimens(parent)
+    Render.computeChildDimens(parent)
     children.forEach(child => {
-      _Render.inflateView(child, parentElem)
+      Render.inflateView(child, parentElem)
     })
   },
 
