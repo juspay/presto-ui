@@ -91,6 +91,12 @@ function setAttributes(type, elem, props, firstRender) {
 
   elem.style.transition = props.transition;
 
+  if(type == "linearLayout") {
+    for(let key in props.newStyle) {
+      elem.style[key] = props.newStyle[key];
+    }
+  }
+
   for (let key in props) {
     if (key == "popupMenu") {
       popup(elem, props);
@@ -158,7 +164,8 @@ function setAttributes(type, elem, props, firstRender) {
 }
 
 let setDimens = function (elem, props) {
-  elem.style.display = props.visibility === "gone" ? "none" : "";
+  if(elem.style.display != "flex")
+    elem.style.display = props.visibility === "gone" ? "none" : "";
   elem.style.left = props.x;
   elem.style.top = props.y;
   elem.style.width = props.w;
@@ -236,7 +243,9 @@ let inflateView = function (view, parentElement) {
       elem.style.overflowX = "hidden";
     }
 
-    elem.style.position = "absolute";
+    if(view.type == "relativeLayout") {
+      elem.style.position = "absolute";
+    }
 
     newInflated = true;
     if (parentElement) {
