@@ -164,13 +164,12 @@ function setAttributes(type, elem, props, firstRender) {
 }
 
 let setDimens = function (elem, props) {
-  if(elem.style.display != "flex")
     elem.style.display = props.visibility === "gone" ? "none" : "";
-  elem.style.left = props.x;
-  elem.style.top = props.y;
-  elem.style.width = props.w;
-  elem.style.height = props.h;
-  elem.style.visibility = props.visibility === "invisible" ?  "hidden" : "";
+    elem.style.left = props.x;
+    elem.style.top = props.y;
+    elem.style.width = props.w;
+    elem.style.height = props.h;
+    elem.style.visibility = props.visibility === "invisible" ?  "hidden" : "";
 }
 
 let isHorizontalScrollView = function (elem) {
@@ -255,6 +254,7 @@ let inflateView = function (view, parentElement) {
   }
 
   let move = helper.shouldMove(view);
+  let isFlex = elem.style.display === "flex";
   let inflateChilds = helper.shouldInfateChilds(view);
 
   if (!(move || inflateChilds)) {
@@ -265,7 +265,7 @@ let inflateView = function (view, parentElement) {
 
   helper.cacheDimen(view);
 
-  if (move)
+  if (move && !isFlex)
     setDimens(elem, view.props);
 
   if (!inflateChilds) {
