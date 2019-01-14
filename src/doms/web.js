@@ -56,11 +56,38 @@ module.exports = function (type, props, ...children) {
 
 const newParseParams = (type, props) => {
   if(type == "linearLayout") {
+    console.log(props);
     // example mapping
     props.newStyle = {
       "display": "flex",
-      "flex-direction": props.orientation == "horizontal" || props.orientation == null ? "row" : "column"
+      "flex-direction": props.orientation == "horizontal" || props.orientation == null ? "row" : "column",
+      "height": props.hasOwnProperty('height') && !isNaN(props.height)? props.height + 'px': 'auto',
+      "width": 'auto'
     };
+
+    if(props.hasOwnProperty('gravity')){
+      switch(props.gravity){
+        case "center_vertical":
+          if(props["flex-direction"] == 'row'){
+            props.newStyle["justify-content"] = "center";
+          }else{
+            props.newStyle["align-items"] = "center";
+          }
+        break;
+        case "center_horizontal":
+          if(props["flex-direction"] == 'row'){
+            props.newStyle["align-items"] = "center";
+          }else{
+            props.newStyle["justify-content"] = "center";
+          }
+        break;
+        case "center":
+          props.newStyle["align-items"] = "center";
+          props.newStyle["justify-content"] = "center";
+        break;
+      }
+    }
   }
+
   return props;
 }

@@ -250,6 +250,7 @@ let inflateView = function (view, parentElement) {
     if (parentElement) {
       parentElement.appendChild(elem);
     }
+
     setAttributes(view.type, elem, view.props, true);
   }
 
