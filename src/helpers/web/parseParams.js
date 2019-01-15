@@ -291,10 +291,10 @@ function convertColorToRgba(color) {
   values = color.split(',');
 
   return {
-    r: rWS(values[0]),
-    g: rWS(values[1]),
-    b: rWS(values[2]),
-    a: alpha
+    r: parseInt(rWS(values[0])),
+    g: parseInt(rWS(values[1])),
+    b: parseInt(rWS(values[2])),
+    a: parseFloat(alpha)
   };
 }
 
