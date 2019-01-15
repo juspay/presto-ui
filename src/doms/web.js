@@ -92,6 +92,16 @@ const newParseParams = (type, props) => {
   if(props.style.hasOwnProperty('box-shadow')){
     props.newStyle["box-shadow"] = props.style["box-shadow"];
   }
+
+  if(props.hasOwnProperty('visibility')){
+    let visibility = props.visibility;
+    if(visibility == 'invisible')
+      props.newStyle["visibility"] = "hidden";
+    else if(visibility == 'gone')
+      props.newStyle["visibility"] = "none";
+    else
+      props.newStyle["visibility"] = "";
+  }
   /* Global Styles End */
 
   /* Linear Specific Styles */
