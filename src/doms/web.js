@@ -55,15 +55,42 @@ module.exports = function (type, props, ...children) {
 }
 
 const newParseParams = (type, props) => {
+  props.newStyle = {
+    "height": 'auto',
+    "width": 'auto'
+  };
+
+  /* Global Styles */
+  if(props.hasOwnProperty('width')){
+    if(props.width == 'match_parent'){
+      props.newStyle.width = '100%';
+    }else if(!isNaN(props.width)){
+      props.newStyle.width = props.width + 'px';
+    }
+  }
+
+  if(props.hasOwnProperty('height')){
+    if(props.height == 'match_parent'){
+      props.newStyle.height = '100%';
+    }else if(!isNaN(props.height)){
+      props.newStyle.height = props.height + 'px';
+    }
+  }
+
+  if(props.hasOwnProperty('padding')){
+    let padding = props.padding.split(',').map(a => a * 1);
+
+    props.newStyle['padding'] = padding[0] + 'px ' + padding[1] + 'px ' + padding[2] + 'px ' + padding[3] + 'px';
+  }
+  /* Global Styles End */
+
+  /* Linear Specific Styles */
   if(type == "linearLayout") {
     console.log(props);
-    // example mapping
-    props.newStyle = {
-      "display": "flex",
-      "flex-direction": props.orientation == "horizontal" || props.orientation == null ? "row" : "column",
-      "height": props.hasOwnProperty('height') && !isNaN(props.height)? props.height + 'px': 'auto',
-      "width": 'auto'
-    };
+    
+    props.newStyle["display"] = 'flex';
+    props.newStyle["box-sizing"] = "border-box";
+    props.newStyle["flex-direction"] = props.orientation == "horizontal" || props.orientation == null ? "row" : "column";
 
     if(props.hasOwnProperty('gravity')){
       switch(props.gravity){
@@ -88,6 +115,7 @@ const newParseParams = (type, props) => {
       }
     }
   }
+  /* Linear Specific Styles End */
 
   return props;
 }
