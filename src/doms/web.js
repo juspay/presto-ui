@@ -86,8 +86,6 @@ const newParseParams = (type, props) => {
 
   /* Linear Specific Styles */
   if(type == "linearLayout") {
-    console.log(props);
-    
     props.newStyle["display"] = 'flex';
     props.newStyle["box-sizing"] = "border-box";
     props.newStyle["flex-direction"] = props.orientation == "horizontal" || props.orientation == null ? "row" : "column";

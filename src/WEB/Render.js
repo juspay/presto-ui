@@ -91,7 +91,7 @@ function setAttributes(type, elem, props, firstRender) {
 
   elem.style.transition = props.transition;
 
-  if(type == "linearLayout") {
+  if(type == "linearLayout" || type == "textView") {
     for(let key in props.newStyle) {
       elem.style[key] = props.newStyle[key];
     }
@@ -160,7 +160,6 @@ function setAttributes(type, elem, props, firstRender) {
   } else if (props.animation.transition) {
     afterTransition();
   }
-
 }
 
 let setDimens = function (elem, props) {
@@ -266,7 +265,7 @@ let inflateView = function (view, parentElement) {
 
   helper.cacheDimen(view);
 
-  if (move && !isFlex)
+  if (move && !isFlex && view.type != 'textView')
     setDimens(elem, view.props);
 
   if (!inflateChilds) {
