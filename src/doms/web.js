@@ -88,6 +88,10 @@ const newParseParams = (type, props) => {
 
     props.newStyle['margin'] = margin[1] + 'px ' + margin[2] + 'px ' + margin[3] + 'px ' + margin[0] + 'px';
   }
+  
+  if(props.style.hasOwnProperty('box-shadow')){
+    props.newStyle["box-shadow"] = props.style["box-shadow"];
+  }
   /* Global Styles End */
 
   /* Linear Specific Styles */
