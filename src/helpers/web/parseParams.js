@@ -157,8 +157,6 @@ function parseLayoutProps(type, config, key) {
     else if (type.indexOf('black') != -1)
       type = '900';
 
-
-
     config.style.fontWeight = type;
   }
 

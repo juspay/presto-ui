@@ -80,12 +80,19 @@ const newParseParams = (type, props) => {
   if(props.hasOwnProperty('padding')){
     let padding = props.padding.split(',').map(a => a * 1);
 
-    props.newStyle['padding'] = padding[0] + 'px ' + padding[1] + 'px ' + padding[2] + 'px ' + padding[3] + 'px';
+    props.newStyle['padding'] = padding[1] + 'px ' + padding[2] + 'px ' + padding[3] + 'px ' + padding[0] + 'px';
+  }
+
+  if(props.hasOwnProperty('margin')){
+    let margin = props.margin.split(',').map(a => a * 1);
+
+    props.newStyle['margin'] = margin[1] + 'px ' + margin[2] + 'px ' + margin[3] + 'px ' + margin[0] + 'px';
   }
   /* Global Styles End */
 
   /* Linear Specific Styles */
   if(type == "linearLayout") {
+    console.log(props);
     props.newStyle["display"] = 'flex';
     props.newStyle["box-sizing"] = "border-box";
     props.newStyle["flex-direction"] = props.orientation == "horizontal" || props.orientation == null ? "row" : "column";
