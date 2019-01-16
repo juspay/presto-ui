@@ -633,9 +633,9 @@ function this_setTextAlignment(mode) {
     "fromStore": getSetType?"false":"true",
     "storeKey": "view" + window.__VIEW_INDEX,
     "invokeOn": getSetType?"this":"UIView",
-    "methodName":"setTextAlignment:",
+    "methodName":"setGravity:",
     "values":[
-      {"name": mode , "type": "i"}
+      {"name": mode , "type": "s"}
     ]
   }
 }
@@ -1085,26 +1085,7 @@ function changeKeys(config, type) {
 
   if (type == "textView" && config.gravity) {
     let value = config.gravity;
-    let alignment = 0;
-
-    //Updated to handle all cases for textAlignment
-    switch (value) {
-      case "left":
-          alignment = 0;
-          break;
-      case "right":
-          alignment = 2;
-          break;
-      case "center":
-          alignment = 1;
-          break;
-
-      default:
-          alignment = 0;
-          break;
-    }
-
-    config.textAlignment = alignment;
+    config.textAlignment = value;
     delete config.gravity;
   }
 
