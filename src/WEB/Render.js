@@ -272,7 +272,6 @@ let inflateView = function (view, parentElement) {
   }
 
   let move = helper.shouldMove(view);
-  let isFlex = elem.style.display === "flex";
   let inflateChilds = helper.shouldInfateChilds(view);
 
   if (!(move || inflateChilds)) {
