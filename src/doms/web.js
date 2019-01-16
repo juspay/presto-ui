@@ -100,13 +100,18 @@ const newParseParams = (type, props) => {
     else if(visibility == 'gone')
       props.newStyle["display"] = "none";
     else
-      props.newStyle["visibility"] = "";
+      props.newStyle['visibility'] = '';
   }
   /* Global Styles End */
 
   /* Linear Specific Styles */
   if(type == "linearLayout") {
-    props.newStyle["display"] = 'flex';
+    if(props.newStyle.hasOwnProperty('display') && props.newStyle['display'] == 'none'){
+      //props.newStyle["display"] = 'flex';
+    }else{
+      props.newStyle['display'] = 'flex';
+    }
+
     props.newStyle["box-sizing"] = "border-box";
     props.newStyle["flex-direction"] = props.orientation == "horizontal" || props.orientation == null ? "row" : "column";
 

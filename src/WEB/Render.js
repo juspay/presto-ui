@@ -74,8 +74,8 @@ function popup(elem, props) {
 
 function setAttributes(type, elem, props, firstRender) {
   elem.className = type;
-  if (type == "horizontalScrollView" || type == "scrollView")
-    elem.style.overflow = "auto";
+  //if (type == "horizontalScrollView" || type == "scrollView")
+  //  elem.style.overflow = "auto";
 
   let afterTransition = (x) => {
     let animation = props.animation;
@@ -91,7 +91,11 @@ function setAttributes(type, elem, props, firstRender) {
 
   elem.style.transition = props.transition;
 
-  if(type == "linearLayout" || type == "textView" || type == "imageView") {
+  if(
+    type == "linearLayout" || 
+    type == "textView" || 
+    type == "imageView"
+  ) {
     for(let key in props.newStyle) {
       elem.style[key] = props.newStyle[key];
     }
@@ -162,14 +166,27 @@ function setAttributes(type, elem, props, firstRender) {
   }
 }
 
-let setDimens = function (elem, props) {
+let setDimens = function (elem, props, type) {
     //elem.style.left = props.x;
     //elem.style.top = props.y;
-    elem.style.width = props.w;
-    elem.style.height = props.h;
     
+    if(
+      !type || 
+      (
+        type != 'linearLayout' && 
+        type != 'textView' && 
+        type != 'imageView'
+      )
+    ){
+      elem.style.width = props.w;
+      elem.style.height = props.h;
+    }
+
     elem.style.display = props.visibility === "gone" ? "none" : "";
     elem.style.visibility = props.visibility === "invisible" ?  "hidden" : "";
+
+    if(type == 'linearLayout' && elem.style.display != 'none')
+      elem.style.display = 'flex';
 }
 
 let isHorizontalScrollView = function (elem) {
@@ -235,10 +252,10 @@ let inflateView = function (view, parentElement) {
       elem = document.createElement("div");
 
     if (view.type == "horizontalScrollView") {
-      elem.style.overflowX = "scroll";
+      elem.style.overflowX = "auto";
       elem.style.overflowY = "hidden";
     } else if (view.type == "listView" || view.type == "scrollView") {
-      elem.style.overflowY = "scroll";
+      elem.style.overflowY = "auto";
       elem.style.overflowX = "hidden";
     }
 
@@ -266,8 +283,8 @@ let inflateView = function (view, parentElement) {
 
   helper.cacheDimen(view);
 
-  if (move && !isFlex && view.type != 'textView' && view.type != 'imageView')
-    setDimens(elem, view.props);
+  if (move)
+    setDimens(elem, view.props, view.type);
 
   if (!inflateChilds) {
     if (newInflated)
