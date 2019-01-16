@@ -137,8 +137,10 @@ function setAttributes(type, elem, props, firstRender) {
 
         elem['onfocus'] = function (e) {
           elem.parentNode.classList.add('focused');
-          if (eventType == "focus")
-            e.stopPropagation(); cb(e);
+          if (eventType == "focus") {
+            e.stopPropagation();
+            cb(e);
+          }
         };
       }
       if (!(props.label && eventType == "focus")) {
