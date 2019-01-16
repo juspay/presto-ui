@@ -98,7 +98,7 @@ const newParseParams = (type, props) => {
     if(visibility == 'invisible')
       props.newStyle["visibility"] = "hidden";
     else if(visibility == 'gone')
-      props.newStyle["visibility"] = "none";
+      props.newStyle["display"] = "none";
     else
       props.newStyle["visibility"] = "";
   }
@@ -106,7 +106,6 @@ const newParseParams = (type, props) => {
 
   /* Linear Specific Styles */
   if(type == "linearLayout") {
-    console.log(props);
     props.newStyle["display"] = 'flex';
     props.newStyle["box-sizing"] = "border-box";
     props.newStyle["flex-direction"] = props.orientation == "horizontal" || props.orientation == null ? "row" : "column";

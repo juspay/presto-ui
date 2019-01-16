@@ -91,7 +91,7 @@ function setAttributes(type, elem, props, firstRender) {
 
   elem.style.transition = props.transition;
 
-  if(type == "linearLayout" || type == "textView") {
+  if(type == "linearLayout" || type == "textView" || type == "imageView") {
     for(let key in props.newStyle) {
       elem.style[key] = props.newStyle[key];
     }
@@ -163,11 +163,12 @@ function setAttributes(type, elem, props, firstRender) {
 }
 
 let setDimens = function (elem, props) {
-    elem.style.display = props.visibility === "gone" ? "none" : "";
-    elem.style.left = props.x;
-    elem.style.top = props.y;
+    //elem.style.left = props.x;
+    //elem.style.top = props.y;
     elem.style.width = props.w;
     elem.style.height = props.h;
+    
+    elem.style.display = props.visibility === "gone" ? "none" : "";
     elem.style.visibility = props.visibility === "invisible" ?  "hidden" : "";
 }
 
@@ -241,9 +242,9 @@ let inflateView = function (view, parentElement) {
       elem.style.overflowX = "hidden";
     }
 
-    if(view.type == "relativeLayout") {
+    /*if(view.type == "relativeLayout") {
       elem.style.position = "absolute";
-    }
+    }*/
 
     newInflated = true;
     if (parentElement) {
@@ -265,7 +266,7 @@ let inflateView = function (view, parentElement) {
 
   helper.cacheDimen(view);
 
-  if (move && !isFlex && view.type != 'textView')
+  if (move && !isFlex && view.type != 'textView' && view.type != 'imageView')
     setDimens(elem, view.props);
 
   if (!inflateChilds) {
