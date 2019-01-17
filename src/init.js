@@ -113,6 +113,7 @@ window.onresize = (iosData) => {
     Android.recompute(view);
   }
   return;
+
   if (window.__OS == "IOS") {
     let tag = iosData.tag;
     if (tag == "keyboardWillHide") {
