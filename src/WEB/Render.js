@@ -134,7 +134,6 @@ function setAttributes(type, elem, props, firstRender) {
       }
 
       if (props.label) {
-
         elem.addEventListener('blur', function() {
           var inputValue = elem.value;
           if (inputValue == "") {
@@ -235,6 +234,13 @@ let inflateView = function (view, parentElement) {
         l.innerHTML = view.props.label;
         l.classList.add('input-label');
 
+        l["style"]["position"] = "absolute";
+        l["style"]["color"] = "#999";
+        l["style"]["background-color"] = "#fff";
+        l["style"]["padding"] = "0 5px";
+        l["style"]["z-index"] = 10;
+        l["style"]["transition"] = "transform 150ms ease-out, font-size 150ms ease-out";
+
         if (view.props.letterSpacing) {
           l["style"]["letter-spacing"] = view.props.letterSpacing;
         }
@@ -243,6 +249,8 @@ let inflateView = function (view, parentElement) {
         elem.classList.add('input-group');
         elem.appendChild(l);
         elem.appendChild(inputView);
+
+        view.props.style.position = "relative";
         setAttributes(view.type, elem, view.props, true);
         delete view.props.label;
       } else if (view.props.hint) {
