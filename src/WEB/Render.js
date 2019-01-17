@@ -144,10 +144,49 @@ function setAttributes(type, elem, props, firstRender) {
           }
         });
 
+        if (type == "editText"){
+          elem.addEventListener('keydown', function(key) {
+            try {
+              var keycode = key.keyCode;
+              var valid = (keycode > 47 && keycode < 58)   || // number keys
+                          (keycode > 64 && keycode < 91)   || // letter keys
+                          (keycode > 95 && keycode < 112)  || // numpad keys
+                          (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
+                          (keycode > 218 && keycode < 223); // [\]' (in order)
+              if (valid){
+                var inputId = key.path[0].getAttribute("id");
+                var input = document.getElementById(inputId);
+                var currentInput = key.key;
+                var currentData = input.value;
+                if(input.getAttribute("pattern")){
+                  var data = input.getAttribute("pattern").split(',');
+                  var length = parseInt(data.pop());
+                  var regexString = data.join('');
+                  if(length){
+                    if(currentData.length+1>length){
+                      input.value = currentData;
+                      key.preventDefault();
+                    }
+                  }
+                  if(regexString){
+                    var finalData = currentData+currentInput;
+                    var regexPattern = new RegExp(regexString);
+                    if(!regexPattern.test(finalData)){
+                      key.preventDefault();
+                    }
+                  }
+                }
+              }
+            } catch (error) {}
+          });
+        }
+
         elem['onfocus'] = function (e) {
           elem.parentNode.classList.add('focused');
-          if (eventType == "focus")
-            e.stopPropagation(); cb(e);
+          if (eventType == "focus") {
+            e.stopPropagation();
+            cb(e);
+          }
         };
       }
       if (!(props.label && eventType == "focus")) {

@@ -237,13 +237,20 @@ function parseLayoutProps(type, config, key) {
     config.attributes.id = config.id;
   }
 
-
   if (key == "inputType") {
-    config.attributes.type = config.inputType;
+    var inputType = "text";
+    if(config.inputType=="numericPassword"){
+      inputType = "password";
+    }
+    config.attributes.type = inputType;
+  }
+
+  if (key == "pattern") {
+    config.attributes.pattern = config.pattern;
   }
 
   if (key == "myAttr") {
-   config.attributes["myAttr"] = config.myAttr;
+    config.attributes["myAttr"] = config.myAttr;
   }
 
   if (key == "shadow") {
