@@ -94,7 +94,9 @@ function setAttributes(type, elem, props, firstRender) {
   if(
     type == "linearLayout" || 
     type == "textView" || 
-    type == "imageView"
+    type == "imageView" ||
+    type == "horizontalScrollView" ||
+    type == "scrollView"
   ) {
     for(let key in props.newStyle) {
       elem.style[key] = props.newStyle[key];
@@ -213,7 +215,9 @@ let setDimens = function (elem, props, type) {
       (
         type != 'linearLayout' && 
         type != 'textView' && 
-        type != 'imageView'
+        type != 'imageView' &&
+        type != 'horizontalScrollView' &&
+        type != 'scrollView'
       )
     ){
       elem.style.width = props.w;
@@ -306,16 +310,29 @@ let inflateView = function (view, parentElement) {
       elem.style.overflowX = "hidden";
     }
 
-    /*if(view.type == "relativeLayout") {
-      elem.style.position = "absolute";
-    }*/
-
     newInflated = true;
     if (parentElement) {
       parentElement.appendChild(elem);
     }
 
     setAttributes(view.type, elem, view.props, true);
+
+    /* Computed Styles */
+    if(view.props.hasOwnProperty('activeDimen') && view.props.hasOwnProperty('weight')){
+      let activeDimen = view.props.activeDimen;
+      let weight = view.props.weight;
+
+      if(weight > 0){
+        elem.style.flex = weight;
+              
+        if(activeDimen == 'w'){
+          elem.style.width = 'auto';
+        }else{
+          elem.style.height = 'auto';
+        }
+      }
+    }
+    /* Computed Styles End */
   }
 
   let move = helper.shouldMove(view);

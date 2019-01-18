@@ -167,7 +167,22 @@ function computeGravity(view, viewCtx, isRelative) {
     helper("h", !isHorizontal);
 }
 
-function computeBasic(view, ignoreGravity) {
+function computeBasic(view, ignoreGravity){
+  let viewCtx = viewCtxObj(view);
+  let children = view.children;
+
+  children.forEach(child => {
+    let props = child.props;
+    
+    if (isHidden(props)) {
+      props.h = "0";
+      props.w = "0";
+      return;
+    }
+  });
+}
+
+function computeBasicBackup(view, ignoreGravity) {
   let viewCtx = viewCtxObj(view);
   let children = view.children;
 
@@ -216,6 +231,65 @@ function computeBasic(view, ignoreGravity) {
 }
 
 function computeLinearlayout(view) {
+  let viewCtx = viewCtxObj(view);
+  let parentProps = view.props;
+  let children = view.children;
+  let isHorizontal = (parentProps.orientation === "vertical") ? false : true;
+
+  let activeDimen = (isHorizontal) ? "w" : "h";
+  let passiveDimen = (isHorizontal) ? "h" : "w";
+
+  let hasWeight = hasWeightChild(view.type, children);
+  let hasMatchParent = hasMatchParentChild(children, activeDimen);
+  
+  if (hasWeight && hasMatchParent) {
+    // We can't use both at the same time
+    return;
+  }
+
+  if(hasMatchParent || hasWeight){
+    let first = true;
+    /* Iterate Child */
+    children.forEach(child => {
+      let props = child.props;
+
+      if (isHidden(props))
+        return;
+
+      if(props.hasOwnProperty(activeDimen) && props[activeDimen] == 'match_parent'){
+        props['activeDimen'] = activeDimen;
+        
+        if(first){
+          props['weight'] = 1;
+          first = false;
+        }else{
+          props['weight'] = 0;
+        }
+      }else{
+        if(props.hasOwnProperty('weight') && !isNaN(props['weight'])){
+          let weight = parseFloat(props['weight']);
+
+          if(weight > 0){
+            props['activeDimen'] = activeDimen;
+          }
+        }
+      }
+    });
+    /* Iterate Child End */
+  }
+
+  children.forEach(child => {
+    let props = child.props;
+    
+    if (isHidden(props)) {
+      props.w = "0";
+      props.h = "0";
+      return;
+    }    
+  });
+} // End Compute LinearLayout
+
+function computeLinearlayoutBackup(view) {
   let viewCtx = viewCtxObj(view);
   let containerWidth = viewCtx.width;
   let parentProps = view.props;

@@ -46,6 +46,7 @@ module.exports = function (type, props, ...children) {
       type: type,
       children: children
     };
+
     window.__VIEWS[props.id] = obj;
     window.__VIEW_DIMENSIONS[props.id] = null;
     return obj;
@@ -113,6 +114,7 @@ const newParseParams = (type, props) => {
     }
 
     props.newStyle["box-sizing"] = "border-box";
+    props.newStyle["flex-wrap"] = "wrap";
     props.newStyle["flex-direction"] = props.orientation == "horizontal" || props.orientation == null ? "row" : "column";
 
     if(props.hasOwnProperty('gravity')){
