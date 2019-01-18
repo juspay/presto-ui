@@ -144,29 +144,33 @@ function setAttributes(type, elem, props, firstRender) {
                     if(currentData.length+1>length){
                       input.value = currentData;
                       key.preventDefault();
-                    }
-                  }
-                  if(regexString){
-                    var finalData = currentData+currentInput;
-                    var shouldUpdateTextFiled = true;
-                    var regexPattern = new RegExp(regexString);
-                    if(!regexPattern.test(finalData)){
-                      shouldUpdateTextFiled = false;
-                      key.preventDefault();
+                      return;
                     }
                   }
                   var separator = input.getAttribute("separator");
                   var separatorRepeat = parseInt(input.getAttribute("separatorRepeat"));
-                  if(separator && shouldUpdateTextFiled && separatorRepeat){
+                  var finalData = (currentData+currentInput).replace(/[^a-zA-Z0-9]/g, "");
+                  if(regexString){
+                    var regexPattern = new RegExp(regexString);
+                    if(!regexPattern.test(finalData)){
+                      key.preventDefault();
+                      return;
+                    }
+                  }
+                  if(separator && separatorRepeat){
                       key.preventDefault();
                       var cursorPosition = input.selectionStart;
                       var formattedString = "";
                       for (let index = 0; index < finalData.length; index++) {
                         var element = finalData[index];
                         formattedString += element;
-                        if(formattedString.length && formattedString.length%separatorRepeat==0){
+                        var factor = 0;
+                        if(formattedString.length && formattedString.replace(/[^a-zA-Z0-9]/g, "").length%(separatorRepeat+factor)==0){
                           formattedString += separator;
                         }
+                      }
+                      if(formattedString[formattedString.length-1]==separator){
+                        formattedString = formattedString.substring(0, formattedString.length - 1);
                       }
                       input.value = formattedString;
                       console.log("formattedString----",formattedString);
