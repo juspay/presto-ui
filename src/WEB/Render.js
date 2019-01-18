@@ -121,29 +121,16 @@ function setAttributes(type, elem, props, firstRender) {
       elem.style.userSelect = 'none';
       if (eventType == "change") {
         eventType = "input";
-      }
-
-      if (props.label) {
-
-        elem.addEventListener('blur', function() {
-          var inputValue = elem.value;
-          if (inputValue == "") {
-            elem.classList.remove("filled");
-            elem.parentNode.classList.remove('focused');
-          } else {
-            elem.classList.add('filled');
-          }
-        });
-
-        if (type == "editText"){
+        if (type=="editText" && elem.tagName.toLowerCase() == "input"){
           elem.addEventListener('keydown', function(key) {
+            key.stopPropagation();
             try {
               var keycode = key.keyCode;
               var valid = (keycode > 47 && keycode < 58)   || // number keys
                           (keycode > 64 && keycode < 91)   || // letter keys
                           (keycode > 95 && keycode < 112)  || // numpad keys
                           (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
-                          (keycode > 218 && keycode < 223); // [\]' (in order)
+                          (keycode > 218 && keycode < 223);
               if (valid){
                 var inputId = key.path[0].getAttribute("id");
                 var input = document.getElementById(inputId);
@@ -161,16 +148,46 @@ function setAttributes(type, elem, props, firstRender) {
                   }
                   if(regexString){
                     var finalData = currentData+currentInput;
+                    var shouldUpdateTextFiled = true;
                     var regexPattern = new RegExp(regexString);
                     if(!regexPattern.test(finalData)){
+                      shouldUpdateTextFiled = false;
                       key.preventDefault();
                     }
+                  }
+                  var separator = input.getAttribute("separator");
+                  var separatorRepeat = parseInt(input.getAttribute("separatorRepeat"));
+                  if(separator && shouldUpdateTextFiled && separatorRepeat){
+                      key.preventDefault();
+                      var cursorPosition = input.selectionStart;
+                      var formattedString = "";
+                      for (let index = 0; index < finalData.length; index++) {
+                        var element = finalData[index];
+                        formattedString += element;
+                        if(formattedString.length && formattedString.length%separatorRepeat==0){
+                          formattedString += separator;
+                        }
+                      }
+                      input.value = formattedString;
+                      console.log("formattedString----",formattedString);
                   }
                 }
               }
             } catch (error) {}
           });
         }
+      }
+
+      if (props.label) {
+        elem.addEventListener('blur', function() {
+          var inputValue = elem.value;
+          if (inputValue == "") {
+            elem.classList.remove("filled");
+            elem.parentNode.classList.remove('focused');
+          } else {
+            elem.classList.add('filled');
+          }
+        });  
 
         elem['onfocus'] = function (e) {
           elem.parentNode.classList.add('focused');
@@ -180,6 +197,8 @@ function setAttributes(type, elem, props, firstRender) {
           }
         };
       }
+
+      
       if (!(props.label && eventType == "focus")) {
         elem['on' + eventType] = function (e) {
           e.stopPropagation();eventType == "input" ? cb(e.target.value) : cb(e);

@@ -251,6 +251,13 @@ function parseLayoutProps(type, config, key) {
     config.attributes.pattern = config.pattern;
   }
 
+  if (key == "separator") {
+    config.attributes["separator"] = config.separator;
+  }
+  if (key == "separatorRepeat") {
+    config.attributes["separatorRepeat"] = config.separatorRepeat;
+  }
+
   if (key == "myAttr") {
     config.attributes["myAttr"] = config.myAttr;
   }
