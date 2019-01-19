@@ -25,7 +25,9 @@
 
 module.exports = {
   handle : (ui, callback) => {
-
+    if (!ui) {
+      return;
+    }
     if(ui.render) {
       if (typeof Android === "undefined")
         throw new Error("Android is undefined");
