@@ -96,7 +96,8 @@ function setAttributes(type, elem, props, firstRender) {
     type == "textView" || 
     type == "imageView" ||
     type == "horizontalScrollView" ||
-    type == "scrollView"
+    type == "scrollView" ||
+    type == "relativeLayout"
   ) {
     for(let key in props.newStyle) {
       elem.style[key] = props.newStyle[key];
@@ -217,7 +218,8 @@ let setDimens = function (elem, props, type) {
         type != 'textView' && 
         type != 'imageView' &&
         type != 'horizontalScrollView' &&
-        type != 'scrollView'
+        type != 'scrollView' &&
+        type != 'relativeLayout'
       )
     ){
       elem.style.width = props.w;
