@@ -78,6 +78,10 @@ const newParseParams = (type, props) => {
     }
   }
 
+  if(props.hasOwnProperty('minWidth') && !isNaN(props.minWidth)){
+    props.newStyle.minWidth = props.minWidth + 'px';
+  }
+
   if(props.hasOwnProperty('padding')){
     let padding = props.padding.split(',').map(a => a * 1);
 

@@ -35,8 +35,8 @@ function viewCtxObj(view) {
   let obj = {
     w: props.w * 1,
     h: props.h * 1,
-    x: 0,
-    y: 0,
+    //x: 0,
+    //y: 0,
     width: props.w * 1,
   };
 
