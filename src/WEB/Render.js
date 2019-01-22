@@ -266,8 +266,6 @@ let inflateView = function (view, parentElement) {
 
   if (!elem) {
     if (view.type == "imageView"){
-      console.log(view);
-      
       //elem = document.createElement("img");
       elem = document.createElement('div');
       elem.classList.add('imageView');
@@ -302,8 +300,6 @@ let inflateView = function (view, parentElement) {
 
         elem.appendChild(img);
       }
-
-      console.log(view);
     }else if (view.type == "checkBox")
       elem = document.createElement("checkBox");
     else if (view.type == "editText") {
