@@ -266,40 +266,14 @@ let inflateView = function (view, parentElement) {
 
   if (!elem) {
     if (view.type == "imageView"){
-      //elem = document.createElement("img");
-      elem = document.createElement('div');
-      elem.classList.add('imageView');
+      elem = document.createElement("img");
+      elem["style"]["margin"] = "0";
+      elem["style"]["padding"] = "0";
+      elem["style"]["display"] = "block";
+      elem["style"]["max-width"] = "100%";
+      elem["style"]["max-height"] = "100%";
       elem["style"]["box-sizing"] = "border-box";
-      elem["style"]["align-items"] = "center";
-      elem["style"]["justify-content"] = "center";
-
-      if(view.props.hasOwnProperty('imageUrl') && view.props.imageUrl != ''){
-        var img = document.createElement('img');
-        var imageUrl = view.props.imageUrl;
-        
-        /* Check EXT */
-        var temp = imageUrl.split('.');
-        var ext = '';
-        if(temp && temp.length > 0)
-          ext = temp[temp.length - 1];
-        /* Check EXT End */
-
-        var exts = ["jpeg", "jpg", "png", "bmp", "svg"];
-        ext = ext.toLowerCase();
-
-        if(!exts.includes(ext))
-          imageUrl += '.png';
-
-        img["style"]["margin"] = "0";
-        img["style"]["padding"] = "0";
-        img["style"]["display"] = "block";
-        img["style"]["max-width"] = "100%";
-        img["style"]["max-height"] = "100%";
-        img.setAttribute("src", imageUrl);
-        img.setAttribute("alt", "");
-
-        elem.appendChild(img);
-      }
+      elem.setAttribute("alt", "");
     }else if (view.type == "checkBox")
       elem = document.createElement("checkBox");
     else if (view.type == "editText") {

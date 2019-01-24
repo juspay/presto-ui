@@ -107,7 +107,20 @@ function parseLayoutProps(type, config, key) {
     config.style.fontSize = config.textSize;
 
   if (key == "imageUrl"){
-    //config.attributes.src = config.imageUrl + ".png";
+    let imageUrl = config.imageUrl;
+        
+    let temp = imageUrl.split('.');
+    let ext = '';
+    if(temp && temp.length > 0)
+      ext = temp[temp.length - 1];
+    
+    let exts = ["jpeg", "jpg", "png", "bmp", "svg"];
+    ext = ext.toLowerCase();
+
+    if(!exts.includes(ext))
+      imageUrl += '.png';
+
+    config.attributes.src = imageUrl;
   }
 
   if (key == "background") {
