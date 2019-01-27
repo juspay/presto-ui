@@ -23,9 +23,7 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-let {
-  computeChildDimens
-} = require("../compute");
+let { computeChildDimens } = require("../compute");
 let helper = require("../helper");
 let R = require("ramda");
 
@@ -72,11 +70,32 @@ function popup(elem, props) {
   });
 }
 
+function setComputedStyles(elem, props){
+  /* Computed Styles */
+  if(props.hasOwnProperty('activeDimen') && props.hasOwnProperty('activeWeight')){
+    let activeDimen = props.activeDimen;
+    let weight = props.activeWeight;
+
+    if(weight > 0){
+      elem.style.flex = weight;
+            
+      if(activeDimen == 'w'){
+        elem.style.width = 'auto';
+      }else{
+        elem.style.height = 'auto';
+      }
+    }else{
+      elem.style.flex = 'none';  
+    }
+  }else{
+    elem.style.flex = 'none';  
+  }
+  /* Computed Styles End */
+}
+
 function setAttributes(type, elem, props, firstRender) {
   elem.className = type;
-  //if (type == "horizontalScrollView" || type == "scrollView")
-  //  elem.style.overflow = "auto";
-
+  
   let afterTransition = (x) => {
     let animation = props.animation;
     let myElem = elem;
@@ -91,18 +110,88 @@ function setAttributes(type, elem, props, firstRender) {
 
   elem.style.transition = props.transition;
 
-  if(
-    type == "linearLayout" || 
-    type == "textView" || 
-    type == "imageView" ||
-    type == "horizontalScrollView" ||
-    type == "scrollView" ||
-    type == "relativeLayout"
-  ) {
-    for(let key in props.newStyle) {
-      elem.style[key] = props.newStyle[key];
+  /* New Style */
+    /* Render from global static styles */
+    if(
+      type == "linearLayout" || 
+      type == "textView" || 
+      type == "imageView" ||
+      type == "horizontalScrollView" ||
+      type == "scrollView" ||
+      type == "relativeLayout"
+    ) {
+      for(let key in props.newStyle) {
+        elem.style[key] = props.newStyle[key];
+      }
+
+      elem.style.width = 'auto';
+      elem.style.height = 'auto';
+
+      if(props.hasOwnProperty('width')){
+        if(props.width == 'match_parent'){
+          elem.style.width = '100%';
+        }else if(!isNaN(props.width)){
+          elem.style.width = props.width + 'px';
+        }
+      }
+    
+      if(props.hasOwnProperty('height')){
+        if(props.height == 'match_parent'){
+          elem.style.height = '100%';
+        }else if(!isNaN(props.height)){
+          elem.style.height = props.height + 'px';
+        }
+      }
     }
-  }
+    /* Render from global static styles end */
+
+    /* Render global dynamic styles */
+    if(props.hasOwnProperty('visibility')){
+      let visibility = props.visibility;
+      if(visibility == 'invisible')
+        elem.style.visibility = "hidden";
+      else if(visibility == 'gone')
+        elem.style.display = "none";
+      else{
+        elem.style.visibility = '';
+
+        if(type == 'linearLayout')
+          elem.style.display = 'flex';
+        else
+          elem.style.display = '';
+      }
+    }
+    /* Render global dynamic styles end */
+
+    /* Render linearLayout specific styles */
+    if(type == 'linearLayout'){
+      elem.style["flex-direction"] = props.orientation == "horizontal" || props.orientation == null ? "row" : "column";
+    
+      if(props.hasOwnProperty('gravity')){
+        switch(props.gravity){
+          case "center_vertical":
+            if(props["flex-direction"] == 'row'){
+              elem.style["justify-content"] = "center";
+            }else{
+              elem.style["align-items"] = "center";
+            }
+          break;
+          case "center_horizontal":
+            if(props["flex-direction"] == 'row'){
+              elem.style["align-items"] = "center";
+            }else{
+              elem.style["justify-content"] = "center";
+            }
+          break;
+          case "center":
+            elem.style["align-items"] = "center";
+            elem.style["justify-content"] = "center";
+          break;
+        }
+      }
+    }
+    /* Render linearLayout specific styles end */
+  /* New Style End */
 
   for (let key in props) {
     if (key == "popupMenu") {
@@ -208,9 +297,6 @@ function setAttributes(type, elem, props, firstRender) {
 }
 
 let setDimens = function (elem, props, type) {
-    //elem.style.left = props.x;
-    //elem.style.top = props.y;
-    
     if(
       !type || 
       (
@@ -225,18 +311,6 @@ let setDimens = function (elem, props, type) {
       elem.style.width = props.w;
       elem.style.height = props.h;
     }
-
-    elem.style.display = props.visibility === "gone" ? "none" : "";
-    elem.style.visibility = props.visibility === "invisible" ?  "hidden" : "";
-
-    if(
-      (
-        type == 'linearLayout' ||
-        type == 'imageView'  
-      ) &&
-      elem.style.display != 'none'
-    )
-      elem.style.display = 'flex';
 }
 
 let isHorizontalScrollView = function (elem) {
@@ -250,7 +324,7 @@ let isScrollView = function (elem) {
 // Creates the DOM element if it has not been already inflated
 // View: Object of ReactDOM, {type, props, children}
 // parentElement: DOM Object
-let inflateView = function (view, parentElement) {
+let inflateView = function (view, parentElement, parentView) {
   let elem = document.getElementById(view.props.id);
   let newInflated = false;
   let cb = () => {
@@ -331,51 +405,37 @@ let inflateView = function (view, parentElement) {
     }
 
     setAttributes(view.type, elem, view.props, true);
-
-    /* Computed Styles */
-    if(view.props.hasOwnProperty('activeDimen') && view.props.hasOwnProperty('weight')){
-      let activeDimen = view.props.activeDimen;
-      let weight = view.props.weight;
-
-      if(weight > 0){
-        elem.style.flex = weight;
-              
-        if(activeDimen == 'w'){
-          elem.style.width = 'auto';
-        }else{
-          elem.style.height = 'auto';
-        }
-      }
-    }
-    /* Computed Styles End */
   }
 
-  let move = helper.shouldMove(view);
+  /*let move = helper.shouldMove(view);
   let inflateChilds = helper.shouldInfateChilds(view);
 
   if (!(move || inflateChilds)) {
     if (newInflated)
       cb();
     return elem;
-  }
+  }*/
 
-  helper.cacheDimen(view);
+  //helper.cacheDimen(view);
+  
+  //if (move)
+  //  setDimens(elem, view.props, view.type);
 
-  if (move)
-    setDimens(elem, view.props, view.type);
-
-  if (!inflateChilds) {
+  /*if (!inflateChilds) {
     if (newInflated)
       cb();
     return elem;
-  }
+  }*/
 
   computeChildDimens(view);
+  setComputedStyles(elem, view.props);
 
-  for (let i = 0; i < view.children.length; i++) {
-    let child = view.children[i];
-    if (child) {
-      inflateView(child, elem);
+  if(view.hasOwnProperty('children') && view.children.length > 0){
+    for (let i = 0; i < view.children.length; i++) {
+      let child = view.children[i];
+      if (child) {
+        inflateView(child, elem, view);
+      }
     }
   }
 
@@ -388,14 +448,17 @@ let inflateView = function (view, parentElement) {
 let runInUI = function (cmd) {
   if (!(cmd instanceof Array))
     cmd = [cmd];
+  
   cmd.forEach(function (each) {
     let elem = document.getElementById(each.id);
     if (!elem)
       return console.error("runInUI (Id NULL) CMD:", each);
-    let parentDom = elem.parentNode;
+
     let view = window.__VIEWS[elem.id];
-    let parentView = window.__VIEWS[parentDom.id];
     view.props = R.merge(view.props, each);
+    //let parentDom = elem.parentNode;
+    //let parentView = window.__VIEWS[parentDom.id];
+        
     setAttributes(view.type, elem, view.props, false);
   });
 };

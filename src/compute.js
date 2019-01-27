@@ -121,6 +121,17 @@ function computeLinearlayout(view) {
     return;
   }
 
+  /* Initialize */
+  children.forEach(child => {
+    let props = child.props;
+
+    if (props.hasOwnProperty("activeDimen"))
+      delete props["activeDimen"];
+    if (props.hasOwnProperty("activeWeight"))
+      delete props["activeWeight"];
+  });
+  /* Initialize End */
+  
   if(hasMatchParent || hasWeight){
     let first = true;
     /* Iterate Child */
@@ -134,10 +145,10 @@ function computeLinearlayout(view) {
         props['activeDimen'] = activeDimen;
         
         if(first){
-          props['weight'] = 1;
+          props['activeWeight'] = 1;
           first = false;
         }else{
-          props['weight'] = 0;
+          props['activeWeight'] = 0;
         }
       }else{
         if(props.hasOwnProperty('weight') && !isNaN(props['weight'])){
@@ -145,6 +156,7 @@ function computeLinearlayout(view) {
 
           if(weight > 0){
             props['activeDimen'] = activeDimen;
+            props['activeWeight'] = weight;
           }
         }
       }

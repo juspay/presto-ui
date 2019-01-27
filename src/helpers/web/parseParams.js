@@ -280,7 +280,6 @@ function parseLayoutProps(type, config, key) {
     var shadowColor = convertColorToRgba(shadowValues[4]);
 
     config["style"]["box-shadow"] = parseInt(shadowOffset.x) + "px " + parseInt(shadowOffset.y) + "px " + parseInt(shadowBlur) + "px " + parseInt(shadowSpread) + "px rgba(" + shadowColor.r + ", " +  shadowColor.g + ", " +  shadowColor.b + ", " +  shadowColor.a + ")" ;
-
   }
 
   if (key == "lineHeight")

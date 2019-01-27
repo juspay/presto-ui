@@ -56,28 +56,9 @@ module.exports = function (type, props, ...children) {
 }
 
 const newParseParams = (type, props) => {
-  props.newStyle = {
-    "height": 'auto',
-    "width": 'auto'
-  };
+  props.newStyle = {};
 
-  /* Global Styles */
-  if(props.hasOwnProperty('width')){
-    if(props.width == 'match_parent'){
-      props.newStyle.width = '100%';
-    }else if(!isNaN(props.width)){
-      props.newStyle.width = props.width + 'px';
-    }
-  }
-
-  if(props.hasOwnProperty('height')){
-    if(props.height == 'match_parent'){
-      props.newStyle.height = '100%';
-    }else if(!isNaN(props.height)){
-      props.newStyle.height = props.height + 'px';
-    }
-  }
-
+  /* Global Static Styles */
   if(props.hasOwnProperty('minWidth') && !isNaN(props.minWidth)){
     props.newStyle.minWidth = props.minWidth + 'px';
   }
@@ -97,54 +78,15 @@ const newParseParams = (type, props) => {
   if(props.style.hasOwnProperty('box-shadow')){
     props.newStyle["box-shadow"] = props.style["box-shadow"];
   }
+  /* Global Static Styles End */
 
-  if(props.hasOwnProperty('visibility')){
-    let visibility = props.visibility;
-    if(visibility == 'invisible')
-      props.newStyle["visibility"] = "hidden";
-    else if(visibility == 'gone')
-      props.newStyle["display"] = "none";
-    else
-      props.newStyle['visibility'] = '';
-  }
-  /* Global Styles End */
-
-  /* Linear Specific Styles */
+  /* Linear Specific Static Styles */
   if(type == "linearLayout") {
-    if(props.newStyle.hasOwnProperty('display') && props.newStyle['display'] == 'none'){
-      //props.newStyle["display"] = 'flex';
-    }else{
-      props.newStyle['display'] = 'flex';
-    }
-
+    props.newStyle['display'] = 'flex';
     props.newStyle["box-sizing"] = "border-box";
     props.newStyle["flex-wrap"] = "wrap";
-    props.newStyle["flex-direction"] = props.orientation == "horizontal" || props.orientation == null ? "row" : "column";
-
-    if(props.hasOwnProperty('gravity')){
-      switch(props.gravity){
-        case "center_vertical":
-          if(props["flex-direction"] == 'row'){
-            props.newStyle["justify-content"] = "center";
-          }else{
-            props.newStyle["align-items"] = "center";
-          }
-        break;
-        case "center_horizontal":
-          if(props["flex-direction"] == 'row'){
-            props.newStyle["align-items"] = "center";
-          }else{
-            props.newStyle["justify-content"] = "center";
-          }
-        break;
-        case "center":
-          props.newStyle["align-items"] = "center";
-          props.newStyle["justify-content"] = "center";
-        break;
-      }
-    }
   }
-  /* Linear Specific Styles End */
+  /* Linear Specific Static Styles End */
 
   return props;
 }

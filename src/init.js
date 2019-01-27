@@ -106,6 +106,8 @@ window.updateLanguage = (lang) => {
 };
 
 window.onresize = (iosData) => {
+  return;
+  
   if (window.__OS == "WEB") {
     const content = document.getElementById('content');
     const id = content.firstElementChild.id;
