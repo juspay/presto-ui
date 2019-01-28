@@ -109,6 +109,7 @@ var map = {
     fnName: 'requestFocus',
     inVokedIn: 'VIEW',
   },
+
   fillViewport: {
     values: [{
       type: 'b'
@@ -440,6 +441,14 @@ var map = {
       fnName: 'setBackground',
       inVokedIn: 'VIEW',
     },
+  "lineHeight": {
+    values: [{
+      type: 'dp'
+    }],
+    'dontMap': true,
+    fnName: 'setLineHeight',
+    inVokedIn: 'VIEW'
+  },
   "letterSpacing": {
     values: [{
       type: 'f',
