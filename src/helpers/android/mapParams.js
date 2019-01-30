@@ -331,6 +331,16 @@ var map = {
     fnName: 'smoothScrollTo',
     inVokedIn: 'VIEW'
   },
+  "lineSpacing": {
+    values: [{
+      type: 'dp'
+    }, {
+      type: 'f'
+    }],
+    'dontMap': true,
+    fnName: 'setLineSpacing',
+    inVokedIn: 'VIEW'
+  },
   "url": {
     values: [{
       type: 's',
