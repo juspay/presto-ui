@@ -47,7 +47,6 @@ else
   parseParams = require('./helpers/ios/parseParams');
 
 class BaseView {
-
   constructor(props, children) {
     this.props = props || {};
     this.children = children || [];
@@ -109,6 +108,7 @@ class BaseView {
       window.__ID++;
       this.idSet[name] = window.__ID;
     }
+    
     return this.idSet[name];
   }
 

@@ -109,7 +109,7 @@ function computeLinearlayout(view) {
   let parentProps = view.props;
   let children = view.children;
   let isHorizontal = (parentProps.orientation === "vertical") ? false : true;
-
+  
   let activeDimen = (isHorizontal) ? "w" : "h";
   let passiveDimen = (isHorizontal) ? "h" : "w";
 

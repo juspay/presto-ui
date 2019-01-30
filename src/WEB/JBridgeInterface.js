@@ -80,12 +80,10 @@ module.exports = {
       elem.style.borderBottom = "1px solid #eee";
       parent.appendChild(elem);
       let a = JSON.parse(more);
-      console.log(a, "more");
-
+      
       Renderer.inflateView(JSON.parse(more), elem);
     }
   },
-
 
   callAPI: function callAPI(method, url, data, headers, type, callback) {
     headers = parseJson(headers)
@@ -132,8 +130,6 @@ module.exports = {
     if (es6promise)
       es6promise(immu(key)).then(value);
   },
-
-
 
   getResourceByName: function getResourceByName(tag) {
     return -1;

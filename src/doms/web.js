@@ -34,13 +34,13 @@ Array.prototype.flatten = function () {
 
 module.exports = function (type, props, ...children) {
   children = children.flatten();
-
+  
   if (!props)
     props = {};
-
+  
   if (typeof type === "string") {
     props = parseParams(type, props);
-    props = newParseParams(type, props);
+    
     let obj = {
       props: props,
       type: type,
@@ -53,40 +53,4 @@ module.exports = function (type, props, ...children) {
   } else {
     return new type(props, children);
   }
-}
-
-const newParseParams = (type, props) => {
-  props.newStyle = {};
-
-  /* Global Static Styles */
-  if(props.hasOwnProperty('minWidth') && !isNaN(props.minWidth)){
-    props.newStyle.minWidth = props.minWidth + 'px';
-  }
-
-  if(props.hasOwnProperty('padding')){
-    let padding = props.padding.split(',').map(a => a * 1);
-
-    props.newStyle['padding'] = padding[1] + 'px ' + padding[2] + 'px ' + padding[3] + 'px ' + padding[0] + 'px';
-  }
-
-  if(props.hasOwnProperty('margin')){
-    let margin = props.margin.split(',').map(a => a * 1);
-
-    props.newStyle['margin'] = margin[1] + 'px ' + margin[2] + 'px ' + margin[3] + 'px ' + margin[0] + 'px';
-  }
-  
-  if(props.style.hasOwnProperty('box-shadow')){
-    props.newStyle["box-shadow"] = props.style["box-shadow"];
-  }
-  /* Global Static Styles End */
-
-  /* Linear Specific Static Styles */
-  if(type == "linearLayout") {
-    props.newStyle['display'] = 'flex';
-    props.newStyle["box-sizing"] = "border-box";
-    props.newStyle["flex-wrap"] = "wrap";
-  }
-  /* Linear Specific Static Styles End */
-
-  return props;
 }

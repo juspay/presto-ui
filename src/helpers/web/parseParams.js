@@ -64,6 +64,7 @@ function flattenObject(ob) {
       toReturn[i] = ob[i];
     }
   }
+
   return toReturn;
 };
 
@@ -341,7 +342,6 @@ function setDefaults(type, config) {
 }
 
 module.exports = function (type, config, getSetType) {
-
   config = flattenObject(config);
   setDefaults(type, config);
 

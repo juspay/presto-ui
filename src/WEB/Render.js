@@ -120,10 +120,6 @@ function setAttributes(type, elem, props, firstRender) {
       type == "scrollView" ||
       type == "relativeLayout"
     ) {
-      for(let key in props.newStyle) {
-        elem.style[key] = props.newStyle[key];
-      }
-
       elem.style.width = 'auto';
       elem.style.height = 'auto';
 
@@ -143,6 +139,22 @@ function setAttributes(type, elem, props, firstRender) {
         }
       }
     }
+
+    if(props.hasOwnProperty('minWidth') && !isNaN(props.minWidth)){
+      elem.style.minWidth = props.minWidth + 'px';
+    }
+
+    if(props.hasOwnProperty('padding')){
+      let padding = props.padding.split(',').map(a => a * 1);
+  
+      elem.style['padding'] = padding[1] + 'px ' + padding[2] + 'px ' + padding[3] + 'px ' + padding[0] + 'px';
+    }
+  
+    if(props.hasOwnProperty('margin')){
+      let margin = props.margin.split(',').map(a => a * 1);
+  
+      elem.style['margin'] = margin[1] + 'px ' + margin[2] + 'px ' + margin[3] + 'px ' + margin[0] + 'px';
+    }
     /* Render from global static styles end */
 
     /* Render global dynamic styles */
@@ -160,11 +172,15 @@ function setAttributes(type, elem, props, firstRender) {
         else
           elem.style.display = '';
       }
+    }else if(type == 'linearLayout'){
+      elem.style["display"] = "flex";
     }
     /* Render global dynamic styles end */
 
     /* Render linearLayout specific styles */
     if(type == 'linearLayout'){
+      elem.style["box-sizing"] = "border-box";
+      elem.style["flex-wrap"] = "wrap";
       elem.style["flex-direction"] = props.orientation == "horizontal" || props.orientation == null ? "row" : "column";
     
       if(props.hasOwnProperty('gravity')){
@@ -192,7 +208,7 @@ function setAttributes(type, elem, props, firstRender) {
     }
     /* Render linearLayout specific styles end */
   /* New Style End */
-
+  
   for (let key in props) {
     if (key == "popupMenu") {
       popup(elem, props);
@@ -209,8 +225,9 @@ function setAttributes(type, elem, props, firstRender) {
           elem.style[innerKey] = props.style[innerKey];
       }
     } else if (key == "attributes") {
-      for (let innerKey in props.attributes)
+      for (let innerKey in props.attributes){
         elem.setAttribute(innerKey, props.attributes[innerKey]);
+      }
     } else if (key == "className") {
         elem.classList.add(props[key]);
     } else if (key == "classList") {
