@@ -211,6 +211,38 @@ function setAttributes(type, elem, props, firstRender) {
       }
     }
     /* Render linearLayout specific styles end */
+
+    /* Render scroll related styles */
+    let scrollBarX = true;
+    let scrollBarY = true;
+
+    if(props.hasOwnProperty('scrollBarX'))
+      scrollBarX = props.scrollBarX;
+    if(props.hasOwnProperty('scrollBarY'))
+      scrollBarY = props.scrollBarY;
+
+    if (type == "horizontalScrollView") {
+      elem.style.overflowX = "auto";
+      elem.style.overflowY = "hidden";
+
+      if(!scrollBarX)
+        elem.style.overflowX = 'hidden';
+    } else if (type == "listView") {
+      elem.style.overflowY = "auto";
+      elem.style.overflowX = "hidden";
+
+      if(!scrollBarY)
+        elem.style.overflowY = 'hidden';
+    } else if(type == 'scrollView') {
+      elem.style.overflowX = 'auto';
+      elem.style.overflowY = 'auto';
+
+      if(!scrollBarX)
+        elem.style.overflowX = 'hidden';
+      if(!scrollBarY)
+        elem.style.overflowY = 'hidden';
+    }
+    /* Render scroll related styles end */ 
   /* New Style End */
   
   for (let key in props) {
@@ -411,14 +443,6 @@ let inflateView = function (view, parentElement, parentView) {
       }
     } else
       elem = document.createElement("div");
-
-    if (view.type == "horizontalScrollView") {
-      elem.style.overflowX = "auto";
-      elem.style.overflowY = "hidden";
-    } else if (view.type == "listView" || view.type == "scrollView") {
-      elem.style.overflowY = "auto";
-      elem.style.overflowX = "hidden";
-    }
 
     newInflated = true;
     if (parentElement) {
