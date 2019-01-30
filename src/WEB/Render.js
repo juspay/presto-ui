@@ -144,6 +144,10 @@ function setAttributes(type, elem, props, firstRender) {
       elem.style.minWidth = props.minWidth + 'px';
     }
 
+    if(props.hasOwnProperty('minHeight') && !isNaN(props.minHeight)){
+      elem.style.minHeight = props.minHeight + 'px';
+    }
+
     if(props.hasOwnProperty('padding')){
       let padding = props.padding.split(',').map(a => a * 1);
   
