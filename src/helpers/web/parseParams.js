@@ -144,6 +144,10 @@ function parseLayoutProps(type, config, key) {
     config.animation.opacity = config[key];
   }
 
+  if (key == "fontFamily") {
+    config.style.fontFamily = config.fontFamily;
+  }
+
   if (key == "fontStyle") {
     let match = config.fontStyle.match(/[/-]/);
     let fontName = match ? config.fontStyle.slice(0, match.index) : config.fontStyle;
