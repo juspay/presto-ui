@@ -394,8 +394,9 @@ let isScrollView = function (elem) {
 // Creates the DOM element if it has not been already inflated
 // View: Object of ReactDOM, {type, props, children}
 // parentElement: DOM Object
-let inflateView = function (view, parentElement, parentView) {
+let inflateView = function (view, parentElement) {
   let elem = document.getElementById(view.props.id);
+  let subElem = null;
   let newInflated = false;
   let cb = () => {
     if (view.props.afterRender && typeof view.props.afterRender ==
@@ -418,9 +419,26 @@ let inflateView = function (view, parentElement, parentView) {
       elem["style"]["max-height"] = "100%";
       elem["style"]["box-sizing"] = "border-box";
       elem.setAttribute("alt", "");
-    }else if (view.type == "checkBox")
-      elem = document.createElement("checkBox");
-    else if (view.type == "editText") {
+    }else if (view.type == "checkBox"){
+      elem = document.createElement("input");
+      elem.setAttribute('type', 'checkbox');
+
+      if(view.props.hasOwnProperty('checked') && view.props.checked == true){
+        elem.setAttribute('checked', 'checked');
+      }else{
+        elem.removeAttribute('checked');
+      }
+
+      if(view.props.hasOwnProperty('label') && view.props.label != '' && parentElement){
+        subElem = document.createElement('label');
+        subElem.setAttribute('for', view.props.id);
+        subElem.innerHTML = view.props.label;
+        subElem.style.padding = "0 0 0 5px";
+        subElem.classList.add('input-label');
+        
+        delete view.props.label;
+      }
+    }else if (view.type == "editText") {
       elem = document.createElement("input");
       elem.value = view.props.text || "";
       if (view.props.letterSpacing) {
@@ -462,8 +480,12 @@ let inflateView = function (view, parentElement, parentView) {
       elem = document.createElement("div");
 
     newInflated = true;
+
     if (parentElement) {
       parentElement.appendChild(elem);
+      if(subElem){
+        parentElement.appendChild(subElem);
+      }
     }
 
     setAttributes(view.type, elem, view.props, true);
@@ -476,7 +498,7 @@ let inflateView = function (view, parentElement, parentView) {
     for (let i = 0; i < view.children.length; i++) {
       let child = view.children[i];
       if (child) {
-        inflateView(child, elem, view);
+        inflateView(child, elem);
       }
     }
   }
