@@ -126,6 +126,8 @@ function setAttributes(type, elem, props, firstRender) {
       if(props.hasOwnProperty('width')){
         if(props.width == 'match_parent'){
           elem.style.width = '100%';
+        }else if(props.width == 'wrap_content'){
+          // You see below
         }else if(!isNaN(props.width)){
           elem.style.width = props.width + 'px';
         }
@@ -171,13 +173,10 @@ function setAttributes(type, elem, props, firstRender) {
       else{
         elem.style.visibility = '';
 
-        if(type == 'linearLayout')
-          elem.style.display = 'flex';
-        else
-          elem.style.display = '';
+        initializeShow(elem, props, type);  
       }
-    }else if(type == 'linearLayout'){
-      elem.style["display"] = "flex";
+    }else{
+      initializeShow(elem, props, type);
     }
     /* Render global dynamic styles end */
 
@@ -349,6 +348,24 @@ function setAttributes(type, elem, props, firstRender) {
   }
 }
 
+let initializeShow = function(elem, props, type) {
+  if(type == 'linearLayout'){
+    if(props.hasOwnProperty('width') && props.width == 'wrap_content'){
+      elem.style.display = 'inline-flex';
+      elem.style.width = 'auto';
+    }else{
+      elem.style["display"] = "flex";
+    }
+  }else{
+    if(props.hasOwnProperty('width') && props.width == 'wrap_content'){
+      elem.style.display = 'inline-block';
+      elem.style.width = 'auto';
+    }else{
+      elem.style.display = '';
+    }
+  }
+}
+
 let setDimens = function (elem, props, type) {
     if(
       !type || 
@@ -452,26 +469,6 @@ let inflateView = function (view, parentElement, parentView) {
     setAttributes(view.type, elem, view.props, true);
   }
 
-  /*let move = helper.shouldMove(view);
-  let inflateChilds = helper.shouldInfateChilds(view);
-
-  if (!(move || inflateChilds)) {
-    if (newInflated)
-      cb();
-    return elem;
-  }*/
-
-  //helper.cacheDimen(view);
-  
-  //if (move)
-  //  setDimens(elem, view.props, view.type);
-
-  /*if (!inflateChilds) {
-    if (newInflated)
-      cb();
-    return elem;
-  }*/
-
   computeChildDimens(view);
   setComputedStyles(elem, view.props);
 
@@ -501,8 +498,6 @@ let runInUI = function (cmd) {
 
     let view = window.__VIEWS[elem.id];
     view.props = R.merge(view.props, each);
-    //let parentDom = elem.parentNode;
-    //let parentView = window.__VIEWS[parentDom.id];
         
     setAttributes(view.type, elem, view.props, false);
   });
