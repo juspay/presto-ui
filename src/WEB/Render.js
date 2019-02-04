@@ -70,6 +70,60 @@ function popup(elem, props) {
   });
 }
 
+function setGravityStylesForRow(elem, props){
+  if(!props.hasOwnProperty('gravity') || !props.gravity)
+    return;
+
+  switch(props.gravity){
+    case 'center_vertical':
+      elem.style['align-items'] = 'center';
+    break;
+    case 'center_horizontal':
+      elem.style['justify-content'] = 'center';
+    break;
+    case 'center':
+      elem.style['align-items'] = "center";
+      elem.style['justify-content'] = "center";
+    break;
+    case 'left':
+    case 'start':
+      elem.style['align-items'] = 'flex-start';
+      elem.style['justify-content'] = 'flex-start';
+    break;
+    case 'right':
+    case 'end':
+      elem.style['justify-content'] = 'flex-end';
+    break;
+  }
+}
+
+function setGravityStylesForColumn(elem, props){
+  if(!props.hasOwnProperty('gravity') || !props.gravity)
+    return;
+
+  switch(props.gravity){
+    case 'center_vertical':
+      elem.style['justify-content'] = 'center';
+    break;
+    case 'center_horizontal':
+      elem.style['align-items'] = 'center';
+    break;
+    case 'center':
+      elem.style["align-items"] = "center";
+      elem.style["justify-content"] = "center";
+    break;
+    case 'left':
+    case 'start':
+      elem.style['justify-content'] = 'flex-start';
+      elem.style['align-items'] = 'flex-start';
+    break;
+    case 'right':
+    case 'end':
+      elem.style['align-items'] = 'flex-end';
+    break;
+  }
+}
+
 function setComputedStyles(elem, props){
   /* Computed Styles */
   if(props.hasOwnProperty('activeDimen') && props.hasOwnProperty('activeWeight')){
@@ -185,29 +239,11 @@ function setAttributes(type, elem, props, firstRender) {
       elem.style["box-sizing"] = "border-box";
       elem.style["flex-wrap"] = "wrap";
       elem.style["flex-direction"] = props.orientation == "horizontal" || props.orientation == null ? "row" : "column";
-    
-      if(props.hasOwnProperty('gravity')){
-        switch(props.gravity){
-          case "center_vertical":
-            if(props["flex-direction"] == 'row'){
-              elem.style["justify-content"] = "center";
-            }else{
-              elem.style["align-items"] = "center";
-            }
-          break;
-          case "center_horizontal":
-            if(props["flex-direction"] == 'row'){
-              elem.style["align-items"] = "center";
-            }else{
-              elem.style["justify-content"] = "center";
-            }
-          break;
-          case "center":
-            elem.style["align-items"] = "center";
-            elem.style["justify-content"] = "center";
-          break;
-        }
-      }
+      
+      if(elem.style["flex-direction"] == 'row')
+        setGravityStylesForRow(elem, props);
+      else
+        setGravityStylesForColumn(elem, props);  
     }
     /* Render linearLayout specific styles end */
 
