@@ -34,8 +34,13 @@ module.exports = {
 
       if (window.__OS != "ANDROID")
         return Android.Render(ui.render, null);
-      else
-        return Android.Render(JSON.stringify(ui.render), null);
+      else {
+        if(typeof Android.getNewID == "function") {
+          return Android.Render(JSON.stringify(ui.render), null, "false");
+        } else {
+          return Android.Render(JSON.stringify(ui.render), null);
+        }
+      }
     }
 
     if(ui.runInUI) {
