@@ -402,23 +402,6 @@ let initializeShow = function(elem, props, type) {
   }
 }
 
-let setDimens = function (elem, props, type) {
-    if(
-      !type || 
-      (
-        type != 'linearLayout' && 
-        type != 'textView' && 
-        type != 'imageView' &&
-        type != 'horizontalScrollView' &&
-        type != 'scrollView' &&
-        type != 'relativeLayout'
-      )
-    ){
-      elem.style.width = props.w;
-      elem.style.height = props.h;
-    }
-}
-
 let isHorizontalScrollView = function (elem) {
   return elem && elem.classList[0] == "horizontalScrollView";
 }
