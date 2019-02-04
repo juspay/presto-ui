@@ -166,14 +166,14 @@ function setAttributes(type, elem, props, firstRender) {
 
   /* New Style */
     /* Render from global static styles */
-    if(
+    /*if(
       type == "linearLayout" || 
       type == "textView" || 
       type == "imageView" ||
       type == "horizontalScrollView" ||
       type == "scrollView" ||
       type == "relativeLayout"
-    ) {
+    ) {*/
       elem.style.width = 'auto';
       elem.style.height = 'auto';
 
@@ -194,7 +194,7 @@ function setAttributes(type, elem, props, firstRender) {
           elem.style.height = props.height + 'px';
         }
       }
-    }
+    //}
 
     if(props.hasOwnProperty('minWidth') && !isNaN(props.minWidth)){
       elem.style.minWidth = props.minWidth + 'px';
