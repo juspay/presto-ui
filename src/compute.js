@@ -46,10 +46,6 @@ function viewCtxObj(view) {
   return obj;
 }
 
-function isHidden(prop) {
-  return prop.visibility === "gone";
-}
-
 /*
   Returns true if container has a child with match_parent for a
   given dimension (width or height)
@@ -57,8 +53,7 @@ function isHidden(prop) {
 function hasMatchParentChild(childs, dimen) {
   for (let i = 0; i < childs.length; i++) {
     let childProp = childs[i].props;
-    if (isHidden(childProp))
-      continue;
+    
     if (childProp[dimen] && (childProp[dimen] == "match_parent")) {
       return true;
     }
@@ -76,28 +71,12 @@ function hasWeightChild(type, childs) {
 
   for (let i = 0; i < childs.length; i++) {
     let child = childs[i].props;
-    if (isHidden(child))
-      continue;
+    
     if (child.weight && parseInt(child.weight) > 0) {
       return true;
     }
   }
   return false;
-}
-
-function computeBasic(view, ignoreGravity){
-  let viewCtx = viewCtxObj(view);
-  let children = view.children;
-
-  children.forEach(child => {
-    let props = child.props;
-    
-    if (isHidden(props)) {
-      props.h = "0";
-      props.w = "0";
-      return;
-    }
-  });
 }
 
 function computeRelativeLayout(view) {
@@ -106,12 +85,6 @@ function computeRelativeLayout(view) {
 
   children.forEach(child => {
     let props = child.props;
-
-    if (isHidden(props)) {
-      props.h = "0";
-      props.w = "0";
-      return;
-    }
 
     props.absolute = true;
     props.fromTop = 0;
@@ -165,9 +138,6 @@ function computeLinearlayout(view) {
     children.forEach(child => {
       let props = child.props;
 
-      if (isHidden(props))
-        return;
-
       if(props.hasOwnProperty(activeDimen) && props[activeDimen] == 'match_parent'){
         props['activeDimen'] = activeDimen;
         
@@ -190,16 +160,6 @@ function computeLinearlayout(view) {
     });
     /* Iterate Child End */
   }
-
-  children.forEach(child => {
-    let props = child.props;
-    
-    if (isHidden(props)) {
-      props.w = "0";
-      props.h = "0";
-      return;
-    }    
-  });
 } // End Compute LinearLayout
 
 function computeChildDimens(view) {
@@ -214,7 +174,7 @@ function computeChildDimens(view) {
   } else if (view.type == "relativeLayout") {
     computeRelativeLayout(view);
   } else {
-    computeBasic(view, false);
+    // Do Nothing
   }
 
   return view;

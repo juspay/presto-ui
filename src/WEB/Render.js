@@ -411,7 +411,7 @@ let initializeShow = function(elem, props, type) {
       elem.style.display = 'inline-flex';
       elem.style.width = 'auto';
     }else{
-      elem.style["display"] = "flex";
+      elem.style.display = "flex";
     }
   }else{
     if(props.hasOwnProperty('width') && props.width == 'wrap_content'){
