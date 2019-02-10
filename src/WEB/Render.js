@@ -166,36 +166,27 @@ function setAttributes(type, elem, props, firstRender) {
 
   /* New Style */
     /* Render from global static styles */
-    /*if(
-      type == "linearLayout" || 
-      type == "textView" || 
-      type == "imageView" ||
-      type == "horizontalScrollView" ||
-      type == "scrollView" ||
-      type == "relativeLayout"
-    ) {*/
-      elem.style.width = 'auto';
-      elem.style.height = 'auto';
+    elem.style.width = 'auto';
+    elem.style.height = 'auto';
 
-      if(props.hasOwnProperty('width')){
-        if(props.width == 'match_parent'){
-          elem.style.width = '100%';
-        }else if(props.width == 'wrap_content'){
-          // You see below
-        }else if(!isNaN(props.width)){
-          elem.style.width = props.width + 'px';
-        }
+    if(props.hasOwnProperty('width')){
+      if(props.width == 'match_parent'){
+        elem.style.width = '100%';
+      }else if(props.width == 'wrap_content'){
+        // You see below
+      }else if(!isNaN(props.width)){
+        elem.style.width = props.width + 'px';
       }
+    }
+  
+    if(props.hasOwnProperty('height')){
+      if(props.height == 'match_parent'){
+        elem.style.height = '100%';
+      }else if(!isNaN(props.height)){
+        elem.style.height = props.height + 'px';
+      }
+    }
     
-      if(props.hasOwnProperty('height')){
-        if(props.height == 'match_parent'){
-          elem.style.height = '100%';
-        }else if(!isNaN(props.height)){
-          elem.style.height = props.height + 'px';
-        }
-      }
-    //}
-
     if(props.hasOwnProperty('minWidth') && !isNaN(props.minWidth)){
       elem.style.minWidth = props.minWidth + 'px';
     }
