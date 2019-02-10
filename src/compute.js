@@ -35,16 +35,12 @@ function viewCtxObj(view) {
   let obj = {
     w: props.w * 1,
     h: props.h * 1,
-    //x: 0,
-    //y: 0,
     width: props.w * 1,
   };
 
   view.children.forEach(child => {
     child.props.w = child.props.width;
     child.props.h = child.props.height;
-    //child.props.x = 0;
-    //child.props.y = 0;
   });
 
   return obj;
@@ -100,6 +96,37 @@ function computeBasic(view, ignoreGravity){
       props.h = "0";
       props.w = "0";
       return;
+    }
+  });
+}
+
+function computeRelativeLayout(view) {
+  let viewCtx = viewCtxObj(view);
+  let children = view.children;
+
+  children.forEach(child => {
+    let props = child.props;
+
+    if (isHidden(props)) {
+      props.h = "0";
+      props.w = "0";
+      return;
+    }
+
+    props.absolute = true;
+    props.fromTop = 0;
+    props.fromBottom = 'auto';
+    props.fromLeft = 0;
+    props.fromRight = 'auto';
+
+    if(props.hasOwnProperty('alignParentLeft') && props.alignParentLeft){
+      props.fromLeft = 0;
+      props.fromRight = 'auto';
+    }
+
+    if(props.hasOwnProperty('alignParentBottom') && props.alignParentBottom){
+      props.fromTop = 'auto';
+      props.fromBottom = 0;
     }
   });
 }
@@ -184,6 +211,8 @@ function computeChildDimens(view) {
   } else if (view.type == "horizontalScrollView") {
     view.props.orientation = "horizontal";
     computeLinearlayout(view);
+  } else if (view.type == "relativeLayout") {
+    computeRelativeLayout(view);
   } else {
     computeBasic(view, false);
   }
@@ -192,8 +221,5 @@ function computeChildDimens(view) {
 }
 
 module.exports = {
-  computeLinearlayout,
-  computeRelativeLayout: (view) => computeBasic(view, false),
-  computeScrollView: (view) => computeBasic(view, true),
   computeChildDimens
 };

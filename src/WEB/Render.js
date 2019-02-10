@@ -126,6 +126,7 @@ function setGravityStylesForColumn(elem, props){
 
 function setComputedStyles(elem, props){
   /* Computed Styles */
+  // LinearLayout Styles
   if(props.hasOwnProperty('activeDimen') && props.hasOwnProperty('activeWeight')){
     let activeDimen = props.activeDimen;
     let weight = props.activeWeight;
@@ -143,6 +144,39 @@ function setComputedStyles(elem, props){
     }
   }else{
     elem.style.flex = 'none';  
+  }
+  
+  // RelativeLayout Styles
+  if(props.hasOwnProperty('absolute') && props.absolute){
+    elem.style.position = 'absolute';
+
+    if(props.hasOwnProperty("fromTop")){
+      if(isNaN(props.fromTop))
+        elem.style.top = props.fromTop;
+      else
+        elem.style.top = props.fromTop + 'px';
+    }
+
+    if(props.hasOwnProperty("fromBottom")){
+      if(isNaN(props.fromBottom))
+        elem.style.bottom = props.fromBottom;
+      else
+        elem.style.bottom = props.fromBottom + 'px';
+    }
+
+    if(props.hasOwnProperty("fromLeft")){
+      if(isNaN(props.fromLeft))
+        elem.style.left = props.fromLeft;
+      else
+        elem.style.left = props.fromLeft + 'px';
+    }
+
+    if(props.hasOwnProperty("fromRight")){
+      if(isNaN(props.fromRight))
+        elem.style.right = props.fromRight;
+      else
+        elem.style.right = props.fromRight + 'px';
+    }
   }
   /* Computed Styles End */
 }
@@ -165,7 +199,7 @@ function setAttributes(type, elem, props, firstRender) {
   elem.style.transition = props.transition;
 
   /* New Style */
-    /* Render from global static styles */
+    /* Render from global styles */
     elem.style.width = 'auto';
     elem.style.height = 'auto';
 
@@ -206,9 +240,7 @@ function setAttributes(type, elem, props, firstRender) {
   
       elem.style['margin'] = margin[1] + 'px ' + margin[2] + 'px ' + margin[3] + 'px ' + margin[0] + 'px';
     }
-    /* Render from global static styles end */
-
-    /* Render global dynamic styles */
+    
     if(props.hasOwnProperty('visibility')){
       let visibility = props.visibility;
       if(visibility == 'invisible')
@@ -223,9 +255,17 @@ function setAttributes(type, elem, props, firstRender) {
     }else{
       initializeShow(elem, props, type);
     }
-    /* Render global dynamic styles end */
+    /* Render global styles end */
 
-    /* Render linearLayout specific styles */
+    let scrollBarX = true;
+    let scrollBarY = true;
+
+    if(props.hasOwnProperty('scrollBarX'))
+      scrollBarX = props.scrollBarX;
+    if(props.hasOwnProperty('scrollBarY'))
+      scrollBarY = props.scrollBarY;
+
+    /* Render type specific styles */
     if(type == 'linearLayout'){
       elem.style["box-sizing"] = "border-box";
       elem.style["flex-wrap"] = "wrap";
@@ -235,19 +275,7 @@ function setAttributes(type, elem, props, firstRender) {
         setGravityStylesForRow(elem, props);
       else
         setGravityStylesForColumn(elem, props);  
-    }
-    /* Render linearLayout specific styles end */
-
-    /* Render scroll related styles */
-    let scrollBarX = true;
-    let scrollBarY = true;
-
-    if(props.hasOwnProperty('scrollBarX'))
-      scrollBarX = props.scrollBarX;
-    if(props.hasOwnProperty('scrollBarY'))
-      scrollBarY = props.scrollBarY;
-
-    if (type == "horizontalScrollView") {
+    } else if (type == "horizontalScrollView") {
       elem.style.overflowX = "auto";
       elem.style.overflowY = "hidden";
 
@@ -267,8 +295,10 @@ function setAttributes(type, elem, props, firstRender) {
         elem.style.overflowX = 'hidden';
       if(!scrollBarY)
         elem.style.overflowY = 'hidden';
+    } else if(type == 'relativeLayout') {
+      elem.style.position = 'relative';
     }
-    /* Render scroll related styles end */ 
+    /* Render type specific styles end */
   /* New Style End */
   
   for (let key in props) {
