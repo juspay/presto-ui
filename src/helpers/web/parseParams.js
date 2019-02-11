@@ -125,11 +125,11 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "backgroundColor") {
-    config.style["background-color"] = parseColors(config.backgroundColor);
+    //config.style["background-color"] = parseColors(config.backgroundColor);
+    config.style["background-color"] = config.backgroundColor;
   }
 
   if (key == "background") {
-    //config.style.background = parseColors(config.background);
     config.style.background = config.background;
   }
 
