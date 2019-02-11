@@ -124,8 +124,13 @@ function parseLayoutProps(type, config, key) {
     config.attributes.src = imageUrl;
   }
 
+  if (key == "backgroundColor") {
+    config.style["background-color"] = parseColors(config.backgroundColor);
+  }
+
   if (key == "background") {
-    config.style.background = parseColors(config.background);
+    //config.style.background = parseColors(config.background);
+    config.style.background = config.background;
   }
 
   if (key == "color") {

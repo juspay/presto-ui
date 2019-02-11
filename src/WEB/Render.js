@@ -182,6 +182,11 @@ function setComputedStyles(elem, props){
 }
 
 function setAttributes(type, elem, props, firstRender) {
+  /*if(props.id == '847' || props.id == '851' || props.id == '855'){
+    console.log(props.id);
+    console.log('render - ' + firstRender);
+  }*/
+
   elem.className = type;
   
   let afterTransition = (x) => {
