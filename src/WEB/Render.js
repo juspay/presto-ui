@@ -214,7 +214,10 @@ function setAttributes(type, elem, props, firstRender) {
       }else if(props.width == 'wrap_content'){
         // You see below
       }else if(!isNaN(props.width)){
-        elem.style.width = props.width + 'px';
+        if(props.hasOwnProperty('percentWidth') && props.percentWidth)
+          elem.style.width = props.width + '%';
+        else
+          elem.style.width = props.width + 'px';
       }
     }
   
@@ -222,7 +225,10 @@ function setAttributes(type, elem, props, firstRender) {
       if(props.height == 'match_parent'){
         elem.style.height = '100%';
       }else if(!isNaN(props.height)){
-        elem.style.height = props.height + 'px';
+        if(props.hasOwnProperty('percentHeight') && props.percentHeight)
+          elem.style.height = props.height + '%';
+        else
+          elem.style.height = props.height + 'px';
       }
     }
     
