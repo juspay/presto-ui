@@ -182,11 +182,6 @@ function setComputedStyles(elem, props){
 }
 
 function setAttributes(type, elem, props, firstRender) {
-  /*if(props.id == '847' || props.id == '851' || props.id == '855'){
-    console.log(props.id);
-    console.log('render - ' + firstRender);
-  }*/
-
   elem.className = type;
   
   let afterTransition = (x) => {
@@ -445,7 +440,7 @@ let isScrollView = function (elem) {
 // Creates the DOM element if it has not been already inflated
 // View: Object of ReactDOM, {type, props, children}
 // parentElement: DOM Object
-let inflateView = function (view, parentElement) {
+let inflateView = function (view, parentElement, siblingView) {
   let elem = document.getElementById(view.props.id);
   let subElem = null;
   let newInflated = false;
@@ -533,9 +528,27 @@ let inflateView = function (view, parentElement) {
     newInflated = true;
 
     if (parentElement) {
-      parentElement.appendChild(elem);
-      if(subElem){
-        parentElement.appendChild(subElem);
+      let siblingElement = siblingView?document.getElementById(siblingView.props.id):null;
+
+      if(siblingElement && siblingElement != undefined){
+        if(parentElement == siblingElement){ // Prepend
+          if(subElem){
+            parentElement.prepend(subElem);
+          }
+          parentElement.prepend(elem);
+        }else{ // Insert in specified position
+          let nextSiblingElement = siblingElement.nextSibling;
+
+          parentElement.insertBefore(elem, nextSiblingElement);
+          if(subElem){
+            parentElement.insertBefore(subElem, nextSiblingElement);
+          }
+        }
+      }else{
+        parentElement.appendChild(elem);
+        if(subElem){
+          parentElement.appendChild(subElem);
+        }
       }
     }
 
@@ -547,9 +560,11 @@ let inflateView = function (view, parentElement) {
 
   if(view.hasOwnProperty('children') && view.children.length > 0){
     for (let i = 0; i < view.children.length; i++) {
-      let child = view.children[i];
-      if (child) {
-        inflateView(child, elem);
+      if (view.children[i]) {
+        if(i != 0)
+          inflateView(view.children[i], elem, view.children[i-1]);
+        else
+          inflateView(view.children[i], elem, view);
       }
     }
   }
