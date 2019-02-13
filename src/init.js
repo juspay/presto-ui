@@ -65,6 +65,15 @@ if (!window.__ENV) {
 window.callJSCallback = require("./helpers").android.callbackMapper.callJSCallback;
 window.__WIDTH = window.__DEVICE_DETAILS.screen_width;
 window.__HEIGHT = window.__DEVICE_DETAILS.screen_height;
+
+/* Modal */
+window.__STYLE_ID = 'style_' + Math.random().toString(36).substr(2, 9);
+window.__CONTENTMODAL_CLASS = 'modal_' + Math.random().toString(36).substr(2, 9);
+window.__OPENMODAL_CLASS = 'modal-open_' + Math.random().toString(36).substr(2, 9);
+window.__BACKDROPMODAL_CLASS = 'modal-backdrop_' + Math.random().toString(36).substr(2, 9);
+window.__SHOWNMODAL_CLASS = 'modal-shown_' + Math.random().toString(36).substr(2, 9);
+/* Modal End */
+
 window.__ID = 1;
 window.__NODE_ID = 1;
 window.__SCREEN_INDEX = -1;
@@ -104,6 +113,25 @@ window.updateLanguage = (lang) => {
   window.LANGUAGE = lang;
   JBridge.setKey("languagePref",lang);
 };
+
+window.onclick = (event) => {
+  if(window.__OS != "WEB")
+    return;
+
+  if(event.target && event.target.classList.contains(window.__BACKDROPMODAL_CLASS)){
+    document.body.classList.remove(window.__OPENMODAL_CLASS);
+    event.target.classList.remove(window.__SHOWNMODAL_CLASS);
+
+    let id = event.target.id;
+    id = id.replace(window.__BACKDROPMODAL_CLASS + '_', '');
+    
+    let view = __VIEWS[id];
+    if (view && view.props.onDismiss && typeof view.props.onDismiss ==
+      "function") {
+      view.props.onDismiss();
+    }
+  }
+}
 
 window.onresize = (iosData) => {
   return;

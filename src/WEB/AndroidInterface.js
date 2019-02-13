@@ -60,6 +60,30 @@ module.exports = {
   },
 
   Render: function (view, cb) {
+    /* Global Style Tag */
+    let style_id = window.__STYLE_ID;
+    
+    let styleElem = document.getElementById(style_id);
+    if(!styleElem || styleElem == undefined){
+      let css = '';
+      css += '.' + window.__OPENMODAL_CLASS + '{overflow: hidden !important;}';
+      css += '.' + window.__SHOWNMODAL_CLASS + '{display: block !important; opacity: 1 !important;}';
+      css += '.' + window.__CONTENTMODAL_CLASS + '{position: relative !important; pointer-events: none !important; width: 100% !important; min-height: 100% !important; display: flex !important;}';
+
+      styleElem = document.createElement('style');
+      styleElem.setAttribute('id', style_id);
+      styleElem.type = 'text/css';
+      
+      if(styleElem.styleSheet){
+        styleElem.styleSheet.cssText = css;
+      }else{
+        styleElem.appendChild(document.createTextNode(css));
+      }
+
+      document.head.appendChild(styleElem);
+    }
+    /* Global Style Tag End */
+    
     var parentElement = document.getElementById("content");
     let parentView = {
       type: "linearLayout",

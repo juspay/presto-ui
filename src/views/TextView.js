@@ -26,7 +26,6 @@
 var dom = require('../doms');
 var View = require('../baseView');
 
-
 class TextView extends View {
   constructor(props, children) {
     super(props, children);

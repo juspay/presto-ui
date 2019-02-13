@@ -182,6 +182,9 @@ function setComputedStyles(elem, props){
 }
 
 function setAttributes(type, elem, props, firstRender) {
+  if(type == 'modal')
+    return;
+
   elem.className = type;
   
   let afterTransition = (x) => {
@@ -437,10 +440,85 @@ let isScrollView = function (elem) {
   return elem && elem.classList[0] == "scrollView";
 }
 
+// Creates the Modal element if it has not been already inflated
+let inflateModal = function (view) {
+  /* Modal Wrapper */
+  let elem = document.getElementById(view.props.id);
+  if(!elem || elem == undefined){
+    elem = document.createElement('div');
+    elem.setAttribute('id', view.props.id);
+    elem.classList.add(window.__CONTENTMODAL_CLASS);
+
+    setGravityStylesForRow(elem, view.props);
+  }
+  /* Modal Wrapper End */
+
+  /* BackDrop */
+  let backdropElem = document.getElementById(window.__BACKDROPMODAL_CLASS + '_' + view.props.id);
+  if(!backdropElem || backdropElem == undefined){
+    backdropElem = document.createElement('div');
+    backdropElem.setAttribute('id', window.__BACKDROPMODAL_CLASS + '_' + view.props.id);
+    backdropElem.classList.add(window.__BACKDROPMODAL_CLASS);
+    
+    backdropElem.style.position = 'fixed';
+    backdropElem.style.top = 0;
+    backdropElem.style.right = 0;
+    backdropElem.style.bottom = 0;
+    backdropElem.style.left = 0;
+    backdropElem.style['z-index'] = 9999;
+    backdropElem.style.overflowX = 'hidden';
+    backdropElem.style.overflowY = 'auto';
+    backdropElem.style.display = 'none';
+    backdropElem.style.opacity = 0;
+
+    if(view.props.hasOwnProperty('transparent') && view.props.transparent){
+      backdropElem.style.background = 'transparent';
+    }else{
+      backdropElem.style.background = 'rgba(0, 0, 0, 0.5)';
+    }
+
+    backdropElem.appendChild(elem);
+    document.body.appendChild(backdropElem);
+  }
+  /* BackDrop End */
+
+  /* Dynamic Styles */
+  if(view.props.hasOwnProperty('modalVisible') && view.props.modalVisible){
+    backdropElem.classList.add(window.__SHOWNMODAL_CLASS);
+    document.body.classList.add(window.__OPENMODAL_CLASS);
+
+    if(view.props.onShow && typeof view.props.onShow ==
+      "function"){
+    }
+  }else{
+    backdropElem.classList.remove(window.__SHOWNMODAL_CLASS);
+    document.body.classList.remove(window.__OPENMODAL_CLASS);
+  }
+  /* Dynamic Styles End */
+
+  if(view.hasOwnProperty('children') && view.children.length > 0){
+    for (let i = 0; i < view.children.length; i++) {
+      if (view.children[i]) {
+        view.children[i].props.style.pointerEvents = 'auto';
+        if(i != 0)
+          inflateView(view.children[i], elem, view.children[i-1]);
+        else
+          inflateView(view.children[i], elem, view);
+      }
+    }
+  }
+
+  return backdropElem;
+}
+
 // Creates the DOM element if it has not been already inflated
 // View: Object of ReactDOM, {type, props, children}
 // parentElement: DOM Object
 let inflateView = function (view, parentElement, siblingView) {
+  if(view.type == 'modal'){
+    return inflateModal(view);
+  }
+
   let elem = document.getElementById(view.props.id);
   let subElem = null;
   let newInflated = false;

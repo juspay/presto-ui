@@ -43,4 +43,5 @@ module.exports = {
   ViewPager: require("./ViewPager"),
   ViewWidget: require("./ViewWidget"),
   WebView: require("./WebView"),
+  Modal: require("./Modal")
 }
