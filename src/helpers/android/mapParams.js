@@ -463,7 +463,8 @@ var map = {
       numeric: '2',
       numericPassword: '18',
       disabled: '0',
-      text: '1'
+      text: '1',
+      multiText: '3'
     }],
     fnName: 'setInputType',
     inVokedIn: 'VIEW',

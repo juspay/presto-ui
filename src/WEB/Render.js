@@ -399,6 +399,7 @@ function setAttributes(type, elem, props, firstRender) {
           }
         };
       }
+
       if (!(props.label && eventType == "focus")) {
         elem['on' + eventType] = function (e) {
           e.stopPropagation();eventType == "input" ? cb(e.target.value) : cb(e);
@@ -578,11 +579,21 @@ let inflateView = function (view, parentElement, siblingView, callFrom) {
         delete view.props.label;
       }
     }else if (view.type == "editText") {
-      elem = document.createElement("input");
+      if(view.props.hasOwnProperty('inputType') && view.props.inputType == 'multiText'){
+        elem = document.createElement("textarea");
+        elem.style.border = 'none';
+        elem.style.resize = 'none';
+        elem.style.outline = 'none';
+      }else{
+        elem = document.createElement("input");
+      }
+
       elem.value = view.props.text || "";
+
       if (view.props.letterSpacing) {
         elem["style"]["letter-spacing"] = view.props.letterSpacing;
       }
+
       if (view.props.label) {
         var inputView = elem;
         inputView.style.width = '100%';
