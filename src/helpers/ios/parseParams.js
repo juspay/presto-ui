@@ -943,6 +943,40 @@ function this_setSeparatorRepeat(value) {
   };
 }
 
+
+function this_setSwipeCallback(value) {
+    return {
+        "return": "false",
+        "fromStore": getSetType ? "false" : "true",
+        "storeKey": "view" + window.__VIEW_INDEX,
+        "invokeOn": getSetType ? "this" : "MJPTableView",
+        "methodName": "setSwipeCallback:",
+        "values": [{ "name": value, type: "s" }]
+    };
+}
+
+function this_setCloseSwipe(value) {
+    return {
+        "return": "false",
+        "fromStore": getSetType ? "false" : "true",
+        "storeKey": "view" + window.__VIEW_INDEX,
+        "invokeOn": getSetType ? "this" : "MJPTableView",
+        "methodName": "closeSwipe:",
+        "values": [{ "name": value ? "true" : "false", type: "s" }]
+    };
+}
+
+function this_setEnableSwype(value) {
+    return {
+        "return": "false",
+        "fromStore": getSetType ? "false" : "true",
+        "storeKey": "view" + window.__VIEW_INDEX,
+        "invokeOn": getSetType ? "this" : "MJPTableView",
+        "methodName": "setSwipeEnabled:",
+        "values": [{ "name": value ? "true" : "false", type: "s" }]
+    };
+}
+
 function UIView_bounds() {
   window.__RECT_INDEX++;
 
@@ -1485,6 +1519,18 @@ module.exports = function(type, config, _getSetType) {
 
   if(config.cursorPosition) {
     config.methods.push(self_setCursorPosition(cS(config.id), cS(config.cursorPosition)));
+  }
+
+  if (config.onSwipe && typeof config.onSwipe === "function") {
+      config.methods.push(this_setSwipeCallback(callbackMapper.map(config.onSwipe)));
+  }
+
+  if (config.hasOwnProperty("closeSwipe")) {
+      config.methods.push(this_setCloseSwipe(config.closeSwipe));
+  }
+
+  if (config.hasOwnProperty("swypeEnabled")) {
+    config.methods.push(this_setEnableSwype(config.swypeEnabled));
   }
 
   config.currChildOffset = 0;
