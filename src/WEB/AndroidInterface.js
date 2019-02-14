@@ -41,11 +41,10 @@ module.exports = {
       return;
 
     Render.runInUI(cmd);
-
-    this.recompute();
+    this.recompute('runInUI');
   },
 
-  recompute: function (view, cb) {
+  /*recompute: function (view, cb) {
     var parentElement = document.getElementById("content");
     let parentView = {
       type: "linearLayout",
@@ -57,9 +56,9 @@ module.exports = {
     };
     Render.computeChildDimens(parentView);
     Render.inflateView(view, parentElement);
-  },
+  },*/
 
-  Render: function (view, cb) {
+  Render: function (view, cb, callFrom) {
     /* Global Style Tag */
     let style_id = window.__STYLE_ID;
     
@@ -67,8 +66,17 @@ module.exports = {
     if(!styleElem || styleElem == undefined){
       let css = '';
       css += '.' + window.__OPENMODAL_CLASS + '{overflow: hidden !important;}';
-      css += '.' + window.__SHOWNMODAL_CLASS + '{display: block !important; opacity: 1 !important;}';
+      css += '.' + window.__BACKDROPMODAL_CLASS + '{position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 9999; overflow-x: hidden; overflow-y: auto; visibility: hidden; display: block;}';
+      css += '.' + window.__BACKDROPMODAL_CLASS + '.' + window.__SHOWNMODAL_CLASS + '{visibility: visible;}';
       css += '.' + window.__CONTENTMODAL_CLASS + '{position: relative !important; pointer-events: none !important; width: 100% !important; min-height: 100% !important; display: flex !important;}';
+      css += '.' + window.__FADEMODAL_CLASS + '{opacity: 0; transition: opacity .15s linear;}';
+      css += '.' + window.__FADEMODAL_CLASS + '.' + window.__SHOWNMODAL_CLASS + '{opacity: 1;}';
+      css += '.' + window.__FADEMODAL_CLASS + ' .' + window.__CONTENTMODAL_CLASS + '{transition: .3s ease-out;}';
+      
+      css += '.' + window.__SLIDEMODAL_CLASS + '{opacity: 0; transition: opacity .15s linear;}';
+      css += '.' + window.__SLIDEMODAL_CLASS + '.' + window.__SHOWNMODAL_CLASS + '{opacity: 1;}';
+      css += '.' + window.__SLIDEMODAL_CLASS + ' .' + window.__CONTENTMODAL_CLASS + '{transform: translate(0, -25%); transition: .3s ease-out;}';
+      css += '.' + window.__SLIDEMODAL_CLASS + '.' + window.__SHOWNMODAL_CLASS + ' .' + window.__CONTENTMODAL_CLASS + '{transform: translate(0, 0);}';
 
       styleElem = document.createElement('style');
       styleElem.setAttribute('id', style_id);
@@ -95,7 +103,7 @@ module.exports = {
     };
 
     Render.computeChildDimens(parentView);
-    const elem = Render.inflateView(view, parentElement);
+    const elem = Render.inflateView(view, parentElement, null, callFrom);
 
     if (cb)
       window.callUICallback(cb);
@@ -144,7 +152,7 @@ module.exports = {
     }
 
     parentView.children.splice(index, 0, view);
-    this.recompute();
+    this.recompute('addViewToParent');
 
     if (cb)
       window.callUICallback(cb);
@@ -160,7 +168,7 @@ module.exports = {
     helper.clearViewExternals(view);
     parent.children.splice(idx, 1);
     viewElem.remove();
-    this.recompute();
+    this.recompute('removeView');
   },
 
   replaceView: function (view, id) {
@@ -185,7 +193,7 @@ module.exports = {
 
     oldview.props = view.props;
     oldview.children = [];
-    this.recompute();
+    this.recompute('replaceView');
 
     oldview.children = oldchildren;
     viewElem = document.getElementById(id);
@@ -194,13 +202,13 @@ module.exports = {
         viewElem.appendChild(each);
       });
     }
-    this.recompute();
+    this.recompute('replaceView');
   },
 
-  recompute: function () {
+  recompute: function (callFrom) {
     const rootnode = document.getElementById('content');
     const child = rootnode.firstElementChild;
     const rootview = window.__VIEWS[child.id];
-    this.Render(rootview);
+    this.Render(rootview, null, callFrom);
   }
 };

@@ -441,10 +441,14 @@ let isScrollView = function (elem) {
 }
 
 // Creates the Modal element if it has not been already inflated
-let inflateModal = function (view) {
+let inflateModal = function (view, callFrom) {
+  let newInflated = false;
+
   /* Modal Wrapper */
   let elem = document.getElementById(view.props.id);
   if(!elem || elem == undefined){
+    newInflated = true;
+
     elem = document.createElement('div');
     elem.setAttribute('id', view.props.id);
     elem.classList.add(window.__CONTENTMODAL_CLASS);
@@ -460,16 +464,15 @@ let inflateModal = function (view) {
     backdropElem.setAttribute('id', window.__BACKDROPMODAL_CLASS + '_' + view.props.id);
     backdropElem.classList.add(window.__BACKDROPMODAL_CLASS);
     
-    backdropElem.style.position = 'fixed';
-    backdropElem.style.top = 0;
-    backdropElem.style.right = 0;
-    backdropElem.style.bottom = 0;
-    backdropElem.style.left = 0;
-    backdropElem.style['z-index'] = 9999;
-    backdropElem.style.overflowX = 'hidden';
-    backdropElem.style.overflowY = 'auto';
-    backdropElem.style.display = 'none';
-    backdropElem.style.opacity = 0;
+    if(view.props.hasOwnProperty('animationType') && view.props.animationType != 'none'){
+      let animationType = view.props.animationType;
+      
+      if(animationType == 'fade'){
+        backdropElem.classList.add(window.__FADEMODAL_CLASS);
+      }else if(animationType == 'slide'){
+        backdropElem.classList.add(window.__SLIDEMODAL_CLASS);
+      }
+    }
 
     if(view.props.hasOwnProperty('transparent') && view.props.transparent){
       backdropElem.style.background = 'transparent';
@@ -483,27 +486,39 @@ let inflateModal = function (view) {
   /* BackDrop End */
 
   /* Dynamic Styles */
-  if(view.props.hasOwnProperty('modalVisible') && view.props.modalVisible){
+  if(view.props.hasOwnProperty('modalVisibility') && view.props.modalVisibility){
     backdropElem.classList.add(window.__SHOWNMODAL_CLASS);
     document.body.classList.add(window.__OPENMODAL_CLASS);
 
+    let modalView = null;
+    if(window.__MODAL_VIEWS[view.props.id]){
+      modalView = JSON.parse(window.__MODAL_VIEWS[view.props.id]);
+    }
+
     if(view.props.onShow && typeof view.props.onShow ==
       "function"){
+      if(newInflated || (modalView && modalView.props.modalVisibility != view.props.modalVisibility)){
+        view.props.onShow();
+      }
     }
   }else{
+    view.props.modalVisibility = false;
     backdropElem.classList.remove(window.__SHOWNMODAL_CLASS);
     document.body.classList.remove(window.__OPENMODAL_CLASS);
   }
   /* Dynamic Styles End */
 
+  view.props.time = Math.random();
+  window.__MODAL_VIEWS[view.props.id] = JSON.stringify(view);
+  
   if(view.hasOwnProperty('children') && view.children.length > 0){
     for (let i = 0; i < view.children.length; i++) {
       if (view.children[i]) {
         view.children[i].props.style.pointerEvents = 'auto';
         if(i != 0)
-          inflateView(view.children[i], elem, view.children[i-1]);
+          inflateView(view.children[i], elem, view.children[i-1], callFrom);
         else
-          inflateView(view.children[i], elem, view);
+          inflateView(view.children[i], elem, view, callFrom);
       }
     }
   }
@@ -514,9 +529,9 @@ let inflateModal = function (view) {
 // Creates the DOM element if it has not been already inflated
 // View: Object of ReactDOM, {type, props, children}
 // parentElement: DOM Object
-let inflateView = function (view, parentElement, siblingView) {
+let inflateView = function (view, parentElement, siblingView, callFrom) {
   if(view.type == 'modal'){
-    return inflateModal(view);
+    return inflateModal(view, callFrom);
   }
 
   let elem = document.getElementById(view.props.id);
@@ -640,9 +655,9 @@ let inflateView = function (view, parentElement, siblingView) {
     for (let i = 0; i < view.children.length; i++) {
       if (view.children[i]) {
         if(i != 0)
-          inflateView(view.children[i], elem, view.children[i-1]);
+          inflateView(view.children[i], elem, view.children[i-1], callFrom);
         else
-          inflateView(view.children[i], elem, view);
+          inflateView(view.children[i], elem, view, callFrom);
       }
     }
   }

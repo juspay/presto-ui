@@ -68,10 +68,14 @@ window.__HEIGHT = window.__DEVICE_DETAILS.screen_height;
 
 /* Modal */
 window.__STYLE_ID = 'style_' + Math.random().toString(36).substr(2, 9);
+window.__MODAL_VIEWS = {};
 window.__CONTENTMODAL_CLASS = 'modal_' + Math.random().toString(36).substr(2, 9);
 window.__OPENMODAL_CLASS = 'modal-open_' + Math.random().toString(36).substr(2, 9);
 window.__BACKDROPMODAL_CLASS = 'modal-backdrop_' + Math.random().toString(36).substr(2, 9);
 window.__SHOWNMODAL_CLASS = 'modal-shown_' + Math.random().toString(36).substr(2, 9);
+
+window.__FADEMODAL_CLASS = 'modal-fade_' + Math.random().toString(36).substr(2, 9);
+window.__SLIDEMODAL_CLASS = 'modal-slide_' + Math.random().toString(36).substr(2, 9);
 /* Modal End */
 
 window.__ID = 1;
