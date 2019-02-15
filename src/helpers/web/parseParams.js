@@ -115,7 +115,7 @@ function parseLayoutProps(type, config, key) {
     if(temp && temp.length > 0)
       ext = temp[temp.length - 1];
     
-    let exts = ["jpeg", "jpg", "png", "bmp", "svg"];
+    let exts = ["jpeg", "jpg", "png", "bmp", "svg", "gif"];
     ext = ext.toLowerCase();
 
     if(!exts.includes(ext))
