@@ -77,8 +77,10 @@ function setGravityStylesForRow(elem, props){
   switch(props.gravity){
     case 'center_vertical':
       elem.style['align-items'] = 'center';
+      elem.style['justify-content'] = 'flex-start';
     break;
     case 'center_horizontal':
+      elem.style['align-items'] = 'flex-start';
       elem.style['justify-content'] = 'center';
     break;
     case 'center':
@@ -92,6 +94,7 @@ function setGravityStylesForRow(elem, props){
     break;
     case 'right':
     case 'end':
+      elem.style['align-items'] = 'flex-start';
       elem.style['justify-content'] = 'flex-end';
     break;
   }
@@ -103,10 +106,12 @@ function setGravityStylesForColumn(elem, props){
 
   switch(props.gravity){
     case 'center_vertical':
+      elem.style['align-items'] = 'flex-start';
       elem.style['justify-content'] = 'center';
     break;
     case 'center_horizontal':
       elem.style['align-items'] = 'center';
+      elem.style['justify-content'] = 'flex-start';
     break;
     case 'center':
       elem.style["align-items"] = "center";
@@ -120,6 +125,7 @@ function setGravityStylesForColumn(elem, props){
     case 'right':
     case 'end':
       elem.style['align-items'] = 'flex-end';
+      elem.style['justify-content'] = 'flex-start';
     break;
   }
 }
