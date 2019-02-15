@@ -72,7 +72,7 @@ function popup(elem, props) {
 
 function setGravityStylesForRow(elem, props){
   if(!props.hasOwnProperty('gravity') || !props.gravity)
-    return;
+    props.gravity = '';
 
   switch(props.gravity){
     case 'center_vertical':
@@ -97,12 +97,16 @@ function setGravityStylesForRow(elem, props){
       elem.style['align-items'] = 'flex-start';
       elem.style['justify-content'] = 'flex-end';
     break;
+    default:
+      elem.style['align-items'] = 'flex-start';
+      elem.style['justify-content'] = 'flex-start';
+    break;
   }
 }
 
 function setGravityStylesForColumn(elem, props){
   if(!props.hasOwnProperty('gravity') || !props.gravity)
-    return;
+    props.gravity = '';
 
   switch(props.gravity){
     case 'center_vertical':
@@ -125,6 +129,10 @@ function setGravityStylesForColumn(elem, props){
     case 'right':
     case 'end':
       elem.style['align-items'] = 'flex-end';
+      elem.style['justify-content'] = 'flex-start';
+    break;
+    default:
+      elem.style['align-items'] = 'flex-start';
       elem.style['justify-content'] = 'flex-start';
     break;
   }
