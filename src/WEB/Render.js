@@ -481,6 +481,12 @@ let inflateModal = function (view, callFrom) {
       }
     }
 
+    if(view.props.hasOwnProperty('closeOnBackdrop') && !view.props.closeOnBackdrop){
+      backdropElem.classList.add(window.__DISABLEDBACKDROP_CLASS);
+    }else{
+      backdropElem.classList.remove(window.__DISABLEDBACKDROP_CLASS);
+    }
+
     if(view.props.hasOwnProperty('transparent') && view.props.transparent){
       backdropElem.style.background = 'transparent';
     }else{

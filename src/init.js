@@ -72,6 +72,7 @@ window.__MODAL_VIEWS = {};
 window.__CONTENTMODAL_CLASS = 'modal_' + Math.random().toString(36).substr(2, 9);
 window.__OPENMODAL_CLASS = 'modal-open_' + Math.random().toString(36).substr(2, 9);
 window.__BACKDROPMODAL_CLASS = 'modal-backdrop_' + Math.random().toString(36).substr(2, 9);
+window.__DISABLEDBACKDROP_CLASS = 'modal-backdrop-disabled_' + Math.random().toString(36).substr(2, 9);
 window.__SHOWNMODAL_CLASS = 'modal-shown_' + Math.random().toString(36).substr(2, 9);
 
 window.__FADEMODAL_CLASS = 'modal-fade_' + Math.random().toString(36).substr(2, 9);
@@ -122,7 +123,10 @@ window.onclick = (event) => {
   if(window.__OS != "WEB")
     return;
 
-  if(event.target && event.target.classList.contains(window.__BACKDROPMODAL_CLASS)){
+  if(event.target 
+    && event.target.classList.contains(window.__BACKDROPMODAL_CLASS)
+    && !event.target.classList.contains(window.__DISABLEDBACKDROP_CLASS)
+  ){
     document.body.classList.remove(window.__OPENMODAL_CLASS);
     event.target.classList.remove(window.__SHOWNMODAL_CLASS);
 
