@@ -106,6 +106,8 @@ function parseLayoutProps(type, config, key) {
 
   if (key == "textSize")
     config.style.fontSize = config.textSize;
+  if (key == 'fontSize')
+    config.style.fontSize = config.fontSize;
 
   if (key == "imageUrl"){
     let imageUrl = config.imageUrl;
@@ -153,6 +155,27 @@ function parseLayoutProps(type, config, key) {
     config.style.fontFamily = config.fontFamily;
   }
 
+  if (key == 'typeface') {
+    switch(config.typeface){
+      case 'normal':
+        config.style.fontWeight = 400;
+      break;
+      case 'bold':
+        config.style.fontWeight = 700;
+      break;
+      case 'italic':
+        config.style.fontStyle = 'italic';
+      break;
+      case 'bold_italic':
+        config.style.fontWeight = 700;
+        config.style.fontStyle = 'italic';
+      break;
+      case 'underline':
+        config.style.textDecoration = 'underline';
+      break;
+    }
+  }
+
   if (key == "fontStyle") {
     let match = config.fontStyle.match(/[/-]/);
     let fontName = match ? config.fontStyle.slice(0, match.index) : config.fontStyle;
@@ -168,20 +191,23 @@ function parseLayoutProps(type, config, key) {
     if (type.indexOf('italic') != -1)
       config.style.fontStyle = 'italic';
 
-    if (type.indexOf('extralight') != -1)
-      type = '200';
-    else if (type.indexOf('light') != -1)
-      type = '300';
-    else if (type.indexOf('regular') != -1 || type.indexOf('book') != -1)
-      type = '400';
-    else if (type.indexOf('semibold') != -1 || type.indexOf('medium') != -1)
-      type = '500';
-    else if (type.indexOf('bold') != -1 || type.indexOf('heavy') != -1)
-      type = '700';
-    else if (type.indexOf('black') != -1)
-      type = '900';
+    let fontWeight = 0;
 
-    config.style.fontWeight = type;
+    if (type.indexOf('extralight') != -1)
+      fontWeight = 200;
+    else if (type.indexOf('light') != -1)
+      fontWeight = 300;
+    else if (type.indexOf('regular') != -1 || type.indexOf('book') != -1)
+      fontWeight = 400;
+    else if (type.indexOf('semibold') != -1 || type.indexOf('medium') != -1)
+      fontWeight = 500;
+    else if (type.indexOf('bold') != -1 || type.indexOf('heavy') != -1)
+      fontWeight = 700;
+    else if (type.indexOf('black') != -1)
+      fontWeight = 900;
+
+    if(fontWeight > 0)
+      config.style.fontWeight = fontWeight;
   }
 
   if (key == "stroke") {
