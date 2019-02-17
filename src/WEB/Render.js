@@ -351,7 +351,7 @@ function setAttributes(type, elem, props, firstRender) {
       });
     } else if (props[key] && typeof props[key] == "function") {
       var eventType = key.substring(2, key.length).toLowerCase();
-      var cb = props[key];
+      var elemCB = props[key];
       elem.style.userSelect = 'none';
       if (eventType == "change") {
         eventType = "input";
@@ -409,14 +409,14 @@ function setAttributes(type, elem, props, firstRender) {
           elem.parentNode.classList.add('focused');
           if (eventType == "focus") {
             e.stopPropagation();
-            cb(e);
+            elemCB(e);
           }
         };
       }
 
       if (!(props.label && eventType == "focus")) {
         elem['on' + eventType] = function (e) {
-          e.stopPropagation();eventType == "input" ? cb(e.target.value) : cb(e);
+          e.stopPropagation();eventType == "input" ? elemCB(e.target.value) : elemCB(e);
         };
       }
     }
@@ -453,6 +453,47 @@ let isHorizontalScrollView = function (elem) {
 
 let isScrollView = function (elem) {
   return elem && elem.classList[0] == "scrollView";
+}
+
+let cb = (elem, view) => {
+  if (view.props.afterRender && typeof view.props.afterRender ==
+    "function") {
+    view.props.afterRender();
+  }
+
+  if (view.props.feedback && typeof view.props.feedback == "function") {
+    view.props.feedback();
+  }
+
+  if(view.props.hasOwnProperty('onMouseEnter') && typeof view.props.onMouseEnter == "function"){
+    elem.addEventListener('mouseenter', function(){
+      view.props.onMouseEnter();
+    });
+  }
+
+  if(view.props.hasOwnProperty('onMouseOver') && typeof view.props.onMouseOver == "function"){
+    elem.addEventListener('mouseover', function(){
+      view.props.onMouseOver();
+    });
+  }
+
+  if(view.props.hasOwnProperty('onMouseMove') && typeof view.props.onMouseMove == "function"){
+    elem.addEventListener('mousemove', function(){
+      view.props.onMouseMove();
+    });
+  }
+
+  if(view.props.hasOwnProperty('onMouseOut') && typeof view.props.onMouseOut == "function"){
+    elem.addEventListener('mouseout', function(){
+      view.props.onMouseOut();
+    });
+  }
+
+  if(view.props.hasOwnProperty('onMouseLeave') && typeof view.props.onMouseLeave == "function"){
+    elem.addEventListener('mouseleave', function(){
+      view.props.onMouseLeave();
+    });
+  }
 }
 
 // Creates the Modal element if it has not been already inflated
@@ -532,6 +573,9 @@ let inflateModal = function (view, callFrom) {
   view.props.time = Math.random();
   window.__MODAL_VIEWS[view.props.id] = JSON.stringify(view);
   
+  if(newInflated)
+    cb(elem, view);
+
   if(view.hasOwnProperty('children') && view.children.length > 0){
     for (let i = 0; i < view.children.length; i++) {
       if (view.children[i]) {
@@ -558,16 +602,6 @@ let inflateView = function (view, parentElement, siblingView, callFrom) {
   let elem = document.getElementById(view.props.id);
   let subElem = null;
   let newInflated = false;
-  let cb = () => {
-    if (view.props.afterRender && typeof view.props.afterRender ==
-      "function") {
-      view.props.afterRender();
-    }
-
-    if (view.props.feedback && typeof view.props.feedback == "function") {
-      view.props.feedback();
-    }
-  }
 
   if (!elem) {
     if (view.type == "imageView"){
@@ -694,7 +728,7 @@ let inflateView = function (view, parentElement, siblingView, callFrom) {
   }
 
   if (newInflated)
-    cb();
+    cb(elem, view);
 
   return elem;
 };
