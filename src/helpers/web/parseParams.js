@@ -289,9 +289,12 @@ function parseLayoutProps(type, config, key) {
 
   if (key == "inputType") {
     var inputType = "text";
-    if(config.inputType=="numericPassword"){
+    if(config.inputType=="numericPassword" || config.inputType == "password"){
       inputType = "password";
+    }else if(config.inputType == "disabled"){
+      config.attributes.disabled = 'disabled';
     }
+
     config.attributes.type = inputType;
   }
 
