@@ -119,6 +119,20 @@ window.updateLanguage = (lang) => {
   JBridge.setKey("languagePref",lang);
 };
 
+window.onload = () => {
+  if(window.__OS != "WEB")
+    return;
+
+  if(__VIEWS){
+    for(let i in __VIEWS){
+      let view = __VIEWS[i]
+      if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
+        view.props.afterRender();
+      }
+    }
+  }
+};
+
 window.onmousedown = (event) => {
   if(window.__OS != "WEB")
     return;

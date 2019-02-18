@@ -71,9 +71,11 @@ function popup(elem, props) {
 }
 
 function setGravityStylesForRow(elem, props){
-  if(!props.hasOwnProperty('gravity') || !props.gravity)
+  if(!props.hasOwnProperty('gravity') || !props.gravity){
     props.gravity = '';
-
+    //return;
+  }
+  
   switch(props.gravity){
     case 'center_vertical':
       elem.style['align-items'] = 'center';
@@ -105,8 +107,10 @@ function setGravityStylesForRow(elem, props){
 }
 
 function setGravityStylesForColumn(elem, props){
-  if(!props.hasOwnProperty('gravity') || !props.gravity)
+  if(!props.hasOwnProperty('gravity') || !props.gravity){
     props.gravity = '';
+    //return;
+  }
 
   switch(props.gravity){
     case 'center_vertical':
@@ -456,11 +460,6 @@ let isScrollView = function (elem) {
 }
 
 let cb = (elem, view) => {
-  if (view.props.afterRender && typeof view.props.afterRender ==
-    "function") {
-    view.props.afterRender();
-  }
-
   if (view.props.feedback && typeof view.props.feedback == "function") {
     view.props.feedback();
   }
@@ -497,7 +496,7 @@ let cb = (elem, view) => {
 }
 
 // Creates the Modal element if it has not been already inflated
-let inflateModal = function (view, callFrom) {
+let inflateModal = function (view) {
   let newInflated = false;
 
   /* Modal Wrapper */
@@ -570,7 +569,6 @@ let inflateModal = function (view, callFrom) {
   }
   /* Dynamic Styles End */
 
-  view.props.time = Math.random();
   window.__MODAL_VIEWS[view.props.id] = JSON.stringify(view);
   
   if(newInflated)
@@ -581,9 +579,9 @@ let inflateModal = function (view, callFrom) {
       if (view.children[i]) {
         view.children[i].props.style.pointerEvents = 'auto';
         if(i != 0)
-          inflateView(view.children[i], elem, view.children[i-1], callFrom);
+          inflateView(view.children[i], elem, view.children[i-1]);
         else
-          inflateView(view.children[i], elem, view, callFrom);
+          inflateView(view.children[i], elem, view);
       }
     }
   }
@@ -594,9 +592,9 @@ let inflateModal = function (view, callFrom) {
 // Creates the DOM element if it has not been already inflated
 // View: Object of ReactDOM, {type, props, children}
 // parentElement: DOM Object
-let inflateView = function (view, parentElement, siblingView, callFrom) {
+let inflateView = function (view, parentElement, siblingView) {
   if(view.type == 'modal'){
-    return inflateModal(view, callFrom);
+    return inflateModal(view);
   }
 
   let elem = document.getElementById(view.props.id);
@@ -720,9 +718,9 @@ let inflateView = function (view, parentElement, siblingView, callFrom) {
     for (let i = 0; i < view.children.length; i++) {
       if (view.children[i]) {
         if(i != 0)
-          inflateView(view.children[i], elem, view.children[i-1], callFrom);
+          inflateView(view.children[i], elem, view.children[i-1]);
         else
-          inflateView(view.children[i], elem, view, callFrom);
+          inflateView(view.children[i], elem, view);
       }
     }
   }

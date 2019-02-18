@@ -41,7 +41,7 @@ module.exports = {
       return;
 
     Render.runInUI(cmd);
-    this.recompute('runInUI');
+    this.recompute();
   },
 
   /*recompute: function (view, cb) {
@@ -58,7 +58,7 @@ module.exports = {
     Render.inflateView(view, parentElement);
   },*/
 
-  Render: function (view, cb, callFrom) {
+  Render: function (view, cb) {
     /* Global Style Tag */
     let style_id = window.__STYLE_ID;
     
@@ -103,7 +103,7 @@ module.exports = {
     };
 
     Render.computeChildDimens(parentView);
-    const elem = Render.inflateView(view, parentElement, null, callFrom);
+    const elem = Render.inflateView(view, parentElement, null);
 
     if (cb)
       window.callUICallback(cb);
@@ -152,7 +152,7 @@ module.exports = {
     }
 
     parentView.children.splice(index, 0, view);
-    this.recompute('addViewToParent');
+    this.recompute();
 
     if (cb)
       window.callUICallback(cb);
@@ -168,7 +168,7 @@ module.exports = {
     helper.clearViewExternals(view);
     parent.children.splice(idx, 1);
     viewElem.remove();
-    this.recompute('removeView');
+    this.recompute();
   },
 
   replaceView: function (view, id) {
@@ -193,7 +193,7 @@ module.exports = {
 
     oldview.props = view.props;
     oldview.children = [];
-    this.recompute('replaceView');
+    this.recompute();
 
     oldview.children = oldchildren;
     viewElem = document.getElementById(id);
@@ -202,13 +202,13 @@ module.exports = {
         viewElem.appendChild(each);
       });
     }
-    this.recompute('replaceView');
+    this.recompute();
   },
 
-  recompute: function (callFrom) {
+  recompute: function () {
     const rootnode = document.getElementById('content');
     const child = rootnode.firstElementChild;
     const rootview = window.__VIEWS[child.id];
-    this.Render(rootview, null, callFrom);
+    this.Render(rootview, null);
   }
 };
