@@ -640,6 +640,7 @@ var map = {
       type: 'i',
       center_horizontal: 1,
       center_vertical: 16,
+      bottom : 80,
       left: 8388611,
       right: 8388613,
       center: 17,
