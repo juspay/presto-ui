@@ -160,15 +160,24 @@ module.exports = {
 
   removeView: function (id) {
     let viewElem = document.getElementById(id);
+
     let parentid = viewElem.parentNode.id;
     let parentElem = document.getElementById(parentid);
+    
     let view = window.__VIEWS[id];
     let parent = window.__VIEWS[parentid];
-    let idx = parent.children.indexOf(view);
-    helper.clearViewExternals(view);
-    parent.children.splice(idx, 1);
-    viewElem.remove();
-    this.recompute();
+
+    if(view.type == 'modal'){
+      helper.clearViewExternals(view);
+      parentElem.remove();
+      this.recompute();
+    }else{
+      let idx = parent.children.indexOf(view);
+      helper.clearViewExternals(view);
+      parent.children.splice(idx, 1);
+      viewElem.remove();
+      this.recompute();
+    }
   },
 
   replaceView: function (view, id) {
