@@ -122,8 +122,13 @@ function merge(a, b) {
 function clearViewExternals(view) {
   if (!view)
     return;
+
   delete window.__VIEWS[view.props.id];
   delete window.__VIEW_DIMENSIONS[view.props.id];
+
+  if(__OBSERVERS[view.props.id])
+    delete window.__OBSERVERS[view.props.id];
+
   view.children.forEach(clearViewExternals);
 }
 

@@ -567,6 +567,14 @@ let inflateModal = function (view) {
 
     backdropElem.appendChild(elem);
     document.body.appendChild(backdropElem);
+
+    if(newInflated){
+      if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
+        // We should run observer for the element
+        observer(elem);
+        elem.setAttribute('hasRender', true);
+      }
+    }
   }
   /* BackDrop End */
 
@@ -609,11 +617,6 @@ let inflateModal = function (view) {
 
   if(newInflated){
     cb(elem, view);
-    if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
-      // We should run observer for the element
-      observer(elem);
-      elem.setAttribute('hasRender', true);
-    }
   }
 
   return backdropElem;
@@ -739,6 +742,12 @@ let inflateView = function (view, parentElement, siblingView) {
     }
 
     setAttributes(view.type, elem, view.props, true);
+
+    if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
+      // We should run observer for the element
+      observer(elem);
+      elem.setAttribute('hasRender', true);
+    }
   }
 
   computeChildDimens(view);
@@ -757,11 +766,6 @@ let inflateView = function (view, parentElement, siblingView) {
 
   if (newInflated){
     cb(elem, view);
-    if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
-      // We should run observer for the element
-      observer(elem);
-      elem.setAttribute('hasRender', true);
-    }
   }
 
   return elem;
