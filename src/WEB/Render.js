@@ -459,10 +459,34 @@ let isScrollView = function (elem) {
   return elem && elem.classList[0] == "scrollView";
 }
 
+let observer = (elem) => {
+  let id = elem.id;
+  if(!id || __OBSERVERS[id])
+    return;
+
+  __OBSERVERS[id] = new MutationObserver(function(item, observer){
+    if(item && item[0].target){
+      let target = item[0].target;
+      let id = target.id;
+      if(id){
+        let view = __VIEWS[id];
+        
+        if(view && view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
+          view.props.afterRender();
+        }
+      }
+    }
+
+    observer.disconnect();
+  });
+
+  (__OBSERVERS[id]).observe(elem, {attributes: true});
+}
+
 let cb = (elem, view) => {
-  if (view.props.feedback && typeof view.props.feedback == "function") {
+  /*if (view.props.feedback && typeof view.props.feedback == "function") {
     view.props.feedback();
-  }
+  }*/
 
   if(view.props.hasOwnProperty('onMouseEnter') && typeof view.props.onMouseEnter == "function"){
     elem.addEventListener('mouseenter', function(){
@@ -571,9 +595,6 @@ let inflateModal = function (view) {
 
   window.__MODAL_VIEWS[view.props.id] = JSON.stringify(view);
   
-  if(newInflated)
-    cb(elem, view);
-
   if(view.hasOwnProperty('children') && view.children.length > 0){
     for (let i = 0; i < view.children.length; i++) {
       if (view.children[i]) {
@@ -583,6 +604,15 @@ let inflateModal = function (view) {
         else
           inflateView(view.children[i], elem, view);
       }
+    }
+  }
+
+  if(newInflated){
+    cb(elem, view);
+    if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
+      // We should run observer for the element
+      observer(elem);
+      elem.setAttribute('hasRender', true);
     }
   }
 
@@ -725,8 +755,14 @@ let inflateView = function (view, parentElement, siblingView) {
     }
   }
 
-  if (newInflated)
+  if (newInflated){
     cb(elem, view);
+    if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
+      // We should run observer for the element
+      observer(elem);
+      elem.setAttribute('hasRender', true);
+    }
+  }
 
   return elem;
 };

@@ -57,7 +57,7 @@ module.exports = {
     Render.computeChildDimens(parentView);
     Render.inflateView(view, parentElement);
   },*/
-
+  
   Render: function (view, cb) {
     /* Global Style Tag */
     let style_id = window.__STYLE_ID;
@@ -114,6 +114,7 @@ module.exports = {
         helper.clearViewExternals(window.__VIEWS[each.id]);
         each.remove();
       });
+
       parentElement.appendChild(elem);
     }
   },
@@ -131,6 +132,7 @@ module.exports = {
     children.splice(children.indexOf(view), 1);
     children.splice(index, 0, view);
     Render.computeChildDimens(parent)
+
     children.forEach(child => {
       Render.inflateView(child, parentElem)
     })
@@ -167,6 +169,9 @@ module.exports = {
     let view = window.__VIEWS[id];
     let parent = window.__VIEWS[parentid];
 
+    if(!view || !view.type)
+      return;
+
     if(view.type == 'modal'){
       helper.clearViewExternals(view);
       parentElem.remove();
@@ -182,8 +187,10 @@ module.exports = {
 
   replaceView: function (view, id) {
     var viewElem = document.getElementById(id);
+
     var parentid = viewElem.parentNode.id;
     var parentElem = document.getElementById(parentid);
+    
     parentElem.removeChild(viewElem);
 
     var oldview;
