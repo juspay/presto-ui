@@ -750,6 +750,24 @@ let inflateView = function (view, parentElement, siblingView) {
     }
   }
 
+  if(view.type == 'horizontalScrollView'){
+    if(view.props.hasOwnProperty('scrollLeft') && !isNaN(view.props.scrollLeft))
+      elem.scrollLeft = view.props.scrollLeft;
+  }
+
+  if(view.type == 'listView'){
+    if(view.props.hasOwnProperty('scrollTop') && !isNaN(view.props.scrollTop))
+      elem.scrollTop = view.props.scrollTop;
+  }
+
+  if(view.type == 'scrollView'){
+    if(view.props.hasOwnProperty('scrollLeft') && !isNaN(view.props.scrollLeft))
+      elem.scrollLeft = view.props.scrollLeft;
+
+    if(view.props.hasOwnProperty('scrollTop') && !isNaN(view.props.scrollTop))
+      elem.scrollTop = view.props.scrollTop;
+  }
+
   computeChildDimens(view);
   setComputedStyles(elem, view.props);
 
