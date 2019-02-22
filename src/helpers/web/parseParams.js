@@ -283,6 +283,10 @@ function parseLayoutProps(type, config, key) {
     config.style.textAlign = config.gravity;
   }
 
+  if (key == "contentEditable" && config.contentEditable){
+    config.attributes.contenteditable = true;
+  }
+
   if (key == "id") {
     config.attributes.id = config.id;
   }
