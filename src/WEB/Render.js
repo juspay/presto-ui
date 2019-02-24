@@ -484,9 +484,9 @@ let observer = (elem) => {
 }
 
 let cb = (elem, view) => {
-  /*if (view.props.feedback && typeof view.props.feedback == "function") {
+  if (view.props.feedback && typeof view.props.feedback == "function") {
     view.props.feedback();
-  }*/
+  }
 
   if(view.props.hasOwnProperty('onMouseEnter') && typeof view.props.onMouseEnter == "function"){
     elem.addEventListener('mouseenter', function(){
