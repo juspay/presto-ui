@@ -295,7 +295,13 @@ function setAttributes(type, elem, props, firstRender) {
     /* Render type specific styles */
     if(type == 'linearLayout'){
       elem.style["box-sizing"] = "border-box";
-      elem.style["flex-wrap"] = "wrap";
+
+      if(props.hasOwnProperty('fixedWrap') && !props.fixedWrap){
+        elem.style["flex-wrap"] = "nowrap";
+      }else{
+        elem.style["flex-wrap"] = "wrap";
+      }
+
       elem.style["flex-direction"] = props.orientation == "horizontal" || props.orientation == null ? "row" : "column";
       
       if(elem.style["flex-direction"] == 'row')
@@ -437,14 +443,14 @@ let initializeShow = function(elem, props, type) {
   if(type == 'linearLayout'){
     if(props.hasOwnProperty('width') && props.width == 'wrap_content'){
       elem.style.display = 'inline-flex';
-      elem.style.width = 'auto';
+      elem.style.width = 'max-content';
     }else{
       elem.style.display = "flex";
     }
   }else{
     if(props.hasOwnProperty('width') && props.width == 'wrap_content'){
       elem.style.display = 'inline-block';
-      elem.style.width = 'auto';
+      elem.style.width = 'max-content';
     }else{
       elem.style.display = '';
     }
@@ -460,6 +466,8 @@ let isScrollView = function (elem) {
 }
 
 let observer = (elem) => {
+  return;
+  
   let id = elem.id;
   if(!id || __OBSERVERS[id])
     return;
