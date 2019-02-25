@@ -514,8 +514,8 @@ let cb = (elem, view) => {
 
   if(view.props.hasOwnProperty('onMouseOut') && typeof view.props.onMouseOut == "function"){
     elem.addEventListener('mouseout', function(event){
-      e = event.toElement || event.relatedTarget;
-      if (e.parentNode == this || e == this)
+      let e = event.toElement || event.relatedTarget;
+      if (e && (e.parentNode == this || e == this))
         return;
 
       view.props.onMouseOut();

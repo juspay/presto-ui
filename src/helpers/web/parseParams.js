@@ -215,6 +215,26 @@ function parseLayoutProps(type, config, key) {
     config.style.border = values[0] + "px solid" + values[1];
   }
 
+  if (key == "strokeTop") {
+    let values = config.strokeTop.split(",");
+    config.style.borderTop = values[0] + "px solid" + values[1];
+  }
+
+  if (key == "strokeRight") {
+    let values = config.strokeRight.split(",");
+    config.style.borderRight = values[0] + "px solid" + values[1];
+  }
+
+  if (key == "strokeBottom") {
+    let values = config.strokeBottom.split(",");
+    config.style.borderBottom = values[0] + "px solid" + values[1];
+  }
+
+  if (key == "strokeLeft") {
+    let values = config.strokeLeft.split(",");
+    config.style.borderLeft = values[0] + "px solid" + values[1];
+  }
+
   if (key == "translationY") {
     config.style.transform += "translateY(" + config[key] + "px) ";
   }
