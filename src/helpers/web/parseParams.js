@@ -105,9 +105,9 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "textSize")
-    config.style.fontSize = config.textSize;
+    config.style.fontSize = config.textSize + 'px';
   if (key == 'fontSize')
-    config.style.fontSize = config.fontSize;
+    config.style.fontSize = config.fontSize + 'px';
 
   if (key == "imageUrl"){
     let imageUrl = config.imageUrl;
