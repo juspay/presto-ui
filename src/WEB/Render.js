@@ -466,8 +466,6 @@ let isScrollView = function (elem) {
 }
 
 let observer = (elem) => {
-  return;
-  
   let id = elem.id;
   if(!id || __OBSERVERS[id])
     return;
