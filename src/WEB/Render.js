@@ -494,37 +494,39 @@ let cb = (elem, view) => {
     view.props.feedback();
   }
 
-  if(view.props.hasOwnProperty('onMouseEnter') && typeof view.props.onMouseEnter == "function"){
+  if(view.props.hasOwnProperty('onClickEvent') && typeof view.props.onClickEvent == "function"){
+    elem.addEventListener('click', function(){
+      view.props.onClickEvent();
+    });
+  }
+
+  if(view.props.hasOwnProperty('onMouseEnterEvent') && typeof view.props.onMouseEnterEvent == "function"){
     elem.addEventListener('mouseenter', function(){
-      view.props.onMouseEnter();
+      view.props.onMouseEnterEvent();
     });
   }
 
-  if(view.props.hasOwnProperty('onMouseOver') && typeof view.props.onMouseOver == "function"){
+  if(view.props.hasOwnProperty('onMouseOverEvent') && typeof view.props.onMouseOverEvent == "function"){
     elem.addEventListener('mouseover', function(){
-      view.props.onMouseOver();
+      view.props.onMouseOverEvent();
     });
   }
 
-  if(view.props.hasOwnProperty('onMouseMove') && typeof view.props.onMouseMove == "function"){
+  if(view.props.hasOwnProperty('onMouseMoveEvent') && typeof view.props.onMouseMoveEvent == "function"){
     elem.addEventListener('mousemove', function(){
-      view.props.onMouseMove();
+      view.props.onMouseMoveEvent();
     });
   }
 
-  if(view.props.hasOwnProperty('onMouseOut') && typeof view.props.onMouseOut == "function"){
+  if(view.props.hasOwnProperty('onMouseOutEvent') && typeof view.props.onMouseOutEvent == "function"){
     elem.addEventListener('mouseout', function(event){
-      let e = event.toElement || event.relatedTarget;
-      if (e && (e.parentNode == this || e == this))
-        return;
-
-      view.props.onMouseOut();
+      view.props.onMouseOutEvent();
     });
   }
 
-  if(view.props.hasOwnProperty('onMouseLeave') && typeof view.props.onMouseLeave == "function"){
+  if(view.props.hasOwnProperty('onMouseLeaveEvent') && typeof view.props.onMouseLeaveEvent == "function"){
     elem.addEventListener('mouseleave', function(){
-      view.props.onMouseLeave();
+      view.props.onMouseLeaveEvent();
     });
   }
 }

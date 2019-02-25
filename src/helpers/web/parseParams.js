@@ -100,7 +100,7 @@ function parseLayoutProps(type, config, key) {
   if (!config.style.className)
     config.style.className = "";
 
-  if (key == "onClick") {
+  if (key == "onClick" || key == "onClickEvent") {
     config.style.cursor = "pointer";
   }
 
