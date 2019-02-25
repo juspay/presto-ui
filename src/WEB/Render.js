@@ -500,6 +500,18 @@ let cb = (elem, view) => {
     });
   }
 
+  if(view.props.hasOwnProperty('onMouseDownEvent') && typeof view.props.onMouseDownEvent == "function"){
+    elem.addEventListener('mousedown', function(){
+      view.props.onMouseDownEvent();
+    });
+  }
+
+  if(view.props.hasOwnProperty('onMouseUpEvent') && typeof view.props.onMouseUpEvent == "function"){
+    elem.addEventListener('mouseup', function(){
+      view.props.onMouseUpEvent();
+    });
+  }
+
   if(view.props.hasOwnProperty('onMouseEnterEvent') && typeof view.props.onMouseEnterEvent == "function"){
     elem.addEventListener('mouseenter', function(){
       view.props.onMouseEnterEvent();
