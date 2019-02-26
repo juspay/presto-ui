@@ -218,6 +218,7 @@ module.exports = {
         viewElem.appendChild(each);
       });
     }
+
     this.recompute();
   },
 

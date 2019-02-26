@@ -125,7 +125,7 @@ function clearViewExternals(view) {
 
   delete window.__VIEWS[view.props.id];
   delete window.__VIEW_DIMENSIONS[view.props.id];
-
+  
   if(__OBSERVERS[view.props.id])
     delete window.__OBSERVERS[view.props.id];
 

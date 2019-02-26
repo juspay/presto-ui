@@ -119,7 +119,7 @@ window.updateLanguage = (lang) => {
   JBridge.setKey("languagePref",lang);
 };
 
-window.onmousedown = (event) => {
+/*window.onmousedown = (event) => {
   if(window.__OS != "WEB")
     return;
 
@@ -145,7 +145,7 @@ window.onmouseup = (event) => {
       view.props.onMouseUp();
     }
   }
-}
+}*/
 
 window.onclick = (event) => {
   if(window.__OS != "WEB")
