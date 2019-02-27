@@ -249,11 +249,17 @@ function setAttributes(type, elem, props, firstRender) {
     }
     
     if(props.hasOwnProperty('minWidth') && !isNaN(props.minWidth)){
-      elem.style.minWidth = props.minWidth + 'px';
+      if(props.hasOwnProperty('percentMinWidth') && props.percentMinWidth)
+        elem.style.minWidth = props.minWidth + '%';
+      else
+        elem.style.minWidth = props.minWidth + 'px';
     }
 
     if(props.hasOwnProperty('minHeight') && !isNaN(props.minHeight)){
-      elem.style.minHeight = props.minHeight + 'px';
+      if(props.hasOwnProperty('percentMinHeight') && props.percentMinHeight)
+        elem.style.minHeight = props.minHeight + '%';
+      else
+        elem.style.minHeight = props.minHeight + 'px';
     }
 
     if(props.hasOwnProperty('padding')){
