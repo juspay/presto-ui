@@ -41,8 +41,23 @@ module.exports = {
       return;
 
     Render.runInUI(cmd);
+    this.recompute();
   },
 
+  /*recompute: function (view, cb) {
+    var parentElement = document.getElementById("content");
+    let parentView = {
+      type: "linearLayout",
+      props: {
+        "h": parentElement.clientHeight,
+        "w": parentElement.clientWidth,
+      },
+      children: [view]
+    };
+    Render.computeChildDimens(parentView);
+    Render.inflateView(view, parentElement);
+  },*/
+  
   Render: function (view, cb) {
     /* Global Style Tag */
     let style_id = window.__STYLE_ID;
@@ -77,7 +92,7 @@ module.exports = {
     }
     /* Global Style Tag End */
     
-    let parentElement = document.getElementById("content");
+    var parentElement = document.getElementById("content");
     let parentView = {
       type: "linearLayout",
       props: {
@@ -94,7 +109,7 @@ module.exports = {
       window.callUICallback(cb);
 
     if (parentElement.childElementCount > 1) {
-      let iterableChildNodes = Array.prototype.slice.call(parentElement.children);
+      var iterableChildNodes = Array.prototype.slice.call(parentElement.children);
       iterableChildNodes.forEach((each) => {
         helper.clearViewExternals(window.__VIEWS[each.id]);
         each.remove();
@@ -124,195 +139,87 @@ module.exports = {
   },
 
   addViewToParent: function (id, view, index, cb, replace) {
-    let parentElem = document.getElementById(id)
-    let parentView = window.__VIEWS[id]
-    let siblingView = null
+    var parent = document.getElementById(id);
+    var props = window.__VIEWS[id].props;
+    var type = parent.className;
+    var iterableChildNodes = Array.prototype.slice.call(parent.children);
+    let parentView = window.__VIEWS[id];
 
-    if(!parentElem || !parentView)
-      return
+    if (replace) {
+      helper.clearViewExternals(window.__VIEWS[each.id]);
+      parentView.children = [];
+      iterableChildNodes.forEach((each) => {
+        each.remove();
+      });
+    }
 
-    parentView.children.splice(index, 0, view)
-    
-    if(index == 0)
-      siblingView = parentView
-    else
-      siblingView = parentView.children[index-1]
-    
-    /*let stopObserver = false
-    if(id == '453')
-      stopObserver = true*/
+    parentView.children.splice(index, 0, view);
+    this.recompute();
 
-    Render.inflateView(view, parentElem, siblingView)
-    
     if (cb)
-      window.callUICallback(cb)
+      window.callUICallback(cb);
   },
 
   removeView: function (id) {
     let viewElem = document.getElementById(id);
-    if(!viewElem){
-      helper.clearViewExternals(view)
-      return
-    }
 
-    let parentId = viewElem.parentNode.id
-    if(!parentId){
-      helper.clearViewExternals(view)
-      viewElem.remove()
-      return
-    }
-
-    let parentElem = document.getElementById(parentId);
-    if(!parentElem){
-      helper.clearViewExternals(view)
-      viewElem.remove()
-      return
-    }
-
-    let view = window.__VIEWS[id]
+    let parentid = viewElem.parentNode.id;
+    let parentElem = document.getElementById(parentid);
     
+    let view = window.__VIEWS[id];
+    let parent = window.__VIEWS[parentid];
+
     if(!view || !view.type)
-      return
-    
-    let parent = null
-    let idx
-          
+      return;
+
     if(view.type == 'modal'){
-      let virtualParentId = viewElem.getAttribute('virtual_parent')
-      parent = window.__VIEWS[virtualParentId]
-
-      idx = parent.children.indexOf(view)
-      parent.children.splice(idx, 1)
-
-      helper.clearViewExternals(view)
-      parentElem.remove()
+      helper.clearViewExternals(view);
+      parentElem.remove();
+      this.recompute();
     }else{
-      parent = window.__VIEWS[parentId]
-
-      idx = parent.children.indexOf(view)
-      parent.children.splice(idx, 1)
-
-      helper.clearViewExternals(view)
-      viewElem.remove()
+      let idx = parent.children.indexOf(view);
+      helper.clearViewExternals(view);
+      parent.children.splice(idx, 1);
+      viewElem.remove();
+      this.recompute();
     }
-  },
-
-  replaceModalView: function (view, id) {
-    let elem = document.getElementById(id)
-    if(!elem)
-      return
-
-    let backdropId = elem.parentNode.id
-    let backdropElem = document.getElementById(backdropId)
-
-    let parentId = elem.getAttribute('virtual_parent')
-    let parentView = window.__VIEWS[parentId]
-    let parentElem = document.getElementById(parentId)
-
-    let oldView = null
-    
-    for (let i = 0; i < parentView.children.length; i++) {
-      if(parentView.children[i].props.id == id){
-        oldView = parentView.children[i]
-        break;
-      }
-    }
-
-    if(!oldView)
-      return
-
-    /* Get Children */
-    let childrenElem = []
-    let children = oldView.children
-
-    if(elem && children){
-      for(let i = 0; i < children.length; i++){
-        let childId = children[i].props.id
-        let childElem = document.getElementById(childId)
-
-        if(childElem)
-          childrenElem.push(childElem)
-      }
-    }
-    /* Get Children End */
-
-    oldView.props = view.props
-    backdropElem.remove()
-    Render.inflateView(oldView, parentElem, null, true)
-    window.__VIEWS[id] = oldView
-
-    /* Append Children */
-    elem = document.getElementById(id)
-
-    if(elem && childrenElem.length > 0){
-      for(let i = 0; i < childrenElem.length; i++){
-        elem.appendChild(childrenElem[i])
-      }
-    }
-    /* Append Children End */
   },
 
   replaceView: function (view, id) {
-    if(view.type == 'modal'){
-      this.replaceModalView(view, id)
-      return
-    }
+    var viewElem = document.getElementById(id);
 
-    let elem = document.getElementById(id)
-    if(!elem)
-      return
+    var parentid = viewElem.parentNode.id;
+    var parentElem = document.getElementById(parentid);
+    
+    parentElem.removeChild(viewElem);
 
-    let parentId = elem.parentNode.id
-    let parentElem = document.getElementById(parentId)
-    let parentView = window.__VIEWS[parentId]
+    var oldview;
+    var parentView = window.__VIEWS[parentid];
 
-    let oldView = null
-    let siblingView = null
-
-    for (let i = 0; i < parentView.children.length; i++) {
-      if(parentView.children[i].props.id == id){
-        oldView = parentView.children[i]
-
-        if(i != 0)
-          siblingView = parentView.children[i-1]
-        else
-          siblingView = parentView
+    for (var i = 0; i < parentView.children.length; i++) {
+      var child = parentView.children[i];
+      if (child.props.id == id) {
+        oldview = parentView.children[i];
         break;
       }
     }
-    
-    if(!oldView)
-      return
 
-    /* Get Children */
-    let childrenElem = []
-    let children = oldView.children
+    var oldchildren = oldview.children;
+    var iterableChildNodes = Array.prototype.slice.call(viewElem.children);
 
-    if(elem && children){
-      for(let i = 0; i < children.length; i++){
-        let childId = children[i].props.id
-        let childElem = document.getElementById(childId)
+    oldview.props = view.props;
+    oldview.children = [];
+    this.recompute();
 
-        if(childElem)
-          childrenElem.push(childElem)
-      }
+    oldview.children = oldchildren;
+    viewElem = document.getElementById(id);
+    if (view.type != "textView") {
+      iterableChildNodes.forEach(function (each) {
+        viewElem.appendChild(each);
+      });
     }
-    /* Get Children End */
 
-    oldView.props = view.props
-    parentElem.removeChild(elem)
-    Render.inflateView(oldView, parentElem, siblingView, true)
-    window.__VIEWS[id] = oldView
-
-    /* Append Children */
-    elem = document.getElementById(id)
-
-    if(elem && childrenElem.length > 0){
-      for(let i = 0; i < childrenElem.length; i++){
-        elem.appendChild(childrenElem[i])
-      }
-    }
-    /* Append Children End */
+    this.recompute();
   },
 
   recompute: function () {

@@ -200,9 +200,11 @@ function setComputedStyles(elem, props){
 }
 
 function setAttributes(type, elem, props, firstRender) {
-  if(type == 'modal')
+  if(type == 'modal'){
+    setModalAttributes(elem, props, firstRender);
     return;
-
+  }
+    
   elem.className = type;
   
   let afterTransition = (x) => {
@@ -445,6 +447,35 @@ function setAttributes(type, elem, props, firstRender) {
   }
 }
 
+function setModalAttributes(elem, props, firstRender) {
+  setGravityStylesForRow(elem, props);
+
+  let backdropElem = document.getElementById(window.__BACKDROPMODAL_CLASS + '_' + props.id)
+
+  if(props.hasOwnProperty('modalVisibility') && props.modalVisibility){
+    backdropElem.classList.add(window.__SHOWNMODAL_CLASS);
+    document.body.classList.add(window.__OPENMODAL_CLASS);
+
+    let modalProps = null;
+    if(window.__MODAL_PROPS[props.id]){
+      modalProps = JSON.parse(window.__MODAL_PROPS[props.id]);
+    }
+
+    if(props.onShow && typeof props.onShow ==
+      "function"){
+      if(firstRender || (modalProps && modalProps.modalVisibility != props.modalVisibility)){
+        props.onShow();
+      }
+    }
+  }else{
+    props.modalVisibility = false;
+    backdropElem.classList.remove(window.__SHOWNMODAL_CLASS);
+    document.body.classList.remove(window.__OPENMODAL_CLASS);
+  }
+  
+  window.__MODAL_PROPS[props.id] = JSON.stringify(props);
+}
+
 let initializeShow = function(elem, props, type) {
   if(type == 'linearLayout'){
     if(props.hasOwnProperty('width') && props.width == 'wrap_content'){
@@ -550,8 +581,9 @@ let cb = (elem, view) => {
 }
 
 // Creates the Modal element if it has not been already inflated
-let inflateModal = function (view) {
+let inflateModal = function (view, parentElement, stopChild) {
   let newInflated = false;
+  let parentId = parentElement.id;
 
   /* Modal Wrapper */
   let elem = document.getElementById(view.props.id);
@@ -560,9 +592,8 @@ let inflateModal = function (view) {
 
     elem = document.createElement('div');
     elem.setAttribute('id', view.props.id);
+    elem.setAttribute('virtual_parent', parentId);
     elem.classList.add(window.__CONTENTMODAL_CLASS);
-
-    setGravityStylesForRow(elem, view.props);
   }
   /* Modal Wrapper End */
 
@@ -608,39 +639,18 @@ let inflateModal = function (view) {
   }
   /* BackDrop End */
 
-  /* Dynamic Styles */
-  if(view.props.hasOwnProperty('modalVisibility') && view.props.modalVisibility){
-    backdropElem.classList.add(window.__SHOWNMODAL_CLASS);
-    document.body.classList.add(window.__OPENMODAL_CLASS);
+  setModalAttributes(elem, view.props, newInflated);
 
-    let modalView = null;
-    if(window.__MODAL_VIEWS[view.props.id]){
-      modalView = JSON.parse(window.__MODAL_VIEWS[view.props.id]);
-    }
-
-    if(view.props.onShow && typeof view.props.onShow ==
-      "function"){
-      if(newInflated || (modalView && modalView.props.modalVisibility != view.props.modalVisibility)){
-        view.props.onShow();
-      }
-    }
-  }else{
-    view.props.modalVisibility = false;
-    backdropElem.classList.remove(window.__SHOWNMODAL_CLASS);
-    document.body.classList.remove(window.__OPENMODAL_CLASS);
-  }
-  /* Dynamic Styles End */
-
-  window.__MODAL_VIEWS[view.props.id] = JSON.stringify(view);
-  
-  if(view.hasOwnProperty('children') && view.children.length > 0){
-    for (let i = 0; i < view.children.length; i++) {
-      if (view.children[i]) {
-        view.children[i].props.style.pointerEvents = 'auto';
-        if(i != 0)
-          inflateView(view.children[i], elem, view.children[i-1]);
-        else
-          inflateView(view.children[i], elem, view);
+  if(!stopChild){
+    if(view.hasOwnProperty('children') && view.children.length > 0){
+      for (let i = 0; i < view.children.length; i++) {
+        if (view.children[i]) {
+          view.children[i].props.style.pointerEvents = 'auto';
+          if(i != 0)
+            inflateView(view.children[i], elem, view.children[i-1]);
+          else
+            inflateView(view.children[i], elem, view);
+        }
       }
     }
   }
@@ -655,9 +665,9 @@ let inflateModal = function (view) {
 // Creates the DOM element if it has not been already inflated
 // View: Object of ReactDOM, {type, props, children}
 // parentElement: DOM Object
-let inflateView = function (view, parentElement, siblingView) {
+let inflateView = function (view, parentElement, siblingView, stopChild, stopObserver) {
   if(view.type == 'modal'){
-    return inflateModal(view);
+    return inflateModal(view, parentElement, stopChild);
   }
 
   let elem = document.getElementById(view.props.id);
@@ -774,9 +784,11 @@ let inflateView = function (view, parentElement, siblingView) {
     setAttributes(view.type, elem, view.props, true);
 
     if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
-      // We should run observer for the element
-      observer(elem);
-      elem.setAttribute('hasRender', true);
+      if(!stopObserver){
+        // We should run observer for the element
+        observer(elem);
+        elem.setAttribute('hasRender', true);
+      }
     }
   }
 
@@ -798,16 +810,20 @@ let inflateView = function (view, parentElement, siblingView) {
       elem.scrollTop = view.props.scrollTop;
   }
 
-  computeChildDimens(view);
+  if(!stopChild)
+    computeChildDimens(view);
+  
   setComputedStyles(elem, view.props);
 
-  if(view.hasOwnProperty('children') && view.children.length > 0){
-    for (let i = 0; i < view.children.length; i++) {
-      if (view.children[i]) {
-        if(i != 0)
-          inflateView(view.children[i], elem, view.children[i-1]);
-        else
-          inflateView(view.children[i], elem, view);
+  if(!stopChild){
+    if(view.hasOwnProperty('children') && view.children.length > 0){
+      for (let i = 0; i < view.children.length; i++) {
+        if (view.children[i]) {
+          if(i != 0)
+            inflateView(view.children[i], elem, view.children[i-1], stopChild, stopObserver);
+          else
+            inflateView(view.children[i], elem, view, stopChild, stopObserver);
+        }
       }
     }
   }
@@ -830,7 +846,7 @@ let runInUI = function (cmd) {
 
     let view = window.__VIEWS[elem.id];
     view.props = R.merge(view.props, each);
-        
+    
     setAttributes(view.type, elem, view.props, false);
   });
 };
