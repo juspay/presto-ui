@@ -783,13 +783,13 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
 
     setAttributes(view.type, elem, view.props, true);
 
-    if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
+    /*if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
       if(!stopObserver){
         // We should run observer for the element
         observer(elem);
         elem.setAttribute('hasRender', true);
       }
-    }
+    }*/
   }
 
   if(view.type == 'horizontalScrollView'){
@@ -829,6 +829,14 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
   }
 
   if (newInflated){
+    if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
+      if(!stopObserver){
+        // We should run observer for the element
+        observer(elem);
+        elem.setAttribute('hasRender', true);
+      }
+    }
+    
     cb(elem, view);
   }
 
