@@ -38,9 +38,44 @@ module.exports = {
 
   runInUI: function (cmd) {
     if (typeof cmd == "string")
-      return;
+      return
 
-    Render.runInUI(cmd);
+    Render.runInUI(cmd)
+
+    let id = cmd.id
+    if(id){
+      let elem = document.getElementById(id)
+
+      if(elem){
+        let view = window.__VIEWS[id]
+        //view.props = R.merge(view.props, cmd)
+        let parentId = elem.parentNode.id
+
+        if(parentId){
+          let parentView = window.__VIEWS[parentId]
+          let parentElem = document.getElementById(parentId)
+
+          if(parentElem && parentView){
+            let siblingView = null
+
+            for (let i = 0; i < parentView.children.length; i++) {
+              if(parentView.children[i].props.id == id){
+                if(i != 0)
+                  siblingView = parentView.children[i-1]
+                else
+                  siblingView = parentView
+                break
+              }
+            }
+
+            Render.computeChildDimens(parentView)
+            Render.inflateView(view, parentElem, siblingView)
+          }
+        }
+      }
+    }
+
+    //this.recompute();    
   },
 
   Render: function (view, cb) {
@@ -138,10 +173,6 @@ module.exports = {
     else
       siblingView = parentView.children[index-1]
     
-    /*let stopObserver = false
-    if(id == '453')
-      stopObserver = true*/
-
     Render.inflateView(view, parentElem, siblingView)
     
     if (cb)
