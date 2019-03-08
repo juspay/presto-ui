@@ -179,6 +179,31 @@ module.exports = {
       window.callUICallback(cb)
   },
 
+  getChildModalViews: function (view) {
+    let modalViews = []
+
+    if(view.children) {
+      for(let i = 0; i < view.children.length; i++){
+        let childView = view.children[i]
+
+        if(childView.type == 'modal'){
+          modalViews.push(childView)
+        }else{
+          let items = this.getChildModalViews(childView)
+          if(items && items.length > 0){
+            if(modalViews.length > 0){
+              modalViews = items
+            }else{
+              modalViews = modalViews.concat(items)
+            }
+          }
+        }
+      }
+    }
+
+    return modalViews
+  },
+
   removeView: function (id) {
     let viewElem = document.getElementById(id);
     if(!viewElem){
@@ -218,6 +243,23 @@ module.exports = {
       helper.clearViewExternals(view)
       parentElem.remove()
     }else{
+      /* Modal view among children */
+      let childModalViews = this.getChildModalViews(view)
+      if(childModalViews && childModalViews.length > 0){
+        for(let i = 0; i < childModalViews.length; i++){
+          let modalView = childModalViews[i]
+          let modalElem = document.getElementById(modalView.props.id)
+
+          if(modalElem){
+            let backdropId = modalElem.parentNode.id
+            let backdropElem = document.getElementById(backdropId)
+
+            backdropElem.remove()
+          }
+        }
+      }
+      /* Modal view among children end */
+
       parent = window.__VIEWS[parentId]
 
       idx = parent.children.indexOf(view)

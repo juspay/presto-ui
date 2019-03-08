@@ -851,7 +851,7 @@ let runInUI = function (cmd) {
     let elem = document.getElementById(each.id);
     if (!elem)
       return console.error("runInUI (Id NULL) CMD:", each);
-
+    
     let view = window.__VIEWS[elem.id];
     view.props = R.merge(view.props, each);
     
