@@ -537,6 +537,12 @@ let cb = (elem, view) => {
     });
   }
 
+  if(view.props.hasOwnProperty('onChangeEvent') && typeof view.props.onChangeEvent == "function"){
+    elem.addEventListener('change', function(){
+      view.props.onChangeEvent();
+    });
+  }
+
   if(view.props.hasOwnProperty('onMouseDownEvent') && typeof view.props.onMouseDownEvent == "function"){
     elem.addEventListener('mousedown', function(){
       view.props.onMouseDownEvent();
