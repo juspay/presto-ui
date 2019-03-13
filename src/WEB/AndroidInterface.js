@@ -40,15 +40,14 @@ module.exports = {
     if (typeof cmd == "string")
       return
 
-    Render.runInUI(cmd)
-
     let id = cmd.id
     if(id){
       let elem = document.getElementById(id)
 
       if(elem){
         let view = window.__VIEWS[id]
-        //view.props = R.merge(view.props, cmd)
+        view.props = R.merge(view.props, cmd)
+
         let parentId = elem.parentNode.id
 
         if(parentId){
@@ -69,13 +68,14 @@ module.exports = {
             }
 
             Render.computeChildDimens(parentView)
-            Render.inflateView(view, parentElem, siblingView)
+            Render.inflateView(view, parentElem, siblingView, false, false, true)
           }
         }
       }
     }
 
-    //this.recompute();    
+    //this.recompute()
+    //Render.runInUI(cmd)
   },
 
   Render: function (view, cb) {

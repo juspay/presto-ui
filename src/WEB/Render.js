@@ -671,7 +671,7 @@ let inflateModal = function (view, parentElement, stopChild) {
 // Creates the DOM element if it has not been already inflated
 // View: Object of ReactDOM, {type, props, children}
 // parentElement: DOM Object
-let inflateView = function (view, parentElement, siblingView, stopChild, stopObserver) {
+let inflateView = function (view, parentElement, siblingView, stopChild, stopObserver, renderStyle) {
   if(view.type == 'modal'){
     return inflateModal(view, parentElement, stopChild);
   }
@@ -796,6 +796,8 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
         elem.setAttribute('hasRender', true);
       }
     }*/
+  }else if(renderStyle){
+    setAttributes(view.type, elem, view.props, true);
   }
 
   if(view.type == 'horizontalScrollView'){
@@ -826,9 +828,9 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
       for (let i = 0; i < view.children.length; i++) {
         if (view.children[i]) {
           if(i != 0)
-            inflateView(view.children[i], elem, view.children[i-1], stopChild, stopObserver);
+            inflateView(view.children[i], elem, view.children[i-1], stopChild, stopObserver, renderStyle);
           else
-            inflateView(view.children[i], elem, view, stopChild, stopObserver);
+            inflateView(view.children[i], elem, view, stopChild, stopObserver, renderStyle);
         }
       }
     }
@@ -855,9 +857,11 @@ let runInUI = function (cmd) {
   
   cmd.forEach(function (each) {
     let elem = document.getElementById(each.id);
-    if (!elem)
-      return console.error("runInUI (Id NULL) CMD:", each);
     
+    if (!elem){
+      return console.error("runInUI (Id NULL) CMD:", each);
+    }
+
     let view = window.__VIEWS[elem.id];
     view.props = R.merge(view.props, each);
     
