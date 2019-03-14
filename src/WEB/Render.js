@@ -29,8 +29,19 @@ let R = require("ramda");
 
 function createTextElement(elem, config) {
   let children = elem.childNodes;
-  let span = elem.childNodes.length ? elem.childNodes[0] : document.createElement(
-    'span');
+  let span = null
+
+  if(children.length){
+    for(let i = 0; i < children.length; i++){
+      if(children[i].nodeName.toLowerCase() == 'span'){
+        span = children[i]
+      }
+    }
+  }
+  
+  //span = elem.childNodes.length ? elem.childNodes[0] : document.createElement('span');
+  if(!span)
+    span = document.createElement('span')
 
   elem.style.whiteSpace = "initial";
   span.innerText = config.text;
@@ -204,8 +215,11 @@ function setAttributes(type, elem, props, firstRender) {
     setModalAttributes(elem, props, firstRender);
     return;
   }
-    
-  elem.className = type;
+  
+  if(elem.classList && elem.classList.length > 0)
+    elem.classList.add(type)
+  else
+    elem.className = type
   
   let afterTransition = (x) => {
     let animation = props.animation;
@@ -676,6 +690,9 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
     return inflateModal(view, parentElement, stopChild);
   }
 
+  if(view.props.id == 8)
+    console.log('element..', view.props)
+    
   let elem = document.getElementById(view.props.id);
   let subElem = null;
   let newInflated = false;
@@ -759,6 +776,33 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
       }
     } else
       elem = document.createElement("div");
+
+    /* Tooltip */
+    if(
+      view.type != 'linearLayout' && 
+      view.type != 'relativeLayout' &&
+      view.type != 'horizontalScrollView' &&
+      view.type != 'scrollView' &&
+      view.type != 'listView'
+    ){
+      if(view.props.hasOwnProperty('tooltipText')){
+        let tooltipText = view.props.tooltipText.trim()
+
+        if(tooltipText){
+          let tooltipGravity = view.props.tooltipGravity?view.props.tooltipGravity:'top'
+          
+          elem.classList.add('hasTooltip')
+
+          let tooltipElem = document.createElement('div')
+          tooltipElem.innerHTML = tooltipText
+          tooltipElem.classList.add('tooltipText')
+          tooltipElem.classList.add('tooltipGravity_' + tooltipGravity)
+          
+          elem.appendChild(tooltipElem)
+        }
+      }
+    }
+    /* Tooltip End */
 
     newInflated = true;
 

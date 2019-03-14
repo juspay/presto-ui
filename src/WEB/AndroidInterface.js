@@ -98,6 +98,22 @@ module.exports = {
       css += '.' + window.__SLIDEMODAL_CLASS + ' .' + window.__CONTENTMODAL_CLASS + '{transform: translate(0, -25%); transition: .3s ease-out;}';
       css += '.' + window.__SLIDEMODAL_CLASS + '.' + window.__SHOWNMODAL_CLASS + ' .' + window.__CONTENTMODAL_CLASS + '{transform: translate(0, 0);}';
 
+      css += '.hasTooltip{position: relative; pointer-events: auto; cursor: pointer;}';
+      css += '.hasTooltip .tooltipText{width: max-content; max-width: 300px; visibility: hidden; opacity: 0; text-decoration: none; position: absolute; background-color: #555; color: #fff; font-size: 15px; padding: 5px 10px; box-sizing: border-box; border-radius: 5px; transition: opacity 0.3s}';
+      css += '.hasTooltip:hover .tooltipText{visibility: visible; opacity: 1;}';
+
+      css += '.hasTooltip .tooltipText.tooltipGravity_top{bottom: 100%; margin-bottom: 10px; left: 50%; transform: translateX(-50%);}';
+      css += '.hasTooltip .tooltipGravity_top:after{content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #555 transparent transparent transparent;}';
+      
+      css += '.hasTooltip .tooltipText.tooltipGravity_left{right: 100%; margin-right: 10px; top: 50%; transform: translateY(-50%);}';
+      css += '.hasTooltip .tooltipGravity_left:after{content: ""; position: absolute; left: 100%; top: 50%; margin-top: -5px; border-width: 5px; border-style: solid; border-color: transparent transparent transparent #555;}';
+
+      css += '.hasTooltip .tooltipText.tooltipGravity_right{left: 100%; margin-left: 10px; top: 50%; transform: translateY(-50%);}';
+      css += '.hasTooltip .tooltipGravity_right:after{content: ""; position: absolute; right: 100%; top: 50%; margin-top: -5px; border-width: 5px; border-style: solid; border-color: transparent #555 transparent transparent;}';
+
+      css += '.hasTooltip .tooltipText.tooltipGravity_bottom{top: 100%; margin-top: 10px; left: 50%; transform: translateX(-50%);}';
+      css += '.hasTooltip .tooltipGravity_bottom:after{content: ""; position: absolute; bottom: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: transparent transparent #555 transparent;}';
+
       styleElem = document.createElement('style');
       styleElem.setAttribute('id', style_id);
       styleElem.type = 'text/css';
