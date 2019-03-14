@@ -47,28 +47,45 @@ module.exports = {
       if(elem){
         let view = window.__VIEWS[id]
         view.props = R.merge(view.props, cmd)
+        
+        let parentId = null
+        let parentElem = null
+        let parentView = null
 
-        let parentId = elem.parentNode.id
+        if(view.type == 'modal'){
+          parentId = elem.getAttribute('virtual_parent')
 
-        if(parentId){
-          let parentView = window.__VIEWS[parentId]
-          let parentElem = document.getElementById(parentId)
-
-          if(parentElem && parentView){
-            let siblingView = null
-
-            for (let i = 0; i < parentView.children.length; i++) {
-              if(parentView.children[i].props.id == id){
-                if(i != 0)
-                  siblingView = parentView.children[i-1]
-                else
-                  siblingView = parentView
-                break
-              }
+          if(parentId){
+            parentView = window.__VIEWS[parentId]
+            parentElem = document.getElementById(parentId)
+            
+            if(parentElem && parentView){
+              Render.inflateView(view, parentElem, null, true)
             }
+          }
+        }else{
+          parentId = elem.parentNode.id
 
-            Render.computeChildDimens(parentView)
-            Render.inflateView(view, parentElem, siblingView, false, false, true)
+          if(parentId){
+            parentView = window.__VIEWS[parentId]
+            parentElem = document.getElementById(parentId)
+
+            if(parentElem && parentView){
+              let siblingView = null
+
+              for (let i = 0; i < parentView.children.length; i++) {
+                if(parentView.children[i].props.id == id){
+                  if(i != 0)
+                    siblingView = parentView.children[i-1]
+                  else
+                    siblingView = parentView
+                  break
+                }
+              }
+
+              Render.computeChildDimens(parentView)
+              Render.inflateView(view, parentElem, siblingView, false, false, true)
+            }
           }
         }
       }

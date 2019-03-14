@@ -690,9 +690,6 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
     return inflateModal(view, parentElement, stopChild);
   }
 
-  if(view.props.id == 8)
-    console.log('element..', view.props)
-    
   let elem = document.getElementById(view.props.id);
   let subElem = null;
   let newInflated = false;
@@ -841,7 +838,7 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
       }
     }*/
   }else if(renderStyle){
-    setAttributes(view.type, elem, view.props, true);
+    setAttributes(view.type, elem, view.props, false);
   }
 
   if(view.type == 'horizontalScrollView'){
