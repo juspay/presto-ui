@@ -783,6 +783,8 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
       view.type != 'listView'
     ){
       if(view.props.hasOwnProperty('tooltipText')){
+        console.log(view)
+        
         let tooltipText = view.props.tooltipText.trim()
 
         if(tooltipText){
@@ -795,6 +797,13 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
           tooltipElem.classList.add('tooltipText')
           tooltipElem.classList.add('tooltipGravity_' + tooltipGravity)
           
+          let size = 15
+          if(view.props.hasOwnProperty('tooltipTextSize') && !isNaN(view.props.tooltipTextSize)){
+            size = view.props.tooltipTextSize
+          }
+
+          tooltipElem.style.fontSize = size + 'px'
+
           elem.appendChild(tooltipElem)
         }
       }

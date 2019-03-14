@@ -116,7 +116,7 @@ module.exports = {
       css += '.' + window.__SLIDEMODAL_CLASS + '.' + window.__SHOWNMODAL_CLASS + ' .' + window.__CONTENTMODAL_CLASS + '{transform: translate(0, 0);}';
 
       css += '.hasTooltip{position: relative; pointer-events: auto; cursor: pointer;}';
-      css += '.hasTooltip .tooltipText{width: max-content; max-width: 300px; visibility: hidden; opacity: 0; text-decoration: none; position: absolute; background-color: #555; color: #fff; font-size: 15px; padding: 5px 10px; box-sizing: border-box; border-radius: 5px; transition: opacity 0.3s}';
+      css += '.hasTooltip .tooltipText{width: max-content; max-width: 300px; visibility: hidden; opacity: 0; text-decoration: none; position: absolute; background-color: #555; color: #fff; padding: 5px 10px; box-sizing: border-box; border-radius: 5px; transition: opacity 0.3s}';
       css += '.hasTooltip:hover .tooltipText{visibility: visible; opacity: 1;}';
 
       css += '.hasTooltip .tooltipText.tooltipGravity_top{bottom: 100%; margin-bottom: 10px; left: 50%; transform: translateX(-50%);}';
