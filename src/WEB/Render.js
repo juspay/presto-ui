@@ -783,8 +783,6 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
       view.type != 'listView'
     ){
       if(view.props.hasOwnProperty('tooltipText')){
-        console.log(view)
-        
         let tooltipText = view.props.tooltipText.trim()
 
         if(tooltipText){
@@ -793,7 +791,7 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
           elem.classList.add('hasTooltip')
 
           let tooltipElem = document.createElement('div')
-          tooltipElem.innerHTML = tooltipText
+          tooltipElem.innerHTML = '<pre>' + tooltipText + '</pre>'
           tooltipElem.classList.add('tooltipText')
           tooltipElem.classList.add('tooltipGravity_' + tooltipGravity)
           
