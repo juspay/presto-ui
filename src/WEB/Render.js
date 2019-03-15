@@ -278,6 +278,20 @@ function setAttributes(type, elem, props, firstRender) {
         elem.style.minHeight = props.minHeight + 'px';
     }
 
+    if(props.hasOwnProperty('maxWidth') && !isNaN(props.maxWidth)){
+      if(props.hasOwnProperty('percentMaxWidth') && props.percentMaxWidth)
+        elem.style.maxWidth = props.maxWidth + '%';
+      else
+        elem.style.maxWidth = props.maxWidth + 'px';
+    }
+
+    if(props.hasOwnProperty('maxHeight') && !isNaN(props.maxHeight)){
+      if(props.hasOwnProperty('percentMaxHeight') && props.percentMaxHeight)
+        elem.style.maxHeight = props.maxHeight + '%';
+      else
+        elem.style.maxHeight = props.maxHeight + 'px';
+    }
+
     if(props.hasOwnProperty('padding')){
       let padding = props.padding.split(',').map(a => a * 1);
   
