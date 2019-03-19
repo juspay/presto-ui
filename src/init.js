@@ -117,35 +117,7 @@ if (JBridge.hasOwnProperty("getKey")){
 window.updateLanguage = (lang) => {
   window.LANGUAGE = lang;
   JBridge.setKey("languagePref",lang);
-};
-
-/*window.onmousedown = (event) => {
-  if(window.__OS != "WEB")
-    return;
-
-  if(event.target){
-    let id = event.target.id;
-    let view = __VIEWS[id];
-    
-    if(view && view.props.hasOwnProperty('onMouseDown') && typeof view.props.onMouseDown == 'function'){
-      view.props.onMouseDown();
-    }
-  }
 }
-
-window.onmouseup = (event) => {
-  if(window.__OS != "WEB")
-    return;
-
-  if(event.target){
-    let id = event.target.id;
-    let view = __VIEWS[id];
-    
-    if(view && view.props.hasOwnProperty('onMouseUp') && typeof view.props.onMouseDown == 'function'){
-      view.props.onMouseUp();
-    }
-  }
-}*/
 
 window.onclick = (event) => {
   if(window.__OS != "WEB")

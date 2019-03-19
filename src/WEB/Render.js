@@ -556,61 +556,73 @@ let observer = (elem) => {
 
 let cb = (elem, view) => {
   if (view.props.feedback && typeof view.props.feedback == "function") {
-    view.props.feedback();
+    view.props.feedback()
   }
 
   if(view.props.hasOwnProperty('onClickEvent') && typeof view.props.onClickEvent == "function"){
     elem.addEventListener('click', function(){
-      view.props.onClickEvent();
-    });
+      view.props.onClickEvent()
+    })
   }
 
   if(view.props.hasOwnProperty('onChangeEvent') && typeof view.props.onChangeEvent == "function"){
     elem.addEventListener('change', function(){
-      view.props.onChangeEvent();
+      view.props.onChangeEvent()
     });
   }
 
   if(view.props.hasOwnProperty('onMouseDownEvent') && typeof view.props.onMouseDownEvent == "function"){
     elem.addEventListener('mousedown', function(){
-      view.props.onMouseDownEvent();
+      view.props.onMouseDownEvent()
     });
   }
 
   if(view.props.hasOwnProperty('onMouseUpEvent') && typeof view.props.onMouseUpEvent == "function"){
     elem.addEventListener('mouseup', function(){
-      view.props.onMouseUpEvent();
+      view.props.onMouseUpEvent()
     });
   }
 
   if(view.props.hasOwnProperty('onMouseEnterEvent') && typeof view.props.onMouseEnterEvent == "function"){
     elem.addEventListener('mouseenter', function(){
-      view.props.onMouseEnterEvent();
+      view.props.onMouseEnterEvent()
     });
   }
 
   if(view.props.hasOwnProperty('onMouseOverEvent') && typeof view.props.onMouseOverEvent == "function"){
     elem.addEventListener('mouseover', function(){
-      view.props.onMouseOverEvent();
+      view.props.onMouseOverEvent()
     });
   }
 
   if(view.props.hasOwnProperty('onMouseMoveEvent') && typeof view.props.onMouseMoveEvent == "function"){
     elem.addEventListener('mousemove', function(){
-      view.props.onMouseMoveEvent();
+      view.props.onMouseMoveEvent()
     });
   }
 
   if(view.props.hasOwnProperty('onMouseOutEvent') && typeof view.props.onMouseOutEvent == "function"){
     elem.addEventListener('mouseout', function(event){
-      view.props.onMouseOutEvent();
+      view.props.onMouseOutEvent()
     });
   }
 
   if(view.props.hasOwnProperty('onMouseLeaveEvent') && typeof view.props.onMouseLeaveEvent == "function"){
     elem.addEventListener('mouseleave', function(){
-      view.props.onMouseLeaveEvent();
+      view.props.onMouseLeaveEvent()
     });
+  }
+
+  if(view.props.hasOwnProperty('onFocusEvent') && typeof view.props.onFocusEvent == 'function'){
+    elem.addEventListener('focus', function(){
+      view.props.onFocusEvent()
+    })
+  }
+
+  if(view.props.hasOwnProperty('onBlurEvent') && typeof view.props.onBlurEvent == 'function'){
+    elem.addEventListener('blur', function(){
+      view.props.onBlurEvent()
+    })
   }
 }
 
