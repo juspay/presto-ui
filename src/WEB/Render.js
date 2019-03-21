@@ -522,14 +522,7 @@ let initializeShow = function(elem, props, type) {
   }
 }
 
-let isHorizontalScrollView = function (elem) {
-  return elem && elem.classList[0] == "horizontalScrollView";
-}
-
-let isScrollView = function (elem) {
-  return elem && elem.classList[0] == "scrollView";
-}
-
+/* Observer for afterRender */
 let observer = (elem) => {
   let id = elem.id;
   if(!id || __OBSERVERS[id])
@@ -554,6 +547,45 @@ let observer = (elem) => {
   (__OBSERVERS[id]).observe(elem, {attributes: true});
 }
 
+/* Control components after rendered */
+let controlComponentAfterRender = (elem, view) => {
+  if(!view.props.componentType)
+    return
+
+  let componentType = view.props.componentType
+  
+  switch(componentType) {
+    case 'inputBox':
+      /* Stroke Apply */
+      if(view.props.stroke) {
+        let stroke = view.props.stroke.split(',')
+        let borderWidth = 1
+        let borderStyle = 'solid'
+        let borderColor = '#A3AFC2'
+
+        if(stroke.length == 2) {
+          borderWidth = parseInt(stroke[0])
+          borderColor = stroke[1]
+        }else if(stroke.length == 3) {
+          borderWidth = parseInt(stroke[0])
+          borderStyle = stroke[1]
+          borderColor = stroke[2]
+        }
+
+        elem.addEventListener('focus', function() {
+          elem.style.border = borderWidth + "px " + borderStyle + " #707886"
+        })
+
+        elem.addEventListener('blur', function() {
+          elem.style.border = borderWidth + "px " + borderStyle + " " + borderColor
+        })
+      }
+      /* Stroke Apply End */
+    break
+  }
+}
+
+/* Do some actions after rendered */
 let cb = (elem, view) => {
   if (view.props.feedback && typeof view.props.feedback == "function") {
     view.props.feedback()
@@ -624,6 +656,11 @@ let cb = (elem, view) => {
       view.props.onBlurEvent()
     })
   }
+
+  /* Component Processing */
+  if(view.props.hasOwnProperty('componentType') && view.props.componentType)
+    controlComponentAfterRender(elem, view)
+  /* Component Processing End */
 }
 
 // Creates the Modal element if it has not been already inflated

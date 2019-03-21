@@ -9,7 +9,7 @@
     "object-assign": "^4.1.0",
     "promise": "^7.1.1",
     "qs": "^6.6.0",
-    "ramda": "latest"
+    "ramda": "^0.26.1"
   },
   "devDependencies": {
     "async": "latest",

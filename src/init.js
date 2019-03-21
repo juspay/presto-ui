@@ -66,6 +66,13 @@ window.callJSCallback = require("./helpers").android.callbackMapper.callJSCallba
 window.__WIDTH = window.__DEVICE_DETAILS.screen_width;
 window.__HEIGHT = window.__DEVICE_DETAILS.screen_height;
 
+/* Components */
+/*window.COMPS_GLOBAL_CLASSNAME = 'PDC'
+window.COMPS_TYPE_CLASSNAME = {
+    inputBox: 'PDC_inputBox'
+}*/
+/* Components End */
+
 /* Modal */
 window.__STYLE_ID = 'style_' + Math.random().toString(36).substr(2, 9);
 window.__MODAL_PROPS = {};
