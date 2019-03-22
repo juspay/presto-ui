@@ -347,7 +347,7 @@ function setAttributes(type, elem, props, firstRender) {
     } else if (type == "horizontalScrollView") {
       elem.style.overflowX = "auto";
       elem.style.overflowY = "hidden";
-
+      
       if(!scrollBarX)
         elem.style.overflowX = 'hidden';
     } else if (type == "listView") {
@@ -709,7 +709,11 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
   let newInflated = false;
 
   if (!elem) {
-    if (view.type == "imageView"){
+    if (view.type == "webView") {
+      elem = document.createElement('iframe')
+      
+      elem.style.border = 'none'
+    }else if (view.type == "imageView"){
       elem = document.createElement("img");
       elem["style"]["margin"] = "0";
       elem["style"]["padding"] = "0";
