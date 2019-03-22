@@ -29,31 +29,32 @@ let R = require("ramda");
 
 function createTextElement(elem, config) {
   let children = elem.childNodes;
-  let span = null
+  let article = null
 
   if(children.length){
     for(let i = 0; i < children.length; i++){
-      if(children[i].nodeName.toLowerCase() == 'span'){
-        span = children[i]
+      if(children[i].nodeName.toLowerCase() == 'article'){
+        article = children[i]
       }
     }
   }
   
-  //span = elem.childNodes.length ? elem.childNodes[0] : document.createElement('span');
-  if(!span)
-    span = document.createElement('span')
+  if(!article)
+    article = document.createElement('ARTICLE')
 
   elem.style.whiteSpace = "initial";
   
   if(config.isHtmlContent)
-    span.innerHTML = '<pre>' + config.text + '</pre>'
+    article.innerHTML = config.text
   else
-    span.innerHTML = config.text
+    article.innerText = config.text
 
-  span.style.wordBreak = "break-word"
-  if (config.letterSpacing)
-    elem["style"]["letter-spacing"] = config.letterSpacing;
-  elem.appendChild(span);
+  article.style.wordBreak = "break-word"
+  
+  if(config.letterSpacing)
+    elem["style"]["letter-spacing"] = config.letterSpacing
+
+  elem.appendChild(article);
 }
 
 function popup(elem, props) {
