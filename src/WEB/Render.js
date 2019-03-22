@@ -23,9 +23,10 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-let { computeChildDimens } = require("../compute");
-let helper = require("../helper");
-let R = require("ramda");
+let { computeChildDimens } = require("../compute")
+let { controlComponentAfterRender, controlComponentStyle } = require("../component")
+//let helper = require("../helper")
+let R = require("ramda")
 
 function createTextElement(elem, config) {
   let children = elem.childNodes;
@@ -473,6 +474,14 @@ function setAttributes(type, elem, props, firstRender) {
   } else if (props.animation.transition) {
     afterTransition();
   }
+
+  /* 
+    We are not calling this function when firstRender.
+    That's because we have another function for firstRender.
+  */
+  if(props.hasOwnProperty('componentType') && props.componentType && !firstRender) {
+    controlComponentStyle(elem, props)
+  }
 }
 
 function setModalAttributes(elem, props, firstRender) {
@@ -545,46 +554,6 @@ let observer = (elem) => {
   });
 
   (__OBSERVERS[id]).observe(elem, {attributes: true});
-}
-
-/* Control components after rendered */
-let controlComponentAfterRender = (elem, view) => {
-  console.log(view)
-  
-  if(!view.props.componentType)
-    return
-
-  let componentType = view.props.componentType
-  
-  switch(componentType) {
-    case 'inputBox':
-      /* Stroke Apply */
-      if(view.props.stroke) {
-        let stroke = view.props.stroke.split(',')
-        let borderWidth = 1
-        let borderStyle = 'solid'
-        let borderColor = '#A3AFC2'
-
-        if(stroke.length == 2) {
-          borderWidth = parseInt(stroke[0])
-          borderColor = stroke[1]
-        }else if(stroke.length == 3) {
-          borderWidth = parseInt(stroke[0])
-          borderStyle = stroke[1]
-          borderColor = stroke[2]
-        }
-
-        elem.addEventListener('focus', function() {
-          elem.style.border = borderWidth + "px " + borderStyle + " #707886"
-        })
-
-        elem.addEventListener('blur', function() {
-          elem.style.border = borderWidth + "px " + borderStyle + " " + borderColor
-        })
-      }
-      /* Stroke Apply End */
-    break
-  }
 }
 
 /* Do some actions after rendered */
@@ -718,7 +687,7 @@ let inflateModal = function (view, parentElement, stopChild) {
       if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
         // We should run observer for the element
         observer(elem);
-        elem.setAttribute('hasRender', true);
+        elem.setAttribute('has_render', true);
       }
     }
   }
@@ -906,7 +875,7 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
       if(!stopObserver){
         // We should run observer for the element
         observer(elem);
-        elem.setAttribute('hasRender', true);
+        elem.setAttribute('has_render', true);
       }
     }*/
   }else if(renderStyle){
@@ -954,7 +923,7 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
       if(!stopObserver){
         // We should run observer for the element
         observer(elem);
-        elem.setAttribute('hasRender', true);
+        elem.setAttribute('has_render', true);
       }
     }
     
