@@ -44,7 +44,12 @@ function createTextElement(elem, config) {
     span = document.createElement('span')
 
   elem.style.whiteSpace = "initial";
-  span.innerText = config.text;
+  
+  if(config.isHtmlContent)
+    span.innerHTML = '<pre>' + config.text + '</pre>'
+  else
+    span.innerHTML = config.text
+
   span.style.wordBreak = "break-word"
   if (config.letterSpacing)
     elem["style"]["letter-spacing"] = config.letterSpacing;
