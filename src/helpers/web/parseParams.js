@@ -66,10 +66,13 @@ function flattenObject(ob) {
   }
 
   return toReturn;
-};
+}
 
 function parseColors(color) {
   if (color.length < 8)
+    return color;
+
+  if (color.indexOf("rgba") !== -1 || color.indexOf("rgb") !== -1)
     return color;
 
   var alpha = parseInt(color.substring(1, 3), 16);
@@ -127,8 +130,7 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "backgroundColor") {
-    //config.style["background-color"] = parseColors(config.backgroundColor);
-    config.style["background-color"] = config.backgroundColor;
+    config.style.backgroundColor = parseColors(config.backgroundColor);
   }
 
   if (key == "background") {

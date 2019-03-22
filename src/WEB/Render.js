@@ -549,6 +549,8 @@ let observer = (elem) => {
 
 /* Control components after rendered */
 let controlComponentAfterRender = (elem, view) => {
+  console.log(view)
+  
   if(!view.props.componentType)
     return
 
