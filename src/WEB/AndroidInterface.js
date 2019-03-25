@@ -131,6 +131,9 @@ module.exports = {
       css += '.hasTooltip .tooltipText.tooltipGravity_bottom{top: 100%; margin-top: 10px; left: 50%; transform: translateX(-50%);}';
       css += '.hasTooltip .tooltipGravity_bottom:after{content: ""; position: absolute; bottom: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: transparent transparent #555 transparent;}';
 
+      css += '.componentWrapper .componentDropdownOption {background: #ffffff}'
+      css += '.componentWrapper .componentDropdownOption:hover, .componentWrapper .componentDropdownOption.selected {background: #EEF1F8}'
+
       styleElem = document.createElement('style');
       styleElem.setAttribute('id', style_id);
       styleElem.type = 'text/css';

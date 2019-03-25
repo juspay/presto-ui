@@ -36,6 +36,7 @@ function createTextElement(elem, config) {
     for(let i = 0; i < children.length; i++){
       if(children[i].nodeName.toLowerCase() == 'article'){
         article = children[i]
+        break
       }
     }
   }
@@ -388,7 +389,7 @@ function setAttributes(type, elem, props, firstRender) {
     } else if (key == "style") {
       for (let innerKey in props.style) {
         if (innerKey == "className")
-          elem.className += props.style[innerKey];
+          elem.className += " " + props.style[innerKey];
         else
           elem.style[innerKey] = props.style[innerKey];
       }
