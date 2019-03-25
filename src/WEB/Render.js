@@ -30,26 +30,32 @@ let R = require("ramda")
 
 function createTextElement(elem, config) {
   let children = elem.childNodes;
-  let span = null
+  let article = null
 
   if(children.length){
     for(let i = 0; i < children.length; i++){
-      if(children[i].nodeName.toLowerCase() == 'span'){
-        span = children[i]
+      if(children[i].nodeName.toLowerCase() == 'article'){
+        article = children[i]
       }
     }
   }
   
-  //span = elem.childNodes.length ? elem.childNodes[0] : document.createElement('span');
-  if(!span)
-    span = document.createElement('span')
+  if(!article)
+    article = document.createElement('ARTICLE')
 
   elem.style.whiteSpace = "initial";
-  span.innerText = config.text;
-  span.style.wordBreak = "break-word"
-  if (config.letterSpacing)
-    elem["style"]["letter-spacing"] = config.letterSpacing;
-  elem.appendChild(span);
+  
+  if(config.isHtmlContent)
+    article.innerHTML = config.text
+  else
+    article.innerText = config.text
+
+  article.style.wordBreak = "break-word"
+  
+  if(config.letterSpacing)
+    elem["style"]["letter-spacing"] = config.letterSpacing
+
+  elem.appendChild(article);
 }
 
 function popup(elem, props) {
@@ -348,7 +354,7 @@ function setAttributes(type, elem, props, firstRender) {
     } else if (type == "horizontalScrollView") {
       elem.style.overflowX = "auto";
       elem.style.overflowY = "hidden";
-
+      
       if(!scrollBarX)
         elem.style.overflowX = 'hidden';
     } else if (type == "listView") {
@@ -723,7 +729,11 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
   let newInflated = false;
 
   if (!elem) {
-    if (view.type == "imageView"){
+    if (view.type == "webView") {
+      elem = document.createElement('iframe')
+      
+      elem.style.border = 'none'
+    }else if (view.type == "imageView"){
       elem = document.createElement("img");
       elem["style"]["margin"] = "0";
       elem["style"]["padding"] = "0";
