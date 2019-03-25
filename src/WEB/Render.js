@@ -24,7 +24,7 @@
 */
 
 let { computeChildDimens } = require("../compute")
-let { controlComponentAfterRender, controlComponentStyle } = require("../component")
+let { controlComponent } = require("../component")
 //let helper = require("../helper")
 let R = require("ramda")
 
@@ -479,9 +479,8 @@ function setAttributes(type, elem, props, firstRender) {
     We are not calling this function when firstRender.
     That's because we have another function for firstRender.
   */
-  if(props.hasOwnProperty('componentType') && props.componentType && !firstRender) {
-    controlComponentStyle(elem, props)
-  }
+  if(props.hasOwnProperty('componentType') && props.componentType)
+    controlComponent(elem, props, firstRender)
 }
 
 function setModalAttributes(elem, props, firstRender) {
@@ -627,11 +626,6 @@ let cb = (elem, view) => {
       view.props.onBlurEvent()
     })
   }
-
-  /* Component Processing */
-  if(view.props.hasOwnProperty('componentType') && view.props.componentType)
-    controlComponentAfterRender(elem, view)
-  /* Component Processing End */
 }
 
 // Creates the Modal element if it has not been already inflated
