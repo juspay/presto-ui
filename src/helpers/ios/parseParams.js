@@ -1019,6 +1019,17 @@ function self_setPopupMenu(popupMenu, onMenuItemClick) {
   };
 }
 
+function this_setClipsToBounds(bounds) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName": "setClipsToBounds:",
+    "values": [{ "name": bounds ? "1" : "0", type: "i" }]
+  };
+}
+
 function UIColor_setColor(color) {
   let values;
   let alpha = "1.00";
@@ -1531,6 +1542,10 @@ module.exports = function(type, config, _getSetType) {
 
   if (config.hasOwnProperty("swypeEnabled")) {
     config.methods.push(this_setEnableSwype(config.swypeEnabled));
+  }
+
+  if (config.hasOwnProperty("clipsToBounds")) {
+    config.methods.push(this_setClipsToBounds(config.clipsToBounds));
   }
 
   config.currChildOffset = 0;
