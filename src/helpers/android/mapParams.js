@@ -109,6 +109,7 @@ var map = {
     fnName: 'requestFocus',
     inVokedIn: 'VIEW',
   },
+
   fillViewport: {
     values: [{
       type: 'b'
@@ -330,6 +331,16 @@ var map = {
     fnName: 'smoothScrollTo',
     inVokedIn: 'VIEW'
   },
+  "lineSpacing": {
+    values: [{
+      type: 'dp'
+    }, {
+      type: 'f'
+    }],
+    'dontMap': true,
+    fnName: 'setLineSpacing',
+    inVokedIn: 'VIEW'
+  },
   "url": {
     values: [{
       type: 's',
@@ -440,6 +451,14 @@ var map = {
       fnName: 'setBackground',
       inVokedIn: 'VIEW',
     },
+  "lineHeight": {
+    values: [{
+      type: 'dp'
+    }],
+    'dontMap': true,
+    fnName: 'setLineHeight',
+    inVokedIn: 'VIEW'
+  },
   "letterSpacing": {
     values: [{
       type: 'f',
@@ -520,6 +539,62 @@ var map = {
     fnName: 'setAllCaps',
     inVokedIn: 'VIEW',
   },
+  "expand": {
+    values: [{
+      type: 'b'
+    }],
+    'dontMap': true,
+    fnName: 'setExpand',
+    inVokedIn: 'VIEW'
+  },
+  "focusableInTouchMode": {
+    values: [{
+      type: 'b'
+    }],
+    'dontMap': true,
+    fnName: 'setFocusableInTouchMode',
+    inVokedIn: 'VIEW'
+  },
+  "descendantFocusability": {
+    values: [{
+      type: 'i'
+    }],
+    'dontMap': true,
+    fnName: 'setDescendantFocusability',
+    inVokedIn: 'VIEW'
+  },
+  "expandDuration": {
+    values: [{
+      type: 'i'
+    }],
+    'dontMap': true,
+    fnName: 'setExpandDuration',
+    inVokedIn: 'VIEW'
+  },
+  "expandScrollParent": {
+    values: [{
+      type: 'i'
+    }],
+    'dontMap': true,
+    fnName: 'setScrollParent',
+    inVokedIn: 'VIEW'
+  },
+  "expandAlpha": {
+    values: [{
+      type: 'f'
+    }],
+    'dontMap': true,
+    fnName: 'setExpandAlpha',
+    inVokedIn: 'VIEW'
+  },
+  "defaultExpand": {
+    values: [{
+      type: 'b'
+    }],
+    'dontMap': true,
+    fnName: 'setDefaultExpand',
+    inVokedIn: 'VIEW'
+  },
   "swypeEnabled": {
     values: [{
       type: 'b'
@@ -565,6 +640,7 @@ var map = {
       type: 'i',
       center_horizontal: 1,
       center_vertical: 16,
+      bottom : 80,
       left: 8388611,
       right: 8388613,
       center: 17,
@@ -759,30 +835,6 @@ var map = {
     values: [{
       type: 'i',
       'true': 11,
-      'false': 12121
-    }, {
-      type: 'i',
-      dontMap: true
-    }, ],
-    inVokedIn: 'PARAMS',
-    fnName: "addRule",
-  },
-  'alignParentRight': {
-    values: [{
-      type: 'i',
-      'true': 11,
-      'false': 12121
-    }, {
-      type: 'i',
-      dontMap: true
-    }, ],
-    inVokedIn: 'PARAMS',
-    fnName: "addRule",
-  },
-  'alignParentLeft': {
-    values: [{
-      type: 'i',
-      'true': 9,
       'false': 12121
     }, {
       type: 'i',

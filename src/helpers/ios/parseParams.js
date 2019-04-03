@@ -847,6 +847,36 @@ function this_setImageURL(id,url,placeholder) {
   };
 }
 
+function this_setGif(id, imageName) {
+  return {
+    "return": "false",
+    "invokeOn": "self",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "methodName": "loadGif:::",
+    "values": [{ "name": "" + id, "type": "s" }, { "name": imageName, "type": "s" }]
+  };
+}
+
+function this_startGif() {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName": "startGIF"
+  };
+}
+
+function this_stopGif() {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName": "stopGIF"
+  };
+}
+
 function self_setAlpha(alpha){
   return {
     "return": "false",
@@ -1224,11 +1254,22 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setFrame());
   }
 
- if (config.imageNamed) {
-   let id = cS(config.id);
-   let placeholder = config.placeHolder || "";
-   config.methods.push(this_setImageURL(id, config.imageNamed, placeholder));
- }
+  if (config.imageNamed) {
+    let id = cS(config.id);
+    let placeholder = config.placeHolder || "";
+    if (config.imageNamed.endsWith(".gif")){
+      config.methods.push(this_setGif(id, config.imageNamed));
+    } else {
+      config.methods.push(this_setImageURL(id, config.imageNamed, placeholder));
+    }
+  }
+
+  if (config.hasOwnProperty("playGif")){
+    if (config.playGif)
+      config.methods.push(this_startGif());
+    else 
+      config.methods.push(this_stopGif());
+  }
 
   if (config.hasOwnProperty("text")) {
     if (config.letterSpacing) {
@@ -1460,7 +1501,7 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setSwype(config.swypeEnabled));
   }
 
-  if (config.focus) {
+  if (config.hasOwnProperty("focus")) {
     config.methods.push(this_becomeFirstResponder(cS(config.focus)));
   }
 

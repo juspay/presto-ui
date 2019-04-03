@@ -42,6 +42,7 @@ var excluded = {
   "ShimmerFrameLayout": "com.facebook.shimmer.",
   "SwypeLayout": "in.juspay.godel.core.",
   "SwypeScroll": "in.juspay.godel.core.",
+  "AccordionLayout": "in.juspay.godel.core.",
 }
 
 function getCtr(viewGroup) {
@@ -62,6 +63,7 @@ function getCtr(viewGroup) {
     'expandableListView': 'android.widget.LinearLayout$LayoutParams->new',
     'recyclerView': 'android.support.v7.widget.RecyclerView$LayoutParams->new',
     'ratingBar': 'android.widget.LinearLayout$LayoutParams->new',
+    'accordionLayout': 'android.widget.FrameLayout$LayoutParams->new',
     'swypeLayout': 'android.widget.FrameLayout$LayoutParams->new',
     'swypeScroll': 'android.widget.LinearLayout$LayoutParams->new',
   }
