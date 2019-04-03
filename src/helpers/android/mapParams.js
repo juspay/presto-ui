@@ -640,6 +640,7 @@ var map = {
       type: 'i',
       center_horizontal: 1,
       center_vertical: 16,
+      bottom : 80,
       left: 8388611,
       right: 8388613,
       center: 17,
@@ -834,30 +835,6 @@ var map = {
     values: [{
       type: 'i',
       'true': 11,
-      'false': 12121
-    }, {
-      type: 'i',
-      dontMap: true
-    }, ],
-    inVokedIn: 'PARAMS',
-    fnName: "addRule",
-  },
-  'alignParentRight': {
-    values: [{
-      type: 'i',
-      'true': 11,
-      'false': 12121
-    }, {
-      type: 'i',
-      dontMap: true
-    }, ],
-    inVokedIn: 'PARAMS',
-    fnName: "addRule",
-  },
-  'alignParentLeft': {
-    values: [{
-      type: 'i',
-      'true': 9,
       'false': 12121
     }, {
       type: 'i',

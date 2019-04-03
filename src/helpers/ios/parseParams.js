@@ -1501,7 +1501,7 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setSwype(config.swypeEnabled));
   }
 
-  if (config.focus) {
+  if (config.hasOwnProperty("focus")) {
     config.methods.push(this_becomeFirstResponder(cS(config.focus)));
   }
 
