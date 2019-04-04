@@ -66,6 +66,10 @@ window.callJSCallback = require("./helpers").android.callbackMapper.callJSCallba
 window.__WIDTH = window.__DEVICE_DETAILS.screen_width;
 window.__HEIGHT = window.__DEVICE_DETAILS.screen_height;
 
+/* Components */
+window.__COMPONENT_EVENT = false
+/* Components End */
+
 /* Modal */
 window.__STYLE_ID = 'style_' + Math.random().toString(36).substr(2, 9);
 window.__MODAL_PROPS = {};

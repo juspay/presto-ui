@@ -51,6 +51,9 @@ function controlDropdownBoxStyle(elem, props, renderEvent) {
      elem.style.letterSpacing = 0.4
      elem.style.fontFamily = 'Helvetica'
      elem.style.padding = "5 15 5 15"
+
+     if(article)
+          article.style.pointerEvents = 'none'
      /* Default Styles End */
 
      /* Stroke Apply */
@@ -69,7 +72,7 @@ function controlDropdownBoxStyle(elem, props, renderEvent) {
                     return
 
                let has_value = elem.getAttribute('has_value')
-
+               
                if(has_value && has_value == 'yes') {
                     elem.removeAttribute('has_value')
                     elem.style.border = "1px solid #A3AFC2"
@@ -162,6 +165,7 @@ function createComponentDropdownBoxOption(parentElem, props, option, lastOption,
 
      let article = document.createElement('ARTICLE')
      article.innerText = option.text
+     article.style.pointerEvents = 'none'
 
      elem.appendChild(article)
      parentElem.appendChild(elem)
@@ -184,6 +188,14 @@ function controlComponent(elem, props, firstRender) {
           case 'dropdownBoxOptions':
                controlDropdownBoxOptionsStyle(elem, props, firstRender)
           break
+     }
+
+     if(!window.__COMPONENT_EVENT) {
+          window.__COMPONENT_EVENT = true
+
+          document.body.addEventListener('click', function(e) {
+               console.log(e.target)
+          })
      }
 }
 
