@@ -117,17 +117,22 @@ function parseLayoutProps(type, config, key) {
     
   if (key == "imageUrl"){
     let imageUrl = config.imageUrl;
-        
-    let temp = imageUrl.split('.');
-    let ext = '';
-    if(temp && temp.length > 0)
-      ext = temp[temp.length - 1];
     
-    let exts = ["jpeg", "jpg", "png", "bmp", "svg", "gif"];
-    ext = ext.toLowerCase();
+    if(config.rawData) {
+      // Do nothing
+    } else {
+      let temp = imageUrl.split('.');
+      let ext = '';
+      if(temp && temp.length > 0)
+        ext = temp[temp.length - 1];
+      
+      let exts = ["jpeg", "jpg", "png", "bmp", "svg", "gif"];
+      ext = ext.toLowerCase();
 
-    if(!exts.includes(ext))
-      imageUrl += '.png';
+      if(!exts.includes(ext)) {
+        imageUrl += '.png';
+      }
+    }
 
     config.attributes.src = imageUrl;
   }
