@@ -374,6 +374,28 @@ function setAttributes(type, elem, props, firstRender) {
         elem.style.overflowY = 'hidden';
     } else if(type == 'relativeLayout') {
       elem.style.position = 'relative';
+    } else if(type == 'imageView') {
+      if(props.imageUrl) {
+        let imageUrl = props.imageUrl
+
+        if(props.rawData) {
+          // Do Nothing
+        } else {
+          let temp = imageUrl.split('.')
+          let ext = ''
+          if(temp && temp.length > 0)
+            ext = temp[temp.length - 1]
+          
+          let exts = ["jpeg", "jpg", "png", "bmp", "svg", "gif"]
+          ext = ext.toLowerCase()
+
+          if(!exts.includes(ext)) {
+            imageUrl += '.png'
+          }
+        }
+
+        elem.setAttribute('src', imageUrl)
+      }
     }
     /* Render type specific styles end */
   /* New Style End */

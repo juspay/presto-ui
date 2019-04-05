@@ -115,7 +115,7 @@ function parseLayoutProps(type, config, key) {
   if (key == 'url')
     config.attributes.src = config.url
     
-  if (key == "imageUrl"){
+  /*if (key == "imageUrl"){
     let imageUrl = config.imageUrl;
     
     if(config.rawData) {
@@ -135,7 +135,7 @@ function parseLayoutProps(type, config, key) {
     }
 
     config.attributes.src = imageUrl;
-  }
+  }*/
 
   if (key == "backgroundColor") {
     config.style.backgroundColor = parseColors(config.backgroundColor);
