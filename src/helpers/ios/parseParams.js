@@ -23,9 +23,7 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-import colors from "./colors";
 import flattenObject from "./flattenObject";
-const R = require('ramda');
 
 
 var callbackMapper  = require("./callbackMapper");
@@ -1317,7 +1315,7 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setFont());
   }
 
-  if (config.hasOwnProperty("multipleLine")) {
+  if (config.hasOwnProperty("singleLine")) {
     config.methods.push(this_setLineBreakMode("0"));
     config.methods.push(this_setNumberOfLines("0"));
     //Not required right now. This case handled in native.
@@ -1328,8 +1326,8 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setHidden(config.visibility));
   }
 
-  if (config.hasOwnProperty("userInteraction")) {
-    config.methods.push(this_setUserInteraction(rWS(cS(config.userInteraction))));
+  if (config.hasOwnProperty("clickable")) {
+    config.methods.push(this_setUserInteraction(rWS(cS(config.clickable))));
   }
 
   if (config.translationX) {
@@ -1381,8 +1379,7 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(self_setHTMLText(props));
   }
 
-  // doesnt work
-  if (config.bringSubViewToFront) {
+  if (config.hasOwnProperty("bringSubViewToFront")) {
     let viewTag = cS(config.id);
     config.methods.push(this_bringSubViewToFront(viewTag));
   }
@@ -1438,8 +1435,8 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setKeyboardType(cS(config.inputType)));
   }
 
-  if (config.hasOwnProperty("autocapitalizationType")) {
-      let keyboardType = cS(config.autocapitalizationType);
+  if (config.hasOwnProperty("autoCapitalizationType")) {
+      let keyboardType = cS(config.autoCapitalizationType);
       config.methods.push(this_setAutocapitalizationType(keyboardType));
   }
 
@@ -1452,7 +1449,7 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(this_becomeFirstResponder());
   }
 
-  if (config.setOn) {
+  if (config.hasOwnProperty("setOn")) {
     let enabled = cS(config.setOn);
       config.methods.push(this_setOn(enabled));
   }
