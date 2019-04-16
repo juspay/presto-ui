@@ -769,12 +769,6 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
       elem = document.createElement("input");
       elem.setAttribute('type', 'checkbox');
 
-      if(view.props.hasOwnProperty('checked') && view.props.checked == true){
-        elem.setAttribute('checked', 'checked');
-      }else{
-        elem.removeAttribute('checked');
-      }
-
       if(view.props.hasOwnProperty('label') && view.props.label != '' && parentElement){
         subElem = document.createElement('label');
         subElem.setAttribute('for', view.props.id);
@@ -925,6 +919,14 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
 
     if(view.props.hasOwnProperty('scrollTop') && !isNaN(view.props.scrollTop))
       elem.scrollTop = view.props.scrollTop;
+  }
+
+  if(view.type == 'checkBox'){
+    if(view.props.hasOwnProperty('checked') && view.props.checked == true){
+      elem.setAttribute('checked', 'checked');
+    }else{
+      elem.removeAttribute('checked');
+    }
   }
 
   if(!stopChild)
