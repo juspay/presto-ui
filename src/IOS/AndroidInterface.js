@@ -146,6 +146,21 @@ module.exports = {
     this.recomputeView(parent);
   },
 
+  createListData: function (id, view) {
+    const parent = window.__VIEWS[id];
+    if (!parent) {
+      return "{}";
+    }
+    const views = window.__VIEWS;
+    window.__VIEWS = {};
+    parent.children = [view];
+    view.props.parentId = id;
+    render.computeChildDimens(parent);
+    const inflatedView = render.inflate(view);
+    window.__VIEWS = views;
+    return JSON.stringify(inflatedView);
+  },
+
   replaceView: function (view, id) {
     if (!window.__VIEWS[id]) {
       return console.error(new Error("AddViewToParent: Invalid parent ID: " + id));
