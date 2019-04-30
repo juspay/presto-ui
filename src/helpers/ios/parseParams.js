@@ -23,9 +23,7 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-import colors from "./colors";
 import flattenObject from "./flattenObject";
-const R = require('ramda');
 
 
 var callbackMapper  = require("./callbackMapper");
@@ -1032,6 +1030,17 @@ function self_setPopupMenu(popupMenu, onMenuItemClick) {
   };
 }
 
+function this_setClipsToBounds(bounds) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName": "setClipsToBounds:",
+    "values": [{ "name": bounds ? "1" : "0", type: "i" }]
+  };
+}
+
 function UIColor_setColor(color) {
   let values;
   let alpha = "1.00";
@@ -1319,7 +1328,7 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setFont());
   }
 
-  if (config.multipleLine) {
+  if (config.hasOwnProperty("singleLine")) {
     config.methods.push(this_setLineBreakMode("0"));
     config.methods.push(this_setNumberOfLines("0"));
     //Not required right now. This case handled in native.
@@ -1330,8 +1339,8 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setHidden(config.visibility));
   }
 
-  if (config.hasOwnProperty("userInteraction")) {
-    config.methods.push(this_setUserInteraction(rWS(cS(config.userInteraction))));
+  if (config.hasOwnProperty("clickable")) {
+    config.methods.push(this_setUserInteraction(rWS(cS(config.clickable))));
   }
 
   if (config.translationX) {
@@ -1383,8 +1392,7 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(self_setHTMLText(props));
   }
 
-  // doesnt work
-  if (config.bringSubViewToFront) {
+  if (config.hasOwnProperty("bringSubViewToFront")) {
     let viewTag = cS(config.id);
     config.methods.push(this_bringSubViewToFront(viewTag));
   }
@@ -1415,13 +1423,13 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(this_setStatusBarStyle(enabled));
   }
 
-  if (config.enabled) {
+  if (config.hasOwnProperty("enabled")) {
     let enabled = cS(config.enabled);
       config.methods.push(this_setEnabled(enabled));
   }
 
 
-  if (config.inputTypeI) {
+  if (config.hasOwnProperty("inputTypeI")) {
       let keyboardType = cS(config.inputTypeI);
       config.methods.push(this_setKeyboardType(keyboardType));
   }
@@ -1444,21 +1452,21 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setKeyboardType(cS(config.inputType)));
   }
 
-  if (config.autocapitalizationType) {
-      let keyboardType = cS(config.autocapitalizationType);
+  if (config.hasOwnProperty("autoCapitalizationType")) {
+      let keyboardType = cS(config.autoCapitalizationType);
       config.methods.push(this_setAutocapitalizationType(keyboardType));
   }
 
-  if (config.autoCorrectionType) {
+  if (config.hasOwnProperty("autoCorrectionType")) {
     let autoCorrectionType = cS(config.autoCorrectionType);
       config.methods.push(this_setAutoCorrectionType(autoCorrectionType));
   }
 
-  if (config.becomeFirstResponder) {
+  if (config.hasOwnProperty("becomeFirstResponder")) {
       config.methods.push(this_becomeFirstResponder());
   }
 
-  if (config.setOn) {
+  if (config.hasOwnProperty("setOn")) {
     let enabled = cS(config.setOn);
       config.methods.push(this_setOn(enabled));
   }
@@ -1548,6 +1556,10 @@ module.exports = function(type, config, _getSetType) {
 
   if (config.hasOwnProperty("swypeEnabled")) {
     config.methods.push(this_setEnableSwype(config.swypeEnabled));
+  }
+
+  if (config.hasOwnProperty("clipsToBounds")) {
+    config.methods.push(this_setClipsToBounds(config.clipsToBounds));
   }
 
   config.currChildOffset = 0;
