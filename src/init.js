@@ -53,7 +53,7 @@ const getScreenDetails = () => {
     console.error(
       "error in gettting screen dimensions, setting default values", err);
     return {
-      screen_width: "720",
+      screen_width: "1080",
       screen_height: "1920"
     };
   }

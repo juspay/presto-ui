@@ -320,6 +320,19 @@ function this_becomeFirstResponder(mode) {
   };
 }
 
+function this_setOnItemClick(callback) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setOnItemClick:",
+    "values":[
+      { "name": callbackMapper.map(callback), "type": "s" },
+    ]
+  }
+ }
+
 function this_setOnFocusCallback(callback) {
   return {
     "return": "false",
@@ -1383,6 +1396,10 @@ module.exports = function(type, config, _getSetType) {
 
   if(config.onFocus){
     config.methods.push(this_setOnFocusCallback(config.onFocus));
+  }
+
+  if(config.hasOwnProperty("onItemClick")){
+    config.methods.push(this_setOnItemClick(config.onItemClick));
   }
 
   if (type == 'uIScrollView') {
