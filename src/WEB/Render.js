@@ -923,9 +923,9 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
 
   if(view.type == 'checkBox'){
     if(view.props.hasOwnProperty('checked') && view.props.checked == true){
-      elem.setAttribute('checked', 'checked');
+      elem.checked = true
     }else{
-      elem.removeAttribute('checked');
+      elem.checked = false
     }
   }
 
