@@ -949,6 +949,39 @@ function this_scrollTo(value) {
   };
 }
 
+function this_setExpand(value) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "MJPExpandableCell",
+    "methodName": "setExpand:",
+    "values": [{"name": value, "type": "s"}]
+  };
+}
+
+function this_setExpandDuration(value) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "MJPExpandableCell",
+    "methodName": "setExpandDuration:",
+    "values": [{"name": value, "type": "s"}]
+  };
+}
+
+function this_setExpandAlpha(value) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "MJPExpandableCell",
+    "methodName": "setExpandAlpha:",
+    "values": [{"name": value, "type": "s"}]
+  };
+}
+
 function this_setSwype(value) {
   return {
     "return": "false",
@@ -1384,6 +1417,18 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_scrollTo(cS(parsedData)));
   }
 
+  if (config.hasOwnProperty("expand")) {
+    config.methods.push(this_setExpand(cS(config.expand)));
+  }
+
+  if (config.hasOwnProperty("expandDuration")) {
+    config.methods.push(this_setExpandDuration(cS(config.expandDuration)));
+  }
+
+  if (config.hasOwnProperty("expandAlpha")) {
+    config.methods.push(this_setExpandAlpha(cS(config.expandAlpha)));
+  }
+  
   //Updated to handle 0 being passed for default alignment
   if (config.hasOwnProperty("textAlignment")) {
       config.methods.push(this_setTextAlignment(rWS(cS(config.textAlignment))));
