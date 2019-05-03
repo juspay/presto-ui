@@ -1176,6 +1176,8 @@ function generateType(type, config) {
       generatedType = "mJPSwitch";
    } else if (type == "swypeLayout"){
       generatedType = "mJPSwypeLayoutCell";
+   } else if (type == "accordionLayout"){
+      generatedType = "mJPExpandableCell";
    } else {
       generatedType = "mJPView";
    }
