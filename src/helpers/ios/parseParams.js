@@ -633,9 +633,9 @@ function this_setTextAlignment(mode) {
     "fromStore": getSetType?"false":"true",
     "storeKey": "view" + window.__VIEW_INDEX,
     "invokeOn": getSetType?"this":"UIView",
-    "methodName":"setTextAlignment:",
+    "methodName":"setGravity:",
     "values":[
-      {"name": mode , "type": "i"}
+      {"name": mode , "type": "s"}
     ]
   }
 }
@@ -984,6 +984,62 @@ function this_setSeparatorRepeat(value) {
   };
 }
 
+
+function this_setSwipeCallback(value) {
+    return {
+        "return": "false",
+        "fromStore": getSetType ? "false" : "true",
+        "storeKey": "view" + window.__VIEW_INDEX,
+        "invokeOn": getSetType ? "this" : "MJPTableView",
+        "methodName": "setSwipeCallback:",
+        "values": [{ "name": value, type: "s" }]
+    };
+}
+
+function this_setupList(listData, listItem) {
+  return {
+    "return": "false",
+    "fromStore": "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "MJPTableView",
+    "methodName": "setupList::",
+    "values": [{ "name": listData, type: "s" }, { "name": listItem, type: "s" }]
+    };
+}
+
+function this_inlineAnimation(inlineAnimation) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "MJPTableView",
+    "methodName": "setInlineAnimation:",
+    "values": [{ "name": inlineAnimation, type: "s" }]
+    };
+}
+
+function this_setCloseSwipe(value) {
+    return {
+        "return": "false",
+        "fromStore": getSetType ? "false" : "true",
+        "storeKey": "view" + window.__VIEW_INDEX,
+        "invokeOn": getSetType ? "this" : "MJPTableView",
+        "methodName": "closeSwipe:",
+        "values": [{ "name": value ? "true" : "false", type: "s" }]
+    };
+}
+
+function this_setEnableSwype(value) {
+    return {
+        "return": "false",
+        "fromStore": getSetType ? "false" : "true",
+        "storeKey": "view" + window.__VIEW_INDEX,
+        "invokeOn": getSetType ? "this" : "MJPTableView",
+        "methodName": "setSwipeEnabled:",
+        "values": [{ "name": value ? "true" : "false", type: "s" }]
+    };
+}
+
 function UIView_bounds() {
   window.__RECT_INDEX++;
 
@@ -1023,6 +1079,17 @@ function self_setPopupMenu(popupMenu, onMenuItemClick) {
     "invokeOn": "self",
     "methodName": "createActionSheetWithTitles::",
     "values": [{ "name": popupMenu, "type": "s" }, { "name": callback, "type": "s" }]
+  };
+}
+
+function this_setClipsToBounds(bounds) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName": "setClipsToBounds:",
+    "values": [{ "name": bounds ? "1" : "0", type: "i" }]
   };
 }
 
@@ -1074,7 +1141,7 @@ function transformKeys(config) {
   return config;
 }
 
-function generateType(type) {
+function generateType(type, config) {
   var generatedType = "mJPView";
 
   if (type == "editText") {
@@ -1088,7 +1155,11 @@ function generateType(type) {
   } else if (type == "collectionView" || type == "viewPager") {
     generatedType = "mJPCollectionView";
   } else if (type == "tableView" || type == "listView") {
-    generatedType = "mJPTableView";
+    if (config.hasOwnProperty("listData") && config.hasOwnProperty("listItem")) {
+      generatedType = "mJPRepeatTableView";
+    } else {
+      generatedType = "mJPTableView";
+    }
   } else if (type == "progressBar") {
     generatedType = "mJPActivityIndicator";
   } else if (type == "switch") {
@@ -1126,11 +1197,7 @@ function changeKeys(config, type) {
 
   if (type == "textView" && config.gravity) {
     let value = config.gravity;
-    let alignMent = 0;
-
-    alignMent = (value == "left" ? "0" : (value == "center" ?  "1" : "2"));
-
-    config.textAlignment = alignMent;
+    config.textAlignment = value;
     delete config.gravity;
   }
 
@@ -1144,7 +1211,7 @@ function changeKeys(config, type) {
 // the extract className out of the stored object in the store
 module.exports = function(type, config, _getSetType) {
   config = changeKeys(flattenObject(config), type);
-  type = generateType(type);
+  type = generateType(type, config);
   getSetType = (_getSetType == "set")?1:0;
   config.methods = [];
 
@@ -1271,18 +1338,6 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(this_stopGif());
   }
 
-  if (config.hasOwnProperty("text")) {
-    if (config.letterSpacing) {
-      var data = JSON.stringify({
-        'text': cS(config.text),
-        'letterSpacing': config.letterSpacing
-      });
-      config.methods.push(this_setTextProperties(data));
-    } else {
-      config.methods.push(this_setText(cS(config.text)));
-    }
-  }
-
   if (config.hint) {
     if (config.letterSpacing) {
       var data = JSON.stringify({
@@ -1315,12 +1370,9 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_scrollTo(cS(parsedData)));
   }
 
-  if(config.cursorPosition) {
-    config.methods.push(self_setCursorPosition(cS(config.id), cS(config.cursorPosition)));
-  }
-
-  if (config.textAlignment) {
-    config.methods.push(this_setTextAlignment(rWS(cS(config.textAlignment))));
+  //Updated to handle 0 being passed for default alignment
+  if (config.hasOwnProperty("textAlignment")) {
+      config.methods.push(this_setTextAlignment(rWS(cS(config.textAlignment))));
   }
 
   if (config.textColor) {
@@ -1346,7 +1398,8 @@ module.exports = function(type, config, _getSetType) {
   if (config.multipleLine) {
     config.methods.push(this_setLineBreakMode("0"));
     config.methods.push(this_setNumberOfLines("0"));
-    config.methods.push(this_sizeToFit());
+    //Not required right now. This case handled in native.
+    // config.methods.push(this_sizeToFit());
   }
 
   if (config.visibility) {
@@ -1447,7 +1500,7 @@ module.exports = function(type, config, _getSetType) {
 
   if (config.inputType) {
     let keyboardType = config.inputType;
-    if (keyboardType == "numeric") {
+    if (keyboardType == "numeric" || keyboardType == "numericWithoutSuggestion") {
       config.inputType = 4;
     } else if (keyboardType == "email") {
       config.inputType = 7;
@@ -1548,6 +1601,43 @@ module.exports = function(type, config, _getSetType) {
       json: config.animation
     };
     config.methods.push(self_animateNew(animProps));
+  }
+
+  if (config.hasOwnProperty("text")) {
+    if (config.letterSpacing) {
+      config.methods.push(this_setLetterSpacing(cS(config.letterSpacing)));
+    }
+    config.methods.push(this_setText(cS(config.text)));
+  }
+
+  if(config.cursorPosition) {
+    config.methods.push(self_setCursorPosition(cS(config.id), cS(config.cursorPosition)));
+  }
+
+  if (config.onSwipe && typeof config.onSwipe === "function") {
+      config.methods.push(this_setSwipeCallback(callbackMapper.map(config.onSwipe)));
+  }
+
+  if (config.hasOwnProperty("closeSwipe")) {
+      config.methods.push(this_setCloseSwipe(config.closeSwipe));
+  }
+
+  if (config.hasOwnProperty("swypeEnabled")) {
+    config.methods.push(this_setEnableSwype(config.swypeEnabled));
+  }
+
+  if (config.hasOwnProperty("listData") && config.hasOwnProperty("listItem")) {
+    const item = JSON.parse(config.listItem);
+    item.itemView = Android.createListData(config.id, item.itemView);
+    config.methods.push(this_setupList(config.listData, JSON.stringify(item)));
+  }
+
+  if (config.hasOwnProperty("inlineAnimation")) {
+    config.methods.push(this_inlineAnimation(config.inlineAnimation));
+  }
+
+  if (config.hasOwnProperty("clipsToBounds")) {
+    config.methods.push(this_setClipsToBounds(config.clipsToBounds));
   }
 
   config.currChildOffset = 0;

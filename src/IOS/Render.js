@@ -80,10 +80,11 @@ function inflate(view) {
   const move = helper.shouldMove(view);
   const inflateChilds = helper.shouldInfateChilds(view);
   helper.cacheDimen(view);
-
+  let ranRunInUI = false;
   if (move) {
     move.id = id;
-    runInUIHelper(view.type, move);
+    runInUIHelper(view.type, view.props);
+    ranRunInUI = true;
   }
 
   computeChildDimens(view)
@@ -98,6 +99,7 @@ function inflate(view) {
     };
     runInUI(cmd, true);
   }
+  return ranRunInUI;
 }
 
 function runInUI(cmd, fromInflate) {
@@ -109,23 +111,34 @@ function runInUI(cmd, fromInflate) {
     const view = window.__VIEWS[id];
     const parent = window.__VIEWS[view.props.parentId];
     view.props = R.merge(view.props, each);
-    if (each.visibility !== "visible") {
-      runInUIHelper(view.type, view.props);
+    //Adding as stop gag solution for editText in ios where text 
+    //was getting set empty in case other properties were modified.
+    if (!each.hasOwnProperty('text')){
+      delete view.props.text;
     }
+    // if (each.visibility !== "visible") {
+    //   runInUIHelper(view.type, view.props);
+    // }
     if (parent && !fromInflate) {
-      const view = parent;
-      if (view.type.indexOf("scroll") != -1) {
-        inflate(view);
+      if (parent.type.indexOf("scroll") != -1) {
+        inflate(parent);
       }
-      computeChildDimens(view);
-      const children = view.children;
+      computeChildDimens(parent);
+      const children = parent.children;
+      if(!inflate(view)) {
+        runInUIHelper(view.type, view.props);
+      };
       for (let i = 0, len = children.length; i < len; i++) {
+        if (view != children[i]) {
           inflate(children[i]);
+        }
       }
-    }
-    if (each.visibility === "visible") {
+    } else {
       runInUIHelper(view.type, view.props);
     }
+    // if (each.visibility === "visible") {
+    //   runInUIHelper(view.type, view.props);
+    // }
   });
 };
 
