@@ -1142,33 +1142,34 @@ function transformKeys(config) {
 }
 
 function generateType(type, config) {
-  var generatedType = "mJPView";
-
-  if (type == "editText") {
-    generatedType = "mJPTextField";
-  } else if (type == "imageView") {
-    generatedType = "uIImageView";
-  } else if (type == "textView") {
-    generatedType = "mJPLabel";
-  } else if (type == "scrollView" || type == "horizontalScrollView") {
-    generatedType = "mJPScrollView";
-  } else if (type == "collectionView" || type == "viewPager") {
-    generatedType = "mJPCollectionView";
-  } else if (type == "tableView" || type == "listView") {
-    if (config.hasOwnProperty("listData") && config.hasOwnProperty("listItem")) {
-      generatedType = "mJPRepeatTableView";
-    } else {
-      generatedType = "mJPTableView";
-    }
-  } else if (type == "progressBar") {
-    generatedType = "mJPActivityIndicator";
-  } else if (type == "switch") {
-    generatedType = "mJPSwitch";
-  } else {
-    generatedType = "mJPView";
-  }
-
-  return generatedType;
+   var generatedType = "mJPView";
+   if (type == "editText") {
+      generatedType = "mJPTextField";
+   } else if (type == "imageView") {
+      generatedType = "uIImageView";
+   } else if (type == "textView") {
+      generatedType = "mJPLabel";
+   } else if (type == "scrollView" || type == "horizontalScrollView") {
+      generatedType = "mJPScrollView";
+   } else if (type == "collectionView" || type == "viewPager") {
+      generatedType = "mJPCollectionView";
+   } else if (type == "tableView" || type == "listView") {
+      if (config.hasOwnProperty("listData") && config.hasOwnProperty("listItem")) {
+         generatedType = "mJPRepeatTableView";
+      } else {
+         generatedType = "mJPTableView";
+      }
+   } else if (type == "progressBar") {
+      generatedType = "mJPActivityIndicator";
+   } else if (type == "switch") {
+      generatedType = "mJPSwitch";
+   } else if (type == "swypeLayout"){
+      generatedType = "mJPSwypeLayoutCell";
+   } else {
+      generatedType = "mJPView";
+   }
+   
+   return generatedType;
 }
 
 function changeKeys(config, type) {
