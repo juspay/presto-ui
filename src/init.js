@@ -66,21 +66,47 @@ window.callJSCallback = require("./helpers").android.callbackMapper.callJSCallba
 window.__WIDTH = window.__DEVICE_DETAILS.screen_width;
 window.__HEIGHT = window.__DEVICE_DETAILS.screen_height;
 
+const guid = Math.random().toString(36).substr(2, 9)
+
 /* Components */
-window.__COMPONENT_EVENT = false
+window.__COM_EVENT = false
+window.__COM_CLASS_GROUP = {
+  WRAPPER: 'com_wrapper_' + guid,
+  NAVBAR: 'com_navbar_' + guid,
+  NAVBAR_ITEM: 'com_navbar_item_' + guid,
+  NAVBAR_ITEM_WITH_SUB: 'com_navbar_has_sub_' + guid, 
+  NAVBAR_SUB_ITEM: 'com_navbar_subitem_' + guid,
+  DSB: 'com_dsb_' + guid,
+  DSB_BODY: 'com_dsb_body_' + guid,
+  DSB_OPTIONS: 'com_dsb_options_' + guid,
+  DSB_OPTION: 'com_dsb_option_' + guid,
+  DSB_SEARCH: 'com_dsb_search_' + guid
+}
+window.__COM_COLOR_GROUP = {
+  BG: '#ffffff',
+  ACTIVE_BG: '#EEF1F8',
+  ACTIVE_COLOR: 'rgb(53, 64, 82)',
+  INACTIVE_COLOR: 'rgba(53, 64, 82, 0.5)',
+  BORDER_COLOR: '#A3AFC2',
+  ACTIVE_BORDER_COLOR: '#707886',
+  SEARCH_COLOR: '#dddddd'
+}
+window.__COM_ACTIVE = {
+  DSB: ''
+}
 /* Components End */
 
 /* Modal */
-window.__STYLE_ID = 'style_' + Math.random().toString(36).substr(2, 9);
-window.__MODAL_PROPS = {};
-window.__CONTENTMODAL_CLASS = 'modal_' + Math.random().toString(36).substr(2, 9);
-window.__OPENMODAL_CLASS = 'modal-open_' + Math.random().toString(36).substr(2, 9);
-window.__BACKDROPMODAL_CLASS = 'modal-backdrop_' + Math.random().toString(36).substr(2, 9);
-window.__DISABLEDBACKDROP_CLASS = 'modal-backdrop-disabled_' + Math.random().toString(36).substr(2, 9);
-window.__SHOWNMODAL_CLASS = 'modal-shown_' + Math.random().toString(36).substr(2, 9);
+window.__STYLE_ID = 'style_' + guid
+window.__MODAL_PROPS = {}
+window.__CONTENTMODAL_CLASS = 'modal_' + guid
+window.__OPENMODAL_CLASS = 'modal-open_' + guid
+window.__BACKDROPMODAL_CLASS = 'modal-backdrop_' + guid
+window.__DISABLEDBACKDROP_CLASS = 'modal-backdrop-disabled_' + guid
+window.__SHOWNMODAL_CLASS = 'modal-shown_' + guid
 
-window.__FADEMODAL_CLASS = 'modal-fade_' + Math.random().toString(36).substr(2, 9);
-window.__SLIDEMODAL_CLASS = 'modal-slide_' + Math.random().toString(36).substr(2, 9);
+window.__FADEMODAL_CLASS = 'modal-fade_' + guid
+window.__SLIDEMODAL_CLASS = 'modal-slide_' + guid
 /* Modal End */
 
 window.__ID = 1;

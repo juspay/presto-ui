@@ -23,8 +23,8 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-let { computeChildDimens } = require("../compute")
-let { controlComponent } = require("../component")
+let { computeChildDimens } = require("../compute") 
+let { renderComponent } = require("../component")
 //let helper = require("../helper")
 let R = require("ramda")
 
@@ -44,19 +44,22 @@ function createTextElement(elem, config) {
   if(!article)
     article = document.createElement('ARTICLE')
 
-  elem.style.whiteSpace = "initial";
+  elem.style.whiteSpace = "initial"
   
   if(config.isHtmlContent)
     article.innerHTML = config.text
   else
     article.innerText = config.text
 
+  if(!config.text && config.hint)
+    article.innerText = config.hint
+
   article.style.wordBreak = "break-word"
   
   if(config.letterSpacing)
     elem["style"]["letter-spacing"] = config.letterSpacing
 
-  elem.appendChild(article);
+  elem.appendChild(article)
 }
 
 function popup(elem, props) {
@@ -402,12 +405,12 @@ function setAttributes(type, elem, props, firstRender) {
   
   for (let key in props) {
     if (key == "popupMenu") {
-      popup(elem, props);
+      popup(elem, props)
     } else if (key == "text") {
       if (type == "editText")
-        elem.value = props[key];
+        elem.value = props[key]
       else
-        createTextElement(elem, props);
+        createTextElement(elem, props)
     } else if (key == "style") {
       for (let innerKey in props.style) {
         if (innerKey == "className")
@@ -504,12 +507,17 @@ function setAttributes(type, elem, props, firstRender) {
     afterTransition();
   }
 
-  /* 
-    We are not calling this function when firstRender.
-    That's because we have another function for firstRender.
-  */
+  /* Component Part */
+  if(props.hasOwnProperty('elementType') && props.elementType == 'component') {
+    elem.classList.add(window.__COM_CLASS_GROUP.WRAPPER)
+    elem.style.pointerEvents = 'none'
+
+    if(firstRender)
+      elem.setAttribute('guid', props.guid)
+  }
+
   if(props.hasOwnProperty('componentType') && props.componentType)
-    controlComponent(elem, props, firstRender)
+    renderComponent(elem, props, firstRender)
 }
 
 function setModalAttributes(elem, props, firstRender) {
