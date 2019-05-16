@@ -5,6 +5,11 @@ NavBar.prototype._getActiveRouteItem = function(guid) {
      return document.body.querySelector(query) 
 }
 
+NavBar.prototype._getMainObject = function(guid) {
+     let query = '.' + window.__COM_CLASS_GROUP.NAVBAR + '[guid="' + guid +'"]'
+     return document.body.querySelector(query)
+}
+
 NavBar.prototype._openByGUID = function(guid, parentElem) {
      parentElem.classList.add('selected')
      window.__COM_ACTIVE.NAVBAR = guid
@@ -18,6 +23,28 @@ NavBar.prototype._closeByGUID = function(guid) {
      window.__COM_ACTIVE.NAVBAR = ''
 }
 
+NavBar.prototype._selectRouteByGUID = function(guid, elem) {
+     let key = elem.getAttribute('route-key')
+     let text = elem.getAttribute('route-text')
+
+     let object = this._getMainObject(guid)
+     let objectID = object.id
+     
+     if(!key || !text || !objectID)
+          return
+     
+     let view = window.__VIEWS[objectID]
+     
+     if(!view || !view.props)
+          return
+
+     /* Event Trigger */
+     if (view.props.onSelect && typeof view.props.onSelect == "function") {
+          view.props.onSelect(key)
+     }
+     
+}
+
 NavBar.prototype._renderRoute = function(parentElem, props, guid, route, renderEvent) {
      if(!route.key || !route.text)
           return
@@ -28,6 +55,11 @@ NavBar.prototype._renderRoute = function(parentElem, props, guid, route, renderE
      elem.setAttribute('route-key', route.key)
      elem.setAttribute('route-text', route.text)
      elem.setAttribute('guid', guid)
+
+     if(props.value && props.value == route.key)
+          elem.classList.add('selected')
+     else
+          elem.classList.remove('selected')
 
      let article = document.createElement('article')
      if(props.height && !isNaN(props.height))
@@ -71,6 +103,11 @@ NavBar.prototype._renderSubRoute = function(parentElem, props, guid, route, rend
      elem.setAttribute('route-key', route.key)
      elem.setAttribute('route-text', route.text)
      elem.setAttribute('guid', guid)
+
+     if(props.value && props.value == route.key)
+          elem.classList.add('selected')
+     else
+          elem.classList.remove('selected')
 
      let article = document.createElement('article')
      article.innerHTML = route.text

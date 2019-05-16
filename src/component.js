@@ -77,7 +77,7 @@ function renderComponent(elem, props, firstRender) {
                          if(classList.contains('selected'))
                               return
                          
-                         
+                         NavBar._selectRouteByGUID(guid, target)
                     } else if(classList.contains(window.__COM_CLASS_GROUP.DSB)) { // DSB Main Click
                          if(guid == window.__COM_ACTIVE.DSB) {
                               DropdownSearchBox._closeByGUID(guid)
