@@ -1,5 +1,23 @@
 function NavBar() {}
 
+NavBar.prototype._getActiveRouteItem = function(guid) {
+     let query = '.' + window.__COM_CLASS_GROUP.NAVBAR_ITEM_WITH_SUB + '.selected[guid="' + guid +'"]'
+     return document.body.querySelector(query) 
+}
+
+NavBar.prototype._openByGUID = function(guid, parentElem) {
+     parentElem.classList.add('selected')
+     window.__COM_ACTIVE.NAVBAR = guid
+}
+
+NavBar.prototype._closeByGUID = function(guid) {
+     let object = this._getActiveRouteItem(guid)
+     if(object)
+          object.classList.remove('selected')
+
+     window.__COM_ACTIVE.NAVBAR = ''
+}
+
 NavBar.prototype._renderRoute = function(parentElem, props, guid, route, renderEvent) {
      if(!route.key || !route.text)
           return
@@ -12,6 +30,9 @@ NavBar.prototype._renderRoute = function(parentElem, props, guid, route, renderE
      elem.setAttribute('guid', guid)
 
      let article = document.createElement('article')
+     if(props.height && !isNaN(props.height))
+          article.style.lineHeight = props.height + 'px'
+
      elem.appendChild(article)
 
      if(route.subroutes && route.subroutes.length > 0) {
@@ -19,6 +40,13 @@ NavBar.prototype._renderRoute = function(parentElem, props, guid, route, renderE
           elem.classList.add(window.__COM_CLASS_GROUP.NAVBAR_ITEM_WITH_SUB)
 
           let virtualElem = document.createElement('UL')
+          virtualElem.classList.add(window.__COM_CLASS_GROUP.NAVBAR_SUB)
+          virtualElem.setAttribute('guid', guid)
+
+          virtualElem.style.border = '1px solid ' + window.__COM_COLOR_GROUP.BORDER_COLOR
+          if(props.translationZ_nav)
+               virtualElem.style.zIndex = props.translationZ_nav
+
           elem.appendChild(virtualElem)
 
           for(let i = 0; i < route.subroutes.length; i++) {
@@ -55,7 +83,7 @@ NavBar.prototype._renderMain = function(elem, props, renderEvent) {
      elem.innerHTML = ''
      elem.style.pointerEvents = 'none'
      elem.style.fontSize = 14
-     elem.style.letterSpacing = 0.2
+     elem.style.letterSpacing = 0.4
      elem.style.fontFamily = 'Helvetica'
 
      let routes = []
@@ -66,7 +94,9 @@ NavBar.prototype._renderMain = function(elem, props, renderEvent) {
      if(elem.getAttribute('guid'))
           guid = elem.getAttribute('guid')
 
-     let virtualElem = document.createElement('UL')  
+     let virtualElem = document.createElement('UL')
+     virtualElem.style.height = '100%'
+
      elem.appendChild(virtualElem)
 
      if(routes.length > 0) {

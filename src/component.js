@@ -2,6 +2,13 @@ const DropdownSearchBox = require('./components/DropdownSearchBox')
 const NavBar = require('./components/NavBar')
 
 /* Components */
+function closeAllActiveComponents() {
+     if(window.__COM_ACTIVE.NAVBAR != '')
+          NavBar._closeByGUID(window.__COM_ACTIVE.NAVBAR)
+     if(window.__COM_ACTIVE.DSB != '')
+          DropdownSearchBox._closeByGUID(window.__COM_ACTIVE.DSB)
+}
+
 function renderComponent(elem, props, firstRender) {
      if(!props.componentType)
           return
@@ -49,19 +56,33 @@ function renderComponent(elem, props, firstRender) {
                let guid = target.getAttribute('guid')
                
                if(!guid) { // We need to close any active components
-                    if(window.__COM_ACTIVE.DSB != '')
-                         DropdownSearchBox._closeByGUID(window.__COM_ACTIVE.DSB)
+                    closeAllActiveComponents()
                } else {
                     let classList = target.classList
 
-                    if(classList.contains(window.__COM_CLASS_GROUP.DSB)) { // DSB Main Click
+                    if(classList.contains(window.__COM_CLASS_GROUP.NAVBAR_ITEM_WITH_SUB)) { // NAVBAR Menu Item with SubRoute
+                         if(classList.contains('selected')) {
+                              if(!window.__COM_ACTIVE.NAVBAR)
+                                   return
+
+                              NavBar._closeByGUID(window.__COM_ACTIVE.NAVBAR)
+                         } else {
+                              closeAllActiveComponents()
+                              NavBar._openByGUID(guid, target)
+                         }
+                    } else if(classList.contains(window.__COM_CLASS_GROUP.NAVBAR_ITEM) || classList.contains(window.__COM_CLASS_GROUP.NAVBAR_SUB_ITEM)) { // NAVBAR Menu Item (Sub Item as well)
+                         if(window.__COM_ACTIVE.NAVBAR)
+                              NavBar._closeByGUID(window.__COM_ACTIVE.NAVBAR)
+
+                         if(classList.contains('selected'))
+                              return
+                         
+                         
+                    } else if(classList.contains(window.__COM_CLASS_GROUP.DSB)) { // DSB Main Click
                          if(guid == window.__COM_ACTIVE.DSB) {
                               DropdownSearchBox._closeByGUID(guid)
                          } else {
-                              if(window.__COM_ACTIVE.DSB != '') {
-                                   DropdownSearchBox._closeByGUID(window.__COM_ACTIVE.DSB)
-                              }
-          
+                              closeAllActiveComponents()
                               DropdownSearchBox._openByGUID(guid)
                          }
                     } else if(classList.contains(window.__COM_CLASS_GROUP.DSB_OPTION)) { // DSB Option Select

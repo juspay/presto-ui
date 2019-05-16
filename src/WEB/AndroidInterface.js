@@ -133,10 +133,13 @@ module.exports = {
 
       // NavBar
       css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul{ list-style: none !important;}'
-      css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li { position:relative !important; display: inline-block !important; pointer-events: auto !important; cursor: pointer !important; padding: 5px 10px !important;}'
+      css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li { color: ' + window.__COM_COLOR_GROUP.INACTIVE_COLOR + '; position:relative !important; display: inline-block !important; pointer-events: auto !important; cursor: pointer !important; padding-left: 10px !important; padding-right: 10px !important;}'
+      css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li:hover, .' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li.selected {color: ' + window.__COM_COLOR_GROUP.ACTIVE_COLOR + ';}'
       css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li article { pointer-events: none !important; }'
-      css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li ul { position: absolute !important; z-index: 1 !important; pointer-events: none !important;}'
-      css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li ul li { display: block !important; pointer-events: auto !important;}'
+      css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li ul { background: white !important; display: none !important; position: absolute !important; pointer-events: none !important; width: max-content !important;}'
+      css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li.selected ul {display: block !important;}'
+      css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li ul li { display: block !important; pointer-events: auto !important; padding-left: 10px !important; padding-right: 10px !important; padding-top: 10px !important; padding-bottom: 10px !important;}'
+      css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li ul li:hover, ' + '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li ul li.selected {background: ' + window.__COM_COLOR_GROUP.ACTIVE_BG + '}'
 
       // DropDown Search Box
       css += '.' + window.__COM_CLASS_GROUP.DSB_OPTION + ':hover, .' + window.__COM_CLASS_GROUP.DSB_OPTION + '.selected {background: ' + window.__COM_COLOR_GROUP.ACTIVE_BG + '}'
