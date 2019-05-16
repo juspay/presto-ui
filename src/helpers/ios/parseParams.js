@@ -283,7 +283,7 @@ function this_setKeyboardType(mode) {
  }
 }
 
-function this_setAutocapitalizationType(mode) {
+function this_setAutoCapitalizationType(mode) {
  return {
    "return": "false",
    "fromStore": getSetType?"false":"true",
@@ -1455,10 +1455,10 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (config.hasOwnProperty("singleLine")) {
-    config.methods.push(this_setLineBreakMode("0"));
-    config.methods.push(this_setNumberOfLines("0"));
-    //Not required right now. This case handled in native.
-    // config.methods.push(this_sizeToFit());
+    if(!config.singleLine){
+      config.methods.push(this_setLineBreakMode("0"));
+      config.methods.push(this_setNumberOfLines("0"));
+    }
   }
 
   if (config.visibility) {
@@ -1580,7 +1580,7 @@ module.exports = function(type, config, _getSetType) {
 
   if (config.hasOwnProperty("autoCapitalizationType")) {
       let keyboardType = cS(config.autoCapitalizationType);
-      config.methods.push(this_setAutocapitalizationType(keyboardType));
+      config.methods.push(this_setAutoCapitalizationType(keyboardType));
   }
 
   if (config.hasOwnProperty("autoCorrectionType")) {
