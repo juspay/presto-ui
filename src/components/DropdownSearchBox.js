@@ -131,10 +131,10 @@ DropdownSearchBox.prototype._renderOption = function(parentElem, props, guid, op
      elem.style.display = 'flex'
      elem.style.alignItems = 'center'
      elem.style.cursor = 'pointer'
-     elem.style.fontSize = 14
-     elem.style.letterSpacing = 0.4
+     elem.style.fontSize = '14px'
+     elem.style.letterSpacing = '0.4px'
      elem.style.fontFamily = 'Helvetica'
-     elem.style.padding = "5 15 5 15"
+     elem.style.padding = "5px 15px 5px 15px"
      elem.style.pointerEvents = 'auto'
 
      elem.setAttribute('guid', guid)
@@ -196,10 +196,10 @@ DropdownSearchBox.prototype._renderMain = function(elem, props, renderEvent) {
      elem.style.display = 'flex'
      elem.style.alignItems = 'center'
      elem.style.cursor = 'pointer'
-     elem.style.fontSize = 14
-     elem.style.letterSpacing = 0.4
+     elem.style.fontSize = '14px'
+     elem.style.letterSpacing = '0.4px'
      elem.style.fontFamily = 'Helvetica'
-     elem.style.padding = "5 15 5 15"
+     elem.style.padding = "5px 15px 5px 15px"
      elem.style.border = "1px solid " + window.__COM_COLOR_GROUP.BORDER_COLOR
      
      if(article)
@@ -236,8 +236,8 @@ DropdownSearchBox.prototype._renderSearch = function(elem, props, renderEvent) {
      elem.style.width = '100%'
      elem.style.height = '100%'
      elem.style.color = window.__COM_COLOR_GROUP.ACTIVE_COLOR
-     elem.style.fontSize = 14
-     elem.style.letterSpacing = 0.4
+     elem.style.fontSize = '14px'
+     elem.style.letterSpacing = '0.4px'
      elem.style.fontFamily = 'Helvetica'
 }
 

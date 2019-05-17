@@ -75,7 +75,6 @@ NavBar.prototype._renderRoute = function(parentElem, props, guid, route, renderE
           virtualElem.classList.add(window.__COM_CLASS_GROUP.NAVBAR_SUB)
           virtualElem.setAttribute('guid', guid)
 
-          virtualElem.style.border = '1px solid ' + window.__COM_COLOR_GROUP.BORDER_COLOR
           if(props.translationZ_nav)
                virtualElem.style.zIndex = props.translationZ_nav
 
@@ -119,8 +118,8 @@ NavBar.prototype._renderSubRoute = function(parentElem, props, guid, route, rend
 NavBar.prototype._renderMain = function(elem, props, renderEvent) {
      elem.innerHTML = ''
      elem.style.pointerEvents = 'none'
-     elem.style.fontSize = 14
-     elem.style.letterSpacing = 0.4
+     elem.style.fontSize = '14px'
+     elem.style.letterSpacing = '0.4px'
      elem.style.fontFamily = 'Helvetica'
 
      let routes = []

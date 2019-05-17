@@ -136,14 +136,14 @@ module.exports = {
       css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li { color: ' + window.__COM_COLOR_GROUP.INACTIVE_COLOR + '; position:relative !important; display: inline-block !important; pointer-events: auto !important; cursor: pointer !important; padding-left: 10px !important; padding-right: 10px !important;}'
       css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li:hover, .' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li.selected {color: ' + window.__COM_COLOR_GROUP.ACTIVE_COLOR + ';}'
       css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li article { pointer-events: none !important; }'
-      css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li ul { background: white !important; display: none !important; position: absolute !important; pointer-events: none !important; width: max-content !important;}'
+      css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li ul { background: white !important; display: none !important; position: absolute !important; left:0; pointer-events: none !important; width: 100% !important; min-width: max-content !important; border: 1px solid #efefef; border-bottom: 3px solid #efefef;}'
       css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li.selected ul {display: block !important;}'
       css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li ul li { display: block !important; pointer-events: auto !important; padding-left: 10px !important; padding-right: 10px !important; padding-top: 10px !important; padding-bottom: 10px !important;}'
       css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li ul li:hover, ' + '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li ul li.selected {background: ' + window.__COM_COLOR_GROUP.ACTIVE_BG + '}'
 
       // DropDown Search Box
-      css += '.' + window.__COM_CLASS_GROUP.DSB_OPTION + ':hover, .' + window.__COM_CLASS_GROUP.DSB_OPTION + '.selected {background: ' + window.__COM_COLOR_GROUP.ACTIVE_BG + '}'
-      css += '.' + window.__COM_CLASS_GROUP.DSB_OPTION + '{background: ' + window.__COM_COLOR_GROUP.BG + '}'
+      css += '.' + window.__COM_CLASS_GROUP.DSB_OPTION + ':hover, .' + window.__COM_CLASS_GROUP.DSB_OPTION + '.selected {background: ' + window.__COM_COLOR_GROUP.ACTIVE_BG + ' !important;}'
+      css += '.' + window.__COM_CLASS_GROUP.DSB_OPTION + '{background: ' + window.__COM_COLOR_GROUP.BG + ' !important;}'
       css += '.' + window.__COM_CLASS_GROUP.DSB + '.selected {border: 1px solid ' + window.__COM_COLOR_GROUP.ACTIVE_BORDER_COLOR + ' !important; color: ' + window.__COM_COLOR_GROUP.ACTIVE_COLOR + ' !important;}'
 
       styleElem = document.createElement('style');
