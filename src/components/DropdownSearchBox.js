@@ -200,7 +200,8 @@ DropdownSearchBox.prototype._renderMain = function(elem, props, renderEvent) {
      elem.style.letterSpacing = '0.4px'
      elem.style.fontFamily = 'Helvetica'
      elem.style.padding = "5px 15px 5px 15px"
-     elem.style.border = "1px solid " + window.__COM_COLOR_GROUP.BORDER_COLOR
+     
+     //elem.style.border = "1px solid " + window.__COM_COLOR_GROUP.BORDER_COLOR
      
      if(article)
           article.style.pointerEvents = 'none'

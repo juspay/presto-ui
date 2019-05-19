@@ -192,7 +192,7 @@ module.exports = {
       return console.error(new Error("MoveView: Invalid view ID: " + id));
     }
     var view = window.__VIEWS[id];
-    var viewElem = document.getElementById(id);
+    var viewElem = document.getElementById(id); 
     var parentId = viewElem.parentNode.id;
     var parent = window.__VIEWS[parentId];
     var parentElem = document.getElementById(parentId);
