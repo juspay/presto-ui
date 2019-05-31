@@ -1418,7 +1418,7 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (config.hasOwnProperty("expand")) {
-    config.methods.push(this_setExpand(cS(config.expand)));
+    config.methods.push(this_setExpand(config.expand?"1":"0"));
   }
 
   if (config.hasOwnProperty("expandDuration")) {

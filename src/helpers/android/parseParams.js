@@ -145,17 +145,27 @@ function getConfigGroups(config) {
 }
 
 function getCtr(viewGroup) {
-  var viewGroupMap = {
+  var viewGroupMap =  {
     'linearLayout': 'android.widget.LinearLayout$LayoutParams->new',
+    'coordinatorLayout': 'android.widget.CoordinatorLayout$LayoutParams->new',
     'scrollView': 'android.widget.LinearLayout$LayoutParams->new',
+    'horizontalScrollView': 'android.widget.LinearLayout$LayoutParams->new',
     'relativeLayout': 'android.widget.RelativeLayout$LayoutParams->new',
     'frameLayout': 'android.widget.FrameLayout$LayoutParams->new',
     'toolbar': 'android.support.v7.widget.Toolbar$LayoutParams->new',
+    'collapsingToolbarLayout': 'android.support.design.widget.CoordinatorLayout$LayoutParams->new',
+    'appBarLayout': 'android.support.design.widget.AppBarLayout$LayoutParams->new',
     'view': 'android.widget.LinearLayout$LayoutParams->new',
-    'horizontalScrollView': 'android.widget.LinearLayout$LayoutParams->new',
+    'tabLayout': 'android.widget.LinearLayout$LayoutParams->new',
+    'viewPager': 'android.support.v4.view.ViewPager$LayoutParams->new',
     'listView': 'android.widget.LinearLayout$LayoutParams->new',
     'expandableListView': 'android.widget.LinearLayout$LayoutParams->new',
-  }
+    'recyclerView': 'android.support.v7.widget.RecyclerView$LayoutParams->new',
+    'ratingBar': 'android.widget.LinearLayout$LayoutParams->new',
+    'accordionLayout': 'android.widget.FrameLayout$LayoutParams->new',
+    'swypeLayout': 'android.widget.FrameLayout$LayoutParams->new',
+    'swypeScroll': 'android.widget.LinearLayout$LayoutParams->new'
+  };
 
   if(!viewGroupMap[viewGroup]) {
     throw new Error("No such view group found : " + viewGroup);
