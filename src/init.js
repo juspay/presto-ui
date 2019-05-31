@@ -40,6 +40,8 @@ if (window.__OS == "WEB") {
   window.JBridge = merge(window.JBridge, {});
 }
 
+window.PrestoUI = require("./PrestoUIInterface");
+
 window.__ENV = 0;
 
 const getScreenDetails = () => {
