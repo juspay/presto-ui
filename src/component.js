@@ -1,3 +1,4 @@
+const DropdownBox = require('./components/DropdownBox')
 const DropdownSearchBox = require('./components/DropdownSearchBox') 
 const NavBar = require('./components/NavBar')
 
@@ -7,6 +8,8 @@ function closeAllActiveComponents() {
           NavBar._closeByGUID(window.__COM_ACTIVE.NAVBAR)
      if(window.__COM_ACTIVE.DSB != '')
           DropdownSearchBox._closeByGUID(window.__COM_ACTIVE.DSB)
+     if(window.__COM_ACTIVE.DB != '')
+          DropdownBox._closeByGUID(window.__COM_ACTIVE.DB)
 }
 
 function renderComponent(elem, props, firstRender) {
@@ -20,17 +23,35 @@ function renderComponent(elem, props, firstRender) {
           elem.setAttribute('guid', props.guid)
 
      switch(componentType) {
+          // Nav Bar
           case 'NAVBAR':
                elem.classList.add(window.__COM_CLASS_GROUP.NAVBAR)
 
                NavBar._renderMain(elem, props, firstRender)
           break
+          // Dropdown Box
+          case 'DB':
+               elem.classList.add(window.__COM_CLASS_GROUP.DB)
+
+               DropdownBox._renderMain(elem, props, firstRender)
+          break
+          case 'DB_BODY':
+               elem.classList.add(window.__COM_CLASS_GROUP.DB_BODY)
+
+               DropdownBox._renderBody(elem, props, firstRender)
+          break
+          case 'DB_OPTIONS':
+               elem.classList.add(window.__COM_CLASS_GROUP.DB_OPTIONS)
+               
+               DropdownBox._renderOptions(elem, props, firstRender)
+          break
+          // Dropdown Search Box
           case 'DSB':
                elem.classList.add(window.__COM_CLASS_GROUP.DSB)
 
                DropdownSearchBox._renderMain(elem, props, firstRender)
           break
-          case 'DSB_BODY':
+          case 'DSB_BODY': 
                elem.classList.add(window.__COM_CLASS_GROUP.DSB_BODY)
 
                DropdownSearchBox._renderBody(elem, props, firstRender)
@@ -78,6 +99,16 @@ function renderComponent(elem, props, firstRender) {
                               return
                          
                          NavBar._selectRouteByGUID(guid, target)
+                    } else if(classList.contains(window.__COM_CLASS_GROUP.DB)) { // DB Main Click
+                         if(guid == window.__COM_ACTIVE.DB) {
+                              DropdownBox._closeByGUID(guid)
+                         } else {
+                              closeAllActiveComponents()
+                              DropdownBox._openByGUID(guid)
+                         }
+                    } else if(classList.contains(window.__COM_CLASS_GROUP.DB_OPTION)) { // DB Option Select
+                         DropdownBox._closeByGUID(guid)
+                         DropdownBox._selectOptionByGUID(guid, target)
                     } else if(classList.contains(window.__COM_CLASS_GROUP.DSB)) { // DSB Main Click
                          if(guid == window.__COM_ACTIVE.DSB) {
                               DropdownSearchBox._closeByGUID(guid)

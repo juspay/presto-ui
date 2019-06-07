@@ -77,6 +77,10 @@ window.__COM_CLASS_GROUP = {
   NAVBAR_ITEM_WITH_SUB: 'com_navbar_has_sub_' + guid,
   NAVBAR_SUB: 'com_navbar_sub_' + guid, 
   NAVBAR_SUB_ITEM: 'com_navbar_subitem_' + guid,
+  DB: 'com_db_' + guid,
+  DB_BODY: 'com_db_body_' + guid,
+  DB_OPTIONS: 'com_db_options_' + guid,
+  DB_OPTION: 'com_db_option_' + guid,
   DSB: 'com_dsb_' + guid,
   DSB_BODY: 'com_dsb_body_' + guid,
   DSB_OPTIONS: 'com_dsb_options_' + guid,
@@ -94,7 +98,8 @@ window.__COM_COLOR_GROUP = {
 }
 window.__COM_ACTIVE = {
   DSB: '',
-  NAVBAR: ''
+  NAVBAR: '',
+  DB: ''
 }
 /* Components End */
 

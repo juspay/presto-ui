@@ -141,6 +141,11 @@ module.exports = {
       css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li ul li { display: block !important; pointer-events: auto !important; padding-left: 10px !important; padding-right: 10px !important; padding-top: 10px !important; padding-bottom: 10px !important;}'
       css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li ul li:hover, ' + '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li ul li.selected {background: ' + window.__COM_COLOR_GROUP.ACTIVE_BG + '}'
 
+      // Dropdown Box
+      css += '.' + window.__COM_CLASS_GROUP.DB_OPTION + ':hover, .' + window.__COM_CLASS_GROUP.DB_OPTION + '.selected {background: ' + window.__COM_COLOR_GROUP.ACTIVE_BG + ' !important;}'
+      css += '.' + window.__COM_CLASS_GROUP.DB_OPTION + '{background: ' + window.__COM_COLOR_GROUP.BG + ' !important;}'
+      css += '.' + window.__COM_CLASS_GROUP.DB + '.selected {border: 1px solid ' + window.__COM_COLOR_GROUP.ACTIVE_BORDER_COLOR + ' !important; color: ' + window.__COM_COLOR_GROUP.ACTIVE_COLOR + ' !important;}'
+
       // DropDown Search Box
       css += '.' + window.__COM_CLASS_GROUP.DSB_OPTION + ':hover, .' + window.__COM_CLASS_GROUP.DSB_OPTION + '.selected {background: ' + window.__COM_COLOR_GROUP.ACTIVE_BG + ' !important;}'
       css += '.' + window.__COM_CLASS_GROUP.DSB_OPTION + '{background: ' + window.__COM_COLOR_GROUP.BG + ' !important;}'
