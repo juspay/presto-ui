@@ -738,6 +738,18 @@ let inflateModal = function (view, parentElement, stopChild) {
         }
       }
     }
+  } else {
+    if(elem.hasChildNodes()) {
+      let childNodes = elem.childNodes
+
+      if(childNodes) {
+        for(let i = 0; i < childNodes.length; i++) {
+          let childNode = childNodes[i]
+
+          childNode.style.pointerEvents = 'auto'
+        }
+      }
+    }
   }
 
   if(newInflated){
