@@ -305,8 +305,7 @@ function computeLinearlayout(view) {
     // Active Dimension
     if (props[activeDimen] === "match_parent") {
       props[activeDimen] = viewCtx[activeDimen];
-      props[activeDimen] -= margins[activeMargin[0]] + margins[activeMargin[
-        1]];
+      props[activeDimen] -= margins[activeMargin[0]] + margins[activeMargin[1]];
       props[activeDimen] += '';
       viewCtx[activeDimen] = 0;
     }

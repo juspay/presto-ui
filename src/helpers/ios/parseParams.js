@@ -1051,16 +1051,49 @@ function this_setupList(listData, listItem) {
     };
 }
 
-function this_inlineAnimation(inlineAnimation) {
+function this_inlineAnimation(config) {
   return {
     "return": "false",
     "fromStore": getSetType ? "false" : "true",
     "storeKey": "view" + window.__VIEW_INDEX,
     "invokeOn": getSetType ? "this" : "MJPTableView",
     "methodName": "setInlineAnimation:",
-    "values": [{ "name": inlineAnimation, type: "s" }]
+    "values": [{ "name": modifyTranslation(config), type: "s" }]
     };
 }
+
+
+function modifyTranslation(config){
+  if(config.hasOwnProperty("margin")){
+    var margins = config.margin.split(",");
+    var marginLeft = margins[0];
+    var marginTop = margins[1];
+    var animationArray = JSON.parse(config.inlineAnimation);
+    var animationArray = animationArray.map(function(a){
+      if(a.hasOwnProperty("fromX")){
+        a.fromX = parseInt(a.fromX) + parseInt(marginLeft) + '';
+        if(!a.hasOwnProperty("toX")){
+          a.toX = 0 + parseInt(marginLeft) + '';
+        }
+      }
+      if(a.hasOwnProperty("toX")){
+        a.toX = parseInt(a.toX) + parseInt(marginLeft) + '';
+      }
+      if(a.hasOwnProperty("fromY")){
+        a.fromY = parseInt(a.fromY) + parseInt(marginTop) + '';
+        if(!a.hasOwnProperty("toY")){
+          a.toY = 0 + parseInt(marginTop) + '';
+        }
+      }
+      if(a.hasOwnProperty("toY")){
+        a.toY = parseInt(a.toY) + parseInt(marginTop) + '';
+      }
+      return a;
+    })
+    return JSON.stringify(animationArray);
+  }
+}
+
 
 function this_setCloseSwipe(value) {
     return {
@@ -1695,7 +1728,7 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (config.hasOwnProperty("inlineAnimation")) {
-    config.methods.push(this_inlineAnimation(config.inlineAnimation));
+    config.methods.push(this_inlineAnimation(config));
   }
 
   if (config.hasOwnProperty("clipsToBounds")) {
