@@ -334,27 +334,28 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
   }
 
   if (attrs.key == "gradient") {
-    var gradientObj = JSON.parse(attrs.value)
-    var orientation = ""
-    if(gradientObj.type == "linear") {
+    var gradientObj = JSON.parse(attrs.value);
+    var orientation = "";
+    if (gradientObj.type == "linear") {
       // orientation += "set_o=setOrientation:"
-    } else {
+    } else {}
 
-    }
+    var intClass = "set_cc=java.lang.Class->forName:s_java.lang.Integer;";
+    var arrList = "set_arr=java.util.ArrayList->new;";
 
-    var intClass = "set_cc=java.lang.Class->forName:s_java.lang.Integer;"
-    var arrList = "set_arr=java.util.ArrayList->new;"
+    prePend += gradientObj.values.map(function (color, i) {
+      return parseColor(color, "set_color" + i);
+    }).join("");
 
-    prePend += gradientObj.values.map((color, i) => parseColor(color, "set_color" + i)).join("")
+    arrList += gradientObj.values.map(function (color, i) {
+      return "get_arr->add:get_color" + i;
+    }).join(";");
 
-    arrList += gradientObj.values.map((color, i) => "get_arr->add:get_color"+i).join(";")
-
-    prePend += "set_gd=android.graphics.drawable.GradientDrawable->new;"
-    prePend += (arrList + ";")
-    prePend += "set_c=java.lang.Class->forName:s_java.lang.Integer;"
-    prePend += "in.juspay.mystique.InflateView->convertAndStoreArray:get_arr,get_c,s_pArr,b_true;"
-    prePend += "get_gd->setColors:get_pArr;"
-    currTransVal = "get_gd"
+    prePend += "set_gd=android.graphics.drawable.GradientDrawable->new;";
+    prePend += arrList + ";";
+    prePend += "set_c=java.lang.Class->forName:s_java.lang.Integer;";
+    prePend += "in.juspay.mystique.InflateView->convertAndStoreArray:get_arr,get_c,s_pArr,b_true;";
+    currTransVal = "get_pArr";
   }
 
   // shadowTag : level,tag

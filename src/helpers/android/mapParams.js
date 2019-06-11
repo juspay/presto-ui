@@ -453,12 +453,12 @@ var map = {
     },
   "gradient": {
       values: [{
-            type: 'cs',
-          }],
+        type: 'cs'
+      }],
       'dontMap': true,
-      fnName: 'setBackground',
-      inVokedIn: 'VIEW',
-    },
+      fnName: 'setColors',
+      inVokedIn: 'DRAWABLE'
+  },
   "lineHeight": {
     values: [{
       type: 'dp'
