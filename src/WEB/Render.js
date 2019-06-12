@@ -81,7 +81,7 @@ function popup(elem, props) {
       typeof props[clickCb] == "function") {
       menuDiv.addEventListener("click", () => {
         props[clickCb](index);
-      });
+      }); 
     }
   }
   elem.addEventListener("click", function () {
@@ -413,9 +413,9 @@ function setAttributes(type, elem, props, firstRender) {
         createTextElement(elem, props)
     } else if (key == "style") {
       for (let innerKey in props.style) {
-        if (innerKey == "className")
+        if (innerKey == "className") {
           elem.className += " " + props.style[innerKey];
-        else
+        } else 
           elem.style[innerKey] = props.style[innerKey];
       }
     } else if (key == "attributes") {
@@ -423,7 +423,7 @@ function setAttributes(type, elem, props, firstRender) {
         elem.setAttribute(innerKey, props.attributes[innerKey]);
       }
     } else if (key == "className") {
-        elem.classList.add(props[key]);
+      elem.classList.add(props[key]);
     } else if (key == "classList") {
       JSON.parse(props[key]).forEach(function(obj) {
         elem.classList.add(obj);

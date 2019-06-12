@@ -73,7 +73,11 @@ NavBar.prototype._renderRoute = function(parentElem, props, guid, route, renderE
 
           let virtualElem = document.createElement('UL')
           virtualElem.classList.add(window.__COM_CLASS_GROUP.NAVBAR_SUB)
-          virtualElem.setAttribute('guid', guid)
+
+          if(route.navDirection && route.navDirection == 'from_right') 
+               virtualElem.classList.add(window.__COM_CLASS_GROUP.NAVBAR_SUB_RIGHT)
+
+          virtualElem.setAttribute('guid', guid)          
 
           if(props.translationZ_nav)
                virtualElem.style.zIndex = props.translationZ_nav

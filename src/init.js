@@ -76,6 +76,7 @@ window.__COM_CLASS_GROUP = {
   NAVBAR_ITEM: 'com_navbar_item_' + guid,
   NAVBAR_ITEM_WITH_SUB: 'com_navbar_has_sub_' + guid,
   NAVBAR_SUB: 'com_navbar_sub_' + guid, 
+  NAVBAR_SUB_RIGHT: 'com_navbar_sub_right_' + guid,
   NAVBAR_SUB_ITEM: 'com_navbar_subitem_' + guid,
   DB: 'com_db_' + guid,
   DB_BODY: 'com_db_body_' + guid,
