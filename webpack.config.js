@@ -22,15 +22,28 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
-const path = require('path');
+const path = require('path')
+const TerserPlugin = require('terser-webpack-plugin')
 
-let config = {
+let config = { 
   devtool: "inline-cheap-module-source-map",
+  //devtool: "inline-source-map",
   entry: "./index.js",
   output: {
     path: path.join(__dirname,"/lib"),
     filename: "index.js",
     libraryTarget: 'commonjs2'
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        cache: true,
+        parallel: true,
+        sourceMap: true, // Must be set to true if using source-maps in production
+        terserOptions: {}
+      })
+    ]
   },
   module: {
     rules: [
@@ -41,7 +54,7 @@ let config = {
         }
       },
     ]
-  },
-};
+  }
+}
 
-module.exports = config;
+module.exports = config

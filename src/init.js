@@ -70,6 +70,11 @@ const guid = Math.random().toString(36).substr(2, 9)
 
 /* Components */
 window.__COM_EVENT = false
+window.__COM_RENDERED = {
+  DRP_GLOBAL: false,
+  DRP: []
+}
+
 window.__COM_CLASS_GROUP = {
   WRAPPER: 'com_wrapper_' + guid,
   NAVBAR: 'com_navbar_' + guid,
@@ -78,6 +83,8 @@ window.__COM_CLASS_GROUP = {
   NAVBAR_SUB: 'com_navbar_sub_' + guid, 
   NAVBAR_SUB_RIGHT: 'com_navbar_sub_right_' + guid,
   NAVBAR_SUB_ITEM: 'com_navbar_subitem_' + guid,
+  DRP: 'com_drp_' + guid,
+  DRP_BODY: 'com_drp_body_' + guid,
   DB: 'com_db_' + guid,
   DB_BODY: 'com_db_body_' + guid,
   DB_OPTIONS: 'com_db_options_' + guid,

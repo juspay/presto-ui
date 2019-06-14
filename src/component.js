@@ -1,6 +1,7 @@
 const DropdownBox = require('./components/DropdownBox')
 const DropdownSearchBox = require('./components/DropdownSearchBox') 
 const NavBar = require('./components/NavBar')
+const DateRangePicker = require('./components/DateRangePicker')
 
 /* Components */
 function closeAllActiveComponents() {
@@ -10,7 +11,7 @@ function closeAllActiveComponents() {
           DropdownSearchBox._closeByGUID(window.__COM_ACTIVE.DSB)
      if(window.__COM_ACTIVE.DB != '')
           DropdownBox._closeByGUID(window.__COM_ACTIVE.DB)
-}
+}    
 
 function renderComponent(elem, props, firstRender) {
      if(!props.componentType)
@@ -23,6 +24,17 @@ function renderComponent(elem, props, firstRender) {
           elem.setAttribute('guid', props.guid)
 
      switch(componentType) {
+          // Date Range Picker
+          case 'DRP': 
+               elem.classList.add(window.__COM_CLASS_GROUP.DRP)
+
+               DateRangePicker._renderMain(elem, props, firstRender)
+          break
+          case 'DRP_BODY':
+               elem.classList.add(window.__COM_CLASS_GROUP.DRP_BODY)
+
+               DateRangePicker._renderBody(elem, props, firstRender)
+          break
           // Nav Bar
           case 'NAVBAR':
                elem.classList.add(window.__COM_CLASS_GROUP.NAVBAR)
