@@ -1065,28 +1065,27 @@ function this_inlineAnimation(config) {
 
 function modifyTranslation(config){
   if(config.hasOwnProperty("margin")){
-    var margins = config.margin.split(",");
-    var marginLeft = margins[0];
-    var marginTop = margins[1];
+    var x = config.x || "0";
+    var y = config.y || "0";
     var animationArray = JSON.parse(config.inlineAnimation);
     var animationArray = animationArray.map(function(a){
       if(a.hasOwnProperty("fromX")){
-        a.fromX = parseInt(a.fromX) + parseInt(marginLeft) + '';
+        a.fromX = parseInt(a.fromX) + parseInt(x) + '';
         if(!a.hasOwnProperty("toX")){
-          a.toX = 0 + parseInt(marginLeft) + '';
+          a.toX = 0 + parseInt(x) + '';
         }
       }
       if(a.hasOwnProperty("toX")){
-        a.toX = parseInt(a.toX) + parseInt(marginLeft) + '';
+        a.toX = parseInt(a.toX) + parseInt(x) + '';
       }
       if(a.hasOwnProperty("fromY")){
-        a.fromY = parseInt(a.fromY) + parseInt(marginTop) + '';
+        a.fromY = parseInt(a.fromY) + parseInt(y) + '';
         if(!a.hasOwnProperty("toY")){
-          a.toY = 0 + parseInt(marginTop) + '';
+          a.toY = 0 + parseInt(y) + '';
         }
       }
       if(a.hasOwnProperty("toY")){
-        a.toY = parseInt(a.toY) + parseInt(marginTop) + '';
+        a.toY = parseInt(a.toY) + parseInt(y) + '';
       }
       return a;
     })
@@ -1310,8 +1309,8 @@ module.exports = function(type, config, _getSetType) {
   if (config.x || config.y || config.w || config.h) {
     let x = rWS(cS(config.x)) ||  "0";
     let y =  rWS(cS(config.y))|| "0";
-    let width = rWS(cS(config.w)) || "100";
-    let height = rWS(cS(config.h)) || "100";
+    let width = rWS(cS(config.w)) || "0";
+    let height = rWS(cS(config.h)) || "0";
 
     config.methods.push(self_rectFromDictionary(x,y,width,height));
     config.methods.push(this_setFrame());
