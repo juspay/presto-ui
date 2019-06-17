@@ -22,14 +22,14 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
-const containers = require('./container');
-const iosAndroidInterface = require('./IOS/AndroidInterface');
-const getOS = require('./helper').getOS;
-const merge = require('./helper').merge;
+const containers = require('./container')
+const iosAndroidInterface = require('./IOS/AndroidInterface')
+const getOS = require('./helper').getOS
+const merge = require('./helper').merge
 
-const getCurrTime = () => (new Date()).getTime();
+const getCurrTime = () => (new Date()).getTime()
 
-window.__OS = getOS();
+window.__OS = getOS()
 
 if (window.__OS == "WEB") {
   window.Android = require("./WEB/AndroidInterface");;
