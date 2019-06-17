@@ -144,6 +144,7 @@ DropdownBox.prototype._renderOptions = function(elem, props, renderEvent) {
 
      let virtualElem = document.createElement('div')
      virtualElem.style.width = '100%'  
+     virtualElem.style.pointerEvents = 'none'
      
      elem.appendChild(virtualElem)
 

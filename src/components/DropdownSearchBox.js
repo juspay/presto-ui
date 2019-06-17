@@ -131,13 +131,20 @@ DropdownSearchBox.prototype._renderOption = function(parentElem, props, guid, op
      elem.style.display = 'flex'
      elem.style.alignItems = 'center'
      elem.style.cursor = 'pointer'
-     elem.style.fontSize = '14px'
      elem.style.letterSpacing = '0.4px'
-     elem.style.fontFamily = 'Helvetica'
-     elem.style.padding = "5px 15px 5px 15px"
      elem.style.pointerEvents = 'auto'
 
-     elem.setAttribute('guid', guid)
+     if(props.fontSize) 
+          elem.style.fontSize = props.fontSize + 'px'
+     if(props.fontFamily)
+          elem.style.fontFamily = props.fontFamily
+     if(props.optionPadding) { 
+          let padding = props.optionPadding.split(',').map(a => a * 1);
+  
+          elem.style.padding = padding[1] + 'px ' + padding[2] + 'px ' + padding[3] + 'px ' + padding[0] + 'px'
+     }
+
+     elem.setAttribute('guid', guid) 
 
      if(props.optionValue && props.optionValue == option.value) {
           elem.classList.add('selected')
@@ -191,15 +198,11 @@ DropdownSearchBox.prototype._renderMain = function(elem, props, renderEvent) {
           }
      }
 
-     elem.style.pointerEvents = 'auto'
      elem.style.color = window.__COM_COLOR_GROUP.INACTIVE_COLOR
      elem.style.display = 'flex'
      elem.style.alignItems = 'center'
      elem.style.cursor = 'pointer'
-     elem.style.fontSize = '14px'
      elem.style.letterSpacing = '0.4px'
-     elem.style.fontFamily = 'Helvetica'
-     elem.style.padding = "5px 15px 5px 15px"
      
      if(!props.stroke)
           elem.style.border = "1px solid " + window.__COM_COLOR_GROUP.BORDER_COLOR
@@ -234,13 +237,8 @@ DropdownSearchBox.prototype._renderSearch = function(elem, props, renderEvent) {
      elem.value = ''
      elem.style.border = 'none'
      elem.style.borderBottom = '1px solid ' + window.__COM_COLOR_GROUP.SEARCH_COLOR
-     elem.style.pointerEvents = 'auto'
-     elem.style.width = '100%'
-     elem.style.height = '100%'
      elem.style.color = window.__COM_COLOR_GROUP.ACTIVE_COLOR
-     elem.style.fontSize = '14px'
      elem.style.letterSpacing = '0.4px'
-     elem.style.fontFamily = 'Helvetica'
 }
 
 DropdownSearchBox.prototype._renderOptions = function(elem, props, renderEvent) {
@@ -251,7 +249,6 @@ DropdownSearchBox.prototype._renderOptions = function(elem, props, renderEvent) 
      }
 
      elem.innerHTML = ''
-     elem.style.pointerEvents = 'auto'
      
      let height = 50
      if(props.optionHeight && !isNaN(props.optionHeight)) {
