@@ -112,7 +112,7 @@ NavBar.prototype._renderSubRoute = function(parentElem, props, guid, route, rend
      else
           elem.classList.remove('selected')
 
-     let article = document.createElement('article')
+     let article = document.createElement('article') 
      article.innerHTML = route.text
 
      elem.appendChild(article)
@@ -121,10 +121,7 @@ NavBar.prototype._renderSubRoute = function(parentElem, props, guid, route, rend
 
 NavBar.prototype._renderMain = function(elem, props, renderEvent) {
      elem.innerHTML = ''
-     elem.style.pointerEvents = 'none'
-     elem.style.fontSize = '14px'
      elem.style.letterSpacing = '0.4px'
-     elem.style.fontFamily = 'Helvetica'
 
      let routes = []
      if(props && props.routes)
