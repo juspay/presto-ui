@@ -23,12 +23,11 @@ DateRangePicker.prototype._getEndDate = function(props) {
 
      return end
 }
-
+ 
 DateRangePicker.prototype._renderMain = function(elem, props, renderEvent) {
-     elem.style.pointerEvents = 'auto'
      elem.style.cursor = 'pointer'
      elem.style.border = "1px solid " + window.__COM_COLOR_GROUP.BORDER_COLOR
-
+     
      if(!window.__COM_RENDERED.DRP_GLOBAL) {
           window.__COM_RENDERED.DRP_GLOBAL = true
 
