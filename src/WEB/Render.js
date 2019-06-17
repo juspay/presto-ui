@@ -504,15 +504,14 @@ function setAttributes(type, elem, props, firstRender) {
   if ((props.style.transform || props.style.opacity) && props.animation.transition) {
     setTimeout(afterTransition, 100);
   } else if (props.animation.transition) {
-    afterTransition();
+    afterTransition(); 
   }
 
   /* Component Part */
   if(props.hasOwnProperty('elementType') && props.elementType == 'component') {
     elem.classList.add(window.__COM_CLASS_GROUP.WRAPPER)
-    elem.style.pointerEvents = 'none'
-
-    if(firstRender)
+    
+    if(firstRender) 
       elem.setAttribute('guid', props.guid)
   }
 
