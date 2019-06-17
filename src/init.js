@@ -32,14 +32,14 @@ const getCurrTime = () => (new Date()).getTime()
 window.__OS = getOS()
 
 if (window.__OS == "WEB") {
-  window.Android = require("./WEB/AndroidInterface");;
-  window.JBridge = require("./WEB/JBridgeInterface");;
+  window.Android = require("./WEB/AndroidInterface")
+  window.JBridge = require("./WEB/JBridgeInterface")
 } else if (window.__OS == "IOS") {
-  window.Android = require("./IOS/AndroidInterface");
-  window.JBridge = merge(window.JBridge, {});
+  window.Android = require("./IOS/AndroidInterface")
+  window.JBridge = merge(window.JBridge, {})
 }
 
-window.__ENV = 0;
+window.__ENV = 0
 
 const getScreenDetails = () => {
   try {
