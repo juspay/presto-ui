@@ -131,6 +131,11 @@ module.exports = {
       css += '.hasTooltip .tooltipText.tooltipGravity_bottom{top: 100%; margin-top: 10px; left: 50%; transform: translateX(-50%);}';
       css += '.hasTooltip .tooltipGravity_bottom:after{content: ""; position: absolute; bottom: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: transparent transparent #555 transparent;}';
 
+      // Switch Button
+      css += '.' + window.__COM_CLASS_GROUP.SWITCH_BODY + ' input{opacity: 0; width: 0; height: 0;} '
+      css += '.' + window.__COM_CLASS_GROUP.SWITCH_BODY + ' .' + window.__COM_CLASS_GROUP.SWITCH_SLIDER + '{position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: ' + window.__COM_COLOR_GROUP.INACTIVE_SWITCH + '; -webkit-transition: .4s; transition: .4s;}'
+      css += '.' + window.__COM_CLASS_GROUP.SWITCH_BODY + ' input:checked + .' + window.__COM_CLASS_GROUP.SWITCH_SLIDER + '{background-color: ' + window.__COM_COLOR_GROUP.ACTIVE_SWITCH + '} '
+     
       // NavBar
       css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul{ list-style: none !important;}'
       css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li { color: ' + window.__COM_COLOR_GROUP.INACTIVE_COLOR + '; position:relative !important; display: inline-block !important; pointer-events: auto !important; cursor: pointer !important; padding-left: 10px !important; padding-right: 10px !important;}'

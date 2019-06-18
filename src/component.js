@@ -2,6 +2,7 @@ const DropdownBox = require('./components/DropdownBox')
 const DropdownSearchBox = require('./components/DropdownSearchBox') 
 const NavBar = require('./components/NavBar')
 const DateRangePicker = require('./components/DateRangePicker')
+const SwitchButton = require('./components/SwitchButton')
 
 /* Components */
 function closeAllActiveComponents() {
@@ -24,6 +25,12 @@ function renderComponent(elem, props, firstRender) {
           elem.setAttribute('guid', props.guid)
 
      switch(componentType) {
+          // Switch Button
+          case 'SWITCH':
+               elem.classList.add(window.__COM_CLASS_GROUP.SWITCH)
+
+               SwitchButton._renderMain(elem, props, firstRender)
+          break
           // Date Range Picker
           case 'DRP': 
                elem.classList.add(window.__COM_CLASS_GROUP.DRP)

@@ -72,6 +72,7 @@ const guid = Math.random().toString(36).substr(2, 9)
 window.__COM_EVENT = false
 window.__COM_RENDERED = {
   DRP_GLOBAL: false,
+  SWITCH_GLOBAL: false,
   DRP: []
 }
 
@@ -93,7 +94,10 @@ window.__COM_CLASS_GROUP = {
   DSB_BODY: 'com_dsb_body_' + guid,
   DSB_OPTIONS: 'com_dsb_options_' + guid,
   DSB_OPTION: 'com_dsb_option_' + guid,
-  DSB_SEARCH: 'com_dsb_search_' + guid
+  DSB_SEARCH: 'com_dsb_search_' + guid,
+  SWITCH: 'com_switch_' + guid,
+  SWITCH_BODY: 'com_switch_body' + guid,
+  SWITCH_SLIDER: 'com_switch_slider_' + guid 
 }
 window.__COM_COLOR_GROUP = {
   BG: '#ffffff',
@@ -102,7 +106,9 @@ window.__COM_COLOR_GROUP = {
   INACTIVE_COLOR: 'rgba(53, 64, 82, 0.5)',
   BORDER_COLOR: '#A3AFC2',
   ACTIVE_BORDER_COLOR: '#707886',
-  SEARCH_COLOR: '#dddddd'
+  SEARCH_COLOR: '#dddddd',
+  INACTIVE_SWITCH: '#B7DBBC',
+  ACTIVE_SWITCH: '#36AF47'
 }
 window.__COM_ACTIVE = {
   DSB: '',
