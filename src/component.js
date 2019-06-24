@@ -54,15 +54,10 @@ function renderComponent(elem, props, firstRender) {
 
                DropdownBox._renderMain(elem, props, firstRender)
           break
-          case 'DB_BODY':
-               elem.classList.add(window.__COM_CLASS_GROUP.DB_BODY)
+          case 'DB_FULL_BODY': 
+               elem.classList.add(window.__COM_CLASS_GROUP.DB_FULL_BODY)
 
-               DropdownBox._renderBody(elem, props, firstRender)
-          break
-          case 'DB_OPTIONS':
-               elem.classList.add(window.__COM_CLASS_GROUP.DB_OPTIONS)
-               
-               DropdownBox._renderOptions(elem, props, firstRender)
+               DropdownBox._renderFullBody(elem, props, firstRender)
           break
           // Dropdown Search Box
           case 'DSB':

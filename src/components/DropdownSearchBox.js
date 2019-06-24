@@ -31,15 +31,31 @@ DropdownSearchBox.prototype._selectOptionByGUID = function(guid, optionElem) {
 
      // Update UI
      let optionsElem = this._getOptionsObject(guid)
-     if (optionsElem && optionsElem.children) {
-          for (let i = 0; i < optionsElem.children.length; i++) {
-               if (optionsElem.children[i].getAttribute('option-value') == value && optionsElem.children[i].getAttribute('option-text') == text) {
-                    optionsElem.children[i].classList.add('selected')
+     if (optionsElem && optionsElem.childNodes) {
+          for (let i = 0; i < optionsElem.childNodes.length; i++) {
+               if (optionsElem.childNodes[i].getAttribute('option-value') == value && optionsElem.childNodes[i].getAttribute('option-text') == text) {
+                    optionsElem.childNodes[i].classList.add('selected')
                } else {
-                    optionsElem.children[i].classList.remove('selected')
+                    optionsElem.childNodes[i].classList.remove('selected')
                }
           }
      }
+
+     let children = mainObject.childNodes
+     let article = null
+
+     if(children.length){
+          for(let i = 0; i < children.length; i++){
+               if(children[i].nodeName.toLowerCase() == 'article'){
+                    article = children[i]
+                    break
+               }
+          }
+     }
+
+     mainObject.style.color = window.__COM_COLOR_GROUP.ACTIVE_COLOR
+     if (article)
+          article.innerText = text
 
      // Event Trigger
      if (view.props.onSelect && typeof view.props.onSelect == "function") {
@@ -48,18 +64,18 @@ DropdownSearchBox.prototype._selectOptionByGUID = function(guid, optionElem) {
 }
 
 DropdownSearchBox.prototype._isValidOV = function(optionValue, options) {
-     let exist = false
+     let optionText = ""
      
      if(options && options.length > 0) {
           for(let i in options) {
                if(options[i].value == optionValue) {
-                    exist = true
+                    optionText = options[i].text
                     break
                }
           }
      } 
 
-     return exist
+     return optionText
 }
 
 DropdownSearchBox.prototype._getMainObject = function(guid) {
@@ -100,9 +116,9 @@ DropdownSearchBox.prototype._filterOptions = function(guid, query) {
 
      query = query.toLowerCase()
 
-     if (optionsElem.children) {
-          for (let i = 0; i < optionsElem.children.length; i++) {
-               let optionElem = optionsElem.children[i]
+     if (optionsElem.childNodes) {
+          for (let i = 0; i < optionsElem.childNodes.length; i++) {
+               let optionElem = optionsElem.childNodes[i]
                let text = optionElem.getAttribute('option-text')
 
                if (text) {
@@ -202,19 +218,26 @@ DropdownSearchBox.prototype._renderMain = function(elem, props, renderEvent) {
      if(!props.stroke)
           elem.style.border = "1px solid " + window.__COM_COLOR_GROUP.BORDER_COLOR
      
-     if(props.optionValue && props.options) {
+     if(props.options) {
           let options = JSON.parse(props.options)
           let optionValue = props.optionValue
+
+          if (props.optionValue)
+               optionValue = props.optionValue
 
           // Read option value
           if (window.__COM_RENDERED.DSB[guid] && window.__COM_RENDERED.DSB[guid].optionValue)
                optionValue = window.__COM_RENDERED.DSB[guid].optionValue + ""
 
-          if(this._isValidOV(optionValue, options)) {
-               elem.style.color = window.__COM_COLOR_GROUP.ACTIVE_COLOR
+          if (optionValue) {
+               let optionText = this._isValidOV(optionValue, options)
 
-               if(article)
-                    article.innerText = optionValue
+               if(optionText != "") {
+                    elem.style.color = window.__COM_COLOR_GROUP.ACTIVE_COLOR
+
+                    if(article)
+                         article.innerText = optionText
+               }
           }
      }
      /* Default Styles End */

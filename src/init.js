@@ -74,7 +74,8 @@ window.__COM_RENDERED = {
   DRP_GLOBAL: false,
   SWITCH_GLOBAL: false,
   DRP: [],
-  DSB: {}
+  DSB: {},
+  DB: {}
 }
 
 window.__COM_CLASS_GROUP = {
@@ -88,6 +89,7 @@ window.__COM_CLASS_GROUP = {
   DRP: 'com_drp_' + guid,
   DRP_BODY: 'com_drp_body_' + guid,
   DB: 'com_db_' + guid,
+  DB_FULL_BODY: 'com_db_full_body_' + guid,
   DB_BODY: 'com_db_body_' + guid,
   DB_OPTIONS: 'com_db_options_' + guid,
   DB_OPTION: 'com_db_option_' + guid,
