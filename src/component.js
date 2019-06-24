@@ -70,20 +70,10 @@ function renderComponent(elem, props, firstRender) {
 
                DropdownSearchBox._renderMain(elem, props, firstRender)
           break
-          case 'DSB_BODY': 
-               elem.classList.add(window.__COM_CLASS_GROUP.DSB_BODY)
+          case 'DSB_FULL_BODY':
+               elem.classList.add(window.__COM_CLASS_GROUP.DSB_FULL_BODY)
 
-               DropdownSearchBox._renderBody(elem, props, firstRender)
-          break
-          case 'DSB_SEARCH':
-               elem.classList.add(window.__COM_CLASS_GROUP.DSB_SEARCH)
-
-               DropdownSearchBox._renderSearch(elem, props, firstRender)
-          break
-          case 'DSB_OPTIONS':
-               elem.classList.add(window.__COM_CLASS_GROUP.DSB_OPTIONS)
-               
-               DropdownSearchBox._renderOptions(elem, props, firstRender)
+               DropdownSearchBox._renderFullBody(elem, props, firstRender)
           break
      }
 

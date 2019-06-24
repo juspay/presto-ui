@@ -153,9 +153,16 @@ module.exports = {
       css += '.' + window.__COM_CLASS_GROUP.DB + '.selected {border: 1px solid ' + window.__COM_COLOR_GROUP.ACTIVE_BORDER_COLOR + ' !important; color: ' + window.__COM_COLOR_GROUP.ACTIVE_COLOR + ' !important;}'
 
       // DropDown Search Box
-      css += '.' + window.__COM_CLASS_GROUP.DSB_OPTION + ':hover, .' + window.__COM_CLASS_GROUP.DSB_OPTION + '.selected {background: ' + window.__COM_COLOR_GROUP.ACTIVE_BG + ' !important;}'
-      css += '.' + window.__COM_CLASS_GROUP.DSB_OPTION + '{background: ' + window.__COM_COLOR_GROUP.BG + ' !important;}'
+      css += '.' + window.__COM_CLASS_GROUP.DSB + '{color: ' + window.__COM_COLOR_GROUP.INACTIVE_COLOR + '; display: flex; align-items: center; cursor: pointer; letter-spacing: 0.4px;}'
+      css += '.' + window.__COM_CLASS_GROUP.DSB + ' article {pointer-events: none;}'
       css += '.' + window.__COM_CLASS_GROUP.DSB + '.selected {border: 1px solid ' + window.__COM_COLOR_GROUP.ACTIVE_BORDER_COLOR + ' !important; color: ' + window.__COM_COLOR_GROUP.ACTIVE_COLOR + ' !important;}'
+      css += '.' + window.__COM_CLASS_GROUP.DSB_BODY + '{position: absolute; display: block; width: 100%; border: 1px solid ' + window.__COM_COLOR_GROUP.BORDER_COLOR + ';}'
+      css += '.' + window.__COM_CLASS_GROUP.DSB_SEARCH_WRAP + '{width: 100%; height: 40px; padding: 5px 15px 0px 15px; box-sizing: border-box;}'
+      css += '.' + window.__COM_CLASS_GROUP.DSB_SEARCH + '{display: block; width: 100%; height: 100%; pointer-events: auto; border: none; border-bottom: 1px solid ' + window.__COM_COLOR_GROUP.SEARCH_COLOR + '; color: ' + window.__COM_COLOR_GROUP.ACTIVE_COLOR + '; letter-spacing: 0.4px;}'
+      css += '.' + window.__COM_CLASS_GROUP.DSB_OPTIONS + '{width: 100%; pointer-events: auto; overflow-y: auto;}'
+      css += '.' + window.__COM_CLASS_GROUP.DSB_OPTION + '{background: ' + window.__COM_COLOR_GROUP.BG + ' !important; width: 100%; color: ' + window.__COM_COLOR_GROUP.ACTIVE_COLOR + '; display: flex; align-items: center; cursor: pointer; letter-spacing: 0.4px; pointer-events: auto;}'
+      css += '.' + window.__COM_CLASS_GROUP.DSB_OPTION + ':hover, .' + window.__COM_CLASS_GROUP.DSB_OPTION + '.selected {background: ' + window.__COM_COLOR_GROUP.ACTIVE_BG + ' !important;}'
+      css += '.' + window.__COM_CLASS_GROUP.DSB_OPTION + ' article {pointer-events: none;}'
 
       styleElem = document.createElement('style');
       styleElem.setAttribute('id', style_id);

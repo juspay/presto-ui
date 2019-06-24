@@ -29,7 +29,7 @@ let { renderComponent } = require("../component")
 let R = require("ramda")
 
 function createTextElement(elem, config) {
-  let children = elem.childNodes;
+  let children = elem.childNodes
   let article = null
 
   if(children.length){
@@ -63,159 +63,159 @@ function createTextElement(elem, config) {
 }
 
 function popup(elem, props) {
-  let menuItems = props["popupMenu"].split(',');
-  let menuBar = document.createElement("div");
-  menuBar.setAttribute("class", "popupMenu");
-  menuBar.style.cssText =
-    "display: none; position: absolute; right: 20px; top:20px; z-index: 5;" +
-    "box-shadow: 0px 5px 10px #888888;";
+  let menuItems = props["popupMenu"].split(',')
+  let menuBar = document.createElement("div")
+  menuBar.setAttribute("class", "popupMenu")
+  menuBar.style.cssText = "display: none; position: absolute; right: 20px; top:20px; z-index: 5;" + "box-shadow: 0px 5px 10px #888888;"
   document.body.appendChild(menuBar)
-  let clickCb = "onMenuItemClick";
+
+  let clickCb = "onMenuItemClick"
   for (let i = 0; i < menuItems.length; i++) {
-    let menuDiv = document.createElement("div");
-    menuDiv.setAttribute("class", "menuItem");
-    menuDiv.textContent = menuItems[i];
-    menuBar.appendChild(menuDiv);
-    let index = i;
-    if (props[clickCb] &&
-      typeof props[clickCb] == "function") {
+    let menuDiv = document.createElement("div")
+    menuDiv.setAttribute("class", "menuItem")
+    menuDiv.textContent = menuItems[i]
+    menuBar.appendChild(menuDiv)
+
+    let index = i
+    if (props[clickCb] && typeof props[clickCb] == "function") {
       menuDiv.addEventListener("click", () => {
-        props[clickCb](index);
-      }); 
+        props[clickCb](index)
+      })
     }
   }
+
   elem.addEventListener("click", function () {
     if (menuBar.style.display == "none")
-      menuBar.style.display = "";
+      menuBar.style.display = ""
     else
-      menuBar.style.display = "none";
-  });
+      menuBar.style.display = "none"
+  })
 }
 
-function setGravityStylesForRow(elem, props){
-  if(!props.hasOwnProperty('gravity') || !props.gravity){
-    props.gravity = '';
-    //return;
+function setGravityStylesForRow(elem, props) {
+  if(!props.hasOwnProperty('gravity') || !props.gravity) {
+    props.gravity = ''
+    //return
   }
   
   switch(props.gravity){
     case 'center_vertical':
-      elem.style['align-items'] = 'center';
-      elem.style['justify-content'] = 'flex-start';
-    break;
+      elem.style['align-items'] = 'center'
+      elem.style['justify-content'] = 'flex-start'
+    break
     case 'center_horizontal':
-      elem.style['align-items'] = 'flex-start';
-      elem.style['justify-content'] = 'center';
-    break;
+      elem.style['align-items'] = 'flex-start'
+      elem.style['justify-content'] = 'center'
+    break
     case 'center':
-      elem.style['align-items'] = "center";
-      elem.style['justify-content'] = "center";
-    break;
+      elem.style['align-items'] = "center"
+      elem.style['justify-content'] = "center"
+    break
     case 'left':
     case 'start':
-      elem.style['align-items'] = 'flex-start';
-      elem.style['justify-content'] = 'flex-start';
-    break;
+      elem.style['align-items'] = 'flex-start'
+      elem.style['justify-content'] = 'flex-start'
+    break
     case 'right':
     case 'end':
-      elem.style['align-items'] = 'flex-start';
-      elem.style['justify-content'] = 'flex-end';
-    break;
+      elem.style['align-items'] = 'flex-start'
+      elem.style['justify-content'] = 'flex-end'
+    break
     default:
-      elem.style['align-items'] = 'flex-start';
-      elem.style['justify-content'] = 'flex-start';
-    break;
+      elem.style['align-items'] = 'flex-start'
+      elem.style['justify-content'] = 'flex-start'
+    break
   }
 }
 
-function setGravityStylesForColumn(elem, props){
-  if(!props.hasOwnProperty('gravity') || !props.gravity){
-    props.gravity = '';
+function setGravityStylesForColumn(elem, props) {
+  if(!props.hasOwnProperty('gravity') || !props.gravity) {
+    props.gravity = ''
     //return;
   }
 
   switch(props.gravity){
     case 'center_vertical':
-      elem.style['align-items'] = 'flex-start';
-      elem.style['justify-content'] = 'center';
-    break;
+      elem.style['align-items'] = 'flex-start'
+      elem.style['justify-content'] = 'center'
+    break
     case 'center_horizontal':
-      elem.style['align-items'] = 'center';
-      elem.style['justify-content'] = 'flex-start';
-    break;
+      elem.style['align-items'] = 'center'
+      elem.style['justify-content'] = 'flex-start'
+    break
     case 'center':
-      elem.style["align-items"] = "center";
-      elem.style["justify-content"] = "center";
-    break;
+      elem.style["align-items"] = "center"
+      elem.style["justify-content"] = "center"
+    break
     case 'left':
     case 'start':
-      elem.style['justify-content'] = 'flex-start';
-      elem.style['align-items'] = 'flex-start';
-    break;
+      elem.style['justify-content'] = 'flex-start'
+      elem.style['align-items'] = 'flex-start'
+    break
     case 'right':
     case 'end':
-      elem.style['align-items'] = 'flex-end';
-      elem.style['justify-content'] = 'flex-start';
-    break;
+      elem.style['align-items'] = 'flex-end'
+      elem.style['justify-content'] = 'flex-start'
+    break
     default:
-      elem.style['align-items'] = 'flex-start';
-      elem.style['justify-content'] = 'flex-start';
-    break;
+      elem.style['align-items'] = 'flex-start'
+      elem.style['justify-content'] = 'flex-start'
+    break
   }
 }
 
-function setComputedStyles(elem, props){
+function setComputedStyles(elem, props) {
   /* Computed Styles */
   // LinearLayout Styles
-  if(props.hasOwnProperty('activeDimen') && props.hasOwnProperty('activeWeight')){
-    let activeDimen = props.activeDimen;
-    let weight = props.activeWeight;
+  if(props.hasOwnProperty('activeDimen') && props.hasOwnProperty('activeWeight')) {
+    let activeDimen = props.activeDimen
+    let weight = props.activeWeight
 
     if(weight > 0){
-      elem.style.flex = weight;
+      elem.style.flex = weight
             
       if(activeDimen == 'w'){
-        elem.style.width = 'auto';
+        elem.style.width = 'auto'
       }else{
-        elem.style.height = 'auto';
+        elem.style.height = 'auto'
       }
     }else{
-      elem.style.flex = 'none';  
+      elem.style.flex = 'none'
     }
   }else{
-    elem.style.flex = 'none';  
+    elem.style.flex = 'none' 
   }
   
   // RelativeLayout Styles
   if(props.hasOwnProperty('absolute') && props.absolute){
-    elem.style.position = 'absolute';
+    elem.style.position = 'absolute'
 
     if(props.hasOwnProperty("fromTop")){
       if(isNaN(props.fromTop))
-        elem.style.top = props.fromTop;
+        elem.style.top = props.fromTop
       else
-        elem.style.top = props.fromTop + 'px';
+        elem.style.top = props.fromTop + 'px'
     }
 
     if(props.hasOwnProperty("fromBottom")){
       if(isNaN(props.fromBottom))
-        elem.style.bottom = props.fromBottom;
+        elem.style.bottom = props.fromBottom
       else
-        elem.style.bottom = props.fromBottom + 'px';
+        elem.style.bottom = props.fromBottom + 'px'
     }
 
     if(props.hasOwnProperty("fromLeft")){
       if(isNaN(props.fromLeft))
-        elem.style.left = props.fromLeft;
+        elem.style.left = props.fromLeft
       else
-        elem.style.left = props.fromLeft + 'px';
+        elem.style.left = props.fromLeft + 'px'
     }
 
     if(props.hasOwnProperty("fromRight")){
       if(isNaN(props.fromRight))
-        elem.style.right = props.fromRight;
+        elem.style.right = props.fromRight
       else
-        elem.style.right = props.fromRight + 'px';
+        elem.style.right = props.fromRight + 'px'
     }
   }
   /* Computed Styles End */
@@ -223,8 +223,8 @@ function setComputedStyles(elem, props){
 
 function setAttributes(type, elem, props, firstRender) {
   if(type == 'modal'){
-    setModalAttributes(elem, props, firstRender);
-    return;
+    setModalAttributes(elem, props, firstRender)
+    return
   }
   
   if(elem.classList && elem.classList.length > 0)
@@ -233,150 +233,151 @@ function setAttributes(type, elem, props, firstRender) {
     elem.className = type
   
   let afterTransition = (x) => {
-    let animation = props.animation;
-    let myElem = elem;
-    let pro = props;
+    let animation = props.animation
+    let myElem = elem
+    
     if (animation.transition) {
-      myElem.style.transition = animation.transition;
-      myElem.style.transform = animation.transform;
-      if (animation.opacity)
-        myElem.style.opacity = animation.opacity;
-    }
-  };
+      myElem.style.transition = animation.transition
+      myElem.style.transform = animation.transform
 
-  elem.style.transition = props.transition;
+      if (animation.opacity)
+        myElem.style.opacity = animation.opacity
+    }
+  }
+
+  elem.style.transition = props.transition
 
   /* New Style */
     /* Render from global styles */
-    elem.style.width = 'auto';
-    elem.style.height = 'auto';
+    elem.style.width = 'auto'
+    elem.style.height = 'auto'
 
     if(props.hasOwnProperty('width')){
       if(props.width == 'match_parent'){
-        elem.style.width = '100%';
+        elem.style.width = '100%'
       }else if(props.width == 'wrap_content'){
         // You see below
       }else if(!isNaN(props.width)){
         if(props.hasOwnProperty('percentWidth') && props.percentWidth)
-          elem.style.width = props.width + '%';
+          elem.style.width = props.width + '%'
         else
-          elem.style.width = props.width + 'px';
+          elem.style.width = props.width + 'px'
       }
     }
   
     if(props.hasOwnProperty('height')){
       if(props.height == 'match_parent'){
-        elem.style.height = '100%';
+        elem.style.height = '100%'
       }else if(!isNaN(props.height)){
         if(props.hasOwnProperty('percentHeight') && props.percentHeight)
-          elem.style.height = props.height + '%';
+          elem.style.height = props.height + '%'
         else
-          elem.style.height = props.height + 'px';
+          elem.style.height = props.height + 'px'
       }
     }
     
     if(props.hasOwnProperty('minWidth') && !isNaN(props.minWidth)){
       if(props.hasOwnProperty('percentMinWidth') && props.percentMinWidth)
-        elem.style.minWidth = props.minWidth + '%';
+        elem.style.minWidth = props.minWidth + '%'
       else
-        elem.style.minWidth = props.minWidth + 'px';
+        elem.style.minWidth = props.minWidth + 'px'
     }
 
     if(props.hasOwnProperty('minHeight') && !isNaN(props.minHeight)){
       if(props.hasOwnProperty('percentMinHeight') && props.percentMinHeight)
-        elem.style.minHeight = props.minHeight + '%';
+        elem.style.minHeight = props.minHeight + '%'
       else
-        elem.style.minHeight = props.minHeight + 'px';
+        elem.style.minHeight = props.minHeight + 'px'
     }
 
     if(props.hasOwnProperty('maxWidth') && !isNaN(props.maxWidth)){
       if(props.hasOwnProperty('percentMaxWidth') && props.percentMaxWidth)
-        elem.style.maxWidth = props.maxWidth + '%';
+        elem.style.maxWidth = props.maxWidth + '%'
       else
-        elem.style.maxWidth = props.maxWidth + 'px';
+        elem.style.maxWidth = props.maxWidth + 'px'
     }
 
     if(props.hasOwnProperty('maxHeight') && !isNaN(props.maxHeight)){
       if(props.hasOwnProperty('percentMaxHeight') && props.percentMaxHeight)
-        elem.style.maxHeight = props.maxHeight + '%';
+        elem.style.maxHeight = props.maxHeight + '%'
       else
-        elem.style.maxHeight = props.maxHeight + 'px';
+        elem.style.maxHeight = props.maxHeight + 'px'
     }
 
     if(props.hasOwnProperty('padding')){
-      let padding = props.padding.split(',').map(a => a * 1);
+      let padding = props.padding.split(',').map(a => a * 1)
   
-      elem.style['padding'] = padding[1] + 'px ' + padding[2] + 'px ' + padding[3] + 'px ' + padding[0] + 'px';
+      elem.style['padding'] = padding[1] + 'px ' + padding[2] + 'px ' + padding[3] + 'px ' + padding[0] + 'px'
     }
   
     if(props.hasOwnProperty('margin')){
-      let margin = props.margin.split(',').map(a => a * 1);
+      let margin = props.margin.split(',').map(a => a * 1)
   
-      elem.style['margin'] = margin[1] + 'px ' + margin[2] + 'px ' + margin[3] + 'px ' + margin[0] + 'px';
+      elem.style['margin'] = margin[1] + 'px ' + margin[2] + 'px ' + margin[3] + 'px ' + margin[0] + 'px'
     }
     
     if(props.hasOwnProperty('visibility')){
-      let visibility = props.visibility;
+      let visibility = props.visibility
       if(visibility == 'invisible')
-        elem.style.visibility = "hidden";
+        elem.style.visibility = "hidden"
       else if(visibility == 'gone')
-        elem.style.display = "none";
+        elem.style.display = "none"
       else{
-        elem.style.visibility = '';
+        elem.style.visibility = ''
 
-        initializeShow(elem, props, type);  
+        initializeShow(elem, props, type)
       }
     }else{
-      initializeShow(elem, props, type);
+      initializeShow(elem, props, type)
     }
     /* Render global styles end */
 
-    let scrollBarX = true;
-    let scrollBarY = true;
+    let scrollBarX = true
+    let scrollBarY = true
 
     if(props.hasOwnProperty('scrollBarX'))
-      scrollBarX = props.scrollBarX;
+      scrollBarX = props.scrollBarX
     if(props.hasOwnProperty('scrollBarY'))
-      scrollBarY = props.scrollBarY;
+      scrollBarY = props.scrollBarY
 
     /* Render type specific styles */
     if(type == 'linearLayout'){
-      elem.style["box-sizing"] = "border-box";
+      elem.style["box-sizing"] = "border-box"
 
       if(props.hasOwnProperty('fixedWrap') && !props.fixedWrap){
-        elem.style["flex-wrap"] = "nowrap";
+        elem.style["flex-wrap"] = "nowrap"
       }else{
-        elem.style["flex-wrap"] = "wrap";
+        elem.style["flex-wrap"] = "wrap"
       }
 
-      elem.style["flex-direction"] = props.orientation == "horizontal" || props.orientation == null ? "row" : "column";
+      elem.style["flex-direction"] = props.orientation == "horizontal" || props.orientation == null ? "row" : "column"
       
       if(elem.style["flex-direction"] == 'row')
-        setGravityStylesForRow(elem, props);
+        setGravityStylesForRow(elem, props)
       else
-        setGravityStylesForColumn(elem, props);  
+        setGravityStylesForColumn(elem, props)  
     } else if (type == "horizontalScrollView") {
-      elem.style.overflowX = "auto";
-      elem.style.overflowY = "hidden";
+      elem.style.overflowX = "auto"
+      elem.style.overflowY = "hidden"
       
       if(!scrollBarX)
-        elem.style.overflowX = 'hidden';
+        elem.style.overflowX = 'hidden'
     } else if (type == "listView") {
-      elem.style.overflowY = "auto";
-      elem.style.overflowX = "hidden";
+      elem.style.overflowY = "auto"
+      elem.style.overflowX = "hidden"
 
       if(!scrollBarY)
-        elem.style.overflowY = 'hidden';
+        elem.style.overflowY = 'hidden'
     } else if(type == 'scrollView') {
-      elem.style.overflowX = 'auto';
-      elem.style.overflowY = 'auto';
+      elem.style.overflowX = 'auto'
+      elem.style.overflowY = 'auto'
 
       if(!scrollBarX)
-        elem.style.overflowX = 'hidden';
+        elem.style.overflowX = 'hidden'
       if(!scrollBarY)
-        elem.style.overflowY = 'hidden';
+        elem.style.overflowY = 'hidden'
     } else if(type == 'relativeLayout') {
-      elem.style.position = 'relative';
+      elem.style.position = 'relative'
     } else if(type == 'imageView') {
       if(props.imageUrl) {
         let imageUrl = props.imageUrl
@@ -414,38 +415,39 @@ function setAttributes(type, elem, props, firstRender) {
     } else if (key == "style") {
       for (let innerKey in props.style) {
         if (innerKey == "className") {
-          elem.className += " " + props.style[innerKey];
+          elem.className += " " + props.style[innerKey]
         } else 
-          elem.style[innerKey] = props.style[innerKey];
+          elem.style[innerKey] = props.style[innerKey]
       }
     } else if (key == "attributes") {
       for (let innerKey in props.attributes){
-        elem.setAttribute(innerKey, props.attributes[innerKey]);
+        elem.setAttribute(innerKey, props.attributes[innerKey])
       }
     } else if (key == "className") {
-      elem.classList.add(props[key]);
+      elem.classList.add(props[key])
     } else if (key == "classList") {
       JSON.parse(props[key]).forEach(function(obj) {
-        elem.classList.add(obj);
-      });
+        elem.classList.add(obj)
+      })
     } else if (props[key] && typeof props[key] == "function") {
-      var eventType = key.substring(2, key.length).toLowerCase();
-      var elemCB = props[key];
-      elem.style.userSelect = 'none';
+      var eventType = key.substring(2, key.length).toLowerCase()
+      var elemCB = props[key]
+
+      elem.style.userSelect = 'none'
       if (eventType == "change") {
-        eventType = "input";
+        eventType = "input"
       }
 
       if (props.label) {
         elem.addEventListener('blur', function() {
-          var inputValue = elem.value;
+          var inputValue = elem.value
           if (inputValue == "") {
-            elem.classList.remove("filled");
-            elem.parentNode.classList.remove('focused');
+            elem.classList.remove("filled")
+            elem.parentNode.classList.remove('focused')
           } else {
-            elem.classList.add('filled');
+            elem.classList.add('filled')
           }
-        });
+        })
 
         if (type == "editText"){
           elem.addEventListener('keydown', function(key) {
@@ -481,7 +483,7 @@ function setAttributes(type, elem, props, firstRender) {
                 }
               }
             } catch (error) {}
-          });
+          })
         }
 
         elem['onfocus'] = function (e) {
@@ -490,21 +492,22 @@ function setAttributes(type, elem, props, firstRender) {
             e.stopPropagation();
             elemCB(e);
           }
-        };
+        }
       }
 
       if (!(props.label && eventType == "focus")) {
         elem['on' + eventType] = function (e) {
-          e.stopPropagation();eventType == "input" ? elemCB(e.target.value) : elemCB(e);
-        };
+          e.stopPropagation()
+          eventType == "input" ? elemCB(e.target.value) : elemCB(e)
+        }
       }
     }
   }
 
   if ((props.style.transform || props.style.opacity) && props.animation.transition) {
-    setTimeout(afterTransition, 100);
+    setTimeout(afterTransition, 100)
   } else if (props.animation.transition) {
-    afterTransition(); 
+    afterTransition()
   }
 
   /* Component Part */
@@ -568,99 +571,33 @@ let initializeShow = function(elem, props, type) {
 
 /* Observer for afterRender */
 let observer = (elem) => {
-  let id = elem.id;
+  let id = elem.id
   if(!id || __OBSERVERS[id])
     return;
 
   __OBSERVERS[id] = new MutationObserver(function(item, observer){
     if(item && item[0].target){
-      let target = item[0].target;
-      let id = target.id;
+      let target = item[0].target
+      let id = target.id
       if(id){
-        let view = __VIEWS[id];
+        let view = __VIEWS[id]
         
         if(view && view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
-          view.props.afterRender();
+          view.props.afterRender()
         }
       }
     }
 
-    observer.disconnect();
-  });
+    observer.disconnect()
+  })
 
-  (__OBSERVERS[id]).observe(elem, {attributes: true});
+  (__OBSERVERS[id]).observe(elem, {attributes: true})
 }
 
 /* Do some actions after rendered */
 let cb = (elem, view) => {
   if (view.props.feedback && typeof view.props.feedback == "function") {
-    view.props.feedback()
-  }
-
-  if(view.props.hasOwnProperty('onClickEvent') && typeof view.props.onClickEvent == "function"){
-    elem.addEventListener('click', function(){
-      view.props.onClickEvent()
-    })
-  }
-
-  if(view.props.hasOwnProperty('onChangeEvent') && typeof view.props.onChangeEvent == "function"){
-    elem.addEventListener('change', function(){
-      view.props.onChangeEvent()
-    });
-  }
-
-  if(view.props.hasOwnProperty('onMouseDownEvent') && typeof view.props.onMouseDownEvent == "function"){
-    elem.addEventListener('mousedown', function(){
-      view.props.onMouseDownEvent()
-    });
-  }
-
-  if(view.props.hasOwnProperty('onMouseUpEvent') && typeof view.props.onMouseUpEvent == "function"){
-    elem.addEventListener('mouseup', function(){
-      view.props.onMouseUpEvent()
-    });
-  }
-
-  if(view.props.hasOwnProperty('onMouseEnterEvent') && typeof view.props.onMouseEnterEvent == "function"){
-    elem.addEventListener('mouseenter', function(){
-      view.props.onMouseEnterEvent()
-    });
-  }
-
-  if(view.props.hasOwnProperty('onMouseOverEvent') && typeof view.props.onMouseOverEvent == "function"){
-    elem.addEventListener('mouseover', function(){
-      view.props.onMouseOverEvent()
-    });
-  }
-
-  if(view.props.hasOwnProperty('onMouseMoveEvent') && typeof view.props.onMouseMoveEvent == "function"){
-    elem.addEventListener('mousemove', function(){
-      view.props.onMouseMoveEvent()
-    });
-  }
-
-  if(view.props.hasOwnProperty('onMouseOutEvent') && typeof view.props.onMouseOutEvent == "function"){
-    elem.addEventListener('mouseout', function(event){
-      view.props.onMouseOutEvent()
-    });
-  }
-
-  if(view.props.hasOwnProperty('onMouseLeaveEvent') && typeof view.props.onMouseLeaveEvent == "function"){
-    elem.addEventListener('mouseleave', function(){
-      view.props.onMouseLeaveEvent()
-    });
-  }
-
-  if(view.props.hasOwnProperty('onFocusEvent') && typeof view.props.onFocusEvent == 'function'){
-    elem.addEventListener('focus', function(){
-      view.props.onFocusEvent()
-    })
-  }
-
-  if(view.props.hasOwnProperty('onBlurEvent') && typeof view.props.onBlurEvent == 'function'){
-    elem.addEventListener('blur', function(){
-      view.props.onBlurEvent()
-    })
+    view.props.feedback() 
   }
 }
 
@@ -986,21 +923,21 @@ let runInUI = function (cmd) {
     cmd = [cmd];
   
   cmd.forEach(function (each) {
-    let elem = document.getElementById(each.id);
+    let elem = document.getElementById(each.id)
     
     if (!elem){
-      return console.error("runInUI (Id NULL) CMD:", each);
+      return console.error("runInUI (Id NULL) CMD:", each)
     }
 
-    let view = window.__VIEWS[elem.id];
-    view.props = R.merge(view.props, each);
+    let view = window.__VIEWS[elem.id]
+    view.props = R.merge(view.props, each)
     
-    setAttributes(view.type, elem, view.props, false);
-  });
-};
+    setAttributes(view.type, elem, view.props, false)
+  })
+}
 
 module.exports = {
   inflateView,
   runInUI,
   computeChildDimens
-};
+}

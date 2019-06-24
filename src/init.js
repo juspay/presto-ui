@@ -73,7 +73,8 @@ window.__COM_EVENT = false
 window.__COM_RENDERED = {
   DRP_GLOBAL: false,
   SWITCH_GLOBAL: false,
-  DRP: []
+  DRP: [],
+  DSB: {}
 }
 
 window.__COM_CLASS_GROUP = {
@@ -91,9 +92,11 @@ window.__COM_CLASS_GROUP = {
   DB_OPTIONS: 'com_db_options_' + guid,
   DB_OPTION: 'com_db_option_' + guid,
   DSB: 'com_dsb_' + guid,
+  DSB_FULL_BODY: 'com_dsb_full_body_' + guid,
   DSB_BODY: 'com_dsb_body_' + guid,
   DSB_OPTIONS: 'com_dsb_options_' + guid,
   DSB_OPTION: 'com_dsb_option_' + guid,
+  DSB_SEARCH_WRAP: 'com_dsb_search_wrap_' + guid,
   DSB_SEARCH: 'com_dsb_search_' + guid,
   SWITCH: 'com_switch_' + guid,
   SWITCH_BODY: 'com_switch_body' + guid,
