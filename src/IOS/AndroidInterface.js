@@ -24,7 +24,6 @@
 */
 
 const render = require('./Render');
-const helper = require('../helper');
 const R = require('ramda');
 const parseParams = require('../helpers').ios.parseParams;
 

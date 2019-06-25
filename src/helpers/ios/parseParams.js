@@ -23,10 +23,7 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-import colors from "./colors";
 import flattenObject from "./flattenObject";
-const R = require('ramda');
-
 
 var callbackMapper  = require("./callbackMapper");
 

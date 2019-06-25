@@ -51,10 +51,7 @@ module.exports = {
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
-
-import colors from "../ios/colors";
 import flattenObject from "../ios/flattenObject";
-const R = require('ramda');
 
 var callbackMapper  = require("../ios/callbackMapper");
 
