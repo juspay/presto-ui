@@ -198,6 +198,7 @@ DateRangePicker.prototype._renderStyle = function() {
           style += ".daterangepicker .drp-calendar.left .calendar-table {padding-right: 8px;}"
           style += ".daterangepicker .ranges, .daterangepicker .drp-calendar {float: left;}"
      style += "}"
+     
      style += "@media (min-width: 730px) {"
           style += ".daterangepicker .ranges {width: auto;}"
           style += ".daterangepicker .ranges {float: left;}"
