@@ -73,7 +73,7 @@ window.__COM_EVENT = false
 window.__COM_RENDERED = {
   DRP_GLOBAL: false,
   SWITCH_GLOBAL: false,
-  DRP: [],
+  DRP: {},
   DSB: {},
   DB: {},
   NAVBAR: {}

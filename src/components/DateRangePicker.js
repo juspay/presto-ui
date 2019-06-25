@@ -1,8 +1,13 @@
 const $ = require('jquery')
-const moment = require('moment')
+const moment = require('moment') 
 const daterangepicker = require('daterangepicker')
 
 function DateRangePicker() {}
+
+DateRangePicker.prototype._getBodyObject = function(guid) {
+     let query = '.' + window.__COM_CLASS_GROUP.DRP_BODY + '[guid="' + guid +'"]'
+     return document.body.querySelector(query)
+}
 
 DateRangePicker.prototype._getStartDate = function(props) {
      let start = moment().subtract(29, 'days')
@@ -23,37 +28,59 @@ DateRangePicker.prototype._getEndDate = function(props) {
 
      return end
 }
- 
-DateRangePicker.prototype._renderMain = function(elem, props, renderEvent) {
-     elem.style.cursor = 'pointer'
-     elem.style.border = "1px solid " + window.__COM_COLOR_GROUP.BORDER_COLOR
-     
-     if(!window.__COM_RENDERED.DRP_GLOBAL) {
-          window.__COM_RENDERED.DRP_GLOBAL = true
 
-          this._renderStyle()
+DateRangePicker.prototype._renderText = function(elem, start, end) {
+     let children = elem.childNodes
+     let article = null
+
+     if(children.length){
+          for(let i = 0; i < children.length; i++){
+               if(children[i].nodeName.toLowerCase() == 'article'){
+                    article = children[i]
+                    break
+               }
+          }
      }
+     
+     if (article) {
+          article.innerHTML = start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+     }
+     
+     elem.style.color = window.__COM_COLOR_GROUP.INACTIVE_COLOR
+}
 
+DateRangePicker.prototype._renderMain = function(elem, props, renderEvent) {
+     // GUID
      let guid = props.guid
      if(elem.getAttribute('guid'))
           guid = elem.getAttribute('guid')
 
-     if(!window.__COM_RENDERED.DRP.includes(guid)) {
-          window.__COM_RENDERED.DRP.push(guid)
-
-          if(!elem.id) 
-               return
+     if(renderEvent) {
+          if(!window.__COM_RENDERED.DRP_GLOBAL) {
+               window.__COM_RENDERED.DRP_GLOBAL = true
+     
+               this._renderStyle()
+          }
 
           let start = this._getStartDate(props)
           let end = this._getEndDate(props)
 
-          function cb(start, end) {
+          let cb = (start, end) => {
                let res = {
                     startLabel: start.format('MMMM D, YYYY'),
                     endLabel: end.format('MMMM D, YYYY'),
                     startDate: start.format('YYYY-MM-DD'),
                     endDate: end.format('YYYY-MM-DD')
                }
+
+               /* Update UI */
+               let bodyElem = this._getBodyObject(guid)
+               this._renderText(bodyElem, start, end)
+
+               if (!window.__COM_RENDERED.DRP[guid])
+                    window.__COM_RENDERED.DRP[guid] = {}
+               window.__COM_RENDERED.DRP[guid].start = start
+               window.__COM_RENDERED.DRP[guid].end = end
 
                /* Events Trigger */
                if (props.onDateChange && typeof props.onDateChange == "function") {
@@ -77,28 +104,22 @@ DateRangePicker.prototype._renderMain = function(elem, props, renderEvent) {
 }
 
 DateRangePicker.prototype._renderBody = function(elem, props, renderEvent) {
+     // GUID
+     let guid = props.guid
+     if(elem.getAttribute('guid'))
+          guid = elem.getAttribute('guid')
+
      let start = this._getStartDate(props)
      let end = this._getEndDate(props)
 
-     let children = elem.childNodes
-     let article = null
+     if (window.__COM_RENDERED.DRP[guid]) {
+          if (window.__COM_RENDERED.DRP[guid].start)
+               start = window.__COM_RENDERED.DRP[guid].start
+          if (window.__COM_RENDERED.DRP[guid].end)
+               end = window.__COM_RENDERED.DRP[guid].end
+     }
 
-     if(children.length){
-          for(let i = 0; i < children.length; i++){
-               if(children[i].nodeName.toLowerCase() == 'article'){
-                    article = children[i]
-                    break
-               }
-          }
-     }
-     
-     if(!article) {
-          article = document.createElement('ARTICLE')
-          elem.appendChild(article)
-     }
-     
-     article.innerHTML = start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
-     elem.style.color = window.__COM_COLOR_GROUP.INACTIVE_COLOR
+     this._renderText(elem, start, end)
 }
 
 DateRangePicker.prototype._renderStyle = function() {
