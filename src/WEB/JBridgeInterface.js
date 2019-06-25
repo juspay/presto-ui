@@ -37,7 +37,7 @@ function parseJson(str) {
   } catch (e) {
     return {};
   }
-}
+} 
 
 module.exports = {
   getSymbol: function (type) {
@@ -79,7 +79,6 @@ module.exports = {
       elem.style.height = "100px";
       elem.style.borderBottom = "1px solid #eee";
       parent.appendChild(elem);
-      let a = JSON.parse(more);
       
       Renderer.inflateView(JSON.parse(more), elem);
     }

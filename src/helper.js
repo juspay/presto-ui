@@ -24,6 +24,8 @@
 */
 
 // Following functions are used by WEB and IOS Render
+const R = require('ramda');
+
 function cacheDimen(view) {
   let props = view.props;
   let dimen = {

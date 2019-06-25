@@ -23,6 +23,8 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
+const R = require('ramda');
+
 function viewCtxObj(view) {
   let props = view.props;
   let obj = {

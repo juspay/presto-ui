@@ -23,6 +23,8 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
+const R = require('ramda');
+
 /*
   ViewContext of the Parent.f
   Obj holds the available width and height of it's parent container
