@@ -137,6 +137,8 @@ module.exports = {
       css += '.' + window.__COM_CLASS_GROUP.SWITCH_BODY + ' input:checked + .' + window.__COM_CLASS_GROUP.SWITCH_SLIDER + '{background-color: ' + window.__COM_COLOR_GROUP.ACTIVE_SWITCH + '} '
      
       // NavBar
+      css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' { letter-spacing: 0.4px; }'
+      css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' > ul { height: 100%; }'
       css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul{ list-style: none !important;}'
       css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li { color: ' + window.__COM_COLOR_GROUP.INACTIVE_COLOR + '; position:relative !important; display: inline-block !important; pointer-events: auto !important; cursor: pointer !important; padding-left: 10px !important; padding-right: 10px !important;}'
       css += '.' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li:hover, .' + window.__COM_CLASS_GROUP.NAVBAR + ' ul li.selected {color: ' + window.__COM_COLOR_GROUP.ACTIVE_COLOR + ';}'

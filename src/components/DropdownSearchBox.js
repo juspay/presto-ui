@@ -220,7 +220,7 @@ DropdownSearchBox.prototype._renderMain = function(elem, props, renderEvent) {
      
      if(props.options) {
           let options = JSON.parse(props.options)
-          let optionValue = props.optionValue
+          let optionValue = null
 
           if (props.optionValue)
                optionValue = props.optionValue

@@ -38,11 +38,22 @@ NavBar.prototype._selectRouteByGUID = function(guid, elem) {
      if(!view || !view.props)
           return
 
+     /* Update UI */
+     if (window.__COM_RENDERED.NAVBAR[guid] && window.__COM_RENDERED.NAVBAR[guid].activeElem)
+          window.__COM_RENDERED.NAVBAR[guid].activeElem.classList.remove('selected')
+
+     elem.classList.add('selected')
+
+     if (!window.__COM_RENDERED.NAVBAR[guid])
+          window.__COM_RENDERED.NAVBAR[guid] = {}
+
+     window.__COM_RENDERED.NAVBAR[guid].activeElem = elem
+     window.__COM_RENDERED.NAVBAR[guid].defaultValue = key
+     
      /* Event Trigger */
      if (view.props.onSelect && typeof view.props.onSelect == "function") {
           view.props.onSelect(key)
      }
-     
 }
 
 NavBar.prototype._renderRoute = function(parentElem, props, guid, route, renderEvent) {
@@ -56,7 +67,13 @@ NavBar.prototype._renderRoute = function(parentElem, props, guid, route, renderE
      elem.setAttribute('route-text', route.text)
      elem.setAttribute('guid', guid)
 
-     if(props.value && props.value == route.key)
+     let defaultValue = null
+     if (props.defaultValue)
+          defaultValue = props.defaultValue
+     if (window.__COM_RENDERED.NAVBAR[guid] && window.__COM_RENDERED.NAVBAR[guid].defaultValue)
+          defaultValue = window.__COM_RENDERED.NAVBAR[guid].defaultValue + ""
+
+     if(defaultValue && defaultValue == route.key)
           elem.classList.add('selected')
      else
           elem.classList.remove('selected')
@@ -107,7 +124,13 @@ NavBar.prototype._renderSubRoute = function(parentElem, props, guid, route, rend
      elem.setAttribute('route-text', route.text)
      elem.setAttribute('guid', guid)
 
-     if(props.value && props.value == route.key)
+     let defaultValue = null
+     if (props.defaultValue)
+          defaultValue = props.defaultValue
+     if (window.__COM_RENDERED.NAVBAR[guid] && window.__COM_RENDERED.NAVBAR[guid].defaultValue)
+          defaultValue = window.__COM_RENDERED.NAVBAR[guid].defaultValue + ""
+
+     if(defaultValue && defaultValue == route.key)
           elem.classList.add('selected')
      else
           elem.classList.remove('selected')
@@ -120,20 +143,21 @@ NavBar.prototype._renderSubRoute = function(parentElem, props, guid, route, rend
 }
 
 NavBar.prototype._renderMain = function(elem, props, renderEvent) {
-     elem.innerHTML = ''
-     elem.style.letterSpacing = '0.4px'
+     if (!renderEvent)
+          return
 
-     let routes = []
-     if(props && props.routes)
-          routes = JSON.parse(props.routes)
-
+     // GUID
      let guid = props.guid
      if(elem.getAttribute('guid'))
           guid = elem.getAttribute('guid')
 
+     // ROUTES
+     let routes = []
+     if(props && props.routes)
+          routes = JSON.parse(props.routes)        
+     
+     elem.innerHTML = ''
      let virtualElem = document.createElement('UL')
-     virtualElem.style.height = '100%'
-
      elem.appendChild(virtualElem)
 
      if(routes.length > 0) {

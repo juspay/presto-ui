@@ -75,7 +75,8 @@ window.__COM_RENDERED = {
   SWITCH_GLOBAL: false,
   DRP: [],
   DSB: {},
-  DB: {}
+  DB: {},
+  NAVBAR: {}
 }
 
 window.__COM_CLASS_GROUP = {
