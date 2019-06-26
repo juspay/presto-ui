@@ -73,9 +73,16 @@ NavBar.prototype._renderRoute = function(parentElem, props, guid, route, renderE
      if (window.__COM_RENDERED.NAVBAR[guid] && window.__COM_RENDERED.NAVBAR[guid].defaultValue)
           defaultValue = window.__COM_RENDERED.NAVBAR[guid].defaultValue + ""
 
-     if(defaultValue && defaultValue == route.key)
+     if(defaultValue && defaultValue == route.key) {
           elem.classList.add('selected')
-     else
+          
+          // Save
+          if (!window.__COM_RENDERED.NAVBAR[guid])
+               window.__COM_RENDERED.NAVBAR[guid] = {}
+
+          window.__COM_RENDERED.NAVBAR[guid].activeElem = elem
+          window.__COM_RENDERED.NAVBAR[guid].defaultValue = route.key
+     } else
           elem.classList.remove('selected')
 
      let article = document.createElement('article')
@@ -130,10 +137,18 @@ NavBar.prototype._renderSubRoute = function(parentElem, props, guid, route, rend
      if (window.__COM_RENDERED.NAVBAR[guid] && window.__COM_RENDERED.NAVBAR[guid].defaultValue)
           defaultValue = window.__COM_RENDERED.NAVBAR[guid].defaultValue + ""
 
-     if(defaultValue && defaultValue == route.key)
+     if(defaultValue && defaultValue == route.key) {
           elem.classList.add('selected')
-     else
+          
+          // Save
+          if (!window.__COM_RENDERED.NAVBAR[guid])
+               window.__COM_RENDERED.NAVBAR[guid] = {}
+
+          window.__COM_RENDERED.NAVBAR[guid].activeElem = elem
+          window.__COM_RENDERED.NAVBAR[guid].defaultValue = route.key
+     } else {
           elem.classList.remove('selected')
+     }
 
      let article = document.createElement('article') 
      article.innerHTML = route.text
