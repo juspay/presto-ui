@@ -102,8 +102,12 @@ window.__COM_CLASS_GROUP = {
   DSB_SEARCH_WRAP: 'com_dsb_search_wrap_' + guid,
   DSB_SEARCH: 'com_dsb_search_' + guid,
   SWITCH: 'com_switch_' + guid,
-  SWITCH_BODY: 'com_switch_body' + guid,
-  SWITCH_SLIDER: 'com_switch_slider_' + guid 
+  SWITCH_BODY: 'com_switch_body_' + guid,
+  SWITCH_SLIDER: 'com_switch_slider_' + guid,
+  BT: 'com_bt_' + guid,
+  BT_BODY: 'com_bt_body_' + guid,
+  BT_TEXT: 'com_bt_text_' + guid,
+  BT_ICON: 'com_bt_icon_' + guid
 }
 window.__COM_COLOR_GROUP = {
   BG: '#ffffff',
@@ -114,7 +118,10 @@ window.__COM_COLOR_GROUP = {
   ACTIVE_BORDER_COLOR: '#707886',
   SEARCH_COLOR: '#dddddd',
   INACTIVE_SWITCH: '#B7DBBC',
-  ACTIVE_SWITCH: '#36AF47'
+  ACTIVE_SWITCH: '#36AF47',
+  BT_BORDER_COLOR: '#1585D8',
+  BT_BG_COLOR: '#1991EB',
+  BT_COLOR: '#ffffff'
 }
 window.__COM_ACTIVE = {
   DSB: '',

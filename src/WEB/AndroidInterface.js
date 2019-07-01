@@ -130,6 +130,10 @@ module.exports = {
 
       css += '.hasTooltip .tooltipText.tooltipGravity_bottom{top: 100%; margin-top: 10px; left: 50%; transform: translateX(-50%);}';
       css += '.hasTooltip .tooltipGravity_bottom:after{content: ""; position: absolute; bottom: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: transparent transparent #555 transparent;}';
+      
+      // Button
+      css += '.' + window.__COM_CLASS_GROUP.BT + ' a {display: block; margin: 0; cursor: pointer}'
+      css += '.' + window.__COM_CLASS_GROUP.BT + ' a:active {box-shadow: 0 1px #666; transform: translateY(1px);}'
 
       // Switch Button
       css += '.' + window.__COM_CLASS_GROUP.SWITCH_BODY + ' input{opacity: 0; width: 0; height: 0;} '
