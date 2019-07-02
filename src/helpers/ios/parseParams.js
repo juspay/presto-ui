@@ -1306,8 +1306,8 @@ module.exports = function(type, config, _getSetType) {
   if (config.x || config.y || config.w || config.h) {
     let x = rWS(cS(config.x)) ||  "0";
     let y =  rWS(cS(config.y))|| "0";
-    let width = rWS(cS(config.w)) || "100";
-    let height = rWS(cS(config.h)) || "100";
+    let width = rWS(cS(config.w)) || "0";
+    let height = rWS(cS(config.h)) || "0";
 
     config.methods.push(self_rectFromDictionary(x,y,width,height));
     config.methods.push(this_setFrame());
