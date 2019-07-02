@@ -1064,36 +1064,32 @@ function this_inlineAnimation(config) {
 
 
 function modifyTranslation(config){
-  if(config.hasOwnProperty("margin")){
-    var margins = config.margin.split(",");
-    var marginLeft = margins[0];
-    var marginTop = margins[1];
-    var animationArray = JSON.parse(config.inlineAnimation);
-    var animationArray = animationArray.map(function(a){
-      if(a.hasOwnProperty("fromX")){
-        a.fromX = parseInt(a.fromX) + parseInt(marginLeft) + '';
-        if(!a.hasOwnProperty("toX")){
-          a.toX = 0 + parseInt(marginLeft) + '';
-        }
+  var x = config.x || "0";
+  var y = config.y || "0";
+  var animationArray = JSON.parse(config.inlineAnimation);
+  var animationArray = animationArray.map(function(a){
+    if(a.hasOwnProperty("fromX")){
+      a.fromX = parseInt(a.fromX) + parseInt(x) + '';
+      if(!a.hasOwnProperty("toX")){
+        a.toX = 0 + parseInt(x) + '';
       }
-      if(a.hasOwnProperty("toX")){
-        a.toX = parseInt(a.toX) + parseInt(marginLeft) + '';
+    }
+    if(a.hasOwnProperty("toX")){
+      a.toX = parseInt(a.toX) + parseInt(x) + '';
+    }
+    if(a.hasOwnProperty("fromY")){
+      a.fromY = parseInt(a.fromY) + parseInt(y) + '';
+      if(!a.hasOwnProperty("toY")){
+        a.toY = 0 + parseInt(y) + '';
       }
-      if(a.hasOwnProperty("fromY")){
-        a.fromY = parseInt(a.fromY) + parseInt(marginTop) + '';
-        if(!a.hasOwnProperty("toY")){
-          a.toY = 0 + parseInt(marginTop) + '';
-        }
-      }
-      if(a.hasOwnProperty("toY")){
-        a.toY = parseInt(a.toY) + parseInt(marginTop) + '';
-      }
-      return a;
-    })
-    return JSON.stringify(animationArray);
-  }
+    }
+    if(a.hasOwnProperty("toY")){
+      a.toY = parseInt(a.toY) + parseInt(y) + '';
+    }
+    return a;
+  })
+  return JSON.stringify(animationArray);
 }
-
 
 function this_setCloseSwipe(value) {
     return {
