@@ -361,7 +361,9 @@ function setAttributes(type, elem, props, firstRender) {
             elem.style.overflowX = 'auto'
         else
             elem.style.overflowX = 'hidden'
+      }
 
+      if (props.hasOwnProperty('scrollBarY')) {
         if (props.scrollBarY)
             elem.style.overflowY = 'auto'
         else
