@@ -3,73 +3,80 @@ const DropdownSearchBox = require('./components/DropdownSearchBox')
 const NavBar = require('./components/NavBar')
 const DateRangePicker = require('./components/DateRangePicker')
 const SwitchButton = require('./components/SwitchButton')
+const Button = require('./components/Button')
 
 /* Components */
 function closeAllActiveComponents() {
-     if(window.__COM_ACTIVE.NAVBAR != '')
-          NavBar._closeByGUID(window.__COM_ACTIVE.NAVBAR)
-     if(window.__COM_ACTIVE.DSB != '')
-          DropdownSearchBox._closeByGUID(window.__COM_ACTIVE.DSB)
-     if(window.__COM_ACTIVE.DB != '')
-          DropdownBox._closeByGUID(window.__COM_ACTIVE.DB)
+    if(window.__COM_ACTIVE.NAVBAR != '')
+        NavBar._closeByGUID(window.__COM_ACTIVE.NAVBAR)
+    if(window.__COM_ACTIVE.DSB != '')
+        DropdownSearchBox._closeByGUID(window.__COM_ACTIVE.DSB)
+    if(window.__COM_ACTIVE.DB != '')
+        DropdownBox._closeByGUID(window.__COM_ACTIVE.DB)
 }    
 
 function renderComponent(elem, props, firstRender) {
-     if(!props.componentType)
-          return
+    if(!props.componentType)
+        return
 
-     let componentType = props.componentType
+    let componentType = props.componentType
 
-     /* Attaching GUID only when firstRender */
-     if(firstRender && props.guid)
-          elem.setAttribute('guid', props.guid)
+    /* Attaching GUID only when firstRender */
+    if(firstRender && props.guid)
+        elem.setAttribute('guid', props.guid)
 
-     switch(componentType) {
-          // Switch Button
-          case 'SWITCH':
-               elem.classList.add(window.__COM_CLASS_GROUP.SWITCH)
+    switch(componentType) {
+        // Button
+        case 'BT':
+            elem.classList.add(window.__COM_CLASS_GROUP.BT)
 
-               SwitchButton._renderMain(elem, props, firstRender)
-          break
-          // Date Range Picker
-          case 'DRP': 
-               elem.classList.add(window.__COM_CLASS_GROUP.DRP)
+            Button._renderMain(elem, props, firstRender)
+        break    
+        // Switch Button
+        case 'SWITCH':
+            elem.classList.add(window.__COM_CLASS_GROUP.SWITCH)
 
-               DateRangePicker._renderMain(elem, props, firstRender)
-          break
-          case 'DRP_BODY':
-               elem.classList.add(window.__COM_CLASS_GROUP.DRP_BODY)
+            SwitchButton._renderMain(elem, props, firstRender)
+        break
+        // Date Range Picker
+        case 'DRP': 
+            elem.classList.add(window.__COM_CLASS_GROUP.DRP)
 
-               DateRangePicker._renderBody(elem, props, firstRender)
-          break
-          // Nav Bar
-          case 'NAVBAR':
-               elem.classList.add(window.__COM_CLASS_GROUP.NAVBAR)
+            DateRangePicker._renderMain(elem, props, firstRender)
+        break
+        case 'DRP_BODY':
+            elem.classList.add(window.__COM_CLASS_GROUP.DRP_BODY)
 
-               NavBar._renderMain(elem, props, firstRender)
-          break
-          // Dropdown Box
-          case 'DB':
-               elem.classList.add(window.__COM_CLASS_GROUP.DB)
+            DateRangePicker._renderBody(elem, props, firstRender)
+        break
+        // Nav Bar
+        case 'NAVBAR':
+            elem.classList.add(window.__COM_CLASS_GROUP.NAVBAR)
 
-               DropdownBox._renderMain(elem, props, firstRender)
-          break
-          case 'DB_FULL_BODY': 
-               elem.classList.add(window.__COM_CLASS_GROUP.DB_FULL_BODY)
+            NavBar._renderMain(elem, props, firstRender)
+        break
+        // Dropdown Box
+        case 'DB':
+            elem.classList.add(window.__COM_CLASS_GROUP.DB)
 
-               DropdownBox._renderFullBody(elem, props, firstRender)
-          break
-          // Dropdown Search Box
-          case 'DSB':
-               elem.classList.add(window.__COM_CLASS_GROUP.DSB)
+            DropdownBox._renderMain(elem, props, firstRender)
+        break
+        case 'DB_FULL_BODY': 
+            elem.classList.add(window.__COM_CLASS_GROUP.DB_FULL_BODY)
 
-               DropdownSearchBox._renderMain(elem, props, firstRender)
-          break
-          case 'DSB_FULL_BODY':
-               elem.classList.add(window.__COM_CLASS_GROUP.DSB_FULL_BODY)
+            DropdownBox._renderFullBody(elem, props, firstRender)
+        break
+        // Dropdown Search Box
+        case 'DSB':
+            elem.classList.add(window.__COM_CLASS_GROUP.DSB)
 
-               DropdownSearchBox._renderFullBody(elem, props, firstRender)
-          break
+            DropdownSearchBox._renderMain(elem, props, firstRender)
+        break
+        case 'DSB_FULL_BODY':
+            elem.classList.add(window.__COM_CLASS_GROUP.DSB_FULL_BODY)
+
+            DropdownSearchBox._renderFullBody(elem, props, firstRender)
+        break
      }
 
      if(!window.__COM_EVENT) {
