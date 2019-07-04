@@ -354,7 +354,20 @@ function setAttributes(type, elem, props, firstRender) {
       if(elem.style["flex-direction"] == 'row')
         setGravityStylesForRow(elem, props);
       else
-        setGravityStylesForColumn(elem, props);  
+        setGravityStylesForColumn(elem, props);
+        
+      if (props.hasOwnProperty('scrollBarX')) {
+        if (props.scrollBarX)
+            elem.style.overflowX = 'auto'
+        else
+            elem.style.overflowX = 'hidden'
+
+        if (props.scrollBarY)
+            elem.style.overflowY = 'auto'
+        else
+            elem.style.overflowY = 'hidden'
+      }
+
     } else if (type == "horizontalScrollView") {
       elem.style.overflowX = "auto";
       elem.style.overflowY = "hidden";
