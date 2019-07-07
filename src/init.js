@@ -71,7 +71,6 @@ const guid = Math.random().toString(36).substr(2, 9)
 /* Components */
 window.__COM_EVENT = false
 window.__COM_RENDERED = {
-  DRP_GLOBAL: false,
   SWITCH_GLOBAL: false,
   DRP: {},
   DSB: {},

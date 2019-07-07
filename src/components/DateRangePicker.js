@@ -56,12 +56,6 @@ DateRangePicker.prototype._renderMain = function(elem, props, renderEvent) {
           guid = elem.getAttribute('guid')
 
      if(renderEvent) {
-          if(!window.__COM_RENDERED.DRP_GLOBAL) {
-               window.__COM_RENDERED.DRP_GLOBAL = true
-     
-               this._renderStyle()
-          }
-
           let start = this._getStartDate(props)
           let end = this._getEndDate(props)
 
