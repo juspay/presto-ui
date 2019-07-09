@@ -400,10 +400,9 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
       window.shadowObject[tag]["dy"].push(arr[1]);
       window.shadowObject[tag]["spread"].push(arr[4]);
       window.shadowObject[tag]["factor"].push(arr[5]);
-
     }
 
-		return "";
+	return "";
   }
 
   if (attrs.key == "letterSpacing") {

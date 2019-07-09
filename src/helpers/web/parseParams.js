@@ -342,14 +342,16 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "inputType") {
-    var inputType = "text";
-    if(config.inputType=="numericPassword" || config.inputType == "password"){
-      inputType = "password";
-    }else if(config.inputType == "disabled"){
-      config.attributes.disabled = 'disabled';
+    var inputType = "text"
+    if (config.inputType == "numericPassword" || config.inputType == "password") {
+        inputType = "password"
+    } else if (config.inputType == "disabled") {
+        config.attributes.disabled = 'disabled'
+    } else if (config.inputType == "numeric") {
+        inputType = "number"
     }
 
-    config.attributes.type = inputType;
+    config.attributes.type = inputType
   }
 
   if (key == "pattern") {
