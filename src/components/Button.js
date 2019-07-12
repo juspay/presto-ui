@@ -14,7 +14,7 @@ Button.prototype._renderMain = function(elem, props, renderEvent) {
 
     linkElem.style.pointerEvents = 'auto'
 
-    if (props.hasOwnProperty('disabled') && !props.disabled) {
+    if (props.hasOwnProperty('disabled') && props.disabled) {
         elem.addClass(window.__COM_CLASS_GROUP.BT_DISABLED)
         linkElem.style.pointerEvents = 'none'        
     }
