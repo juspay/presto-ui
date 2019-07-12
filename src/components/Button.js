@@ -52,15 +52,15 @@ Button.prototype._renderMain = function(elem, props, renderEvent) {
     }
 
     if (!props.stroke) {
-        linkElem.style.border = '1px solid ' + window.__COM_COLOR_GROUP.BT_BORDER_COLOR
+        elem.style.border = '1px solid ' + window.__COM_COLOR_GROUP.BT_BORDER_COLOR
     }
 
     if (!props.backgroundColor) {
-        linkElem.style.backgroundColor = window.__COM_COLOR_GROUP.BT_BG_COLOR
+        elem.style.backgroundColor = window.__COM_COLOR_GROUP.BT_BG_COLOR
     }
 
     if (!props.color) {
-        linkElem.style.color = window.__COM_COLOR_GROUP.BT_COLOR
+        elem.style.color = window.__COM_COLOR_GROUP.BT_COLOR
     }
 }
 
