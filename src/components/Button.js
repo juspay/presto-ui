@@ -12,11 +12,35 @@ Button.prototype._renderMain = function(elem, props, renderEvent) {
     let linkElem = document.createElement('A')
     elem.appendChild(linkElem)
 
-    if (props.text) 
-        linkElem.innerHTML = props.text
-    else
-        linkElem.innerHTML = "Button Text"
+    let html = ''
+    /* Button Image */
+    if (props.imageUrl) { // Image URL
+        let imageUrl = props.imageUrl
 
+        let temp = imageUrl.split('.')
+        let ext = ''
+        if(temp && temp.length > 0)
+            ext = temp[temp.length - 1]
+        
+        let exts = ["jpeg", "jpg", "png", "bmp", "svg", "gif"]
+        ext = ext.toLowerCase()
+
+        if(!exts.includes(ext)) {
+            imageUrl += '.png'
+        }
+
+        html += '<img src="' + imageUrl + '"/>'
+    } else if (props.iconName) { // Font Icon
+        html += '<i class="' + props.iconName + '"></i>'
+    }
+
+    /* Button Text */
+    if (props.text) 
+        html += "<span>" + props.text + "</span>"
+    else
+        html += "<span>Button Text</span>"
+
+    linkElem.innerHTML = html
     linkElem.style.pointerEvents = 'auto'
 
     if(props.hasOwnProperty('padding') && props.padding) {
