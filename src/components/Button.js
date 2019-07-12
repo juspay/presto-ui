@@ -12,6 +12,13 @@ Button.prototype._renderMain = function(elem, props, renderEvent) {
     let linkElem = document.createElement('A')
     elem.appendChild(linkElem)
 
+    linkElem.style.pointerEvents = 'auto'
+
+    if (props.hasOwnProperty('disabled') && !props.disabled) {
+        elem.addClass(window.__COM_CLASS_GROUP.BT_DISABLED)
+        linkElem.style.pointerEvents = 'none'        
+    }
+
     let html = ''
     /* Button Image */
     if (props.imageUrl) { // Image URL
@@ -41,7 +48,6 @@ Button.prototype._renderMain = function(elem, props, renderEvent) {
         html += "<span>Button Text</span>"
 
     linkElem.innerHTML = html
-    linkElem.style.pointerEvents = 'auto'
 
     if(props.hasOwnProperty('padding') && props.padding) {
         let padding = props.padding.split(',').map(a => a * 1)

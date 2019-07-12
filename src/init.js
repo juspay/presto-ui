@@ -102,9 +102,7 @@ window.__COM_CLASS_GROUP = {
   SWITCH_BODY: 'PDC_com_switch_body',
   SWITCH_SLIDER: 'PDC_com_switch_slider',
   BT: 'PDC_com_bt',
-  BT_BODY: 'PDC_com_bt_body',
-  BT_TEXT: 'PDC_com_bt_text',
-  BT_ICON: 'PDC_com_bt_icon'
+  BT_DISABLED: 'PDC_com_bt_disabled'
 }
 window.__COM_COLOR_GROUP = {
   BG: '#ffffff',
