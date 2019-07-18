@@ -358,6 +358,17 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
     currTransVal = "get_pArr";
   }
 
+  if (attrs.key == "cornerRadii") {
+    var cornerRadiiArray = attrs.value.split(',');
+    var arrList = "set_arr=java.util.ArrayList->new;";
+    var floatArray = cornerRadiiArray.map(function(val,i){return "set_cornerRadius=java.lang.Float->new:dpf_"+ val + ";get_arr->add:get_cornerRadius;"});
+    prePend += arrList + ";";
+    prePend += "set_c=java.lang.Class->forName:s_java.lang.Float;";
+    prePend += floatArray.join("");
+    prePend += "in.juspay.mystique.InflateView->convertAndStoreArray:get_arr,get_c,s_pArr,b_true;";
+    currTransVal = "get_pArr";
+  }
+
   // shadowTag : level,tag
   if (attrs.key == "shadowTag") {
     var arr = attrs.value.split(",");

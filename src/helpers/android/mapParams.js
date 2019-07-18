@@ -339,6 +339,14 @@ var map = {
     fnName: 'smoothScrollTo',
     inVokedIn: 'VIEW'
   },
+  "cornerRadii": {
+    values: [{
+      type: 's'
+    }],
+    'dontMap': true,
+    fnName: 'setCornerRadii',
+    inVokedIn: 'DRAWABLE'
+  },
   "lineSpacing": {
     values: [{
       type: 'dp'
