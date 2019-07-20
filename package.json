@@ -12,14 +12,14 @@
     "ramda": "latest"
   },
   "devDependencies": {
-    "async": "3.0.1",
+    "async": "latest",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "bluebird": "latest",
-    "es6-promise": "4.2.6",
+    "es6-promise": "latest",
     "webpack": "^4.16.4",
     "webpack-cli": "^3.1.0"
   },
