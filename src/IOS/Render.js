@@ -109,36 +109,38 @@ function runInUI(cmd, fromInflate) {
   cmd.forEach(function (each) {
     const id = each.id;
     const view = window.__VIEWS[id];
-    const parent = window.__VIEWS[view.props.parentId];
-    view.props = R.merge(view.props, each);
-    //Adding as stop gag solution for editText in ios where text 
-    //was getting set empty in case other properties were modified.
-    if (!each.hasOwnProperty('text')){
-      delete view.props.text;
-    }
-    // if (each.visibility !== "visible") {
-    //   runInUIHelper(view.type, view.props);
-    // }
-    if (parent && !fromInflate) {
-      if (parent.type.indexOf("scroll") != -1) {
-        inflate(parent);
+    if (view){
+      const parent = window.__VIEWS[view.props.parentId];
+      view.props = R.merge(view.props, each);
+      //Adding as stop gag solution for editText in ios where text 
+      //was getting set empty in case other properties were modified.
+      if (!each.hasOwnProperty('text')){
+        delete view.props.text;
       }
-      computeChildDimens(parent);
-      const children = parent.children;
-      if(!inflate(view)) {
-        runInUIHelper(view.type, view.props);
-      };
-      for (let i = 0, len = children.length; i < len; i++) {
-        if (view != children[i]) {
-          inflate(children[i]);
+      // if (each.visibility !== "visible") {
+      //   runInUIHelper(view.type, view.props);
+      // }
+      if (parent && !fromInflate) {
+        if (parent.type.indexOf("scroll") != -1) {
+          inflate(parent);
         }
+        computeChildDimens(parent);
+        const children = parent.children;
+        if(!inflate(view)) {
+          runInUIHelper(view.type, view.props);
+        };
+        for (let i = 0, len = children.length; i < len; i++) {
+          if (view != children[i]) {
+            inflate(children[i]);
+          }
+        }
+      } else {
+        runInUIHelper(view.type, view.props);
       }
-    } else {
-      runInUIHelper(view.type, view.props);
+      // if (each.visibility === "visible") {
+      //   runInUIHelper(view.type, view.props);
+      // }
     }
-    // if (each.visibility === "visible") {
-    //   runInUIHelper(view.type, view.props);
-    // }
   });
 };
 
