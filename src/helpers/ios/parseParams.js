@@ -1219,7 +1219,7 @@ function generateType(type, config) {
    if (type == "editText") {
       generatedType = "mJPTextField";
    } else if (type == "imageView") {
-      generatedType = "uIImageView";
+      generatedType = "mJPImageView";
    } else if (type == "textView") {
       generatedType = "mJPLabel";
    } else if (type == "scrollView" || type == "horizontalScrollView") {
@@ -1552,7 +1552,7 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_bringSubViewToFront(viewTag));
   }
 
-  if (type == 'uIImageView') {
+  if (type == 'mJPImageView') {
     let contentMode = cS(config.contentMode || 1);
     config.methods.push(this_setContentMode(contentMode));
   }
