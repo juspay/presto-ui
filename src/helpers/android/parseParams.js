@@ -359,7 +359,13 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
   }
 
   if (attrs.key == "cornerRadii") {
-    var cornerRadiiArray = attrs.value.split(',');
+    var cornerRadiis = attrs.value.split(',');
+    var cornerRadius = cornerRadiis.splice(0,1);
+    var cornerRadiiArray = [];
+    for(var i = 0; i< cornerRadiis.length;++i){
+      cornerRadiiArray.push((cornerRadiis[i]*cornerRadius)+"");
+      cornerRadiiArray.push((cornerRadiis[i]*cornerRadius)+"");
+    }
     var arrList = "set_arr=java.util.ArrayList->new;";
     var floatArray = cornerRadiiArray.map(function(val,i){return "set_cornerRadius=java.lang.Float->new:dpf_"+ val + ";get_arr->add:get_cornerRadius;"});
     prePend += arrList + ";";

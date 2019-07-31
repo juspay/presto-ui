@@ -1155,6 +1155,17 @@ function self_setPopupMenu(popupMenu, onMenuItemClick) {
   };
 }
 
+function this_setCornerCurves(corner) {
+  return {
+    "return": "false",
+    "fromStore": "false",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": "this",
+    "methodName": "setCornerCurves:",
+    "values": [{ "name": corner + "", "type": "s" }]
+  };
+}
+
 function this_setClipsToBounds(bounds) {
   return {
     "return": "false",
@@ -1729,6 +1740,10 @@ module.exports = function(type, config, _getSetType) {
 
   if (config.hasOwnProperty("clipsToBounds")) {
     config.methods.push(this_setClipsToBounds(config.clipsToBounds));
+  }
+
+  if(config.hasOwnProperty("cornerRadii")){
+    config.methods.push(this_setCornerCurves(config.cornerRadii));
   }
 
   config.currChildOffset = 0;
