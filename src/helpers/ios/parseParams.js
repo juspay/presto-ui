@@ -1056,7 +1056,7 @@ function this_inlineAnimation(config) {
     "return": "false",
     "fromStore": getSetType ? "false" : "true",
     "storeKey": "view" + window.__VIEW_INDEX,
-    "invokeOn": getSetType ? "this" : "MJPTableView",
+    "invokeOn": "this",
     "methodName": "setInlineAnimation:",
     "values": [{ "name": modifyTranslation(config), type: "s" }]
     };
