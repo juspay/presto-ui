@@ -127,7 +127,7 @@ function runInUI(cmd, fromInflate) {
         computeChildDimens(parent);
         const children = parent.children;
         if(!inflate(view)) {
-          runInUIHelper(view.type, view.props);
+          runInUIHelper(view.type, view.props, true);
         };
         for (let i = 0, len = children.length; i < len; i++) {
           if (view != children[i]) {
@@ -144,8 +144,13 @@ function runInUI(cmd, fromInflate) {
   });
 };
 
-function runInUIHelper(type, obj) {
-  const cmd = parseParams(type, obj, "get").config.methods;
+function runInUIHelper(type, obj, removeFrame) {
+  var cmd = parseParams(type, obj, "get").config.methods;
+  if(removeFrame){
+      cmd = cmd.filter(function(itm){
+        return itm.methodName != "setFrame:"
+    })
+  }
   window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
     methodName: "runInUI",
     parameters: cmd
