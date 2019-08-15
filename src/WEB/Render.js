@@ -509,9 +509,19 @@ function setAttributes(type, elem, props, firstRender) {
       }
 
       if (!(props.label && eventType == "focus")) {
-        elem['on' + eventType] = function (e) {
-          e.stopPropagation();eventType == "input" ? elemCB(e.target.value) : elemCB(e);
-        };
+        if (eventType == "enter") {
+            elem.onkeyup = function (e) {
+                if (e.keyCode === 13) {
+                    e.preventDefault()
+                    elemCB(e)
+                }
+            }
+        } else {
+            elem['on' + eventType] = function (e) {
+                e.stopPropagation()
+                eventType == "input" ? elemCB(e.target.value) : elemCB(e)
+            }
+        }
       }
     }
   }
