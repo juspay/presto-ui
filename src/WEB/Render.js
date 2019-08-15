@@ -451,78 +451,70 @@ function setAttributes(type, elem, props, firstRender) {
         eventType = "input";
       }
 
-      if (props.label) {
-        elem.addEventListener('blur', function() {
-          var inputValue = elem.value;
-          if (inputValue == "") {
-            elem.classList.remove("filled");
-            elem.parentNode.classList.remove('focused');
-          } else {
-            elem.classList.add('filled');
-          }
-        });
-
-        if (type == "editText"){
-          elem.addEventListener('keydown', function(key) {
-            try {
-              var keycode = key.keyCode;
-              var valid = (keycode > 47 && keycode < 58)   || // number keys
-                          (keycode > 64 && keycode < 91)   || // letter keys
-                          (keycode > 95 && keycode < 112)  || // numpad keys
-                          (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
-                          (keycode > 218 && keycode < 223); // [\]' (in order)
-              if (valid){
-                var inputId = key.path[0].getAttribute("id");
-                var input = document.getElementById(inputId);
-                var currentInput = key.key;
-                var currentData = input.value;
-                if(input.getAttribute("pattern")){
-                  var data = input.getAttribute("pattern").split(',');
-                  var length = parseInt(data.pop());
-                  var regexString = data.join('');
-                  if(length){
-                    if(currentData.length+1>length){
-                      input.value = currentData;
-                      key.preventDefault();
-                    }
-                  }
-                  if(regexString){
-                    var finalData = currentData+currentInput;
-                    var regexPattern = new RegExp(regexString);
-                    if(!regexPattern.test(finalData)){
-                      key.preventDefault();
-                    }
-                  }
+        if (props.label) {
+            elem.addEventListener('blur', function() {
+                var inputValue = elem.value;
+                if (inputValue == "") {
+                    elem.classList.remove("filled");
+                    elem.parentNode.classList.remove('focused');
+                } else {
+                    elem.classList.add('filled');
                 }
-              }
-            } catch (error) {}
-          });
+            });
+
+            if (type == "editText"){
+                elem.addEventListener('keydown', function(key) {
+                    try {
+                        var keycode = key.keyCode;
+                        var valid = (keycode > 47 && keycode < 58)   || // number keys
+                                    (keycode > 64 && keycode < 91)   || // letter keys
+                                    (keycode > 95 && keycode < 112)  || // numpad keys
+                                    (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
+                                    (keycode > 218 && keycode < 223); // [\]' (in order)
+                        if (valid){
+                            var inputId = key.path[0].getAttribute("id");
+                            var input = document.getElementById(inputId);
+                            var currentInput = key.key;
+                            var currentData = input.value;
+
+                            if(input.getAttribute("pattern")){
+                                var data = input.getAttribute("pattern").split(',');
+                                var length = parseInt(data.pop());
+                                var regexString = data.join('');
+                                if(length){
+                                    if(currentData.length+1>length){
+                                        input.value = currentData;
+                                        key.preventDefault();
+                                    }
+                                }
+                                if(regexString){
+                                    var finalData = currentData+currentInput;
+                                    var regexPattern = new RegExp(regexString);
+                                    if(!regexPattern.test(finalData)){
+                                        key.preventDefault();
+                                    }
+                                }
+                            }
+                        }
+                    } catch (error) {}
+                });
+            }
+
+            elem['onfocus'] = function (e) {
+                elem.parentNode.classList.add('focused');
+                if (eventType == "focus") {
+                    e.stopPropagation();
+                    elemCB(e);
+                }
+            };
         }
 
-        elem['onfocus'] = function (e) {
-          elem.parentNode.classList.add('focused');
-          if (eventType == "focus") {
-            e.stopPropagation();
-            elemCB(e);
-          }
-        };
-      }
-
-      if (!(props.label && eventType == "focus")) {
-        if (eventType == "enter") {
-            elem.onkeyup = function (e) {
-                if (e.keyCode === 13) {
-                    e.preventDefault()
-                    elemCB(e)
-                }
-            }
-        } else {
-            elem['on' + eventType] = function (e) {
+        if (!(props.label && eventType == "focus") && firstRender) {
+            /*elem['on' + eventType] = function (e) {
                 e.stopPropagation()
                 eventType == "input" ? elemCB(e.target.value) : elemCB(e)
-            }
+            }*/
         }
-      }
     }
   }
 
@@ -531,6 +523,38 @@ function setAttributes(type, elem, props, firstRender) {
   } else if (props.animation.transition) {
     afterTransition(); 
   }
+
+    /* Events */
+    if (firstRender) {
+        let events = ['onClick', 'onEnterPressedEvent', 'onChange', 'onMouseDown', 'onMouseUp', 'onMouseEnter', 'onMouseOver', 'onMouseMove', 'onMouseOut', 'onMouseLeave']
+
+        for (let i = 0; i < events.length; i++) {
+            let key = events[i]
+            let eventType = key.substring(2, key.length).toLowerCase()
+
+            if(props.hasOwnProperty(key) && typeof props[key] == "function") {
+                if (key == "onEnterPressedEvent") {
+                    elem.addEventListener('keyup', (e) => {
+                        e.stopPropagation()
+
+                        if (e.keyCode == 13) {
+                            (props[key])(e)
+                        }
+                    })
+                } else {
+                    elem.addEventListener(eventType, (e) => {
+                        e.stopPropagation()
+
+                        if (eventType == "change")
+                            (props[key])(e.target.value)
+                        else
+                            (props[key])(e)
+                    })
+                }
+            }
+        }
+    }
+    /* Events End */
 
   /* Component Part */
   if(props.hasOwnProperty('elementType') && props.elementType == 'component') {
@@ -604,8 +628,8 @@ let observer = (elem) => {
       if(id){
         let view = __VIEWS[id];
         
-        if(view && view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
-          view.props.afterRender();
+        if(view && view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function") {
+            view.props.afterRender()
         }
       }
     }
