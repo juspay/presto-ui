@@ -466,6 +466,52 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
   }
 
   if (attrs.key == "imageUrl") {
+    if(isURL(attrs.value)) {
+      if(typeof top.__BOOT_LOADER == "undefined") {
+        top.__BOOT_LOADER = {};
+      }
+
+      var image = attrs.value.substr(attrs.value.lastIndexOf('/') + 1)
+      var callback = "onImage" + image.substr(0, image.indexOf('.'))
+
+      var filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(image);
+
+
+      if (!filePresent) {
+        top.__BOOT_LOADER[callback] = function (isNew) {
+          const id = allProps.find(a => a.key === "id");
+          if (!id) return;
+          window.updateProperty({
+            type: "imageView",
+            __ref: {
+              __id: id.value
+            },
+            props: {}
+          }, {value0: "imageUrl", value1: attrs.value});
+        };
+        JBridge.renewFile(attrs.value, image, callback);
+      }
+
+
+      prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
+      "set_resolvedName=in.juspay.android_lib.data.FileProvider->appendSdkNameAndVersion:s_" + image + ";" +
+      "set_resolvedFile=java.io.File->new:get_directory,get_resolvedName;" +
+      "set_resolvedPath=get_resolvedFile->toString;" + 
+      "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;";
+
+      currTransVal = "get_dimage"; 
+    } else {
+      prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_"+  attrs.value +",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;"
+      currTransVal = "get_482380";
+    }
+  }
+
+  if (attrs.key == "defaultImage") {
+    prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_"+  attrs.value +",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;"
+    currTransVal = "get_482380";
+  }
+
+  if (attrs.key == "placeHolder") {
     prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_"+  attrs.value +",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;"
     currTransVal = "get_482380";
   }
