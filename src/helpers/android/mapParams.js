@@ -383,6 +383,14 @@ var map = {
     fnName: 'setImageDrawable',
     inVokedIn: 'VIEW',
   },
+  "placeHolder": {
+    values: [{
+      type: 's',
+    }],
+    'dontMap': true,
+    fnName: 'setImageDrawable',
+    inVokedIn: 'VIEW',
+  },
   "packageIcon": {
     values: [{
       type: 's'
