@@ -1558,6 +1558,15 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(self_setHTMLText(props));
   }
 
+  if (config.hasOwnProperty("textFromHtml")) {
+    //TODO: FIX THIS BRING IT OUTSIDE
+    let props = {
+        "text": config.textFromHtml,
+        "id": config.id,
+     };
+      config.methods.push(self_setHTMLText(props));
+  }
+
   if (config.hasOwnProperty("bringSubViewToFront")) {
     let viewTag = cS(config.id);
     config.methods.push(this_bringSubViewToFront(viewTag));
