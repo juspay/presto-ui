@@ -127,6 +127,30 @@ function UIColor_colorWithRGBA(r,g,b,a) {
   }
 }
 
+function self_pivotX(data) {
+  return {
+    "return": "false",
+    "invokeOn": "self",
+    "methodName": "setPivotX:",
+    "values": [{
+      id:data.id+"",
+      value:data.value+""
+    }]
+  };
+}
+
+function self_pivotY(data) {
+  return {
+    "return": "false",
+    "invokeOn": "self",
+    "methodName": "setPivotY:",
+    "values": [{
+      id:data.id+"",
+      value:data.value+""
+    }]
+  };
+}
+
 function self_animate_translation(obj, props) {
   obj.values[0].properties = [
       {
@@ -1579,6 +1603,22 @@ module.exports = function(type, config, _getSetType) {
 
   if(config.onFocus){
     config.methods.push(this_setOnFocusCallback(config.onFocus));
+  }
+
+  if (config.hasOwnProperty("pivotX")) {
+    var data = {
+      "value": config.pivotX,
+      "id": config.id
+    };
+    config.methods.push(self_pivotX(data));
+  }
+
+if (config.hasOwnProperty("pivotY")) {
+    var data = {
+      "value": config.pivotY,
+      "id": config.id
+    };
+    config.methods.push(self_pivotY(data));
   }
 
   if(config.hasOwnProperty("onItemClick")){
