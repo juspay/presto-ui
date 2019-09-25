@@ -33,6 +33,15 @@ var command = "";
 var elementType;
 var getSetType;
 
+function isURL(str) {
+  try {
+    var url = new URL(str);
+    return true;
+  } catch(err) {
+    return false;
+  }
+}
+
 function attachFeedback(config, keys, i) {
   var feedbackFn = function() {};
 
