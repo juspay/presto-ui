@@ -66,10 +66,13 @@ function flattenObject(ob) {
   }
 
   return toReturn;
-};
+}
 
 function parseColors(color) {
   if (color.length < 8)
+    return color;
+
+  if (color.indexOf("rgba") !== -1 || color.indexOf("rgb") !== -1)
     return color;
 
   var alpha = parseInt(color.substring(1, 3), 16);
@@ -112,26 +115,30 @@ function parseLayoutProps(type, config, key) {
   if (key == 'url')
     config.attributes.src = config.url
     
-  if (key == "imageUrl"){
+  /*if (key == "imageUrl"){
     let imageUrl = config.imageUrl;
-        
-    let temp = imageUrl.split('.');
-    let ext = '';
-    if(temp && temp.length > 0)
-      ext = temp[temp.length - 1];
     
-    let exts = ["jpeg", "jpg", "png", "bmp", "svg", "gif"];
-    ext = ext.toLowerCase();
+    if(config.rawData) {
+      // Do nothing
+    } else {
+      let temp = imageUrl.split('.');
+      let ext = '';
+      if(temp && temp.length > 0)
+        ext = temp[temp.length - 1];
+      
+      let exts = ["jpeg", "jpg", "png", "bmp", "svg", "gif"];
+      ext = ext.toLowerCase();
 
-    if(!exts.includes(ext))
-      imageUrl += '.png';
+      if(!exts.includes(ext)) {
+        imageUrl += '.png';
+      }
+    }
 
     config.attributes.src = imageUrl;
-  }
+  }*/
 
   if (key == "backgroundColor") {
-    //config.style["background-color"] = parseColors(config.backgroundColor);
-    config.style["background-color"] = config.backgroundColor;
+    config.style.backgroundColor = parseColors(config.backgroundColor);
   }
 
   if (key == "background") {
@@ -342,14 +349,16 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "inputType") {
-    var inputType = "text";
-    if(config.inputType=="numericPassword" || config.inputType == "password"){
-      inputType = "password";
-    }else if(config.inputType == "disabled"){
-      config.attributes.disabled = 'disabled';
+    var inputType = "text"
+    if (config.inputType == "numericPassword" || config.inputType == "password") {
+        inputType = "password"
+    } else if (config.inputType == "disabled") {
+        config.attributes.disabled = 'disabled'
+    } else if (config.inputType == "numeric") {
+        inputType = "number"
     }
 
-    config.attributes.type = inputType;
+    config.attributes.type = inputType
   }
 
   if (key == "pattern") {

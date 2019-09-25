@@ -22,9 +22,8 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
-
+import colors from "./colors";
 import flattenObject from "./flattenObject";
-
 
 var callbackMapper  = require("./callbackMapper");
 

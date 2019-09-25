@@ -23,9 +23,10 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-let { computeChildDimens } = require("../compute");
-let helper = require("../helper");
-let R = require("ramda");
+let { computeChildDimens } = require("../compute") 
+let { renderComponent } = require("../component")
+//let helper = require("../helper")
+let R = require("ramda")
 
 function createTextElement(elem, config) {
   let children = elem.childNodes;
@@ -35,6 +36,7 @@ function createTextElement(elem, config) {
     for(let i = 0; i < children.length; i++){
       if(children[i].nodeName.toLowerCase() == 'article'){
         article = children[i]
+        break
       }
     }
   }
@@ -42,19 +44,22 @@ function createTextElement(elem, config) {
   if(!article)
     article = document.createElement('ARTICLE')
 
-  elem.style.whiteSpace = "initial";
+  elem.style.whiteSpace = "initial"
   
   if(config.isHtmlContent)
     article.innerHTML = config.text
   else
     article.innerText = config.text
 
+  if(!config.text && config.hint)
+    article.innerText = config.hint
+
   article.style.wordBreak = "break-word"
   
   if(config.letterSpacing)
     elem["style"]["letter-spacing"] = config.letterSpacing
 
-  elem.appendChild(article);
+  elem.appendChild(article)
 }
 
 function popup(elem, props) {
@@ -76,7 +81,7 @@ function popup(elem, props) {
       typeof props[clickCb] == "function") {
       menuDiv.addEventListener("click", () => {
         props[clickCb](index);
-      });
+      }); 
     }
   }
   elem.addEventListener("click", function () {
@@ -349,7 +354,22 @@ function setAttributes(type, elem, props, firstRender) {
       if(elem.style["flex-direction"] == 'row')
         setGravityStylesForRow(elem, props);
       else
-        setGravityStylesForColumn(elem, props);  
+        setGravityStylesForColumn(elem, props);
+        
+      if (props.hasOwnProperty('scrollBarX')) {
+        if (props.scrollBarX)
+            elem.style.overflowX = 'auto'
+        else
+            elem.style.overflowX = 'hidden'
+      }
+
+      if (props.hasOwnProperty('scrollBarY')) {
+        if (props.scrollBarY)
+            elem.style.overflowY = 'auto'
+        else
+            elem.style.overflowY = 'hidden'
+      }
+
     } else if (type == "horizontalScrollView") {
       elem.style.overflowX = "auto";
       elem.style.overflowY = "hidden";
@@ -372,23 +392,45 @@ function setAttributes(type, elem, props, firstRender) {
         elem.style.overflowY = 'hidden';
     } else if(type == 'relativeLayout') {
       elem.style.position = 'relative';
+    } else if(type == 'imageView') {
+      if(props.imageUrl) {
+        let imageUrl = props.imageUrl
+
+        if(props.rawData) {
+          // Do Nothing
+        } else {
+          let temp = imageUrl.split('.')
+          let ext = ''
+          if(temp && temp.length > 0)
+            ext = temp[temp.length - 1]
+          
+          let exts = ["jpeg", "jpg", "png", "bmp", "svg", "gif"]
+          ext = ext.toLowerCase()
+
+          if(!exts.includes(ext)) {
+            imageUrl += '.png'
+          }
+        }
+
+        elem.setAttribute('src', imageUrl)
+      }
     }
     /* Render type specific styles end */
   /* New Style End */
   
   for (let key in props) {
     if (key == "popupMenu") {
-      popup(elem, props);
+      popup(elem, props)
     } else if (key == "text") {
       if (type == "editText")
-        elem.value = props[key];
+        elem.value = props[key]
       else
-        createTextElement(elem, props);
+        createTextElement(elem, props)
     } else if (key == "style") {
       for (let innerKey in props.style) {
-        if (innerKey == "className")
-          elem.className += props.style[innerKey];
-        else
+        if (innerKey == "className") {
+          elem.className += " " + props.style[innerKey];
+        } else 
           elem.style[innerKey] = props.style[innerKey];
       }
     } else if (key == "attributes") {
@@ -396,7 +438,7 @@ function setAttributes(type, elem, props, firstRender) {
         elem.setAttribute(innerKey, props.attributes[innerKey]);
       }
     } else if (key == "className") {
-        elem.classList.add(props[key]);
+      elem.classList.add(props[key]);
     } else if (key == "classList") {
       JSON.parse(props[key]).forEach(function(obj) {
         elem.classList.add(obj);
@@ -409,111 +451,162 @@ function setAttributes(type, elem, props, firstRender) {
         eventType = "input";
       }
 
-      if (props.label) {
-        elem.addEventListener('blur', function() {
-          var inputValue = elem.value;
-          if (inputValue == "") {
-            elem.classList.remove("filled");
-            elem.parentNode.classList.remove('focused');
-          } else {
-            elem.classList.add('filled');
-          }
-        });
-
-        if (type == "editText" && elem.tagName.toLowerCase() == "input"){
-          elem.addEventListener('keydown', function(key) {
-            key.stopPropagation();
-            try {
-              var keycode = key.keyCode;
-              var valid = (keycode > 47 && keycode < 58)   || // number keys
-                          (keycode > 64 && keycode < 91)   || // letter keys
-                          (keycode > 95 && keycode < 112)  || // numpad keys
-                          (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
-                          (keycode > 218 && keycode < 223);
-              if (valid){
-                var inputId = key.path[0].getAttribute("id");
-                var input = document.getElementById(inputId);
-                var currentInput = key.key;
-                var currentData = input.value;
-                if(input.getAttribute("pattern")){
-                  var data = input.getAttribute("pattern").split(',');
-                  var length = parseInt(data.pop());
-                  var regexString = data.join('');
-                  if(length){
-                    if(currentData.length+1>length){
-                      input.value = currentData;
-                      key.preventDefault();
-                      return;
-                    }
-                  }
-                  var separator = input.getAttribute("separator");
-                  var separatorRepeat = parseInt(input.getAttribute("separatorRepeat"));
-                  var finalData = (currentData+currentInput).replace(/[^a-zA-Z0-9]/g, "");
-                  if(regexString){
-                    var regexPattern = new RegExp(regexString);
-                    if(!regexPattern.test(finalData)){
-                      key.preventDefault();
-                      return;
-                    }
-                  }
-                  if(separator && separatorRepeat){
-                      key.preventDefault();
-                      var cursorPosition = input.selectionStart;
-                      var formattedString = "";
-                      for (let index = 0; index < finalData.length; index++) {
-                        var element = finalData[index];
-                        formattedString += element;
-                        var factor = 0;
-                        if(formattedString.length && formattedString.replace(/[^a-zA-Z0-9]/g, "").length%(separatorRepeat+factor)==0){
-                          formattedString += separator;
-                        }
-                      }
-                      if(formattedString[formattedString.length-1]==separator){
-                        formattedString = formattedString.substring(0, formattedString.length - 1);
-                      }
-                      input.value = formattedString;
-                      console.log("formattedString----",formattedString);
-                  }
+        if (props.label) {
+            elem.addEventListener('blur', function() {
+                var inputValue = elem.value;
+                if (inputValue == "") {
+                    elem.classList.remove("filled");
+                    elem.parentNode.classList.remove('focused');
+                } else {
+                    elem.classList.add('filled');
                 }
-              }
-            } catch (error) {}
-          });
+            });
+
+            if (type == "editText" && elem.tagName.toLowerCase() == "input"){
+                elem.addEventListener('keydown', function(key) {
+                  key.stopPropagation();
+                    try {
+                        var keycode = key.keyCode;
+                        var valid = (keycode > 47 && keycode < 58)   || // number keys
+                                    (keycode > 64 && keycode < 91)   || // letter keys
+                                    (keycode > 95 && keycode < 112)  || // numpad keys
+                                    (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
+                                    (keycode > 218 && keycode < 223); // [\]' (in order)
+                        if (valid){
+                            var inputId = key.path[0].getAttribute("id");
+                            var input = document.getElementById(inputId);
+                            var currentInput = key.key;
+                            var currentData = input.value;
+
+                            if(input.getAttribute("pattern")){
+                                var data = input.getAttribute("pattern").split(',');
+                                var length = parseInt(data.pop());
+                                var regexString = data.join('');
+                                if(length){
+                                    if(currentData.length+1>length){
+                                        input.value = currentData;
+                                        key.preventDefault();
+                                    }
+                                }
+                                if(regexString){
+                                    var finalData = currentData+currentInput;
+                                    var regexPattern = new RegExp(regexString);
+                                    if(!regexPattern.test(finalData)){
+                                        key.preventDefault();
+                                    }
+                                }
+                                var separator = input.getAttribute("separator");
+                                var separatorRepeat = parseInt(input.getAttribute("separatorRepeat"));
+                                var finalData = (currentData+currentInput).replace(/[^a-zA-Z0-9]/g, "");
+                                if(regexString){
+                                  var regexPattern = new RegExp(regexString);
+                                  if(!regexPattern.test(finalData)){
+                                    key.preventDefault();
+                                    return;
+                                  }
+                                }
+                                if(separator && separatorRepeat){
+                                    key.preventDefault();
+                                    var cursorPosition = input.selectionStart;
+                                    var formattedString = "";
+                                    for (let index = 0; index < finalData.length; index++) {
+                                      var element = finalData[index];
+                                      formattedString += element;
+                                      var factor = 0;
+                                      if(formattedString.length && formattedString.replace(/[^a-zA-Z0-9]/g, "").length%(separatorRepeat+factor)==0){
+                                        formattedString += separator;
+                                      }
+                                    }
+                                    if(formattedString[formattedString.length-1]==separator){
+                                      formattedString = formattedString.substring(0, formattedString.length - 1);
+                                    }
+                                    input.value = formattedString;
+                                    console.log("formattedString----",formattedString);
+                                }
+                            }
+                        }
+                    } catch (error) {}
+                });
+            }
+
+            elem['onfocus'] = function (e) {
+                elem.parentNode.classList.add('focused');
+                if (eventType == "focus") {
+                    e.stopPropagation();
+                    elemCB(e);
+                }
+            };
         }
       }
+      //TODO: Repeated code to be removed later
+    //   if (props.label) {
+    //     elem.addEventListener('blur', function() {
+    //       var inputValue = elem.value;
+    //       if (inputValue == "") {
+    //         elem.classList.remove("filled");
+    //         elem.parentNode.classList.remove('focused');
+    //       } else {
+    //         elem.classList.add('filled');
+    //       }
+    //     });  
 
-      if (props.label) {
-        elem.addEventListener('blur', function() {
-          var inputValue = elem.value;
-          if (inputValue == "") {
-            elem.classList.remove("filled");
-            elem.parentNode.classList.remove('focused');
-          } else {
-            elem.classList.add('filled');
-          }
-        });  
-
-        elem['onfocus'] = function (e) {
-          elem.parentNode.classList.add('focused');
-          if (eventType == "focus") {
-            e.stopPropagation();
-            elemCB(e);
-          }
-        };
-      }
-
-      if (!(props.label && eventType == "focus")) {
-        elem['on' + eventType] = function (e) {
-          e.stopPropagation();eventType == "input" ? elemCB(e.target.value) : elemCB(e);
-        };
-      }
-    }
+    //     if (!(props.label && eventType == "focus") && firstRender) {
+    //         /*elem['on' + eventType] = function (e) {
+    //             e.stopPropagation()
+    //             eventType == "input" ? elemCB(e.target.value) : elemCB(e)
+    //         }*/
+    //     }
+    // }
   }
 
   if ((props.style.transform || props.style.opacity) && props.animation.transition) {
     setTimeout(afterTransition, 100);
   } else if (props.animation.transition) {
-    afterTransition();
+    afterTransition(); 
   }
+
+    /* Events */
+    if (firstRender) {
+        let events = ['onClick', 'onEnterPressedEvent', 'onChange', 'onMouseDown', 'onMouseUp', 'onMouseEnter', 'onMouseOver', 'onMouseMove', 'onMouseOut', 'onMouseLeave']
+
+        for (let i = 0; i < events.length; i++) {
+            let key = events[i]
+            let eventType = key.substring(2, key.length).toLowerCase()
+
+            if(props.hasOwnProperty(key) && typeof props[key] == "function") {
+                if (key == "onEnterPressedEvent") {
+                    elem.addEventListener('keyup', (e) => {
+                        e.stopPropagation()
+
+                        if (e.keyCode == 13) {
+                            (props[key])(e)
+                        }
+                    })
+                } else {
+                    elem.addEventListener(eventType, (e) => {
+                        e.stopPropagation()
+
+                        if (eventType == "change")
+                            (props[key])(e.target.value)
+                        else
+                            (props[key])(e)
+                    })
+                }
+            }
+        }
+    }
+    /* Events End */
+
+  /* Component Part */
+  if(props.hasOwnProperty('elementType') && props.elementType == 'component') {
+    elem.classList.add(window.__COM_CLASS_GROUP.WRAPPER)
+    
+    if(firstRender) 
+      elem.setAttribute('guid', props.guid)
+  }
+
+  if(props.hasOwnProperty('componentType') && props.componentType)
+    renderComponent(elem, props, firstRender)
 }
 
 function setModalAttributes(elem, props, firstRender) {
@@ -563,14 +656,7 @@ let initializeShow = function(elem, props, type) {
   }
 }
 
-let isHorizontalScrollView = function (elem) {
-  return elem && elem.classList[0] == "horizontalScrollView";
-}
-
-let isScrollView = function (elem) {
-  return elem && elem.classList[0] == "scrollView";
-}
-
+/* Observer for afterRender */
 let observer = (elem) => {
   let id = elem.id;
   if(!id || __OBSERVERS[id])
@@ -583,8 +669,8 @@ let observer = (elem) => {
       if(id){
         let view = __VIEWS[id];
         
-        if(view && view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
-          view.props.afterRender();
+        if(view && view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function") {
+            view.props.afterRender()
         }
       }
     }
@@ -595,63 +681,10 @@ let observer = (elem) => {
   (__OBSERVERS[id]).observe(elem, {attributes: true});
 }
 
+/* Do some actions after rendered */
 let cb = (elem, view) => {
   if (view.props.feedback && typeof view.props.feedback == "function") {
-    view.props.feedback();
-  }
-
-  if(view.props.hasOwnProperty('onClickEvent') && typeof view.props.onClickEvent == "function"){
-    elem.addEventListener('click', function(){
-      view.props.onClickEvent();
-    });
-  }
-
-  if(view.props.hasOwnProperty('onChangeEvent') && typeof view.props.onChangeEvent == "function"){
-    elem.addEventListener('change', function(){
-      view.props.onChangeEvent();
-    });
-  }
-
-  if(view.props.hasOwnProperty('onMouseDownEvent') && typeof view.props.onMouseDownEvent == "function"){
-    elem.addEventListener('mousedown', function(){
-      view.props.onMouseDownEvent();
-    });
-  }
-
-  if(view.props.hasOwnProperty('onMouseUpEvent') && typeof view.props.onMouseUpEvent == "function"){
-    elem.addEventListener('mouseup', function(){
-      view.props.onMouseUpEvent();
-    });
-  }
-
-  if(view.props.hasOwnProperty('onMouseEnterEvent') && typeof view.props.onMouseEnterEvent == "function"){
-    elem.addEventListener('mouseenter', function(){
-      view.props.onMouseEnterEvent();
-    });
-  }
-
-  if(view.props.hasOwnProperty('onMouseOverEvent') && typeof view.props.onMouseOverEvent == "function"){
-    elem.addEventListener('mouseover', function(){
-      view.props.onMouseOverEvent();
-    });
-  }
-
-  if(view.props.hasOwnProperty('onMouseMoveEvent') && typeof view.props.onMouseMoveEvent == "function"){
-    elem.addEventListener('mousemove', function(){
-      view.props.onMouseMoveEvent();
-    });
-  }
-
-  if(view.props.hasOwnProperty('onMouseOutEvent') && typeof view.props.onMouseOutEvent == "function"){
-    elem.addEventListener('mouseout', function(event){
-      view.props.onMouseOutEvent();
-    });
-  }
-
-  if(view.props.hasOwnProperty('onMouseLeaveEvent') && typeof view.props.onMouseLeaveEvent == "function"){
-    elem.addEventListener('mouseleave', function(){
-      view.props.onMouseLeaveEvent();
-    });
+    view.props.feedback()
   }
 }
 
@@ -708,7 +741,7 @@ let inflateModal = function (view, parentElement, stopChild) {
       if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
         // We should run observer for the element
         observer(elem);
-        elem.setAttribute('hasRender', true);
+        elem.setAttribute('has_render', true);
       }
     }
   }
@@ -725,6 +758,18 @@ let inflateModal = function (view, parentElement, stopChild) {
             inflateView(view.children[i], elem, view.children[i-1]);
           else
             inflateView(view.children[i], elem, view);
+        }
+      }
+    }
+  } else {
+    if(elem.hasChildNodes()) {
+      let childNodes = elem.childNodes
+
+      if(childNodes) {
+        for(let i = 0; i < childNodes.length; i++) {
+          let childNode = childNodes[i]
+
+          childNode.style.pointerEvents = 'auto'
         }
       }
     }
@@ -770,12 +815,6 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
     }else if (view.type == "checkBox"){
       elem = document.createElement("input");
       elem.setAttribute('type', 'checkbox');
-
-      if(view.props.hasOwnProperty('checked') && view.props.checked == true){
-        elem.setAttribute('checked', 'checked');
-      }else{
-        elem.removeAttribute('checked');
-      }
 
       if(view.props.hasOwnProperty('label') && view.props.label != '' && parentElement){
         subElem = document.createElement('label');
@@ -904,7 +943,7 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
       if(!stopObserver){
         // We should run observer for the element
         observer(elem);
-        elem.setAttribute('hasRender', true);
+        elem.setAttribute('has_render', true);
       }
     }*/
   }else if(renderStyle){
@@ -927,6 +966,14 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
 
     if(view.props.hasOwnProperty('scrollTop') && !isNaN(view.props.scrollTop))
       elem.scrollTop = view.props.scrollTop;
+  }
+
+  if(view.type == 'checkBox'){
+    if(view.props.hasOwnProperty('checked') && view.props.checked == true){
+      elem.checked = true
+    }else{
+      elem.checked = false
+    }
   }
 
   if(!stopChild)
@@ -952,7 +999,7 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
       if(!stopObserver){
         // We should run observer for the element
         observer(elem);
-        elem.setAttribute('hasRender', true);
+        elem.setAttribute('has_render', true);
       }
     }
     
@@ -991,6 +1038,6 @@ let runInUI = function (cmd) {
 
 module.exports = {
   inflateView,
-  runInUI,
+  runInUI, 
   computeChildDimens
 };

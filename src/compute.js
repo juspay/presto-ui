@@ -26,7 +26,7 @@
 const R = require('ramda');
 
 /*
-  ViewContext of the Parent.
+  ViewContext of the Parent.f
   Obj holds the available width and height of it's parent container
   and x & y offset for it's children
 */

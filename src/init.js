@@ -22,25 +22,24 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
-const containers = require('./container');
-const iosAndroidInterface = require('./IOS/AndroidInterface');
-const getOS = require('./helper').getOS;
-const merge = require('./helper').merge;
+const containers = require('./container')
+const iosAndroidInterface = require('./IOS/AndroidInterface')
+const getOS = require('./helper').getOS
+const merge = require('./helper').merge
 
-const getCurrTime = () => (new Date()).getTime();
+const getCurrTime = () => (new Date()).getTime()
 
-window.__OS = getOS();
+window.__OS = getOS()
 
 if (window.__OS == "WEB") {
-  window.Android = require("./WEB/AndroidInterface");;
-  window.JBridge = require("./WEB/JBridgeInterface");;
+  window.Android = require("./WEB/AndroidInterface")
+  window.JBridge = require("./WEB/JBridgeInterface")
 } else if (window.__OS == "IOS") {
-  window.Android = require("./IOS/AndroidInterface");
-  window.JBridge = merge(window.JBridge, {});
+  window.Android = require("./IOS/AndroidInterface")
+  window.JBridge = merge(window.JBridge, {})
 }
 
 window.PrestoUI = require("./PrestoUIInterface");
-
 window.__ENV = 0;
 
 const getScreenDetails = () => {
@@ -68,17 +67,81 @@ window.callJSCallback = require("./helpers").android.callbackMapper.callJSCallba
 window.__WIDTH = window.__DEVICE_DETAILS.screen_width;
 window.__HEIGHT = window.__DEVICE_DETAILS.screen_height;
 
-/* Modal */
-window.__STYLE_ID = 'style_' + Math.random().toString(36).substr(2, 9);
-window.__MODAL_PROPS = {};
-window.__CONTENTMODAL_CLASS = 'modal_' + Math.random().toString(36).substr(2, 9);
-window.__OPENMODAL_CLASS = 'modal-open_' + Math.random().toString(36).substr(2, 9);
-window.__BACKDROPMODAL_CLASS = 'modal-backdrop_' + Math.random().toString(36).substr(2, 9);
-window.__DISABLEDBACKDROP_CLASS = 'modal-backdrop-disabled_' + Math.random().toString(36).substr(2, 9);
-window.__SHOWNMODAL_CLASS = 'modal-shown_' + Math.random().toString(36).substr(2, 9);
+const guid = Math.random().toString(36).substr(2, 9)
 
-window.__FADEMODAL_CLASS = 'modal-fade_' + Math.random().toString(36).substr(2, 9);
-window.__SLIDEMODAL_CLASS = 'modal-slide_' + Math.random().toString(36).substr(2, 9);
+/* Components */
+window.__COM_EVENT = false
+window.__COM_RENDERED = {
+  DRP_GLOBAL: false,
+  SWITCH_GLOBAL: false,
+  DRP: {},
+  DSB: {},
+  DB: {},
+  NAVBAR: {}
+}
+
+window.__COM_CLASS_GROUP = {
+  WRAPPER: 'com_wrapper_' + guid,
+  NAVBAR: 'com_navbar_' + guid,
+  NAVBAR_ITEM: 'com_navbar_item_' + guid,
+  NAVBAR_ITEM_WITH_SUB: 'com_navbar_has_sub_' + guid,
+  NAVBAR_SUB: 'com_navbar_sub_' + guid, 
+  NAVBAR_SUB_RIGHT: 'com_navbar_sub_right_' + guid,
+  NAVBAR_SUB_ITEM: 'com_navbar_subitem_' + guid,
+  DRP: 'com_drp_' + guid,
+  DRP_BODY: 'com_drp_body_' + guid,
+  DB: 'com_db_' + guid,
+  DB_FULL_BODY: 'com_db_full_body_' + guid,
+  DB_BODY: 'com_db_body_' + guid,
+  DB_OPTIONS: 'com_db_options_' + guid,
+  DB_OPTION: 'com_db_option_' + guid,
+  DSB: 'com_dsb_' + guid,
+  DSB_FULL_BODY: 'com_dsb_full_body_' + guid,
+  DSB_BODY: 'com_dsb_body_' + guid,
+  DSB_OPTIONS: 'com_dsb_options_' + guid,
+  DSB_OPTION: 'com_dsb_option_' + guid,
+  DSB_SEARCH_WRAP: 'com_dsb_search_wrap_' + guid,
+  DSB_SEARCH: 'com_dsb_search_' + guid,
+  SWITCH: 'com_switch_' + guid,
+  SWITCH_BODY: 'com_switch_body_' + guid,
+  SWITCH_SLIDER: 'com_switch_slider_' + guid,
+  BT: 'com_bt_' + guid,
+  BT_BODY: 'com_bt_body_' + guid,
+  BT_TEXT: 'com_bt_text_' + guid,
+  BT_ICON: 'com_bt_icon_' + guid
+}
+window.__COM_COLOR_GROUP = {
+  BG: '#ffffff',
+  ACTIVE_BG: '#EEF1F8',
+  ACTIVE_COLOR: 'rgb(53, 64, 82)',
+  INACTIVE_COLOR: 'rgba(53, 64, 82, 0.5)',
+  BORDER_COLOR: '#A3AFC2',
+  ACTIVE_BORDER_COLOR: '#707886',
+  SEARCH_COLOR: '#dddddd',
+  INACTIVE_SWITCH: '#B7DBBC',
+  ACTIVE_SWITCH: '#36AF47',
+  BT_BORDER_COLOR: '#1585D8',
+  BT_BG_COLOR: '#1991EB',
+  BT_COLOR: '#ffffff'
+}
+window.__COM_ACTIVE = {
+  DSB: '',
+  NAVBAR: '',
+  DB: ''
+}
+/* Components End */
+
+/* Modal */
+window.__STYLE_ID = 'style_' + guid
+window.__MODAL_PROPS = {}
+window.__CONTENTMODAL_CLASS = 'modal_' + guid
+window.__OPENMODAL_CLASS = 'modal-open_' + guid
+window.__BACKDROPMODAL_CLASS = 'modal-backdrop_' + guid
+window.__DISABLEDBACKDROP_CLASS = 'modal-backdrop-disabled_' + guid
+window.__SHOWNMODAL_CLASS = 'modal-shown_' + guid
+
+window.__FADEMODAL_CLASS = 'modal-fade_' + guid
+window.__SLIDEMODAL_CLASS = 'modal-slide_' + guid
 /* Modal End */
 
 window.__ID = 1;
@@ -119,35 +182,7 @@ if (JBridge.hasOwnProperty("getKey")){
 window.updateLanguage = (lang) => {
   window.LANGUAGE = lang;
   JBridge.setKey("languagePref",lang);
-};
-
-/*window.onmousedown = (event) => {
-  if(window.__OS != "WEB")
-    return;
-
-  if(event.target){
-    let id = event.target.id;
-    let view = __VIEWS[id];
-    
-    if(view && view.props.hasOwnProperty('onMouseDown') && typeof view.props.onMouseDown == 'function'){
-      view.props.onMouseDown();
-    }
-  }
 }
-
-window.onmouseup = (event) => {
-  if(window.__OS != "WEB")
-    return;
-
-  if(event.target){
-    let id = event.target.id;
-    let view = __VIEWS[id];
-    
-    if(view && view.props.hasOwnProperty('onMouseUp') && typeof view.props.onMouseDown == 'function'){
-      view.props.onMouseUp();
-    }
-  }
-}*/
 
 window.onclick = (event) => {
   if(window.__OS != "WEB")
