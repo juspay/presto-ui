@@ -423,6 +423,11 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
         __id = allProps[i].value;
       }
     }
+
+    var factor = arr[5];
+    if (typeof JBridge.getPixels == "function"){
+      factor = JBridge.getPixels();
+    }
     //   (viewId, backgroundColor, int blurValue,hadowColor, int dx, int dy, int spread, float factor)
 
     if (!window.shadowObject[tag]) {
@@ -435,7 +440,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
           dx : [arr[0]],
           dy : [arr[1]],
           spread : [arr[4]],
-          factor : [arr[5]]
+          factor : [factor]
         }
     } else {
       window.shadowObject[tag]["viewId"].push(__id);
