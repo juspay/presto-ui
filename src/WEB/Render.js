@@ -37,6 +37,8 @@ function createTextElement(elem, config) {
   elem.style.whiteSpace = "initial";
   span.innerText = config.text;
   span.style.wordBreak = "break-word"
+  if (config.letterSpacing)
+    elem["style"]["letter-spacing"] = config.letterSpacing;
   elem.appendChild(span);
 }
 
@@ -71,6 +73,7 @@ function popup(elem, props) {
 }
 
 function setAttributes(type, elem, props, firstRender) {
+  elem.className = type;
   if (type == "horizontalScrollView" || type == "scrollView")
     elem.style.overflow = "auto";
 
@@ -106,14 +109,105 @@ function setAttributes(type, elem, props, firstRender) {
     } else if (key == "attributes") {
       for (let innerKey in props.attributes)
         elem.setAttribute(innerKey, props.attributes[innerKey]);
+    } else if (key == "className") {
+        elem.classList.add(props[key]);
+    } else if (key == "classList") {
+      JSON.parse(props[key]).forEach(function(obj) {
+        elem.classList.add(obj);
+      });
     } else if (props[key] && typeof props[key] == "function") {
-      let eventType = key.substring(2, key.length).toLowerCase();
-      let cb = props[key];
+      var eventType = key.substring(2, key.length).toLowerCase();
+      var cb = props[key];
       elem.style.userSelect = 'none';
       if (eventType == "change") {
         eventType = "input";
+        if (type=="editText" && elem.tagName.toLowerCase() == "input"){
+          elem.addEventListener('keydown', function(key) {
+            key.stopPropagation();
+            try {
+              var keycode = key.keyCode;
+              var valid = (keycode > 47 && keycode < 58)   || // number keys
+                          (keycode > 64 && keycode < 91)   || // letter keys
+                          (keycode > 95 && keycode < 112)  || // numpad keys
+                          (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
+                          (keycode > 218 && keycode < 223);
+              if (valid){
+                var inputId = key.path[0].getAttribute("id");
+                var input = document.getElementById(inputId);
+                var currentInput = key.key;
+                var currentData = input.value;
+                if(input.getAttribute("pattern")){
+                  var data = input.getAttribute("pattern").split(',');
+                  var length = parseInt(data.pop());
+                  var regexString = data.join('');
+                  if(length){
+                    if(currentData.length+1>length){
+                      input.value = currentData;
+                      key.preventDefault();
+                      return;
+                    }
+                  }
+                  var separator = input.getAttribute("separator");
+                  var separatorRepeat = parseInt(input.getAttribute("separatorRepeat"));
+                  var finalData = (currentData+currentInput).replace(/[^a-zA-Z0-9]/g, "");
+                  if(regexString){
+                    var regexPattern = new RegExp(regexString);
+                    if(!regexPattern.test(finalData)){
+                      key.preventDefault();
+                      return;
+                    }
+                  }
+                  if(separator && separatorRepeat){
+                      key.preventDefault();
+                      var cursorPosition = input.selectionStart;
+                      var formattedString = "";
+                      for (let index = 0; index < finalData.length; index++) {
+                        var element = finalData[index];
+                        formattedString += element;
+                        var factor = 0;
+                        if(formattedString.length && formattedString.replace(/[^a-zA-Z0-9]/g, "").length%(separatorRepeat+factor)==0){
+                          formattedString += separator;
+                        }
+                      }
+                      if(formattedString[formattedString.length-1]==separator){
+                        formattedString = formattedString.substring(0, formattedString.length - 1);
+                      }
+                      input.value = formattedString;
+                      console.log("formattedString----",formattedString);
+                  }
+                }
+              }
+            } catch (error) {}
+          });
+        }
       }
-      elem['on' + eventType] = e => {e.stopPropagation(); (eventType == "input") ? cb(e.target.value) : cb(e);};
+
+      if (props.label) {
+        elem.addEventListener('blur', function() {
+          var inputValue = elem.value;
+          if (inputValue == "") {
+            elem.classList.remove("filled");
+            elem.parentNode.classList.remove('focused');
+          } else {
+            elem.classList.add('filled');
+          }
+        });  
+
+        elem['onfocus'] = function (e) {
+          elem.parentNode.classList.add('focused');
+          if (eventType == "focus") {
+            e.stopPropagation();
+            cb(e);
+          }
+        };
+      }
+
+      
+      if (!(props.label && eventType == "focus")) {
+        elem['on' + eventType] = function (e) {
+          e.stopPropagation();eventType == "input" ? cb(e.target.value) : cb(e);
+        };
+      }
     }
   }
 
@@ -123,7 +217,6 @@ function setAttributes(type, elem, props, firstRender) {
     afterTransition();
   }
 
-  elem.setAttribute("class", type);
 }
 
 let setDimens = function (elem, props) {
@@ -168,7 +261,32 @@ let inflateView = function (view, parentElement) {
     else if (view.type == "editText") {
       elem = document.createElement("input");
       elem.value = view.props.text || "";
-      elem.placeholder = view.props.hint || "";
+      if (view.props.letterSpacing) {
+        elem["style"]["letter-spacing"] = view.props.letterSpacing;
+      }
+      if (view.props.label) {
+        var inputView = elem;
+        inputView.style.width = '100%';
+        setAttributes(view.type, inputView, view.props, true);
+        inputView.setAttribute("id", view.props.id + "_input");
+        var l = document.createElement("label");
+        l.setAttribute("for", view.props.id + "_input");
+        l.innerHTML = view.props.label;
+        l.classList.add('input-label');
+
+        if (view.props.letterSpacing) {
+          l["style"]["letter-spacing"] = view.props.letterSpacing;
+        }
+
+        elem = document.createElement("div");
+        elem.classList.add('input-group');
+        elem.appendChild(l);
+        elem.appendChild(inputView);
+        setAttributes(view.type, elem, view.props, true);
+        delete view.props.label;
+      } else if (view.props.hint) {
+        elem.placeholder = view.props.hint || "";
+      }
     } else
       elem = document.createElement("div");
 

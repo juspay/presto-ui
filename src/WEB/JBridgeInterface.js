@@ -86,6 +86,7 @@ module.exports = {
     }
   },
 
+
   callAPI: function callAPI(method, url, data, headers, type, callback) {
     headers = parseJson(headers)
     data = parseJson(data)
@@ -130,5 +131,44 @@ module.exports = {
     var value = assign(value, {});
     if (es6promise)
       es6promise(immu(key)).then(value);
+  },
+
+
+
+  getResourceByName: function getResourceByName(tag) {
+    return -1;
+  },
+
+  getSessionAttribute: function getSessionAttribute(v1, v2) {
+    return { a: v1};
+  },
+
+  setAnalyticsEndPoint: function setAnalyticsEndPoint(url) {
+    return;
+  },
+
+  getSessionInfo: function getSessionInfo() {
+    return JSON.stringify({});
+  },
+
+  attach: function attach() {
+    return;
+  },
+
+  addToLogList: function aaddToLogList() {
+    return;
+  },
+
+  getLogList: function getLogList() {
+    return JSON.stringify({});
+  },
+
+  updateLogList: function updateLogList() {
+    return JSON.stringify({});
+  },
+
+  isOnline: function isOnline() {
+    return true;
   }
+
 }

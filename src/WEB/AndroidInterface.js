@@ -86,6 +86,24 @@ module.exports = {
     }
   },
 
+  moveView: function moveView(id, index) {
+    if (!window.__VIEWS[id]) {
+      return console.error(new Error("MoveView: Invalid view ID: " + id));
+    }
+    var view = window.__VIEWS[id];
+    var viewElem = document.getElementById(id);
+    var parentId = viewElem.parentNode.id;
+    var parent = window.__VIEWS[parentId];
+    var parentElem = document.getElementById(parentId);
+    var children = parent.children;
+    children.splice(children.indexOf(view), 1);
+    children.splice(index, 0, view);
+    Render.computeChildDimens(parent)
+    children.forEach(child => {
+      Render.inflateView(child, parentElem)
+    })
+  },
+
   addViewToParent: function (id, view, index, cb, replace) {
     var parent = document.getElementById(id);
     var props = window.__VIEWS[id].props;

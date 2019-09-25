@@ -239,21 +239,95 @@ function parseLayoutProps(type, config, key) {
     config.attributes.id = config.id;
   }
 
-
   if (key == "inputType") {
-    config.attributes.type = config.inputType;
+    var inputType = "text";
+    if(config.inputType=="numericPassword"){
+      inputType = "password";
+    }
+    config.attributes.type = inputType;
   }
-  
+
+  if (key == "pattern") {
+    config.attributes.pattern = config.pattern;
+  }
+
+  if (key == "separator") {
+    config.attributes["separator"] = config.separator;
+  }
+  if (key == "separatorRepeat") {
+    config.attributes["separatorRepeat"] = config.separatorRepeat;
+  }
+
   if (key == "myAttr") {
-   config.attributes["myAttr"] = config.myAttr;
+    config.attributes["myAttr"] = config.myAttr;
   }
-  
+
+  if (key == "shadow") {
+    var shadowValues = config.shadow.split(',');
+    var shadowBlur = rWS(cS(shadowValues[2]));
+    var shadowSpread = rWS(cS(shadowValues[3]));
+    var shadowOpacity = rWS(cS(shadowValues[5]));
+    var shadowOffset = {
+        x: rWS(cS(shadowValues[0])),
+        y: rWS(cS(shadowValues[1]))
+      };
+
+    var shadowColor = convertColorToRgba(shadowValues[4]);
+
+    config["style"]["box-shadow"] = parseInt(shadowOffset.x) + "px " + parseInt(shadowOffset.y) + "px " + parseInt(shadowBlur) + "px " + parseInt(shadowSpread) + "px rgba(" + shadowColor.r + ", " +  shadowColor.g + ", " +  shadowColor.b + ", " +  shadowColor.a + ")" ;
+
+  }
+
   if (key == "lineHeight")
     config.style.lineHeight = config.lineHeight;
 
-  if (key == "objectFit") 
+  if (key == "objectFit")
     config.style.objectFit = config.objectFit;
 
+  if (key == "clickable") {
+    config.style.pointerEvents = config.clickable ? "auto" : "none";
+  }
+}
+
+function convertColorToRgba(color) {
+  color = rWS(cS(color));
+
+  var values;
+  var alpha = "1.00";
+
+  if (color.length >= 8) {
+    alpha = parseInt(color.substring(1, 3), 16);
+    alpha = (alpha / 255).toFixed(2);
+    color = color.substring(3, 9);
+  } else {
+    color = color.substring(1, color.length);
+  }
+
+  color = convertHexToRgb(rWS(color));
+  values = color.split(',');
+
+  return {
+    r: rWS(values[0]),
+    g: rWS(values[1]),
+    b: rWS(values[2]),
+    a: alpha
+  };
+}
+
+function convertHexToRgb(hex) {
+  var r = (parseInt(hex.substring(0, 2), 16) / 255).toFixed(2);
+  var g = (parseInt(hex.substring(2, 4), 16) / 255).toFixed(2);
+  var b = (parseInt(hex.substring(4, 6), 16) / 255).toFixed(2);
+
+  return r + "," + g + "," + b;
+}
+
+function cS(value) {
+  return value ? value + '' : "";
+}
+
+function rWS(value) {
+  return value.replace(/ /g, '');
 }
 
 function setDefaults(type, config) {
