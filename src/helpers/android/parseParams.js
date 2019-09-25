@@ -625,6 +625,20 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
     currTransVal = "get_spinnerAdapter";
   }
 
+  if (attrs.key == "startPoint") {
+    var arg = JSON.parse(attrs.value);
+    prePend = "this->setStartX:f_" + arg.x + ";"
+    prePend += "this->setStartY:f_" + arg.y + ";"
+    return prePend
+  }
+    
+  if (attrs.key == "endPoint") {
+    var arg = JSON.parse(attrs.value)
+    prePend = "this->setEndX:f_" + arg.x + ";"
+    prePend += "this->setEndY:f_" + arg.y + ";"
+    return prePend
+  }
+
   if (belongsTo == "VIEW")
   keyWord = globalObjMap[belongsTo].val;
   else
