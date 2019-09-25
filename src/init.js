@@ -67,12 +67,9 @@ window.callJSCallback = require("./helpers").android.callbackMapper.callJSCallba
 window.__WIDTH = window.__DEVICE_DETAILS.screen_width;
 window.__HEIGHT = window.__DEVICE_DETAILS.screen_height;
 
-const guid = Math.random().toString(36).substr(2, 9)
-
 /* Components */
 window.__COM_EVENT = false
 window.__COM_RENDERED = {
-  DRP_GLOBAL: false,
   SWITCH_GLOBAL: false,
   DRP: {},
   DSB: {},
@@ -81,34 +78,32 @@ window.__COM_RENDERED = {
 }
 
 window.__COM_CLASS_GROUP = {
-  WRAPPER: 'com_wrapper_' + guid,
-  NAVBAR: 'com_navbar_' + guid,
-  NAVBAR_ITEM: 'com_navbar_item_' + guid,
-  NAVBAR_ITEM_WITH_SUB: 'com_navbar_has_sub_' + guid,
-  NAVBAR_SUB: 'com_navbar_sub_' + guid, 
-  NAVBAR_SUB_RIGHT: 'com_navbar_sub_right_' + guid,
-  NAVBAR_SUB_ITEM: 'com_navbar_subitem_' + guid,
-  DRP: 'com_drp_' + guid,
-  DRP_BODY: 'com_drp_body_' + guid,
-  DB: 'com_db_' + guid,
-  DB_FULL_BODY: 'com_db_full_body_' + guid,
-  DB_BODY: 'com_db_body_' + guid,
-  DB_OPTIONS: 'com_db_options_' + guid,
-  DB_OPTION: 'com_db_option_' + guid,
-  DSB: 'com_dsb_' + guid,
-  DSB_FULL_BODY: 'com_dsb_full_body_' + guid,
-  DSB_BODY: 'com_dsb_body_' + guid,
-  DSB_OPTIONS: 'com_dsb_options_' + guid,
-  DSB_OPTION: 'com_dsb_option_' + guid,
-  DSB_SEARCH_WRAP: 'com_dsb_search_wrap_' + guid,
-  DSB_SEARCH: 'com_dsb_search_' + guid,
-  SWITCH: 'com_switch_' + guid,
-  SWITCH_BODY: 'com_switch_body_' + guid,
-  SWITCH_SLIDER: 'com_switch_slider_' + guid,
-  BT: 'com_bt_' + guid,
-  BT_BODY: 'com_bt_body_' + guid,
-  BT_TEXT: 'com_bt_text_' + guid,
-  BT_ICON: 'com_bt_icon_' + guid
+  WRAPPER: 'PDC_com_wrapper',
+  NAVBAR: 'PDC_com_navbar',
+  NAVBAR_ITEM: 'PDC_com_navbar_item',
+  NAVBAR_ITEM_WITH_SUB: 'PDC_com_navbar_has_sub',
+  NAVBAR_SUB: 'PDC_com_navbar_sub', 
+  NAVBAR_SUB_RIGHT: 'PDC_com_navbar_sub_right',
+  NAVBAR_SUB_ITEM: 'PDC_com_navbar_subitem',
+  DRP: 'PDC_com_drp',
+  DRP_BODY: 'PDC_com_drp_body',
+  DB: 'PDC_com_db',
+  DB_FULL_BODY: 'PDC_com_db_full_body',
+  DB_BODY: 'PDC_com_db_body',
+  DB_OPTIONS: 'PDC_com_db_options',
+  DB_OPTION: 'PDC_com_db_option',
+  DSB: 'PDC_com_dsb',
+  DSB_FULL_BODY: 'PDC_com_dsb_full_body',
+  DSB_BODY: 'PDC_com_dsb_body',
+  DSB_OPTIONS: 'PDC_com_dsb_options',
+  DSB_OPTION: 'PDC_com_dsb_option',
+  DSB_SEARCH_WRAP: 'PDC_com_dsb_search_wrap',
+  DSB_SEARCH: 'PDC_com_dsb_search',
+  SWITCH: 'PDC_com_switch',
+  SWITCH_BODY: 'PDC_com_switch_body',
+  SWITCH_SLIDER: 'PDC_com_switch_slider',
+  BT: 'PDC_com_bt',
+  BT_DISABLED: 'PDC_com_bt_disabled'
 }
 window.__COM_COLOR_GROUP = {
   BG: '#ffffff',
@@ -132,16 +127,14 @@ window.__COM_ACTIVE = {
 /* Components End */
 
 /* Modal */
-window.__STYLE_ID = 'style_' + guid
 window.__MODAL_PROPS = {}
-window.__CONTENTMODAL_CLASS = 'modal_' + guid
-window.__OPENMODAL_CLASS = 'modal-open_' + guid
-window.__BACKDROPMODAL_CLASS = 'modal-backdrop_' + guid
-window.__DISABLEDBACKDROP_CLASS = 'modal-backdrop-disabled_' + guid
-window.__SHOWNMODAL_CLASS = 'modal-shown_' + guid
-
-window.__FADEMODAL_CLASS = 'modal-fade_' + guid
-window.__SLIDEMODAL_CLASS = 'modal-slide_' + guid
+window.__CONTENTMODAL_CLASS = 'PDC_modal'
+window.__OPENMODAL_CLASS = 'PDC_modal-open'
+window.__BACKDROPMODAL_CLASS = 'PDC_modal-backdrop'
+window.__DISABLEDBACKDROP_CLASS = 'PDC_modal-backdrop-disabled'
+window.__SHOWNMODAL_CLASS = 'PDC_modal-shown'
+window.__FADEMODAL_CLASS = 'PDC_modal-fade'
+window.__SLIDEMODAL_CLASS = 'PDC_modal-slide'
 /* Modal End */
 
 window.__ID = 1;
