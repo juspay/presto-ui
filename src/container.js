@@ -94,7 +94,8 @@ const renderScreen = function (data) {
 const appendToRoot = function (screen, dontAnimate) {
   window.__SCREEN_INDEX++;
   let layout = screen.render();
-  window.__ROOTSCREEN.appendChild(window.__ROOTSCREEN.idSet.root, layout,
+  const id = window.__ROOTSCREEN.idSet.dui_root || window.__ROOTSCREEN.idSet.root
+  window.__ROOTSCREEN.appendChild(id, layout,
     window.__SCREEN_INDEX, screen.afterRender);
   if (dontAnimate || window.__OS == "IOS")
     return;

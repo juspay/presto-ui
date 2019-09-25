@@ -25,15 +25,22 @@
 
 module.exports = {
   handle : (ui, callback) => {
-
+    if (!ui) {
+      return;
+    }
     if(ui.render) {
       if (typeof Android === "undefined")
         throw new Error("Android is undefined");
 
       if (window.__OS != "ANDROID")
         return Android.Render(ui.render, null);
-      else
-        return Android.Render(JSON.stringify(ui.render), null);
+      else {
+        if(typeof Android.getNewID == "function") {
+          return Android.Render(JSON.stringify(ui.render), null, "false");
+        } else {
+          return Android.Render(JSON.stringify(ui.render), null);
+        }
+      }
     }
 
     if(ui.runInUI) {

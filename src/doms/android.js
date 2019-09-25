@@ -43,6 +43,7 @@ var excluded = {
   "SwypeLayout": "in.juspay.godel.core.",
   "SwypeScroll": "in.juspay.godel.core.",
   "AccordionLayout": "in.juspay.godel.core.",
+  "Shape": "in.juspay.mystique.",
   "LottieAnimationView": "com.airbnb.lottie."
 }
 

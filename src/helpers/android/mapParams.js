@@ -118,6 +118,78 @@ var map = {
     inVokedIn: 'VIEW',
     fnName: "setFillViewport",
   },
+  "primitive": {
+    values: [{
+      type: 's'
+    }],
+    'dontMap': true,
+    fnName: 'setPrimitive',
+    inVokedIn: 'VIEW'
+  }, 
+  "cx": {
+    values: [{
+      type: 'f'
+    }],
+    'dontMap': true,
+    fnName: 'setCx',
+    inVokedIn: 'VIEW'
+  },
+  "cy": {
+    values: [{
+      type: 'f'
+    }],
+    'dontMap': true,
+    fnName: 'setCy',
+    inVokedIn: 'VIEW'
+  },
+  "radius": {
+    values: [{
+      type: 'f'
+    }],
+    'dontMap': true,
+    fnName: 'setRadius',
+    inVokedIn: 'VIEW'
+  },
+  "hex": {
+    values: [{
+      type: 's'
+    }],
+    'dontMap': true,
+    fnName: 'setColor',
+    inVokedIn: 'VIEW'
+  },
+  "style": {
+    values: [{
+      type: 's'
+    }],
+    'dontMap': true,
+    fnName: 'setStyle',
+    inVokedIn: 'VIEW'
+  },
+  "sweepAngle": {
+    values: [{
+      type: 'f'
+    }],
+    'dontMap': true,
+    fnName: 'setSweepAngle',
+    inVokedIn: 'VIEW'
+  },
+  "startAngle": {
+    values: [{
+      type: 'f'
+    }],
+    'dontMap': true,
+    fnName: 'setStartAngle',
+    inVokedIn: 'VIEW'
+  },
+  "strokeWidth": {
+    values: [{
+      type: 'f'
+    }],
+    'dontMap': true,
+    fnName: 'setStrokeWidth',
+    inVokedIn: 'VIEW'
+  },
   setDate: {
     values: [{
       type: 'l',

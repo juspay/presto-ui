@@ -139,20 +139,22 @@ window.callUICallback = function () {
   var currTime;
   var timeDiff;
 
+  // backward compatibility for single arg events in presto-dom
+  functionArgs = functionArgs.length == 1 ? functionArgs[0] : functionArgs
+
   if (window.__ALL_ONCLICKS.indexOf(fName) != -1 && args[2] == "feedback") {
     return JBridge.setClickFeedback(args[1]);
   }
 
   if (window.__THROTTELED_ACTIONS.indexOf(fName) == -1) {
-    window.__PROXY_FN[fName].call(null, ...functionArgs);
+    window.__PROXY_FN[fName].call(null, functionArgs);
   } else if (window.__LAST_FN_CALLED && (fName == window.__LAST_FN_CALLED.fName)) {
     currTime = getCurrTime();
     timeDiff = currTime - window.__LAST_FN_CALLED.timeStamp;
 
     if (timeDiff >= 300) {
-      console.log("BUTTON_CLICKED_" + window.__CURR_SCREEN);
       JBridge.trackEvent("BUTTON_CLICKED", "BUTTON_CLICKED_" + window.__CURR_SCREEN);
-      window.__PROXY_FN[fName].call(null, ...functionArgs);
+      window.__PROXY_FN[fName].call(null, functionArgs);
       window.__LAST_FN_CALLED.timeStamp = currTime;
     } else {
       console.warn("function throtteled", fName);
@@ -160,7 +162,7 @@ window.callUICallback = function () {
     }
   } else {
     JBridge.trackEvent("BUTTON_CLICKED", "BUTTON_CLICKED_" + window.__CURR_SCREEN);
-    window.__PROXY_FN[fName].call(null, ...functionArgs);
+    window.__PROXY_FN[fName].call(null, functionArgs);
     window.__LAST_FN_CALLED = {
       timeStamp: (new Date()).getTime(),
       fName: fName
