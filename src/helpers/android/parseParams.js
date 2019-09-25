@@ -145,23 +145,42 @@ function getConfigGroups(config) {
 }
 
 function getCtr(viewGroup) {
-  var viewGroupMap = {
+  var viewGroupMap =  {
     'linearLayout': 'android.widget.LinearLayout$LayoutParams->new',
+    'coordinatorLayout': 'android.widget.CoordinatorLayout$LayoutParams->new',
     'scrollView': 'android.widget.LinearLayout$LayoutParams->new',
+    'horizontalScrollView': 'android.widget.LinearLayout$LayoutParams->new',
     'relativeLayout': 'android.widget.RelativeLayout$LayoutParams->new',
     'frameLayout': 'android.widget.FrameLayout$LayoutParams->new',
     'toolbar': 'android.support.v7.widget.Toolbar$LayoutParams->new',
+    'collapsingToolbarLayout': 'android.support.design.widget.CoordinatorLayout$LayoutParams->new',
+    'appBarLayout': 'android.support.design.widget.AppBarLayout$LayoutParams->new',
     'view': 'android.widget.LinearLayout$LayoutParams->new',
-    'horizontalScrollView': 'android.widget.LinearLayout$LayoutParams->new',
+    'tabLayout': 'android.widget.LinearLayout$LayoutParams->new',
+    'viewPager': 'android.support.v4.view.ViewPager$LayoutParams->new',
     'listView': 'android.widget.LinearLayout$LayoutParams->new',
     'expandableListView': 'android.widget.LinearLayout$LayoutParams->new',
-  }
+    'recyclerView': 'android.support.v7.widget.RecyclerView$LayoutParams->new',
+    'ratingBar': 'android.widget.LinearLayout$LayoutParams->new',
+    'accordionLayout': 'android.widget.FrameLayout$LayoutParams->new',
+    'swypeLayout': 'android.widget.FrameLayout$LayoutParams->new',
+    'swypeScroll': 'android.widget.LinearLayout$LayoutParams->new'
+  };
 
   if(!viewGroupMap[viewGroup]) {
     throw new Error("No such view group found : " + viewGroup);
   }
 
   return  viewGroupMap[viewGroup];
+}
+
+function isURL(str) {
+  try {
+    var url = new URL(str);
+    return true;
+  } catch(err) {
+    return false;
+  }
 }
 
 function handleSpecialChars(value) {
@@ -315,27 +334,45 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
   }
 
   if (attrs.key == "gradient") {
-    var gradientObj = JSON.parse(attrs.value)
-    var orientation = ""
-    if(gradientObj.type == "linear") {
+    var gradientObj = JSON.parse(attrs.value);
+    var orientation = "";
+    if (gradientObj.type == "linear") {
       // orientation += "set_o=setOrientation:"
-    } else {
+    } else {}
 
+    var intClass = "set_cc=java.lang.Class->forName:s_java.lang.Integer;";
+    var arrList = "set_arr=java.util.ArrayList->new;";
+
+    prePend += gradientObj.values.map(function (color, i) {
+      return parseColor(color, "set_color" + i);
+    }).join("");
+
+    arrList += gradientObj.values.map(function (color, i) {
+      return "get_arr->add:get_color" + i;
+    }).join(";");
+
+    prePend += "set_gd=android.graphics.drawable.GradientDrawable->new;";
+    prePend += arrList + ";";
+    prePend += "set_c=java.lang.Class->forName:s_java.lang.Integer;";
+    prePend += "in.juspay.mystique.InflateView->convertAndStoreArray:get_arr,get_c,s_pArr,b_true;";
+    currTransVal = "get_pArr";
+  }
+
+  if (attrs.key == "cornerRadii") {
+    var cornerRadiis = attrs.value.split(',');
+    var cornerRadius = cornerRadiis.splice(0,1);
+    var cornerRadiiArray = [];
+    for(var i = 0; i< cornerRadiis.length;++i){
+      cornerRadiiArray.push((cornerRadiis[i]*cornerRadius)+"");
+      cornerRadiiArray.push((cornerRadiis[i]*cornerRadius)+"");
     }
-
-    var intClass = "set_cc=java.lang.Class->forName:s_java.lang.Integer;"
-    var arrList = "set_arr=java.util.ArrayList->new;"
-
-    prePend += gradientObj.values.map((color, i) => parseColor(color, "set_color" + i)).join("")
-
-    arrList += gradientObj.values.map((color, i) => "get_arr->add:get_color"+i).join(";")
-
-    prePend += "set_gd=android.graphics.drawable.GradientDrawable->new;"
-    prePend += (arrList + ";")
-    prePend += "set_c=java.lang.Class->forName:s_java.lang.Integer;"
-    prePend += "in.juspay.mystique.InflateView->convertAndStoreArray:get_arr,get_c,s_pArr,b_true;"
-    prePend += "get_gd->setColors:get_pArr;"
-    currTransVal = "get_gd"
+    var arrList = "set_arr=java.util.ArrayList->new;";
+    var floatArray = cornerRadiiArray.map(function(val,i){return "set_cornerRadius=java.lang.Float->new:dpf_"+ val + ";get_arr->add:get_cornerRadius;"});
+    prePend += arrList + ";";
+    prePend += "set_c=java.lang.Class->forName:s_java.lang.Float;";
+    prePend += floatArray.join("");
+    prePend += "in.juspay.mystique.InflateView->convertAndStoreArray:get_arr,get_c,s_pArr,b_true;";
+    currTransVal = "get_pArr";
   }
 
   // shadowTag : level,tag
@@ -466,8 +503,64 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
   }
 
   if (attrs.key == "imageUrl") {
+    if(isURL(attrs.value)) {
+      if(typeof top.__BOOT_LOADER == "undefined") {
+        top.__BOOT_LOADER = {};
+      }
+
+      var image = attrs.value.substr(attrs.value.lastIndexOf('/') + 1)
+      var callback = "onImage" + image.substr(0, image.indexOf('.'))
+
+      var filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(image);
+
+
+      if (!filePresent) {
+        top.__BOOT_LOADER[callback] = function (isNew) {
+          const id = allProps.find(a => a.key === "id");
+          if (!id) return;
+          window.updateProperty({
+            type: "imageView",
+            __ref: {
+              __id: id.value
+            },
+            props: {}
+          }, {value0: "imageUrl", value1: attrs.value});
+        };
+        JBridge.renewFile(attrs.value, image, callback);
+      }
+
+
+      prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
+      "set_resolvedName=in.juspay.android_lib.data.FileProvider->appendSdkNameAndVersion:s_" + image + ";" +
+      "set_resolvedFile=java.io.File->new:get_directory,get_resolvedName;" +
+      "set_resolvedPath=get_resolvedFile->toString;" + 
+      "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;";
+
+      currTransVal = "get_dimage"; 
+    } else {
+      prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_"+  attrs.value +",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;"
+      currTransVal = "get_482380";
+    }
+  }
+
+  if (attrs.key == "defaultImage") {
     prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_"+  attrs.value +",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;"
     currTransVal = "get_482380";
+  }
+
+  if (attrs.key == "placeHolder") {
+    prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_"+  attrs.value +",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;"
+    currTransVal = "get_482380";
+  }
+
+  if (attrs.key == "dynamicUrl") {
+    prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
+    "set_resolvedName=in.juspay.android_lib.data.FileProvider->appendSdkNameAndVersion:s_" + attrs.value + ";" +
+    "set_resolvedFile=java.io.File->new:get_directory,get_resolvedName;" +
+    "set_resolvedPath=get_resolvedFile->toString;" + 
+    "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;";
+
+    currTransVal = "get_dimage";
   }
 
   if (attrs.key == "backgroundDrawable") {

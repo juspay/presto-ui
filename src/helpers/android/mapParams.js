@@ -312,6 +312,14 @@ var map = {
     fnName: 'setImageDrawable',
     inVokedIn: 'VIEW',
   },
+  "placeHolder": {
+    values: [{
+      type: 's',
+    }],
+    'dontMap': true,
+    fnName: 'setImageDrawable',
+    inVokedIn: 'VIEW',
+  },
   "packageIcon": {
     values: [{
       type: 's'
@@ -330,6 +338,14 @@ var map = {
     'dontMap': true,
     fnName: 'smoothScrollTo',
     inVokedIn: 'VIEW'
+  },
+  "cornerRadii": {
+    values: [{
+      type: 's'
+    }],
+    'dontMap': true,
+    fnName: 'setCornerRadii',
+    inVokedIn: 'DRAWABLE'
   },
   "lineSpacing": {
     values: [{
@@ -445,12 +461,12 @@ var map = {
     },
   "gradient": {
       values: [{
-            type: 'cs',
-          }],
+        type: 'cs'
+      }],
       'dontMap': true,
-      fnName: 'setBackground',
-      inVokedIn: 'VIEW',
-    },
+      fnName: 'setColors',
+      inVokedIn: 'DRAWABLE'
+  },
   "lineHeight": {
     values: [{
       type: 'dp'
@@ -481,6 +497,7 @@ var map = {
       password: '129',
       numeric: '2',
       numericPassword: '18',
+      numericWithoutSuggestion: '524291',
       disabled: '0',
       text: '1'
     }],
@@ -644,6 +661,7 @@ var map = {
       left: 8388611,
       right: 8388613,
       center: 17,
+      bottom: 80,
       top_vertical: 48,
       start: 8388611,
       end: 8388613,
@@ -707,6 +725,7 @@ var map = {
       left: 3,
       right: 5,
       center: 17,
+      bottom: 80,
       center_horizontal: 1,
       center_vertical: 16,
       start: 8388611,
@@ -1029,6 +1048,22 @@ var map = {
     'dontMap': true,
     fnName: 'setClickable',
     inVokedIn: 'VIEW',
+  },
+  "cursor": {
+    values: [{
+      type: 'b'
+    }],
+    'dontMap': true,
+    fnName: 'setCursorVisible',
+    inVokedIn: 'VIEW'
+  },
+  "longClickable": {
+    values: [{
+      type: 'b'
+    }],
+    'dontMap': true,
+    fnName: 'setLongClickable',
+    inVokedIn: 'VIEW'
   },
   "focusable": {
     values: [{

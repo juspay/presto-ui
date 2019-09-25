@@ -36,6 +36,8 @@ function viewCtxObj(view) {
   };
 
   view.children.forEach(child => {
+    child.props.oldW = child.props.w || "0";
+    child.props.oldH = child.props.h || "0";
     child.props.w = child.props.width;
     child.props.h = child.props.height;
     child.props.x = 0;
@@ -66,6 +68,10 @@ function viewCtxObj(view) {
 
 function isHidden(prop) {
   return prop.visibility === "gone";
+}
+
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 /*
@@ -176,8 +182,8 @@ function computeBasic(view, ignoreGravity) {
     let margins = [0, 0, 0, 0];
 
     if (isHidden(props)) {
-      props.h = "0";
-      props.w = "0";
+      props.w = isNumber(props.oldW) ? props.oldW : "0";
+      props.h = isNumber(props.oldH) ? props.oldH : "0";
       return;
     }
 
@@ -288,8 +294,8 @@ function computeLinearlayout(view) {
     let weight = props["weight"] * 1;
 
     if (isHidden(props)) {
-      props.w = "0";
-      props.h = "0";
+      props.w = isNumber(props.oldW) ? props.oldW : "0";
+      props.h = isNumber(props.oldH) ? props.oldH : "0";
       return;
     }
 
@@ -299,8 +305,7 @@ function computeLinearlayout(view) {
     // Active Dimension
     if (props[activeDimen] === "match_parent") {
       props[activeDimen] = viewCtx[activeDimen];
-      props[activeDimen] -= margins[activeMargin[0]] + margins[activeMargin[
-        1]];
+      props[activeDimen] -= margins[activeMargin[0]] + margins[activeMargin[1]];
       props[activeDimen] += '';
       viewCtx[activeDimen] = 0;
     }

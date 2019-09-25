@@ -80,10 +80,11 @@ function inflate(view) {
   const move = helper.shouldMove(view);
   const inflateChilds = helper.shouldInfateChilds(view);
   helper.cacheDimen(view);
-
+  let ranRunInUI = false;
   if (move) {
     move.id = id;
-    runInUIHelper(view.type, move);
+    runInUIHelper(view.type, view.props);
+    ranRunInUI = true;
   }
 
   computeChildDimens(view)
@@ -98,39 +99,64 @@ function inflate(view) {
     };
     runInUI(cmd, true);
   }
+  return ranRunInUI;
 }
 
 function runInUI(cmd, fromInflate) {
-  if (!(cmd instanceof Array))
-    cmd = [cmd];
+  if (!(cmd instanceof Array)) cmd = [cmd];
 
-  cmd.forEach(function (each) {
-    const id = each.id;
-    const view = window.__VIEWS[id];
-    const parent = window.__VIEWS[view.props.parentId];
-    view.props = R.merge(view.props, each);
-    if (each.visibility !== "visible") {
-      runInUIHelper(view.type, view.props);
-    }
-    if (parent && !fromInflate) {
-      const view = parent;
-      if (view.type.indexOf("scroll") != -1) {
-        inflate(view);
+  if (cmd.length==1 && cmd[0]=="removeAllUI"){
+    window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
+      methodName: "removeAllUI",
+      parameters: {"animated":"false"}
+    }));
+  }else{
+    cmd.forEach(function (each) {
+    var id = each.id;
+    var view = window.__VIEWS[id];
+    if (view) {
+        var parent = window.__VIEWS[view.props.parentId];
+        view.props = R.merge(view.props, each);
+        //Adding as stop gag solution for editText in ios where text 
+        //was getting set empty in case other properties were modified.
+        if (!each.hasOwnProperty('text')) {
+          delete view.props.text;
+        }
+        // if (each.visibility !== "visible") {
+        //   runInUIHelper(view.type, view.props);
+        // }
+        if (parent && !fromInflate) {
+          if (parent.type.indexOf("scroll") != -1) {
+            inflate(parent);
+          }
+          computeChildDimens(parent);
+          var children = parent.children;
+          if (!inflate(view)) {
+            runInUIHelper(view.type, view.props, true);
+          };
+          for (var i = 0, len = children.length; i < len; i++) {
+            if (view != children[i]) {
+              inflate(children[i]);
+            }
+          }
+        } else {
+          runInUIHelper(view.type, view.props);
+        }
+        // if (each.visibility === "visible") {
+        //   runInUIHelper(view.type, view.props);
+        // }
       }
-      computeChildDimens(view);
-      const children = view.children;
-      for (let i = 0, len = children.length; i < len; i++) {
-          inflate(children[i]);
-      }
-    }
-    if (each.visibility === "visible") {
-      runInUIHelper(view.type, view.props);
-    }
-  });
+    });
+  }
 };
 
-function runInUIHelper(type, obj) {
-  const cmd = parseParams(type, obj, "get").config.methods;
+function runInUIHelper(type, obj, removeFrame) {
+  var cmd = parseParams(type, obj, "get").config.methods;
+  if(removeFrame){
+      cmd = cmd.filter(function(itm){
+        return itm.methodName != "setFrame:"
+    })
+  }
   window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
     methodName: "runInUI",
     parameters: cmd

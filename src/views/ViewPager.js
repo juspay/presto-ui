@@ -27,8 +27,6 @@ var dom = require('../doms');
 var View = require('../baseView');
 var TextView = require('./TextView');
 var LinearLayout = require('./LinearLayout');
-const async = require('async');
-const bluebird = require('bluebird');
 
 class ViewPager extends View {
   constructor(props, children) {
@@ -36,7 +34,6 @@ class ViewPager extends View {
   }
 
   render() {
-    var bird = bluebird(this.resolveChildren());
     var params = this.props;
     var children = this.resolveChildren();
 
