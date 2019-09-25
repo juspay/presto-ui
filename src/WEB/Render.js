@@ -253,6 +253,10 @@ let inflateView = function (view, parentElement) {
     }
   }
 
+  if(view.props.x == "NaN" || view.props.y == "NaN") {
+    view = handleWrapContent(view, parentElement)
+  }
+
   if (!elem) {
     if (view.type == "imageView")
       elem = document.createElement("img");
@@ -341,6 +345,15 @@ let inflateView = function (view, parentElement) {
 
   return elem;
 };
+
+let handleWrapContent = (view, parentElement) => {
+  let newDimen = 0;
+  for(var i = 0; i < parentElement.childNodes.length; i++) {
+    newDimen += parentElement.childNodes[i].offsetWidth;
+  }
+  view.props.x = newDimen;
+  return view;
+}
 
 let runInUI = function (cmd) {
   if (!(cmd instanceof Array))

@@ -233,6 +233,13 @@ function parseLayoutProps(type, config, key) {
 
   if (type == "textView" && key == "gravity" && config.gravity) {
     config.style.textAlign = config.gravity;
+    if (config.gravity == "center_vertical") {
+      config.style["align-items"] = "center";
+      config.style.display = "flex";
+    } else if (config.gravity == "center_horizontal") {
+      config.style.display = "flex";
+      config.style["justify-content"] = "center";
+    }
   }
 
   if (key == "id") {
