@@ -841,7 +841,7 @@ function generateType(type){
   if (type == "editText") {
     generatedType = "customTextField";
   } else if (type=="imageView") {
-    generatedType = "uIImageView";
+    generatedType = "mJPImageView";
   } else if (type=="textView") {
     generatedType = "uILabel";
   } else if (type == "scrollView" || type == "horizontalScrollView") {
@@ -1094,7 +1094,7 @@ function mapper(type, config, _getSetType) {
     config.methods.push(this_bringSubViewToFront(viewTag));
   }
 
-  if (type == 'uIImageView') {
+  if (type == 'mJPImageView') {
     let contentMode = cS(config.contentMode || 1);
     config.methods.push(this_setContentMode(contentMode));
   }

@@ -109,6 +109,7 @@ var map = {
     fnName: 'requestFocus',
     inVokedIn: 'VIEW',
   },
+
   fillViewport: {
     values: [{
       type: 'b'
@@ -383,6 +384,14 @@ var map = {
     fnName: 'setImageDrawable',
     inVokedIn: 'VIEW',
   },
+  "placeHolder": {
+    values: [{
+      type: 's',
+    }],
+    'dontMap': true,
+    fnName: 'setImageDrawable',
+    inVokedIn: 'VIEW',
+  },
   "packageIcon": {
     values: [{
       type: 's'
@@ -401,6 +410,14 @@ var map = {
     'dontMap': true,
     fnName: 'smoothScrollTo',
     inVokedIn: 'VIEW'
+  },
+  "cornerRadii": {
+    values: [{
+      type: 's'
+    }],
+    'dontMap': true,
+    fnName: 'setCornerRadii',
+    inVokedIn: 'DRAWABLE'
   },
   "lineSpacing": {
     values: [{
@@ -516,12 +533,12 @@ var map = {
     },
   "gradient": {
       values: [{
-            type: 'cs',
-          }],
+        type: 'cs'
+      }],
       'dontMap': true,
-      fnName: 'setBackground',
-      inVokedIn: 'VIEW',
-    },
+      fnName: 'setColors',
+      inVokedIn: 'DRAWABLE'
+  },
   "lineHeight": {
     values: [{
       type: 'dp'
@@ -552,6 +569,7 @@ var map = {
       password: '129',
       numeric: '2',
       numericPassword: '18',
+      numericWithoutSuggestion: '524291',
       disabled: '0',
       text: '1'
     }],
@@ -610,6 +628,70 @@ var map = {
     fnName: 'setAllCaps',
     inVokedIn: 'VIEW',
   },
+  "expand": {
+    values: [{
+      type: 'b'
+    }],
+    'dontMap': true,
+    fnName: 'setExpand',
+    inVokedIn: 'VIEW'
+  },
+  "focusableInTouchMode": {
+    values: [{
+      type: 'b'
+    }],
+    'dontMap': true,
+    fnName: 'setFocusableInTouchMode',
+    inVokedIn: 'VIEW'
+  },
+  "descendantFocusability": {
+    values: [{
+      type: 'i'
+    }],
+    'dontMap': true,
+    fnName: 'setDescendantFocusability',
+    inVokedIn: 'VIEW'
+  },
+  "expandDuration": {
+    values: [{
+      type: 'i'
+    }],
+    'dontMap': true,
+    fnName: 'setExpandDuration',
+    inVokedIn: 'VIEW'
+  },
+  "expandScrollParent": {
+    values: [{
+      type: 'i'
+    }],
+    'dontMap': true,
+    fnName: 'setScrollParent',
+    inVokedIn: 'VIEW'
+  },
+  "expandAlpha": {
+    values: [{
+      type: 'f'
+    }],
+    'dontMap': true,
+    fnName: 'setExpandAlpha',
+    inVokedIn: 'VIEW'
+  },
+  "defaultExpand": {
+    values: [{
+      type: 'b'
+    }],
+    'dontMap': true,
+    fnName: 'setDefaultExpand',
+    inVokedIn: 'VIEW'
+  },
+  "swypeEnabled": {
+    values: [{
+      type: 'b'
+    }],
+    'dontMap': true,
+    fnName: 'setSwypeEnabled',
+    inVokedIn: 'VIEW'
+  },
   toast: {
     values: [{
       type: 'cs',
@@ -647,9 +729,11 @@ var map = {
       type: 'i',
       center_horizontal: 1,
       center_vertical: 16,
+      bottom : 80,
       left: 8388611,
       right: 8388613,
       center: 17,
+      bottom: 80,
       top_vertical: 48,
       start: 8388611,
       end: 8388613,
@@ -713,6 +797,7 @@ var map = {
       left: 3,
       right: 5,
       center: 17,
+      bottom: 80,
       center_horizontal: 1,
       center_vertical: 16,
       start: 8388611,
@@ -841,30 +926,6 @@ var map = {
     values: [{
       type: 'i',
       'true': 11,
-      'false': 12121
-    }, {
-      type: 'i',
-      dontMap: true
-    }, ],
-    inVokedIn: 'PARAMS',
-    fnName: "addRule",
-  },
-  'alignParentRight': {
-    values: [{
-      type: 'i',
-      'true': 11,
-      'false': 12121
-    }, {
-      type: 'i',
-      dontMap: true
-    }, ],
-    inVokedIn: 'PARAMS',
-    fnName: "addRule",
-  },
-  'alignParentLeft': {
-    values: [{
-      type: 'i',
-      'true': 9,
       'false': 12121
     }, {
       type: 'i',
@@ -1059,6 +1120,22 @@ var map = {
     'dontMap': true,
     fnName: 'setClickable',
     inVokedIn: 'VIEW',
+  },
+  "cursor": {
+    values: [{
+      type: 'b'
+    }],
+    'dontMap': true,
+    fnName: 'setCursorVisible',
+    inVokedIn: 'VIEW'
+  },
+  "longClickable": {
+    values: [{
+      type: 'b'
+    }],
+    'dontMap': true,
+    fnName: 'setLongClickable',
+    inVokedIn: 'VIEW'
   },
   "focusable": {
     values: [{

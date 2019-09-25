@@ -40,6 +40,8 @@ if (window.__OS == "WEB") {
   window.JBridge = merge(window.JBridge, {});
 }
 
+window.PrestoUI = require("./PrestoUIInterface");
+
 window.__ENV = 0;
 
 const getScreenDetails = () => {
@@ -53,7 +55,7 @@ const getScreenDetails = () => {
     console.error(
       "error in gettting screen dimensions, setting default values", err);
     return {
-      screen_width: "720",
+      screen_width: "1080",
       screen_height: "1920"
     };
   }
@@ -107,6 +109,12 @@ window.updateLanguage = (lang) => {
 };
 
 window.onresize = (iosData) => {
+  if (window.__OS == "WEB") {
+    const content = document.getElementById('content');
+    const id = content.firstElementChild.id;
+    const view = __VIEWS[id];
+    Android.recompute(view);
+  }
   return;
   if (window.__OS == "IOS") {
     let tag = iosData.tag;

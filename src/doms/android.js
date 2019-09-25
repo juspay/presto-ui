@@ -35,11 +35,16 @@ var excluded = {
   "RotateAnimation": "android.view.animation.",
   "LinearInterpolator": "android.view.animation.",
   "Animation": "android.view.animation.",
+  "RecyclerView": "android.support.v7.widget.",
   "PagerTabStrip": "android.support.v4.view.",
   "PagerTitleStrip": "android.support.v4.view.",
   "TabLayout": "in.org.npci.upiapp.",
   "ShimmerFrameLayout": "com.facebook.shimmer.",
   "Shape": "in.juspay.mystique.",
+  "SwypeLayout": "in.juspay.godel.core.",
+  "SwypeScroll": "in.juspay.godel.core.",
+  "AccordionLayout": "in.juspay.godel.core.",
+  "LottieAnimationView": "com.airbnb.lottie."
 }
 
 function getCtr(viewGroup) {
@@ -60,6 +65,9 @@ function getCtr(viewGroup) {
     'expandableListView': 'android.widget.LinearLayout$LayoutParams->new',
     'recyclerView': 'android.support.v7.widget.RecyclerView$LayoutParams->new',
     'ratingBar': 'android.widget.LinearLayout$LayoutParams->new',
+    'accordionLayout': 'android.widget.FrameLayout$LayoutParams->new',
+    'swypeLayout': 'android.widget.FrameLayout$LayoutParams->new',
+    'swypeScroll': 'android.widget.LinearLayout$LayoutParams->new',
   }
 
   return viewGroupMap[viewGroup];

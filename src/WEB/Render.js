@@ -110,7 +110,10 @@ function setAttributes(type, elem, props, firstRender) {
       let eventType = key.substring(2, key.length).toLowerCase();
       let cb = props[key];
       elem.style.userSelect = 'none';
-      elem['on' + eventType] = e => {e.stopPropagation(); (eventType == "change") ? cb(e.target.value) : cb(e);};
+      if (eventType == "change") {
+        eventType = "input";
+      }
+      elem['on' + eventType] = e => {e.stopPropagation(); (eventType == "input") ? cb(e.target.value) : cb(e);};
     }
   }
 
@@ -124,11 +127,12 @@ function setAttributes(type, elem, props, firstRender) {
 }
 
 let setDimens = function (elem, props) {
-  elem.style.display = (isHidden(props)) ? "none" : "";
+  elem.style.display = props.visibility === "gone" ? "none" : "";
   elem.style.left = props.x;
   elem.style.top = props.y;
   elem.style.width = props.w;
   elem.style.height = props.h;
+  elem.style.visibility = props.visibility === "invisible" ?  "hidden" : "";
 }
 
 let isHorizontalScrollView = function (elem) {
@@ -137,10 +141,6 @@ let isHorizontalScrollView = function (elem) {
 
 let isScrollView = function (elem) {
   return elem && elem.classList[0] == "scrollView";
-}
-
-let isHidden = function (props) {
-  return props.visibility === "gone";
 }
 
 // Creates the DOM element if it has not been already inflated

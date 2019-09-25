@@ -23,9 +23,7 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-import colors from "./colors";
 import flattenObject from "./flattenObject";
-const R = require('ramda');
 
 
 var callbackMapper  = require("./callbackMapper");
@@ -127,6 +125,30 @@ function UIColor_colorWithRGBA(r,g,b,a) {
       {"name": a , "type": "f"}
     ]
   }
+}
+
+function self_pivotX(data) {
+  return {
+    "return": "false",
+    "invokeOn": "self",
+    "methodName": "setPivotX:",
+    "values": [{
+      id:data.id+"",
+      value:data.value+""
+    }]
+  };
+}
+
+function self_pivotY(data) {
+  return {
+    "return": "false",
+    "invokeOn": "self",
+    "methodName": "setPivotY:",
+    "values": [{
+      id:data.id+"",
+      value:data.value+""
+    }]
+  };
 }
 
 function self_animate_translation(obj, props) {
@@ -285,7 +307,7 @@ function this_setKeyboardType(mode) {
  }
 }
 
-function this_setAutocapitalizationType(mode) {
+function this_setAutoCapitalizationType(mode) {
  return {
    "return": "false",
    "fromStore": getSetType?"false":"true",
@@ -319,6 +341,19 @@ function this_becomeFirstResponder(mode) {
     "values": [{"name": mode, "type": "s"}]
   };
 }
+
+function this_setOnItemClick(callback) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setOnItemClick:",
+    "values":[
+      { "name": callbackMapper.map(callback), "type": "s" },
+    ]
+  }
+ }
 
 function this_setOnFocusCallback(callback) {
   return {
@@ -633,9 +668,9 @@ function this_setTextAlignment(mode) {
     "fromStore": getSetType?"false":"true",
     "storeKey": "view" + window.__VIEW_INDEX,
     "invokeOn": getSetType?"this":"UIView",
-    "methodName":"setTextAlignment:",
+    "methodName":"setGravity:",
     "values":[
-      {"name": mode , "type": "i"}
+      {"name": mode , "type": "s"}
     ]
   }
 }
@@ -777,6 +812,23 @@ function this_setGradient(data) {
   };
 }
 
+function this_setBackgroundImage(data) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": "MJPView",
+    "methodName": "setBackgroundImage::",
+    "values": [{
+      "name": "image" + window.__IMAGE_INDEX,
+      "computed": "true"
+    }, {
+      "name": data,
+      "type": "s"
+    }]
+  };
+}
+
 function _UILabelLayer_setMasksToBounds() {
   return {
     "return": "false",
@@ -827,6 +879,36 @@ function this_setImageURL(id,url,placeholder) {
       {"name": url, "type": "s"},
       {"name": placeholder, "type": "s"}
     ]
+  };
+}
+
+function this_setGif(id, imageName) {
+  return {
+    "return": "false",
+    "invokeOn": "self",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "methodName": "loadGif:::",
+    "values": [{ "name": "" + id, "type": "s" }, { "name": imageName, "type": "s" }]
+  };
+}
+
+function this_startGif() {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName": "startGIF"
+  };
+}
+
+function this_stopGif() {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName": "stopGIF"
   };
 }
 
@@ -891,6 +973,50 @@ function this_scrollTo(value) {
   };
 }
 
+function this_setExpand(value) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "MJPExpandableCell",
+    "methodName": "setExpand:",
+    "values": [{"name": value, "type": "s"}]
+  };
+}
+
+function this_setExpandDuration(value) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "MJPExpandableCell",
+    "methodName": "setExpandDuration:",
+    "values": [{"name": value, "type": "s"}]
+  };
+}
+
+function this_setExpandAlpha(value) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "MJPExpandableCell",
+    "methodName": "setExpandAlpha:",
+    "values": [{"name": value, "type": "s"}]
+  };
+}
+
+function this_setSwype(value) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "MJPTableView",
+    "methodName": "setSwype:",
+    "values": [{ "name": value ? "true" : "false", "type": "s" }]
+  };
+}
+
 function this_setUserInteraction(hidden){
   return {
     "return": "false",
@@ -902,6 +1028,113 @@ function this_setUserInteraction(hidden){
       {"name": (hidden === "true" ? "1" : "0"), type: "i"}
     ]
   }
+}
+
+function this_setSeparator(value) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName": "setSeparator:",
+    "values": [{ "name": value, type: "s" }]
+  };
+}
+
+function this_setSeparatorRepeat(value) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName": "setSeparatorRepeat:",
+    "values": [{ "name": value, type: "s" }]
+  };
+}
+
+
+function this_setSwipeCallback(value) {
+    return {
+        "return": "false",
+        "fromStore": getSetType ? "false" : "true",
+        "storeKey": "view" + window.__VIEW_INDEX,
+        "invokeOn": getSetType ? "this" : "MJPTableView",
+        "methodName": "setSwipeCallback:",
+        "values": [{ "name": value, type: "s" }]
+    };
+}
+
+function this_setupList(listData, listItem) {
+  return {
+    "return": "false",
+    "fromStore": "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "MJPRepeatTableView",
+    "methodName": "setupList::",
+    "values": [{ "name": listData, type: "s" }, { "name": listItem, type: "s" }]
+    };
+}
+
+function this_inlineAnimation(config) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": "this",
+    "methodName": "setInlineAnimation:",
+    "values": [{ "name": modifyTranslation(config), type: "s" }]
+    };
+}
+
+
+function modifyTranslation(config){
+  var x = config.x || "0";
+  var y = config.y || "0";
+  var animationArray = JSON.parse(config.inlineAnimation);
+  var animationArray = animationArray.map(function(a){
+    if(a.hasOwnProperty("fromX")){
+      a.fromX = parseInt(a.fromX) + parseInt(x) + '';
+      if(!a.hasOwnProperty("toX")){
+        a.toX = 0 + parseInt(x) + '';
+      }
+    }
+    if(a.hasOwnProperty("toX")){
+      a.toX = parseInt(a.toX) + parseInt(x) + '';
+    }
+    if(a.hasOwnProperty("fromY")){
+      a.fromY = parseInt(a.fromY) + parseInt(y) + '';
+      if(!a.hasOwnProperty("toY")){
+        a.toY = 0 + parseInt(y) + '';
+      }
+    }
+    if(a.hasOwnProperty("toY")){
+      a.toY = parseInt(a.toY) + parseInt(y) + '';
+    }
+    return a;
+  })
+  return JSON.stringify(animationArray);
+}
+
+function this_setCloseSwipe(value) {
+    return {
+        "return": "false",
+        "fromStore": getSetType ? "false" : "true",
+        "storeKey": "view" + window.__VIEW_INDEX,
+        "invokeOn": getSetType ? "this" : "MJPTableView",
+        "methodName": "closeSwipe:",
+        "values": [{ "name": value ? "true" : "false", type: "s" }]
+    };
+}
+
+function this_setEnableSwype(value) {
+    return {
+        "return": "false",
+        "fromStore": getSetType ? "false" : "true",
+        "storeKey": "view" + window.__VIEW_INDEX,
+        "invokeOn": getSetType ? "this" : "MJPTableView",
+        "methodName": "setSwipeEnabled:",
+        "values": [{ "name": value ? "true" : "false", type: "s" }]
+    };
 }
 
 function UIView_bounds() {
@@ -943,6 +1176,28 @@ function self_setPopupMenu(popupMenu, onMenuItemClick) {
     "invokeOn": "self",
     "methodName": "createActionSheetWithTitles::",
     "values": [{ "name": popupMenu, "type": "s" }, { "name": callback, "type": "s" }]
+  };
+}
+
+function this_setCornerCurves(corner) {
+  return {
+    "return": "false",
+    "fromStore": "false",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": "this",
+    "methodName": "setCornerCurves:",
+    "values": [{ "name": corner + "", "type": "s" }]
+  };
+}
+
+function this_setClipsToBounds(bounds) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName": "setClipsToBounds:",
+    "values": [{ "name": bounds ? "1" : "0", type: "i" }]
   };
 }
 
@@ -994,30 +1249,37 @@ function transformKeys(config) {
   return config;
 }
 
-function generateType(type) {
-  var generatedType = "mJPView";
-
-  if (type == "editText") {
-    generatedType = "mJPTextField";
-  } else if (type == "imageView") {
-    generatedType = "uIImageView";
-  } else if (type == "textView") {
-    generatedType = "mJPLabel";
-  } else if (type == "scrollView" || type == "horizontalScrollView") {
-    generatedType = "mJPScrollView";
-  } else if (type == "collectionView" || type == "viewPager") {
-    generatedType = "mJPCollectionView";
-  } else if (type == "tableView" || type == "listView") {
-    generatedType = "mJPTableView";
-  } else if (type == "progressBar") {
-    generatedType = "mJPActivityIndicator";
-  } else if (type == "switch") {
-    generatedType = "mJPSwitch";
-  } else {
-    generatedType = "mJPView";
-  }
-
-  return generatedType;
+function generateType(type, config) {
+   var generatedType = "mJPView";
+   if (type == "editText") {
+      generatedType = "mJPTextField";
+   } else if (type == "imageView") {
+      generatedType = "mJPImageView";
+   } else if (type == "textView") {
+      generatedType = "mJPLabel";
+   } else if (type == "scrollView" || type == "horizontalScrollView") {
+      generatedType = "mJPScrollView";
+   } else if (type == "collectionView" || type == "viewPager") {
+      generatedType = "mJPCollectionView";
+   } else if (type == "tableView" || type == "listView") {
+      if (config.hasOwnProperty("listData") && config.hasOwnProperty("listItem")) {
+         generatedType = "mJPRepeatTableView";
+      } else {
+         generatedType = "mJPTableView";
+      }
+   } else if (type == "progressBar") {
+      generatedType = "mJPActivityIndicator";
+   } else if (type == "switch") {
+      generatedType = "mJPSwitch";
+   } else if (type == "swypeLayout"){
+      generatedType = "mJPSwypeLayoutCell";
+   } else if (type == "accordionLayout"){
+      generatedType = "mJPExpandableCell";
+   } else {
+      generatedType = "mJPView";
+   }
+   
+   return generatedType;
 }
 
 function changeKeys(config, type) {
@@ -1046,11 +1308,7 @@ function changeKeys(config, type) {
 
   if (type == "textView" && config.gravity) {
     let value = config.gravity;
-    let alignMent = 0;
-
-    alignMent = (value == "left" ? "0" : (value == "center" ?  "1" : "2"));
-
-    config.textAlignment = alignMent;
+    config.textAlignment = value;
     delete config.gravity;
   }
 
@@ -1064,7 +1322,7 @@ function changeKeys(config, type) {
 // the extract className out of the stored object in the store
 module.exports = function(type, config, _getSetType) {
   config = changeKeys(flattenObject(config), type);
-  type = generateType(type);
+  type = generateType(type, config);
   getSetType = (_getSetType == "set")?1:0;
   config.methods = [];
 
@@ -1083,8 +1341,8 @@ module.exports = function(type, config, _getSetType) {
   if (config.x || config.y || config.w || config.h) {
     let x = rWS(cS(config.x)) ||  "0";
     let y =  rWS(cS(config.y))|| "0";
-    let width = rWS(cS(config.w)) || "100";
-    let height = rWS(cS(config.h)) || "100";
+    let width = rWS(cS(config.w)) || "0";
+    let height = rWS(cS(config.h)) || "0";
 
     config.methods.push(self_rectFromDictionary(x,y,width,height));
     config.methods.push(this_setFrame());
@@ -1095,7 +1353,7 @@ module.exports = function(type, config, _getSetType) {
   }
 
   // background
-  if (config.background || config.gradient) {
+  if (config.background || config.gradient || config.backgroundDrawable) {
     if (config.hasOwnProperty("gradient")) {
       var gradient = JSON.parse(config.gradient);
       var gradientType = gradient.type;
@@ -1112,10 +1370,19 @@ module.exports = function(type, config, _getSetType) {
         angle: gradientAngle
       });
       config.methods.push(this_setGradient(gradient));
+    } else if (config.hasOwnProperty("backgroundDrawable")) {
+      config.methods.push(UIImage_imageNamed(config.backgroundDrawable));
+      var frame = { "width": config.w, "height": config.h };
+      config.methods.push(this_setBackgroundImage(JSON.stringify(frame)));
     } else {
       config.methods.push(UIColor_setColor(config.background));
       config.methods.push(this_setBackgroundColor());
     }
+  }
+
+  if (config.backgroundDrawable) {
+    // console.log("Config-",JSON.stringify(config.w));
+
   }
 
   // borderColor, radius and width
@@ -1152,7 +1419,7 @@ module.exports = function(type, config, _getSetType) {
       x: rWS(cS(shadowValues[0])),
       y: rWS(cS(shadowValues[1]))
     };
-    
+
     var shadowColor = convertColorToRgba(shadowValues[4]);
 
     config.methods.push(this_setShadow(config.id, shadowOffset, shadowBlur, shadowSpread, shadowColor, shadowOpacity));
@@ -1165,22 +1432,21 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setFrame());
   }
 
- if (config.imageNamed) {
-   let id = cS(config.id);
-   let placeholder = config.placeHolder || "";
-   config.methods.push(this_setImageURL(id, config.imageNamed, placeholder));
- }
-
-  if (config.hasOwnProperty("text")) {
-    if (config.letterSpacing) {
-      var data = JSON.stringify({
-        'text': cS(config.text),
-        'letterSpacing': config.letterSpacing
-      });
-      config.methods.push(this_setTextProperties(data));
+  if (config.imageNamed) {
+    let id = cS(config.id);
+    let placeholder = config.placeHolder || "";
+    if (config.imageNamed.endsWith(".gif")){
+      config.methods.push(this_setGif(id, config.imageNamed));
     } else {
-      config.methods.push(this_setText(cS(config.text)));
+      config.methods.push(this_setImageURL(id, config.imageNamed, placeholder));
     }
+  }
+
+  if (config.hasOwnProperty("playGif")){
+    if (config.playGif)
+      config.methods.push(this_startGif());
+    else 
+      config.methods.push(this_stopGif());
   }
 
   if (config.hint) {
@@ -1195,6 +1461,16 @@ module.exports = function(type, config, _getSetType) {
     }
   }
 
+  if (config.hasOwnProperty("separator")) {
+    var _enabled6 = cS(config.separator);
+    config.methods.push(this_setSeparator(_enabled6));
+  }
+
+  if (config.hasOwnProperty("separatorRepeat")) {
+    var _enabled6 = cS(config.separatorRepeat);
+    config.methods.push(this_setSeparatorRepeat(_enabled6));
+  }
+
    if (config.translationZ){
      config.methods.push(this_setTranslationZ(cS(config.translationZ)));
    }
@@ -1205,12 +1481,21 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_scrollTo(cS(parsedData)));
   }
 
-  if(config.cursorPosition) {
-    config.methods.push(self_setCursorPosition(cS(config.id), cS(config.cursorPosition)));
+  if (config.hasOwnProperty("expand")) {
+    config.methods.push(this_setExpand(config.expand?"1":"0"));
   }
 
-  if (config.textAlignment) {
-    config.methods.push(this_setTextAlignment(rWS(cS(config.textAlignment))));
+  if (config.hasOwnProperty("expandDuration")) {
+    config.methods.push(this_setExpandDuration(cS(config.expandDuration)));
+  }
+
+  if (config.hasOwnProperty("expandAlpha")) {
+    config.methods.push(this_setExpandAlpha(cS(config.expandAlpha)));
+  }
+  
+  //Updated to handle 0 being passed for default alignment
+  if (config.hasOwnProperty("textAlignment")) {
+      config.methods.push(this_setTextAlignment(rWS(cS(config.textAlignment))));
   }
 
   if (config.textColor) {
@@ -1233,18 +1518,19 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setFont());
   }
 
-  if (config.multipleLine) {
-    config.methods.push(this_setLineBreakMode("0"));
-    config.methods.push(this_setNumberOfLines("0"));
-    config.methods.push(this_sizeToFit());
+  if (config.hasOwnProperty("singleLine")) {
+    if(!config.singleLine){
+      config.methods.push(this_setLineBreakMode("0"));
+      config.methods.push(this_setNumberOfLines("0"));
+    }
   }
 
   if (config.visibility) {
     config.methods.push(this_setHidden(config.visibility));
   }
 
-  if (config.userInteraction) {
-    config.methods.push(this_setUserInteraction(config.userInteraction));
+  if (config.hasOwnProperty("clickable")) {
+    config.methods.push(this_setUserInteraction(rWS(cS(config.clickable))));
   }
 
   if (config.translationX) {
@@ -1254,7 +1540,7 @@ module.exports = function(type, config, _getSetType) {
       'runOnRender' : 'true',
       'easing' : 'linear',
       'delay': '0',
-      'duration': '0',
+      'duration': '1',
       'props' : JSON.stringify([{'to': '' + config.translationX, 'prop':'translationX', 'from':'0'}])
     }];
 
@@ -1268,7 +1554,7 @@ module.exports = function(type, config, _getSetType) {
       'runOnRender' : 'true',
       'easing' : 'linear',
       'delay': '0',
-      'duration': '0',
+      'duration': '1',
       'props' : JSON.stringify([{'to': '' + config.translationY,'prop':'translationY','from':'0'}])
     }];
 
@@ -1296,19 +1582,47 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(self_setHTMLText(props));
   }
 
-  // doesnt work
-  if (config.bringSubViewToFront) {
+  if (config.hasOwnProperty("textFromHtml")) {
+    //TODO: FIX THIS BRING IT OUTSIDE
+    let props = {
+        "text": config.textFromHtml,
+        "id": config.id,
+     };
+      config.methods.push(self_setHTMLText(props));
+  }
+
+  if (config.hasOwnProperty("bringSubViewToFront")) {
     let viewTag = cS(config.id);
     config.methods.push(this_bringSubViewToFront(viewTag));
   }
 
-  if (type == 'uIImageView') {
+  if (type == 'mJPImageView') {
     let contentMode = cS(config.contentMode || 1);
     config.methods.push(this_setContentMode(contentMode));
   }
 
   if(config.onFocus){
     config.methods.push(this_setOnFocusCallback(config.onFocus));
+  }
+
+  if (config.hasOwnProperty("pivotX")) {
+    var data = {
+      "value": config.pivotX,
+      "id": config.id
+    };
+    config.methods.push(self_pivotX(data));
+  }
+
+if (config.hasOwnProperty("pivotY")) {
+    var data = {
+      "value": config.pivotY,
+      "id": config.id
+    };
+    config.methods.push(self_pivotY(data));
+  }
+
+  if(config.hasOwnProperty("onItemClick")){
+    config.methods.push(this_setOnItemClick(config.onItemClick));
   }
 
   if (type == 'uIScrollView') {
@@ -1324,20 +1638,20 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(this_setStatusBarStyle(enabled));
   }
 
-  if (config.enabled) {
+  if (config.hasOwnProperty("enabled")) {
     let enabled = cS(config.enabled);
       config.methods.push(this_setEnabled(enabled));
   }
 
 
-  if (config.inputTypeI) {
+  if (config.hasOwnProperty("inputTypeI")) {
       let keyboardType = cS(config.inputTypeI);
       config.methods.push(this_setKeyboardType(keyboardType));
   }
 
   if (config.inputType) {
     let keyboardType = config.inputType;
-    if (keyboardType == "numeric") {
+    if (keyboardType == "numeric" || keyboardType == "numericWithoutSuggestion") {
       config.inputType = 4;
     } else if (keyboardType == "email") {
       config.inputType = 7;
@@ -1353,21 +1667,21 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setKeyboardType(cS(config.inputType)));
   }
 
-  if (config.autocapitalizationType) {
-      let keyboardType = cS(config.autocapitalizationType);
-      config.methods.push(this_setAutocapitalizationType(keyboardType));
+  if (config.hasOwnProperty("autoCapitalizationType")) {
+      let keyboardType = cS(config.autoCapitalizationType);
+      config.methods.push(this_setAutoCapitalizationType(keyboardType));
   }
 
-  if (config.autoCorrectionType) {
+  if (config.hasOwnProperty("autoCorrectionType")) {
     let autoCorrectionType = cS(config.autoCorrectionType);
       config.methods.push(this_setAutoCorrectionType(autoCorrectionType));
   }
 
-  if (config.becomeFirstResponder) {
+  if (config.hasOwnProperty("becomeFirstResponder")) {
       config.methods.push(this_becomeFirstResponder());
   }
 
-  if (config.setOn) {
+  if (config.hasOwnProperty("setOn")) {
     let enabled = cS(config.setOn);
       config.methods.push(this_setOn(enabled));
   }
@@ -1387,7 +1701,11 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(this_setTextLengthLimit(enabled));
   }
 
-  if (config.focus) {
+  if (config.hasOwnProperty("swypeEnabled")) {
+    config.methods.push(this_setSwype(config.swypeEnabled));
+  }
+
+  if (config.hasOwnProperty("focus")) {
     config.methods.push(this_becomeFirstResponder(cS(config.focus)));
   }
 
@@ -1434,6 +1752,47 @@ module.exports = function(type, config, _getSetType) {
       json: config.animation
     };
     config.methods.push(self_animateNew(animProps));
+  }
+
+  if (config.hasOwnProperty("text")) {
+    if (config.letterSpacing) {
+      config.methods.push(this_setLetterSpacing(cS(config.letterSpacing)));
+    }
+    config.methods.push(this_setText(cS(config.text)));
+  }
+
+  if(config.cursorPosition) {
+    config.methods.push(self_setCursorPosition(cS(config.id), cS(config.cursorPosition)));
+  }
+
+  if (config.onSwipe && typeof config.onSwipe === "function") {
+      config.methods.push(this_setSwipeCallback(callbackMapper.map(config.onSwipe)));
+  }
+
+  if (config.hasOwnProperty("closeSwipe")) {
+      config.methods.push(this_setCloseSwipe(config.closeSwipe));
+  }
+
+  if (config.hasOwnProperty("swypeEnabled")) {
+    config.methods.push(this_setEnableSwype(config.swypeEnabled));
+  }
+
+  if (config.hasOwnProperty("listData") && config.hasOwnProperty("listItem")) {
+    const item = JSON.parse(config.listItem);
+    item.itemView = Android.createListData(config.id, item.itemView);
+    config.methods.push(this_setupList(config.listData, JSON.stringify(item)));
+  }
+
+  if (config.hasOwnProperty("inlineAnimation")) {
+    config.methods.push(this_inlineAnimation(config));
+  }
+
+  if (config.hasOwnProperty("clipsToBounds")) {
+    config.methods.push(this_setClipsToBounds(config.clipsToBounds));
+  }
+
+  if(config.hasOwnProperty("cornerRadii")){
+    config.methods.push(this_setCornerCurves(config.cornerRadii));
   }
 
   config.currChildOffset = 0;
