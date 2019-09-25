@@ -56,7 +56,6 @@ import colors from "../ios/colors";
 import flattenObject from "../ios/flattenObject";
 const R = require('ramda');
 
-
 var callbackMapper  = require("../ios/callbackMapper");
 
 let getSetType = 1;

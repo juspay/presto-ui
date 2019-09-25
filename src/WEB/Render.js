@@ -23,9 +23,7 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-let {
-  computeChildDimens
-} = require("../compute");
+let { computeChildDimens } = require("../compute");
 let helper = require("../helper");
 let R = require("ramda");
 
@@ -72,11 +70,86 @@ function popup(elem, props) {
   });
 }
 
+function setGravityStylesForRow(elem, props){
+  if(!props.hasOwnProperty('gravity') || !props.gravity)
+    return;
+
+  switch(props.gravity){
+    case 'center_vertical':
+      elem.style['align-items'] = 'center';
+    break;
+    case 'center_horizontal':
+      elem.style['justify-content'] = 'center';
+    break;
+    case 'center':
+      elem.style['align-items'] = "center";
+      elem.style['justify-content'] = "center";
+    break;
+    case 'left':
+    case 'start':
+      elem.style['align-items'] = 'flex-start';
+      elem.style['justify-content'] = 'flex-start';
+    break;
+    case 'right':
+    case 'end':
+      elem.style['justify-content'] = 'flex-end';
+    break;
+  }
+}
+
+function setGravityStylesForColumn(elem, props){
+  if(!props.hasOwnProperty('gravity') || !props.gravity)
+    return;
+
+  switch(props.gravity){
+    case 'center_vertical':
+      elem.style['justify-content'] = 'center';
+    break;
+    case 'center_horizontal':
+      elem.style['align-items'] = 'center';
+    break;
+    case 'center':
+      elem.style["align-items"] = "center";
+      elem.style["justify-content"] = "center";
+    break;
+    case 'left':
+    case 'start':
+      elem.style['justify-content'] = 'flex-start';
+      elem.style['align-items'] = 'flex-start';
+    break;
+    case 'right':
+    case 'end':
+      elem.style['align-items'] = 'flex-end';
+    break;
+  }
+}
+
+function setComputedStyles(elem, props){
+  /* Computed Styles */
+  if(props.hasOwnProperty('activeDimen') && props.hasOwnProperty('activeWeight')){
+    let activeDimen = props.activeDimen;
+    let weight = props.activeWeight;
+
+    if(weight > 0){
+      elem.style.flex = weight;
+            
+      if(activeDimen == 'w'){
+        elem.style.width = 'auto';
+      }else{
+        elem.style.height = 'auto';
+      }
+    }else{
+      elem.style.flex = 'none';  
+    }
+  }else{
+    elem.style.flex = 'none';  
+  }
+  /* Computed Styles End */
+}
+
 function setAttributes(type, elem, props, firstRender) {
   elem.className = type;
-  if (type == "horizontalScrollView" || type == "scrollView")
-    elem.style.overflow = "auto";
-
+  
   let afterTransition = (x) => {
     let animation = props.animation;
     let myElem = elem;
@@ -91,12 +164,122 @@ function setAttributes(type, elem, props, firstRender) {
 
   elem.style.transition = props.transition;
 
-  if(type == "linearLayout") {
-    for(let key in props.newStyle) {
-      elem.style[key] = props.newStyle[key];
-    }
-  }
+  /* New Style */
+    /* Render from global static styles */
+    if(
+      type == "linearLayout" || 
+      type == "textView" || 
+      type == "imageView" ||
+      type == "horizontalScrollView" ||
+      type == "scrollView" ||
+      type == "relativeLayout"
+    ) {
+      elem.style.width = 'auto';
+      elem.style.height = 'auto';
 
+      if(props.hasOwnProperty('width')){
+        if(props.width == 'match_parent'){
+          elem.style.width = '100%';
+        }else if(props.width == 'wrap_content'){
+          // You see below
+        }else if(!isNaN(props.width)){
+          elem.style.width = props.width + 'px';
+        }
+      }
+    
+      if(props.hasOwnProperty('height')){
+        if(props.height == 'match_parent'){
+          elem.style.height = '100%';
+        }else if(!isNaN(props.height)){
+          elem.style.height = props.height + 'px';
+        }
+      }
+    }
+
+    if(props.hasOwnProperty('minWidth') && !isNaN(props.minWidth)){
+      elem.style.minWidth = props.minWidth + 'px';
+    }
+
+    if(props.hasOwnProperty('minHeight') && !isNaN(props.minHeight)){
+      elem.style.minHeight = props.minHeight + 'px';
+    }
+
+    if(props.hasOwnProperty('padding')){
+      let padding = props.padding.split(',').map(a => a * 1);
+  
+      elem.style['padding'] = padding[1] + 'px ' + padding[2] + 'px ' + padding[3] + 'px ' + padding[0] + 'px';
+    }
+  
+    if(props.hasOwnProperty('margin')){
+      let margin = props.margin.split(',').map(a => a * 1);
+  
+      elem.style['margin'] = margin[1] + 'px ' + margin[2] + 'px ' + margin[3] + 'px ' + margin[0] + 'px';
+    }
+    /* Render from global static styles end */
+
+    /* Render global dynamic styles */
+    if(props.hasOwnProperty('visibility')){
+      let visibility = props.visibility;
+      if(visibility == 'invisible')
+        elem.style.visibility = "hidden";
+      else if(visibility == 'gone')
+        elem.style.display = "none";
+      else{
+        elem.style.visibility = '';
+
+        initializeShow(elem, props, type);  
+      }
+    }else{
+      initializeShow(elem, props, type);
+    }
+    /* Render global dynamic styles end */
+
+    /* Render linearLayout specific styles */
+    if(type == 'linearLayout'){
+      elem.style["box-sizing"] = "border-box";
+      elem.style["flex-wrap"] = "wrap";
+      elem.style["flex-direction"] = props.orientation == "horizontal" || props.orientation == null ? "row" : "column";
+      
+      if(elem.style["flex-direction"] == 'row')
+        setGravityStylesForRow(elem, props);
+      else
+        setGravityStylesForColumn(elem, props);  
+    }
+    /* Render linearLayout specific styles end */
+
+    /* Render scroll related styles */
+    let scrollBarX = true;
+    let scrollBarY = true;
+
+    if(props.hasOwnProperty('scrollBarX'))
+      scrollBarX = props.scrollBarX;
+    if(props.hasOwnProperty('scrollBarY'))
+      scrollBarY = props.scrollBarY;
+
+    if (type == "horizontalScrollView") {
+      elem.style.overflowX = "auto";
+      elem.style.overflowY = "hidden";
+
+      if(!scrollBarX)
+        elem.style.overflowX = 'hidden';
+    } else if (type == "listView") {
+      elem.style.overflowY = "auto";
+      elem.style.overflowX = "hidden";
+
+      if(!scrollBarY)
+        elem.style.overflowY = 'hidden';
+    } else if(type == 'scrollView') {
+      elem.style.overflowX = 'auto';
+      elem.style.overflowY = 'auto';
+
+      if(!scrollBarX)
+        elem.style.overflowX = 'hidden';
+      if(!scrollBarY)
+        elem.style.overflowY = 'hidden';
+    }
+    /* Render scroll related styles end */ 
+  /* New Style End */
+  
   for (let key in props) {
     if (key == "popupMenu") {
       popup(elem, props);
@@ -113,8 +296,9 @@ function setAttributes(type, elem, props, firstRender) {
           elem.style[innerKey] = props.style[innerKey];
       }
     } else if (key == "attributes") {
-      for (let innerKey in props.attributes)
+      for (let innerKey in props.attributes){
         elem.setAttribute(innerKey, props.attributes[innerKey]);
+      }
     } else if (key == "className") {
         elem.classList.add(props[key]);
     } else if (key == "classList") {
@@ -127,7 +311,20 @@ function setAttributes(type, elem, props, firstRender) {
       elem.style.userSelect = 'none';
       if (eventType == "change") {
         eventType = "input";
-        if (type=="editText" && elem.tagName.toLowerCase() == "input"){
+      }
+
+      if (props.label) {
+        elem.addEventListener('blur', function() {
+          var inputValue = elem.value;
+          if (inputValue == "") {
+            elem.classList.remove("filled");
+            elem.parentNode.classList.remove('focused');
+          } else {
+            elem.classList.add('filled');
+          }
+        });
+
+        if (type == "editText" && elem.tagName.toLowerCase() == "input"){
           elem.addEventListener('keydown', function(key) {
             key.stopPropagation();
             try {
@@ -222,16 +419,41 @@ function setAttributes(type, elem, props, firstRender) {
   } else if (props.animation.transition) {
     afterTransition();
   }
-
 }
 
-let setDimens = function (elem, props) {
-    elem.style.display = props.visibility === "gone" ? "none" : "";
-    elem.style.left = props.x;
-    elem.style.top = props.y;
-    elem.style.width = props.w;
-    elem.style.height = props.h;
-    elem.style.visibility = props.visibility === "invisible" ?  "hidden" : "";
+let initializeShow = function(elem, props, type) {
+  if(type == 'linearLayout'){
+    if(props.hasOwnProperty('width') && props.width == 'wrap_content'){
+      elem.style.display = 'inline-flex';
+      elem.style.width = 'auto';
+    }else{
+      elem.style["display"] = "flex";
+    }
+  }else{
+    if(props.hasOwnProperty('width') && props.width == 'wrap_content'){
+      elem.style.display = 'inline-block';
+      elem.style.width = 'auto';
+    }else{
+      elem.style.display = '';
+    }
+  }
+}
+
+let setDimens = function (elem, props, type) {
+    if(
+      !type || 
+      (
+        type != 'linearLayout' && 
+        type != 'textView' && 
+        type != 'imageView' &&
+        type != 'horizontalScrollView' &&
+        type != 'scrollView' &&
+        type != 'relativeLayout'
+      )
+    ){
+      elem.style.width = props.w;
+      elem.style.height = props.h;
+    }
 }
 
 let isHorizontalScrollView = function (elem) {
@@ -247,6 +469,7 @@ let isScrollView = function (elem) {
 // parentElement: DOM Object
 let inflateView = function (view, parentElement) {
   let elem = document.getElementById(view.props.id);
+  let subElem = null;
   let newInflated = false;
   let cb = () => {
     if (view.props.afterRender && typeof view.props.afterRender ==
@@ -264,11 +487,35 @@ let inflateView = function (view, parentElement) {
   }
 
   if (!elem) {
-    if (view.type == "imageView")
+    if (view.type == "imageView"){
       elem = document.createElement("img");
-    else if (view.type == "checkBox")
-      elem = document.createElement("checkBox");
-    else if (view.type == "editText") {
+      elem["style"]["margin"] = "0";
+      elem["style"]["padding"] = "0";
+      elem["style"]["display"] = "block";
+      elem["style"]["max-width"] = "100%";
+      elem["style"]["max-height"] = "100%";
+      elem["style"]["box-sizing"] = "border-box";
+      elem.setAttribute("alt", "");
+    }else if (view.type == "checkBox"){
+      elem = document.createElement("input");
+      elem.setAttribute('type', 'checkbox');
+
+      if(view.props.hasOwnProperty('checked') && view.props.checked == true){
+        elem.setAttribute('checked', 'checked');
+      }else{
+        elem.removeAttribute('checked');
+      }
+
+      if(view.props.hasOwnProperty('label') && view.props.label != '' && parentElement){
+        subElem = document.createElement('label');
+        subElem.setAttribute('for', view.props.id);
+        subElem.innerHTML = view.props.label;
+        subElem.style.padding = "0 0 0 5px";
+        subElem.classList.add('input-label');
+        
+        delete view.props.label;
+      }
+    }else if (view.type == "editText") {
       elem = document.createElement("input");
       elem.value = view.props.text || "";
       if (view.props.letterSpacing) {
@@ -284,6 +531,13 @@ let inflateView = function (view, parentElement) {
         l.innerHTML = view.props.label;
         l.classList.add('input-label');
 
+        l["style"]["position"] = "absolute";
+        l["style"]["color"] = "#999";
+        l["style"]["background-color"] = "#fff";
+        l["style"]["padding"] = "0 5px";
+        l["style"]["z-index"] = 10;
+        l["style"]["transition"] = "transform 150ms ease-out, font-size 150ms ease-out";
+
         if (view.props.letterSpacing) {
           l["style"]["letter-spacing"] = view.props.letterSpacing;
         }
@@ -292,6 +546,8 @@ let inflateView = function (view, parentElement) {
         elem.classList.add('input-group');
         elem.appendChild(l);
         elem.appendChild(inputView);
+
+        view.props.style.position = "relative";
         setAttributes(view.type, elem, view.props, true);
         delete view.props.label;
       } else if (view.props.hint) {
@@ -300,52 +556,27 @@ let inflateView = function (view, parentElement) {
     } else
       elem = document.createElement("div");
 
-    if (view.type == "horizontalScrollView") {
-      elem.style.overflowX = "scroll";
-      elem.style.overflowY = "hidden";
-    } else if (view.type == "listView" || view.type == "scrollView") {
-      elem.style.overflowY = "scroll";
-      elem.style.overflowX = "hidden";
-    }
-
-    if(view.type == "relativeLayout") {
-      elem.style.position = "absolute";
-    }
-
     newInflated = true;
+
     if (parentElement) {
       parentElement.appendChild(elem);
+      if(subElem){
+        parentElement.appendChild(subElem);
+      }
     }
+
     setAttributes(view.type, elem, view.props, true);
   }
 
-  let move = helper.shouldMove(view);
-  let isFlex = elem.style.display === "flex";
-  let inflateChilds = helper.shouldInfateChilds(view);
-
-  if (!(move || inflateChilds)) {
-    if (newInflated)
-      cb();
-    return elem;
-  }
-
-  helper.cacheDimen(view);
-
-  if (move && !isFlex)
-    setDimens(elem, view.props);
-
-  if (!inflateChilds) {
-    if (newInflated)
-      cb();
-    return elem;
-  }
-
   computeChildDimens(view);
+  setComputedStyles(elem, view.props);
 
-  for (let i = 0; i < view.children.length; i++) {
-    let child = view.children[i];
-    if (child) {
-      inflateView(child, elem);
+  if(view.hasOwnProperty('children') && view.children.length > 0){
+    for (let i = 0; i < view.children.length; i++) {
+      let child = view.children[i];
+      if (child) {
+        inflateView(child, elem);
+      }
     }
   }
 
@@ -367,14 +598,15 @@ let handleWrapContent = (view, parentElement) => {
 let runInUI = function (cmd) {
   if (!(cmd instanceof Array))
     cmd = [cmd];
+  
   cmd.forEach(function (each) {
     let elem = document.getElementById(each.id);
     if (!elem)
       return console.error("runInUI (Id NULL) CMD:", each);
-    let parentDom = elem.parentNode;
+
     let view = window.__VIEWS[elem.id];
-    let parentView = window.__VIEWS[parentDom.id];
     view.props = R.merge(view.props, each);
+        
     setAttributes(view.type, elem, view.props, false);
   });
 };

@@ -127,7 +127,6 @@ function clearViewExternals(view) {
   view.children.forEach(clearViewExternals);
 }
 
-
 module.exports = {
   shouldInfateChilds,
   shouldMove,

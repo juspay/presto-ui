@@ -22,7 +22,6 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
-
 const containers = require('./container');
 const iosAndroidInterface = require('./IOS/AndroidInterface');
 const getOS = require('./helper').getOS;
@@ -109,6 +108,8 @@ window.updateLanguage = (lang) => {
 };
 
 window.onresize = (iosData) => {
+  return;
+  
   if (window.__OS == "WEB") {
     const content = document.getElementById('content');
     const id = content.firstElementChild.id;
@@ -116,6 +117,7 @@ window.onresize = (iosData) => {
     Android.recompute(view);
   }
   return;
+
   if (window.__OS == "IOS") {
     let tag = iosData.tag;
     if (tag == "keyboardWillHide") {

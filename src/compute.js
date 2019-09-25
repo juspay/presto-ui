@@ -35,37 +35,18 @@ function viewCtxObj(view) {
   let obj = {
     w: props.w * 1,
     h: props.h * 1,
-    x: 0,
-    y: 0,
+    //x: 0,
+    //y: 0,
     width: props.w * 1,
   };
 
   view.children.forEach(child => {
     child.props.w = child.props.width;
     child.props.h = child.props.height;
-    child.props.x = 0;
-    child.props.y = 0;
+    //child.props.x = 0;
+    //child.props.y = 0;
   });
 
-  if (props.stroke) {
-    let stroke = props.stroke.split(",")[0];
-    obj.w -= stroke * 2;
-    obj.h -= stroke * 2;
-
-    if (window.__OS == "IOS") {
-      obj.x += stroke * 1;
-      obj.y += stroke * 1;
-    }
-  }
-
-  if (!props.padding)
-    return obj;
-
-  let padding = props.padding.split(',').map(a => a * 1);
-  obj.w -= padding[0] + padding[2];
-  obj.h -= padding[1] + padding[3];
-  obj.x += padding[0];
-  obj.y += padding[1];
   return obj;
 }
 
@@ -108,239 +89,138 @@ function hasWeightChild(type, childs) {
   return false;
 }
 
-/*
-  This manipulates only the viewCtx of the view
-  by changing the x & y offset of the view.
-  Supported Gravity Props = {center, center_vertical, center_horizontal}
-*/
-function computeGravity(view, viewCtx, isRelative) {
-  let parentProps = view.props;
-  let isHorizontal = (parentProps.orientation === "vertical") ? false : true;
-  let centerVertical = true;
-  let centerHorizontal = true;
-  let hasWeight = hasWeightChild(view.type, view.children);
-  let horizontalMp = hasMatchParentChild(view.children, "w");
-  let verticalMp = hasMatchParentChild(view.children, "h");
-
-  let helper = (dimen, shouldAdd) => {
-    if (isRelative)
-      shouldAdd = false;
-    let m = (dimen === "w") ? [0, 2] : [1, 3];
-    let axis = (dimen === "w") ? 'x' : 'y';
-    let maxValue = 0;
-    view.children.forEach(child => {
-      let props = child.props;
-
-      if (isHidden(props))
-        return;
-
-      let value = props[dimen] * 1;
-
-      if (isRelative && props.alignParentBottom && dimen == "h") {
-        maxValue = viewCtx[dimen];
-        return;
-      }
-
-      if (props.margin && (shouldAdd || isRelative)) {
-        let margins = props.margin.split(',').map(a => a * 1);
-        value += margins[m[0]] + margins[m[1]];
-      }
-
-      if (shouldAdd)
-        maxValue += value;
-      else
-        maxValue = (maxValue < value) ? value : maxValue;
-    });
-    if (maxValue <= viewCtx[dimen])
-      viewCtx[axis] += Math.floor((viewCtx[dimen] - maxValue) / 2);
-  };
-
-  if (parentProps.gravity === "center_horizontal")
-    centerVertical = false;
-  else if (parentProps.gravity === "center_vertical")
-    centerHorizontal = false;
-
-  if (centerHorizontal && !horizontalMp && (isRelative || (isHorizontal && !hasWeight)))
-    helper("w", isHorizontal);
-
-  if (centerVertical && !verticalMp && (isRelative || (!isHorizontal && !hasWeight)))
-    helper("h", !isHorizontal);
-}
-
-function computeBasic(view, ignoreGravity) {
+function computeBasic(view, ignoreGravity){
   let viewCtx = viewCtxObj(view);
   let children = view.children;
 
-  if (!ignoreGravity && view.props.gravity)
-    computeGravity(view, viewCtx, true);
-
-  let containerWidth = viewCtx.width;
-
   children.forEach(child => {
     let props = child.props;
-    let margins = [0, 0, 0, 0];
-
+    
     if (isHidden(props)) {
       props.h = "0";
       props.w = "0";
       return;
     }
-
-    if (props.margin)
-      margins = props.margin.split(',').map(a => a * 1);
-
-    let width = viewCtx.w - margins[0] - margins[2];
-    let height = viewCtx.h - margins[1] - margins[3];
-
-    if (props.w === "match_parent")
-      props.w = width + '';
-
-    if (props.h === "match_parent")
-      props.h = height + '';
-
-    props.x += viewCtx.x + margins[0];
-    props.y += viewCtx.y + margins[1];
-
-    if (props.alignParentBottom) {
-      props.y += viewCtx.h - props.h - margins[1] - margins[3];
-    } else if (props.centerInParent) {
-      let extraWidth = viewCtx.w - props.w - margins[0] - margins[2];
-      let extraHeight = viewCtx.h - props.h - margins[1] - margins[3];
-      props.x += Math.floor(extraWidth / 2);
-      props.y += Math.floor(extraHeight / 2);
-    }
-
-    if (window.RTL)
-      props.x = containerWidth - props.x - props.w;
   });
 }
 
 function computeLinearlayout(view) {
   let viewCtx = viewCtxObj(view);
-  let containerWidth = viewCtx.width;
   let parentProps = view.props;
   let children = view.children;
   let isHorizontal = (parentProps.orientation === "vertical") ? false : true;
-
+  
   let activeDimen = (isHorizontal) ? "w" : "h";
   let passiveDimen = (isHorizontal) ? "h" : "w";
 
-  let activeMargin = (isHorizontal) ? [0, 2] : [1, 3];
-  let passiveMargin = (isHorizontal) ? [1, 3] : [0, 2];
-
-  let activeAxis = (isHorizontal) ? 'x' : 'y';
-  let passiveAxis = (isHorizontal) ? 'y' : 'x';
-
   let hasWeight = hasWeightChild(view.type, children);
   let hasMatchParent = hasMatchParentChild(children, activeDimen);
-  let weightSum = 0;
-  let hasPassiveGravity = false;
-  let hasActiveGravity = false;
-
-  if (parentProps.gravity) {
-    let g = parentProps.gravity;
-    if (g == "center") {
-      hasPassiveGravity = true;
-      hasActiveGravity = true;
-    }
-
-    if ((g == "center_vertical" && isHorizontal) || (g == "center_horizontal" && !isHorizontal))
-      hasPassiveGravity = true;
-
-    if ((g == "center_horizontal" && isHorizontal) || (g == "center_vertical" && !isHorizontal))
-      hasActiveGravity = true;
-  }
-
+  
   if (hasWeight && hasMatchParent) {
-    console.log("Render: Layout cannot have children with ",
-      activeDimen + ":match_parent and weight prop, id:" + parentProps.id);
+    // We can't use both at the same time
     return;
   }
 
-  if (hasMatchParent || hasWeight) {
+  /* Initialize */
+  children.forEach(child => {
+    let props = child.props;
+
+    if (props.hasOwnProperty("activeDimen"))
+      delete props["activeDimen"];
+    if (props.hasOwnProperty("activeWeight"))
+      delete props["activeWeight"];
+  });
+  /* Initialize End */
+  
+  if(hasMatchParent || hasWeight){
+    let first = true;
+    /* Iterate Child */
     children.forEach(child => {
       let props = child.props;
 
       if (isHidden(props))
         return;
 
-      let weight = props["weight"] * 1;
+      if(props.hasOwnProperty(activeDimen) && props[activeDimen] == 'match_parent'){
+        props['activeDimen'] = activeDimen;
+        
+        if(first){
+          props['activeWeight'] = 1;
+          first = false;
+        }else{
+          props['activeWeight'] = 0;
+        }
+      }else{
+        if(props.hasOwnProperty('weight') && !isNaN(props['weight'])){
+          let weight = parseFloat(props['weight']);
 
-      if (weight > 0)
-        weightSum += weight;
-
-      if (props.margin) {
-        let margins = props.margin.split(',').map(a => a * 1);
-        viewCtx[activeDimen] -= margins[activeMargin[0]] + margins[
-          activeMargin[1]];
+          if(weight > 0){
+            props['activeDimen'] = activeDimen;
+            props['activeWeight'] = weight;
+          }
+        }
       }
-
-      viewCtx[activeDimen] -= props[activeDimen] * 1 || 0;
     });
+    /* Iterate Child End */
   }
-
-  if (hasActiveGravity)
-    computeGravity(view, viewCtx);
 
   children.forEach(child => {
     let props = child.props;
-    let axis = viewCtx[activeAxis];
-    let margins = [0, 0, 0, 0];
-    let weight = props["weight"] * 1;
-
+    
     if (isHidden(props)) {
       props.w = "0";
       props.h = "0";
       return;
     }
 
-    if (props.margin)
-      margins = props.margin.split(',').map(a => a * 1);
+    // if (props.margin)
+    //   margins = props.margin.split(',').map(a => a * 1);
 
-    // Active Dimension
-    if (props[activeDimen] === "match_parent") {
-      props[activeDimen] = viewCtx[activeDimen];
-      if (!(hasMatchParent || hasWeight))
-        props[activeDimen] -= margins[activeMargin[0]] + margins[activeMargin[1]];
-      props[activeDimen] += '';
-      viewCtx[activeDimen] = 0;
-    }
+    // // Active Dimension
+    // if (props[activeDimen] === "match_parent") {
+    //   props[activeDimen] = viewCtx[activeDimen];
+    //   if (!(hasMatchParent || hasWeight))
+    //     props[activeDimen] -= margins[activeMargin[0]] + margins[activeMargin[1]];
+    //   props[activeDimen] += '';
+    //   viewCtx[activeDimen] = 0;
+    // }
 
-    if (weight > 0) {
-      let dimen = props[activeDimen] * 1 || 0;
-      props[activeDimen] = dimen + Math.floor((viewCtx[activeDimen] *
-        weight) / weightSum);
-      props[activeDimen] += '';
-    }
+    // if (weight > 0) {
+    //   let dimen = props[activeDimen] * 1 || 0;
+    //   props[activeDimen] = dimen + Math.floor((viewCtx[activeDimen] *
+    //     weight) / weightSum);
+    //   props[activeDimen] += '';
+    // }
 
-    props[activeAxis] += axis + margins[activeMargin[0]];
-    props[activeAxis] += '';
-    viewCtx[activeAxis] += props[activeDimen] * 1 + margins[
-      activeMargin[0]] + margins[activeMargin[1]];
+    // props[activeAxis] += axis + margins[activeMargin[0]];
+    // props[activeAxis] += '';
+    // viewCtx[activeAxis] += props[activeDimen] * 1 + margins[
+    //   activeMargin[0]] + margins[activeMargin[1]];
 
 
-    // Passive Dimensions
-    axis = viewCtx[passiveAxis];
-    let passiveMarginVal = margins[passiveMargin[0]];
+    // // Passive Dimensions
+    // axis = viewCtx[passiveAxis];
+    // let passiveMarginVal = margins[passiveMargin[0]];
 
-    if (props[passiveDimen] === "match_parent") {
-      props[passiveDimen] = viewCtx[passiveDimen];
-      props[passiveDimen] -= margins[passiveMargin[0]] + margins[
-        passiveMargin[1]];
-      props[passiveDimen] += '';
-    } else if (hasPassiveGravity) {
-      let availablePassive = viewCtx[passiveDimen] - props[passiveDimen];
-      if (availablePassive > 0)
-        axis += availablePassive / 2;
-      passiveMarginVal = margins[passiveMargin[0]] -  margins[passiveMargin[1]];
-    }
-    props[passiveAxis] += axis + passiveMarginVal;
-    props[passiveAxis] += '';
+    // if (props[passiveDimen] === "match_parent") {
+    //   props[passiveDimen] = viewCtx[passiveDimen];
+    //   props[passiveDimen] -= margins[passiveMargin[0]] + margins[
+    //     passiveMargin[1]];
+    //   props[passiveDimen] += '';
+    // } else if (hasPassiveGravity) {
+    //   let availablePassive = viewCtx[passiveDimen] - props[passiveDimen];
+    //   if (availablePassive > 0)
+    //     axis += availablePassive / 2;
+    //   passiveMarginVal = margins[passiveMargin[0]] -  margins[passiveMargin[1]];
+    // }
+    // props[passiveAxis] += axis + passiveMarginVal;
+    // props[passiveAxis] += '';
 
-    if (window.RTL)
-      props.x = containerWidth - props.x - props.w;
+    // if (window.RTL)
+    //   props.x = containerWidth - props.x - props.w;
+    // }    
   });
-}
+} // End Compute LinearLayout
 
 function computeChildDimens(view) {
   if (view.type == "linearLayout") {

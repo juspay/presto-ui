@@ -34,33 +34,23 @@ Array.prototype.flatten = function () {
 
 module.exports = function (type, props, ...children) {
   children = children.flatten();
-
+  
   if (!props)
     props = {};
-
+  
   if (typeof type === "string") {
     props = parseParams(type, props);
-    props = newParseParams(type, props);
+    
     let obj = {
       props: props,
       type: type,
       children: children
     };
+
     window.__VIEWS[props.id] = obj;
     window.__VIEW_DIMENSIONS[props.id] = null;
     return obj;
   } else {
     return new type(props, children);
   }
-}
-
-const newParseParams = (type, props) => {
-  if(type == "linearLayout") {
-    // example mapping
-    props.newStyle = {
-      "display": "flex",
-      "flex-direction": props.orientation == "horizontal" || props.orientation == null ? "row" : "column"
-    };
-  }
-  return props;
 }

@@ -64,6 +64,7 @@ function flattenObject(ob) {
       toReturn[i] = ob[i];
     }
   }
+
   return toReturn;
 };
 
@@ -106,8 +107,22 @@ function parseLayoutProps(type, config, key) {
   if (key == "textSize")
     config.style.fontSize = config.textSize;
 
-  if (key == "imageUrl")
-    config.attributes.src = config.imageUrl + ".png";
+  if (key == "imageUrl"){
+    let imageUrl = config.imageUrl;
+        
+    let temp = imageUrl.split('.');
+    let ext = '';
+    if(temp && temp.length > 0)
+      ext = temp[temp.length - 1];
+    
+    let exts = ["jpeg", "jpg", "png", "bmp", "svg"];
+    ext = ext.toLowerCase();
+
+    if(!exts.includes(ext))
+      imageUrl += '.png';
+
+    config.attributes.src = imageUrl;
+  }
 
   if (key == "background") {
     config.style.background = parseColors(config.background);
@@ -127,6 +142,10 @@ function parseLayoutProps(type, config, key) {
 
   if (key == "a_alpha") {
     config.animation.opacity = config[key];
+  }
+
+  if (key == "fontFamily") {
+    config.style.fontFamily = config.fontFamily;
   }
 
   if (key == "fontStyle") {
@@ -156,8 +175,6 @@ function parseLayoutProps(type, config, key) {
       type = '700';
     else if (type.indexOf('black') != -1)
       type = '900';
-
-
 
     config.style.fontWeight = type;
   }
@@ -282,7 +299,6 @@ function parseLayoutProps(type, config, key) {
     var shadowColor = convertColorToRgba(shadowValues[4]);
 
     config["style"]["box-shadow"] = parseInt(shadowOffset.x) + "px " + parseInt(shadowOffset.y) + "px " + parseInt(shadowBlur) + "px " + parseInt(shadowSpread) + "px rgba(" + shadowColor.r + ", " +  shadowColor.g + ", " +  shadowColor.b + ", " +  shadowColor.a + ")" ;
-
   }
 
   if (key == "lineHeight")
@@ -314,10 +330,10 @@ function convertColorToRgba(color) {
   values = color.split(',');
 
   return {
-    r: rWS(values[0]),
-    g: rWS(values[1]),
-    b: rWS(values[2]),
-    a: alpha
+    r: parseInt(rWS(values[0])),
+    g: parseInt(rWS(values[1])),
+    b: parseInt(rWS(values[2])),
+    a: parseFloat(alpha)
   };
 }
 
@@ -344,7 +360,6 @@ function setDefaults(type, config) {
 }
 
 module.exports = function (type, config, getSetType) {
-
   config = flattenObject(config);
   setDefaults(type, config);
 
