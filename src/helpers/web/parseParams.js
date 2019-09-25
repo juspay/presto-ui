@@ -100,13 +100,18 @@ function parseLayoutProps(type, config, key) {
   if (!config.style.className)
     config.style.className = "";
 
-  if (key == "onClick") {
+  if (key == "onClick" || key == "onClickEvent") {
     config.style.cursor = "pointer";
   }
 
   if (key == "textSize")
-    config.style.fontSize = config.textSize;
-
+    config.style.fontSize = config.textSize + 'px';
+  if (key == 'fontSize')
+    config.style.fontSize = config.fontSize + 'px';
+  
+  if (key == 'url')
+    config.attributes.src = config.url
+    
   if (key == "imageUrl"){
     let imageUrl = config.imageUrl;
         
@@ -115,7 +120,7 @@ function parseLayoutProps(type, config, key) {
     if(temp && temp.length > 0)
       ext = temp[temp.length - 1];
     
-    let exts = ["jpeg", "jpg", "png", "bmp", "svg"];
+    let exts = ["jpeg", "jpg", "png", "bmp", "svg", "gif"];
     ext = ext.toLowerCase();
 
     if(!exts.includes(ext))
@@ -124,8 +129,13 @@ function parseLayoutProps(type, config, key) {
     config.attributes.src = imageUrl;
   }
 
+  if (key == "backgroundColor") {
+    //config.style["background-color"] = parseColors(config.backgroundColor);
+    config.style["background-color"] = config.backgroundColor;
+  }
+
   if (key == "background") {
-    config.style.background = parseColors(config.background);
+    config.style.background = config.background;
   }
 
   if (key == "color") {
@@ -148,6 +158,27 @@ function parseLayoutProps(type, config, key) {
     config.style.fontFamily = config.fontFamily;
   }
 
+  if (key == 'typeface') {
+    switch(config.typeface){
+      case 'normal':
+        config.style.fontWeight = 400;
+      break;
+      case 'bold':
+        config.style.fontWeight = 700;
+      break;
+      case 'italic':
+        config.style.fontStyle = 'italic';
+      break;
+      case 'bold_italic':
+        config.style.fontWeight = 700;
+        config.style.fontStyle = 'italic';
+      break;
+      case 'underline':
+        config.style.textDecoration = 'underline';
+      break;
+    }
+  }
+
   if (key == "fontStyle") {
     let match = config.fontStyle.match(/[/-]/);
     let fontName = match ? config.fontStyle.slice(0, match.index) : config.fontStyle;
@@ -163,25 +194,68 @@ function parseLayoutProps(type, config, key) {
     if (type.indexOf('italic') != -1)
       config.style.fontStyle = 'italic';
 
-    if (type.indexOf('extralight') != -1)
-      type = '200';
-    else if (type.indexOf('light') != -1)
-      type = '300';
-    else if (type.indexOf('regular') != -1 || type.indexOf('book') != -1)
-      type = '400';
-    else if (type.indexOf('semibold') != -1 || type.indexOf('medium') != -1)
-      type = '500';
-    else if (type.indexOf('bold') != -1 || type.indexOf('heavy') != -1)
-      type = '700';
-    else if (type.indexOf('black') != -1)
-      type = '900';
+    let fontWeight = 0;
 
-    config.style.fontWeight = type;
+    if (type.indexOf('extralight') != -1)
+      fontWeight = 200;
+    else if (type.indexOf('light') != -1)
+      fontWeight = 300;
+    else if (type.indexOf('regular') != -1 || type.indexOf('book') != -1)
+      fontWeight = 400;
+    else if (type.indexOf('semibold') != -1 || type.indexOf('medium') != -1)
+      fontWeight = 500;
+    else if (type.indexOf('bold') != -1 || type.indexOf('heavy') != -1)
+      fontWeight = 700;
+    else if (type.indexOf('black') != -1)
+      fontWeight = 900;
+
+    if(fontWeight > 0)
+      config.style.fontWeight = fontWeight;
   }
 
   if (key == "stroke") {
     let values = config.stroke.split(",");
-    config.style.border = values[0] + "px solid" + values[1];
+
+    if(values.length == 2)
+      config.style.border = values[0] + "px solid " + values[1];
+    else if(values.length == 3)
+      config.style.border = values[0] + "px " + values[1] + " " + values[2];
+  }
+
+  if (key == "strokeTop") {
+    let values = config.strokeTop.split(",");
+    
+    if(values.length == 2)
+      config.style.borderTop = values[0] + "px solid " + values[1];
+    else if(values.length == 3)
+      config.style.borderTop = values[0] + "px " + values[1] + " " + values[2];
+  }
+
+  if (key == "strokeRight") {
+    let values = config.strokeRight.split(",");
+    
+    if(values.length == 2)
+      config.style.borderRight = values[0] + "px solid " + values[1];
+    else if(values.length == 3)
+      config.style.borderRight = values[0] + "px " + values[1] + " " + values[2];
+  }
+
+  if (key == "strokeBottom") {
+    let values = config.strokeBottom.split(",");
+    
+    if(values.length == 2)
+      config.style.borderBottom = values[0] + "px solid " + values[1];
+    else if(values.length == 3)
+      config.style.borderBottom = values[0] + "px " + values[1] + " " + values[2];
+  }
+
+  if (key == "strokeLeft") {
+    let values = config.strokeLeft.split(",");
+    
+    if(values.length == 2)
+      config.style.borderLeft = values[0] + "px solid " + values[1];
+    else if(values.length == 3)
+      config.style.borderLeft = values[0] + "px " + values[1] + " " + values[2];
   }
 
   if (key == "translationY") {
@@ -259,15 +333,22 @@ function parseLayoutProps(type, config, key) {
     }
   }
 
+  if (key == "contentEditable" && config.contentEditable){
+    config.attributes.contenteditable = true;
+  }
+
   if (key == "id") {
     config.attributes.id = config.id;
   }
 
   if (key == "inputType") {
     var inputType = "text";
-    if(config.inputType=="numericPassword"){
+    if(config.inputType=="numericPassword" || config.inputType == "password"){
       inputType = "password";
+    }else if(config.inputType == "disabled"){
+      config.attributes.disabled = 'disabled';
     }
+
     config.attributes.type = inputType;
   }
 

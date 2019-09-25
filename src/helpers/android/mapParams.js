@@ -571,7 +571,8 @@ var map = {
       numericPassword: '18',
       numericWithoutSuggestion: '524291',
       disabled: '0',
-      text: '1'
+      text: '1',
+      multiText: '3'
     }],
     fnName: 'setInputType',
     inVokedIn: 'VIEW',
@@ -886,7 +887,31 @@ var map = {
     inVokedIn: 'PARAMS',
     fnName: "addRule",
   },
-  'alignParentBottom': {
+  "checked": {
+    values: [{
+      type: 'b',
+    }],
+    'dontMap': true,
+    fnName: 'setChecked',
+    inVokedIn: 'VIEW',
+  },
+  "alignParentBottom": {
+    values: [{
+      type: 'b',
+    }],
+    'dontMap': true,
+    fnName: 'setAlignParentBottom',
+    inVokedIn: 'VIEW',
+  },
+  "alignParentLeft": {
+    values: [{
+      type: 'b',
+    }],
+    'dontMap': true,
+    fnName: 'setAlignParentLeft',
+    inVokedIn: 'VIEW',
+  },
+  /*'alignParentBottom': {
     values: [{
       type: 'i',
       'true': 12,
@@ -910,18 +935,6 @@ var map = {
     inVokedIn: 'PARAMS',
     fnName: "addRule",
   },
-  'alignParentLeft': {
-    values: [{
-      type: 'i',
-      'true': 9,
-      'false': 12121
-    }, {
-      type: 'i',
-      dontMap: true
-    }, ],
-    inVokedIn: 'PARAMS',
-    fnName: "addRule",
-  },
   'alignParentRight': {
     values: [{
       type: 'i',
@@ -934,6 +947,18 @@ var map = {
     inVokedIn: 'PARAMS',
     fnName: "addRule",
   },
+  'alignParentLeft': {
+    values: [{
+      type: 'i',
+      'true': 9,
+      'false': 12121
+    }, {
+      type: 'i',
+      dontMap: true
+    }, ],
+    inVokedIn: 'PARAMS',
+    fnName: "addRule",
+  },*/
   'leftOf': {
     values: [{
       type: 'i',

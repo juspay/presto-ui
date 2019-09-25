@@ -29,15 +29,32 @@ let R = require("ramda");
 
 function createTextElement(elem, config) {
   let children = elem.childNodes;
-  let span = elem.childNodes.length ? elem.childNodes[0] : document.createElement(
-    'span');
+  let article = null
+
+  if(children.length){
+    for(let i = 0; i < children.length; i++){
+      if(children[i].nodeName.toLowerCase() == 'article'){
+        article = children[i]
+      }
+    }
+  }
+  
+  if(!article)
+    article = document.createElement('ARTICLE')
 
   elem.style.whiteSpace = "initial";
-  span.innerText = config.text;
-  span.style.wordBreak = "break-word"
-  if (config.letterSpacing)
-    elem["style"]["letter-spacing"] = config.letterSpacing;
-  elem.appendChild(span);
+  
+  if(config.isHtmlContent)
+    article.innerHTML = config.text
+  else
+    article.innerText = config.text
+
+  article.style.wordBreak = "break-word"
+  
+  if(config.letterSpacing)
+    elem["style"]["letter-spacing"] = config.letterSpacing
+
+  elem.appendChild(article);
 }
 
 function popup(elem, props) {
@@ -71,14 +88,18 @@ function popup(elem, props) {
 }
 
 function setGravityStylesForRow(elem, props){
-  if(!props.hasOwnProperty('gravity') || !props.gravity)
-    return;
-
+  if(!props.hasOwnProperty('gravity') || !props.gravity){
+    props.gravity = '';
+    //return;
+  }
+  
   switch(props.gravity){
     case 'center_vertical':
       elem.style['align-items'] = 'center';
+      elem.style['justify-content'] = 'flex-start';
     break;
     case 'center_horizontal':
+      elem.style['align-items'] = 'flex-start';
       elem.style['justify-content'] = 'center';
     break;
     case 'center':
@@ -92,21 +113,30 @@ function setGravityStylesForRow(elem, props){
     break;
     case 'right':
     case 'end':
+      elem.style['align-items'] = 'flex-start';
       elem.style['justify-content'] = 'flex-end';
+    break;
+    default:
+      elem.style['align-items'] = 'flex-start';
+      elem.style['justify-content'] = 'flex-start';
     break;
   }
 }
 
 function setGravityStylesForColumn(elem, props){
-  if(!props.hasOwnProperty('gravity') || !props.gravity)
-    return;
+  if(!props.hasOwnProperty('gravity') || !props.gravity){
+    props.gravity = '';
+    //return;
+  }
 
   switch(props.gravity){
     case 'center_vertical':
+      elem.style['align-items'] = 'flex-start';
       elem.style['justify-content'] = 'center';
     break;
     case 'center_horizontal':
       elem.style['align-items'] = 'center';
+      elem.style['justify-content'] = 'flex-start';
     break;
     case 'center':
       elem.style["align-items"] = "center";
@@ -120,12 +150,18 @@ function setGravityStylesForColumn(elem, props){
     case 'right':
     case 'end':
       elem.style['align-items'] = 'flex-end';
+      elem.style['justify-content'] = 'flex-start';
+    break;
+    default:
+      elem.style['align-items'] = 'flex-start';
+      elem.style['justify-content'] = 'flex-start';
     break;
   }
 }
 
 function setComputedStyles(elem, props){
   /* Computed Styles */
+  // LinearLayout Styles
   if(props.hasOwnProperty('activeDimen') && props.hasOwnProperty('activeWeight')){
     let activeDimen = props.activeDimen;
     let weight = props.activeWeight;
@@ -144,11 +180,52 @@ function setComputedStyles(elem, props){
   }else{
     elem.style.flex = 'none';  
   }
+  
+  // RelativeLayout Styles
+  if(props.hasOwnProperty('absolute') && props.absolute){
+    elem.style.position = 'absolute';
+
+    if(props.hasOwnProperty("fromTop")){
+      if(isNaN(props.fromTop))
+        elem.style.top = props.fromTop;
+      else
+        elem.style.top = props.fromTop + 'px';
+    }
+
+    if(props.hasOwnProperty("fromBottom")){
+      if(isNaN(props.fromBottom))
+        elem.style.bottom = props.fromBottom;
+      else
+        elem.style.bottom = props.fromBottom + 'px';
+    }
+
+    if(props.hasOwnProperty("fromLeft")){
+      if(isNaN(props.fromLeft))
+        elem.style.left = props.fromLeft;
+      else
+        elem.style.left = props.fromLeft + 'px';
+    }
+
+    if(props.hasOwnProperty("fromRight")){
+      if(isNaN(props.fromRight))
+        elem.style.right = props.fromRight;
+      else
+        elem.style.right = props.fromRight + 'px';
+    }
+  }
   /* Computed Styles End */
 }
 
 function setAttributes(type, elem, props, firstRender) {
-  elem.className = type;
+  if(type == 'modal'){
+    setModalAttributes(elem, props, firstRender);
+    return;
+  }
+  
+  if(elem.classList && elem.classList.length > 0)
+    elem.classList.add(type)
+  else
+    elem.className = type
   
   let afterTransition = (x) => {
     let animation = props.animation;
@@ -165,43 +242,60 @@ function setAttributes(type, elem, props, firstRender) {
   elem.style.transition = props.transition;
 
   /* New Style */
-    /* Render from global static styles */
-    if(
-      type == "linearLayout" || 
-      type == "textView" || 
-      type == "imageView" ||
-      type == "horizontalScrollView" ||
-      type == "scrollView" ||
-      type == "relativeLayout"
-    ) {
-      elem.style.width = 'auto';
-      elem.style.height = 'auto';
+    /* Render from global styles */
+    elem.style.width = 'auto';
+    elem.style.height = 'auto';
 
-      if(props.hasOwnProperty('width')){
-        if(props.width == 'match_parent'){
-          elem.style.width = '100%';
-        }else if(props.width == 'wrap_content'){
-          // You see below
-        }else if(!isNaN(props.width)){
+    if(props.hasOwnProperty('width')){
+      if(props.width == 'match_parent'){
+        elem.style.width = '100%';
+      }else if(props.width == 'wrap_content'){
+        // You see below
+      }else if(!isNaN(props.width)){
+        if(props.hasOwnProperty('percentWidth') && props.percentWidth)
+          elem.style.width = props.width + '%';
+        else
           elem.style.width = props.width + 'px';
-        }
-      }
-    
-      if(props.hasOwnProperty('height')){
-        if(props.height == 'match_parent'){
-          elem.style.height = '100%';
-        }else if(!isNaN(props.height)){
-          elem.style.height = props.height + 'px';
-        }
       }
     }
-
+  
+    if(props.hasOwnProperty('height')){
+      if(props.height == 'match_parent'){
+        elem.style.height = '100%';
+      }else if(!isNaN(props.height)){
+        if(props.hasOwnProperty('percentHeight') && props.percentHeight)
+          elem.style.height = props.height + '%';
+        else
+          elem.style.height = props.height + 'px';
+      }
+    }
+    
     if(props.hasOwnProperty('minWidth') && !isNaN(props.minWidth)){
-      elem.style.minWidth = props.minWidth + 'px';
+      if(props.hasOwnProperty('percentMinWidth') && props.percentMinWidth)
+        elem.style.minWidth = props.minWidth + '%';
+      else
+        elem.style.minWidth = props.minWidth + 'px';
     }
 
     if(props.hasOwnProperty('minHeight') && !isNaN(props.minHeight)){
-      elem.style.minHeight = props.minHeight + 'px';
+      if(props.hasOwnProperty('percentMinHeight') && props.percentMinHeight)
+        elem.style.minHeight = props.minHeight + '%';
+      else
+        elem.style.minHeight = props.minHeight + 'px';
+    }
+
+    if(props.hasOwnProperty('maxWidth') && !isNaN(props.maxWidth)){
+      if(props.hasOwnProperty('percentMaxWidth') && props.percentMaxWidth)
+        elem.style.maxWidth = props.maxWidth + '%';
+      else
+        elem.style.maxWidth = props.maxWidth + 'px';
+    }
+
+    if(props.hasOwnProperty('maxHeight') && !isNaN(props.maxHeight)){
+      if(props.hasOwnProperty('percentMaxHeight') && props.percentMaxHeight)
+        elem.style.maxHeight = props.maxHeight + '%';
+      else
+        elem.style.maxHeight = props.maxHeight + 'px';
     }
 
     if(props.hasOwnProperty('padding')){
@@ -215,9 +309,7 @@ function setAttributes(type, elem, props, firstRender) {
   
       elem.style['margin'] = margin[1] + 'px ' + margin[2] + 'px ' + margin[3] + 'px ' + margin[0] + 'px';
     }
-    /* Render from global static styles end */
-
-    /* Render global dynamic styles */
+    
     if(props.hasOwnProperty('visibility')){
       let visibility = props.visibility;
       if(visibility == 'invisible')
@@ -232,22 +324,8 @@ function setAttributes(type, elem, props, firstRender) {
     }else{
       initializeShow(elem, props, type);
     }
-    /* Render global dynamic styles end */
+    /* Render global styles end */
 
-    /* Render linearLayout specific styles */
-    if(type == 'linearLayout'){
-      elem.style["box-sizing"] = "border-box";
-      elem.style["flex-wrap"] = "wrap";
-      elem.style["flex-direction"] = props.orientation == "horizontal" || props.orientation == null ? "row" : "column";
-      
-      if(elem.style["flex-direction"] == 'row')
-        setGravityStylesForRow(elem, props);
-      else
-        setGravityStylesForColumn(elem, props);  
-    }
-    /* Render linearLayout specific styles end */
-
-    /* Render scroll related styles */
     let scrollBarX = true;
     let scrollBarY = true;
 
@@ -256,10 +334,26 @@ function setAttributes(type, elem, props, firstRender) {
     if(props.hasOwnProperty('scrollBarY'))
       scrollBarY = props.scrollBarY;
 
-    if (type == "horizontalScrollView") {
+    /* Render type specific styles */
+    if(type == 'linearLayout'){
+      elem.style["box-sizing"] = "border-box";
+
+      if(props.hasOwnProperty('fixedWrap') && !props.fixedWrap){
+        elem.style["flex-wrap"] = "nowrap";
+      }else{
+        elem.style["flex-wrap"] = "wrap";
+      }
+
+      elem.style["flex-direction"] = props.orientation == "horizontal" || props.orientation == null ? "row" : "column";
+      
+      if(elem.style["flex-direction"] == 'row')
+        setGravityStylesForRow(elem, props);
+      else
+        setGravityStylesForColumn(elem, props);  
+    } else if (type == "horizontalScrollView") {
       elem.style.overflowX = "auto";
       elem.style.overflowY = "hidden";
-
+      
       if(!scrollBarX)
         elem.style.overflowX = 'hidden';
     } else if (type == "listView") {
@@ -276,8 +370,10 @@ function setAttributes(type, elem, props, firstRender) {
         elem.style.overflowX = 'hidden';
       if(!scrollBarY)
         elem.style.overflowY = 'hidden';
+    } else if(type == 'relativeLayout') {
+      elem.style.position = 'relative';
     }
-    /* Render scroll related styles end */ 
+    /* Render type specific styles end */
   /* New Style End */
   
   for (let key in props) {
@@ -307,7 +403,7 @@ function setAttributes(type, elem, props, firstRender) {
       });
     } else if (props[key] && typeof props[key] == "function") {
       var eventType = key.substring(2, key.length).toLowerCase();
-      var cb = props[key];
+      var elemCB = props[key];
       elem.style.userSelect = 'none';
       if (eventType == "change") {
         eventType = "input";
@@ -400,15 +496,14 @@ function setAttributes(type, elem, props, firstRender) {
           elem.parentNode.classList.add('focused');
           if (eventType == "focus") {
             e.stopPropagation();
-            cb(e);
+            elemCB(e);
           }
         };
       }
 
-      
       if (!(props.label && eventType == "focus")) {
         elem['on' + eventType] = function (e) {
-          e.stopPropagation();eventType == "input" ? cb(e.target.value) : cb(e);
+          e.stopPropagation();eventType == "input" ? elemCB(e.target.value) : elemCB(e);
         };
       }
     }
@@ -421,39 +516,51 @@ function setAttributes(type, elem, props, firstRender) {
   }
 }
 
+function setModalAttributes(elem, props, firstRender) {
+  setGravityStylesForRow(elem, props);
+
+  let backdropElem = document.getElementById(window.__BACKDROPMODAL_CLASS + '_' + props.id)
+
+  if(props.hasOwnProperty('modalVisibility') && props.modalVisibility){
+    backdropElem.classList.add(window.__SHOWNMODAL_CLASS);
+    document.body.classList.add(window.__OPENMODAL_CLASS);
+
+    let modalProps = null;
+    if(window.__MODAL_PROPS[props.id]){
+      modalProps = JSON.parse(window.__MODAL_PROPS[props.id]);
+    }
+
+    if(props.onShow && typeof props.onShow ==
+      "function"){
+      if(firstRender || (modalProps && modalProps.modalVisibility != props.modalVisibility)){
+        props.onShow();
+      }
+    }
+  }else{
+    props.modalVisibility = false;
+    backdropElem.classList.remove(window.__SHOWNMODAL_CLASS);
+    document.body.classList.remove(window.__OPENMODAL_CLASS);
+  }
+  
+  window.__MODAL_PROPS[props.id] = JSON.stringify(props);
+}
+
 let initializeShow = function(elem, props, type) {
   if(type == 'linearLayout'){
     if(props.hasOwnProperty('width') && props.width == 'wrap_content'){
       elem.style.display = 'inline-flex';
-      elem.style.width = 'auto';
+      elem.style.width = 'max-content';
     }else{
-      elem.style["display"] = "flex";
+      elem.style.display = "flex";
     }
   }else{
     if(props.hasOwnProperty('width') && props.width == 'wrap_content'){
       elem.style.display = 'inline-block';
-      elem.style.width = 'auto';
+      elem.style.width = 'max-content';
     }else{
       elem.style.display = '';
     }
   }
-}
-
-let setDimens = function (elem, props, type) {
-    if(
-      !type || 
-      (
-        type != 'linearLayout' && 
-        type != 'textView' && 
-        type != 'imageView' &&
-        type != 'horizontalScrollView' &&
-        type != 'scrollView' &&
-        type != 'relativeLayout'
-      )
-    ){
-      elem.style.width = props.w;
-      elem.style.height = props.h;
-    }
 }
 
 let isHorizontalScrollView = function (elem) {
@@ -464,30 +571,194 @@ let isScrollView = function (elem) {
   return elem && elem.classList[0] == "scrollView";
 }
 
+let observer = (elem) => {
+  let id = elem.id;
+  if(!id || __OBSERVERS[id])
+    return;
+
+  __OBSERVERS[id] = new MutationObserver(function(item, observer){
+    if(item && item[0].target){
+      let target = item[0].target;
+      let id = target.id;
+      if(id){
+        let view = __VIEWS[id];
+        
+        if(view && view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
+          view.props.afterRender();
+        }
+      }
+    }
+
+    observer.disconnect();
+  });
+
+  (__OBSERVERS[id]).observe(elem, {attributes: true});
+}
+
+let cb = (elem, view) => {
+  if (view.props.feedback && typeof view.props.feedback == "function") {
+    view.props.feedback();
+  }
+
+  if(view.props.hasOwnProperty('onClickEvent') && typeof view.props.onClickEvent == "function"){
+    elem.addEventListener('click', function(){
+      view.props.onClickEvent();
+    });
+  }
+
+  if(view.props.hasOwnProperty('onChangeEvent') && typeof view.props.onChangeEvent == "function"){
+    elem.addEventListener('change', function(){
+      view.props.onChangeEvent();
+    });
+  }
+
+  if(view.props.hasOwnProperty('onMouseDownEvent') && typeof view.props.onMouseDownEvent == "function"){
+    elem.addEventListener('mousedown', function(){
+      view.props.onMouseDownEvent();
+    });
+  }
+
+  if(view.props.hasOwnProperty('onMouseUpEvent') && typeof view.props.onMouseUpEvent == "function"){
+    elem.addEventListener('mouseup', function(){
+      view.props.onMouseUpEvent();
+    });
+  }
+
+  if(view.props.hasOwnProperty('onMouseEnterEvent') && typeof view.props.onMouseEnterEvent == "function"){
+    elem.addEventListener('mouseenter', function(){
+      view.props.onMouseEnterEvent();
+    });
+  }
+
+  if(view.props.hasOwnProperty('onMouseOverEvent') && typeof view.props.onMouseOverEvent == "function"){
+    elem.addEventListener('mouseover', function(){
+      view.props.onMouseOverEvent();
+    });
+  }
+
+  if(view.props.hasOwnProperty('onMouseMoveEvent') && typeof view.props.onMouseMoveEvent == "function"){
+    elem.addEventListener('mousemove', function(){
+      view.props.onMouseMoveEvent();
+    });
+  }
+
+  if(view.props.hasOwnProperty('onMouseOutEvent') && typeof view.props.onMouseOutEvent == "function"){
+    elem.addEventListener('mouseout', function(event){
+      view.props.onMouseOutEvent();
+    });
+  }
+
+  if(view.props.hasOwnProperty('onMouseLeaveEvent') && typeof view.props.onMouseLeaveEvent == "function"){
+    elem.addEventListener('mouseleave', function(){
+      view.props.onMouseLeaveEvent();
+    });
+  }
+}
+
+// Creates the Modal element if it has not been already inflated
+let inflateModal = function (view, parentElement, stopChild) {
+  let newInflated = false;
+  let parentId = parentElement.id;
+
+  /* Modal Wrapper */
+  let elem = document.getElementById(view.props.id);
+  if(!elem || elem == undefined){
+    newInflated = true;
+
+    elem = document.createElement('div');
+    elem.setAttribute('id', view.props.id);
+    elem.setAttribute('virtual_parent', parentId);
+    elem.classList.add(window.__CONTENTMODAL_CLASS);
+  }
+  /* Modal Wrapper End */
+
+  /* BackDrop */
+  let backdropElem = document.getElementById(window.__BACKDROPMODAL_CLASS + '_' + view.props.id);
+  if(!backdropElem || backdropElem == undefined){
+    backdropElem = document.createElement('div');
+    backdropElem.setAttribute('id', window.__BACKDROPMODAL_CLASS + '_' + view.props.id);
+    backdropElem.classList.add(window.__BACKDROPMODAL_CLASS);
+    
+    if(view.props.hasOwnProperty('animationType') && view.props.animationType != 'none'){
+      let animationType = view.props.animationType;
+      
+      if(animationType == 'fade'){
+        backdropElem.classList.add(window.__FADEMODAL_CLASS);
+      }else if(animationType == 'slide'){
+        backdropElem.classList.add(window.__SLIDEMODAL_CLASS);
+      }
+    }
+
+    if(view.props.hasOwnProperty('closeOnBackdrop') && !view.props.closeOnBackdrop){
+      backdropElem.classList.add(window.__DISABLEDBACKDROP_CLASS);
+    }else{
+      backdropElem.classList.remove(window.__DISABLEDBACKDROP_CLASS);
+    }
+
+    if(view.props.hasOwnProperty('transparent') && view.props.transparent){
+      backdropElem.style.background = 'transparent';
+    }else{
+      backdropElem.style.background = 'rgba(0, 0, 0, 0.5)';
+    }
+
+    backdropElem.appendChild(elem);
+    document.body.appendChild(backdropElem);
+
+    if(newInflated){
+      if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
+        // We should run observer for the element
+        observer(elem);
+        elem.setAttribute('hasRender', true);
+      }
+    }
+  }
+  /* BackDrop End */
+
+  setModalAttributes(elem, view.props, newInflated);
+
+  if(!stopChild){
+    if(view.hasOwnProperty('children') && view.children.length > 0){
+      for (let i = 0; i < view.children.length; i++) {
+        if (view.children[i]) {
+          view.children[i].props.style.pointerEvents = 'auto';
+          if(i != 0)
+            inflateView(view.children[i], elem, view.children[i-1]);
+          else
+            inflateView(view.children[i], elem, view);
+        }
+      }
+    }
+  }
+
+  if(newInflated){
+    cb(elem, view);
+  }
+
+  return backdropElem;
+}
+
 // Creates the DOM element if it has not been already inflated
 // View: Object of ReactDOM, {type, props, children}
 // parentElement: DOM Object
-let inflateView = function (view, parentElement) {
+let inflateView = function (view, parentElement, siblingView, stopChild, stopObserver, renderStyle) {
+  if(view.type == 'modal'){
+    return inflateModal(view, parentElement, stopChild);
+  }
+
   let elem = document.getElementById(view.props.id);
   let subElem = null;
   let newInflated = false;
-  let cb = () => {
-    if (view.props.afterRender && typeof view.props.afterRender ==
-      "function") {
-      view.props.afterRender();
-    }
-
-    if (view.props.feedback && typeof view.props.feedback == "function") {
-      view.props.feedback();
-    }
-  }
 
   if(view.props.x == "NaN" || view.props.y == "NaN") {
     view = handleWrapContent(view, parentElement)
   }
 
   if (!elem) {
-    if (view.type == "imageView"){
+    if (view.type == "webView") {
+      elem = document.createElement('iframe')
+      
+      elem.style.border = 'none'
+    }else if (view.type == "imageView"){
       elem = document.createElement("img");
       elem["style"]["margin"] = "0";
       elem["style"]["padding"] = "0";
@@ -516,11 +787,21 @@ let inflateView = function (view, parentElement) {
         delete view.props.label;
       }
     }else if (view.type == "editText") {
-      elem = document.createElement("input");
+      if(view.props.hasOwnProperty('inputType') && view.props.inputType == 'multiText'){
+        elem = document.createElement("textarea");
+        elem.style.border = 'none';
+        elem.style.resize = 'none';
+        elem.style.outline = 'none';
+      }else{
+        elem = document.createElement("input");
+      }
+
       elem.value = view.props.text || "";
+
       if (view.props.letterSpacing) {
         elem["style"]["letter-spacing"] = view.props.letterSpacing;
       }
+
       if (view.props.label) {
         var inputView = elem;
         inputView.style.width = '100%';
@@ -556,32 +837,127 @@ let inflateView = function (view, parentElement) {
     } else
       elem = document.createElement("div");
 
+    /* Tooltip */
+    if(
+      view.type != 'linearLayout' && 
+      view.type != 'relativeLayout' &&
+      view.type != 'horizontalScrollView' &&
+      view.type != 'scrollView' &&
+      view.type != 'listView'
+    ){
+      if(view.props.hasOwnProperty('tooltipText')){
+        let tooltipText = view.props.tooltipText.trim()
+
+        if(tooltipText){
+          let tooltipGravity = view.props.tooltipGravity?view.props.tooltipGravity:'top'
+          
+          elem.classList.add('hasTooltip')
+
+          let tooltipElem = document.createElement('div')
+          tooltipElem.innerHTML = '<pre>' + tooltipText + '</pre>'
+          tooltipElem.classList.add('tooltipText')
+          tooltipElem.classList.add('tooltipGravity_' + tooltipGravity)
+          
+          let size = 15
+          if(view.props.hasOwnProperty('tooltipTextSize') && !isNaN(view.props.tooltipTextSize)){
+            size = view.props.tooltipTextSize
+          }
+
+          tooltipElem.style.fontSize = size + 'px'
+
+          elem.appendChild(tooltipElem)
+        }
+      }
+    }
+    /* Tooltip End */
+
     newInflated = true;
 
     if (parentElement) {
-      parentElement.appendChild(elem);
-      if(subElem){
-        parentElement.appendChild(subElem);
+      let siblingElement = siblingView?document.getElementById(siblingView.props.id):null;
+
+      if(siblingElement && siblingElement != undefined){
+        if(parentElement == siblingElement){ // Prepend
+          if(subElem){
+            parentElement.prepend(subElem);
+          }
+          parentElement.prepend(elem);
+        }else{ // Insert in specified position
+          let nextSiblingElement = siblingElement.nextSibling;
+
+          parentElement.insertBefore(elem, nextSiblingElement);
+          if(subElem){
+            parentElement.insertBefore(subElem, nextSiblingElement);
+          }
+        }
+      }else{
+        parentElement.appendChild(elem);
+        if(subElem){
+          parentElement.appendChild(subElem);
+        }
       }
     }
 
     setAttributes(view.type, elem, view.props, true);
+
+    /*if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
+      if(!stopObserver){
+        // We should run observer for the element
+        observer(elem);
+        elem.setAttribute('hasRender', true);
+      }
+    }*/
+  }else if(renderStyle){
+    setAttributes(view.type, elem, view.props, false);
   }
 
-  computeChildDimens(view);
+  if(view.type == 'horizontalScrollView'){
+    if(view.props.hasOwnProperty('scrollLeft') && !isNaN(view.props.scrollLeft))
+      elem.scrollLeft = view.props.scrollLeft;
+  }
+
+  if(view.type == 'listView'){
+    if(view.props.hasOwnProperty('scrollTop') && !isNaN(view.props.scrollTop))
+      elem.scrollTop = view.props.scrollTop;
+  }
+
+  if(view.type == 'scrollView'){
+    if(view.props.hasOwnProperty('scrollLeft') && !isNaN(view.props.scrollLeft))
+      elem.scrollLeft = view.props.scrollLeft;
+
+    if(view.props.hasOwnProperty('scrollTop') && !isNaN(view.props.scrollTop))
+      elem.scrollTop = view.props.scrollTop;
+  }
+
+  if(!stopChild)
+    computeChildDimens(view);
+  
   setComputedStyles(elem, view.props);
 
-  if(view.hasOwnProperty('children') && view.children.length > 0){
-    for (let i = 0; i < view.children.length; i++) {
-      let child = view.children[i];
-      if (child) {
-        inflateView(child, elem);
+  if(!stopChild){
+    if(view.hasOwnProperty('children') && view.children.length > 0){
+      for (let i = 0; i < view.children.length; i++) {
+        if (view.children[i]) {
+          if(i != 0)
+            inflateView(view.children[i], elem, view.children[i-1], stopChild, stopObserver, renderStyle);
+          else
+            inflateView(view.children[i], elem, view, stopChild, stopObserver, renderStyle);
+        }
       }
     }
   }
 
-  if (newInflated)
-    cb();
+  if (newInflated){
+    if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
+      if(!stopObserver){
+        // We should run observer for the element
+        observer(elem);
+        elem.setAttribute('hasRender', true);
+      }
+    }
+    
+    cb(elem, view);
+  }
 
   return elem;
 };
@@ -601,12 +977,14 @@ let runInUI = function (cmd) {
   
   cmd.forEach(function (each) {
     let elem = document.getElementById(each.id);
-    if (!elem)
+    
+    if (!elem){
       return console.error("runInUI (Id NULL) CMD:", each);
+    }
 
     let view = window.__VIEWS[elem.id];
     view.props = R.merge(view.props, each);
-        
+    
     setAttributes(view.type, elem, view.props, false);
   });
 };

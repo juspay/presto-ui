@@ -35,23 +35,15 @@ function viewCtxObj(view) {
   let obj = {
     w: props.w * 1,
     h: props.h * 1,
-    //x: 0,
-    //y: 0,
     width: props.w * 1,
   };
 
   view.children.forEach(child => {
     child.props.w = child.props.width;
     child.props.h = child.props.height;
-    //child.props.x = 0;
-    //child.props.y = 0;
   });
 
   return obj;
-}
-
-function isHidden(prop) {
-  return prop.visibility === "gone";
 }
 
 /*
@@ -61,8 +53,7 @@ function isHidden(prop) {
 function hasMatchParentChild(childs, dimen) {
   for (let i = 0; i < childs.length; i++) {
     let childProp = childs[i].props;
-    if (isHidden(childProp))
-      continue;
+    
     if (childProp[dimen] && (childProp[dimen] == "match_parent")) {
       return true;
     }
@@ -80,8 +71,7 @@ function hasWeightChild(type, childs) {
 
   for (let i = 0; i < childs.length; i++) {
     let child = childs[i].props;
-    if (isHidden(child))
-      continue;
+    
     if (child.weight && parseInt(child.weight) > 0) {
       return true;
     }
@@ -89,17 +79,27 @@ function hasWeightChild(type, childs) {
   return false;
 }
 
-function computeBasic(view, ignoreGravity){
+function computeRelativeLayout(view) {
   let viewCtx = viewCtxObj(view);
   let children = view.children;
 
   children.forEach(child => {
     let props = child.props;
-    
-    if (isHidden(props)) {
-      props.h = "0";
-      props.w = "0";
-      return;
+
+    props.absolute = true;
+    props.fromTop = 0;
+    props.fromBottom = 'auto';
+    props.fromLeft = 0;
+    props.fromRight = 'auto';
+
+    if(props.hasOwnProperty('alignParentLeft') && props.alignParentLeft){
+      props.fromLeft = 0;
+      props.fromRight = 'auto';
+    }
+
+    if(props.hasOwnProperty('alignParentBottom') && props.alignParentBottom){
+      props.fromTop = 'auto';
+      props.fromBottom = 0;
     }
   });
 }
@@ -138,9 +138,6 @@ function computeLinearlayout(view) {
     children.forEach(child => {
       let props = child.props;
 
-      if (isHidden(props))
-        return;
-
       if(props.hasOwnProperty(activeDimen) && props[activeDimen] == 'match_parent'){
         props['activeDimen'] = activeDimen;
         
@@ -163,63 +160,6 @@ function computeLinearlayout(view) {
     });
     /* Iterate Child End */
   }
-
-  children.forEach(child => {
-    let props = child.props;
-    
-    if (isHidden(props)) {
-      props.w = "0";
-      props.h = "0";
-      return;
-    }
-
-    // if (props.margin)
-    //   margins = props.margin.split(',').map(a => a * 1);
-
-    // // Active Dimension
-    // if (props[activeDimen] === "match_parent") {
-    //   props[activeDimen] = viewCtx[activeDimen];
-    //   if (!(hasMatchParent || hasWeight))
-    //     props[activeDimen] -= margins[activeMargin[0]] + margins[activeMargin[1]];
-    //   props[activeDimen] += '';
-    //   viewCtx[activeDimen] = 0;
-    // }
-
-    // if (weight > 0) {
-    //   let dimen = props[activeDimen] * 1 || 0;
-    //   props[activeDimen] = dimen + Math.floor((viewCtx[activeDimen] *
-    //     weight) / weightSum);
-    //   props[activeDimen] += '';
-    // }
-
-    // props[activeAxis] += axis + margins[activeMargin[0]];
-    // props[activeAxis] += '';
-    // viewCtx[activeAxis] += props[activeDimen] * 1 + margins[
-    //   activeMargin[0]] + margins[activeMargin[1]];
-
-
-    // // Passive Dimensions
-    // axis = viewCtx[passiveAxis];
-    // let passiveMarginVal = margins[passiveMargin[0]];
-
-    // if (props[passiveDimen] === "match_parent") {
-    //   props[passiveDimen] = viewCtx[passiveDimen];
-    //   props[passiveDimen] -= margins[passiveMargin[0]] + margins[
-    //     passiveMargin[1]];
-    //   props[passiveDimen] += '';
-    // } else if (hasPassiveGravity) {
-    //   let availablePassive = viewCtx[passiveDimen] - props[passiveDimen];
-    //   if (availablePassive > 0)
-    //     axis += availablePassive / 2;
-    //   passiveMarginVal = margins[passiveMargin[0]] -  margins[passiveMargin[1]];
-    // }
-    // props[passiveAxis] += axis + passiveMarginVal;
-    // props[passiveAxis] += '';
-
-    // if (window.RTL)
-    //   props.x = containerWidth - props.x - props.w;
-    // }    
-  });
 } // End Compute LinearLayout
 
 function computeChildDimens(view) {
@@ -231,16 +171,15 @@ function computeChildDimens(view) {
   } else if (view.type == "horizontalScrollView") {
     view.props.orientation = "horizontal";
     computeLinearlayout(view);
+  } else if (view.type == "relativeLayout") {
+    computeRelativeLayout(view);
   } else {
-    computeBasic(view, false);
+    // Do Nothing
   }
 
   return view;
 }
 
 module.exports = {
-  computeLinearlayout,
-  computeRelativeLayout: (view) => computeBasic(view, false),
-  computeScrollView: (view) => computeBasic(view, true),
   computeChildDimens
 };

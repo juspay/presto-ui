@@ -23,25 +23,27 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-module.exports = {
-  Button: require("./Button"),
-  Calendar: require("./Calendar"),
-  CheckBox: require("./CheckBox"),
-  EditText: require("./EditText"),
-  FrameLayout: require("./FrameLayout"),
-  HorizontalScrollView: require("./HorizontalScrollView"),
-  ImageView: require("./ImageView"),
-  LinearLayout: require("./LinearLayout"),
-  ListView: require("./ListView"),
-  ProgressBar: require("./ProgressBar"),
-  RelativeLayout: require("./RelativeLayout"),
-  ScrollView: require("./ScrollView"),
-  ShimmerFrameLayout: require("./ShimmerFrameLayout"),
-  Switch: require("./Switch"),
-  TabLayout: require("./TabLayout"),
-  TextView: require("./TextView"),
-  ViewPager: require("./ViewPager"),
-  ViewWidget: require("./ViewWidget"),
-  WebView: require("./WebView"),
-  Modal: require("./Modal")
+var View = require('../baseView');
+
+class Modal extends View {
+  constructor(props, children) {
+    super(props, children);
+  }
+
+  render() {
+    var params = this.props;
+    var children = this.resolveChildren();
+
+    var layout = (
+      <modal
+        {...params}>
+
+        {children}
+      </modal>
+    );
+
+    return layout;
+  }
 }
+
+module.exports = Modal;

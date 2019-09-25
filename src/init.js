@@ -67,6 +67,20 @@ if (!window.__ENV) {
 window.callJSCallback = require("./helpers").android.callbackMapper.callJSCallback;
 window.__WIDTH = window.__DEVICE_DETAILS.screen_width;
 window.__HEIGHT = window.__DEVICE_DETAILS.screen_height;
+
+/* Modal */
+window.__STYLE_ID = 'style_' + Math.random().toString(36).substr(2, 9);
+window.__MODAL_PROPS = {};
+window.__CONTENTMODAL_CLASS = 'modal_' + Math.random().toString(36).substr(2, 9);
+window.__OPENMODAL_CLASS = 'modal-open_' + Math.random().toString(36).substr(2, 9);
+window.__BACKDROPMODAL_CLASS = 'modal-backdrop_' + Math.random().toString(36).substr(2, 9);
+window.__DISABLEDBACKDROP_CLASS = 'modal-backdrop-disabled_' + Math.random().toString(36).substr(2, 9);
+window.__SHOWNMODAL_CLASS = 'modal-shown_' + Math.random().toString(36).substr(2, 9);
+
+window.__FADEMODAL_CLASS = 'modal-fade_' + Math.random().toString(36).substr(2, 9);
+window.__SLIDEMODAL_CLASS = 'modal-slide_' + Math.random().toString(36).substr(2, 9);
+/* Modal End */
+
 window.__ID = 1;
 window.__NODE_ID = 1;
 window.__SCREEN_INDEX = -1;
@@ -94,7 +108,7 @@ window.__THROTTELED_ACTIONS = [];
 window.__ALL_ONCLICKS = [];
 window.__VIEWS = {};
 window.__VIEW_DIMENSIONS = {};
-
+window.__OBSERVERS = {};
 window.LANGUAGE = "en_US";
 window.ZIndex = 0;
 
@@ -106,6 +120,56 @@ window.updateLanguage = (lang) => {
   window.LANGUAGE = lang;
   JBridge.setKey("languagePref",lang);
 };
+
+/*window.onmousedown = (event) => {
+  if(window.__OS != "WEB")
+    return;
+
+  if(event.target){
+    let id = event.target.id;
+    let view = __VIEWS[id];
+    
+    if(view && view.props.hasOwnProperty('onMouseDown') && typeof view.props.onMouseDown == 'function'){
+      view.props.onMouseDown();
+    }
+  }
+}
+
+window.onmouseup = (event) => {
+  if(window.__OS != "WEB")
+    return;
+
+  if(event.target){
+    let id = event.target.id;
+    let view = __VIEWS[id];
+    
+    if(view && view.props.hasOwnProperty('onMouseUp') && typeof view.props.onMouseDown == 'function'){
+      view.props.onMouseUp();
+    }
+  }
+}*/
+
+window.onclick = (event) => {
+  if(window.__OS != "WEB")
+    return;
+
+  if(event.target 
+    && event.target.classList.contains(window.__BACKDROPMODAL_CLASS)
+    && !event.target.classList.contains(window.__DISABLEDBACKDROP_CLASS)
+  ){
+    document.body.classList.remove(window.__OPENMODAL_CLASS);
+    event.target.classList.remove(window.__SHOWNMODAL_CLASS);
+
+    let id = event.target.id;
+    id = id.replace(window.__BACKDROPMODAL_CLASS + '_', '');
+    
+    let view = __VIEWS[id];
+    if (view && view.props.onDismiss && typeof view.props.onDismiss ==
+      "function") {
+      view.props.onDismiss();
+    }
+  }
+}
 
 window.onresize = (iosData) => {
   return;
