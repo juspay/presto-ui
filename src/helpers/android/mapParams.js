@@ -1209,6 +1209,14 @@ var map = {
     dontMap: 'true',
     fnName: 'setContentDescription',
     inVokedIn: 'VIEW',
+  },
+  imeOptions: {
+    values: [{
+      type: 'i',
+    }],
+    dontMap: 'true',
+    fnName: 'setImeOptions',
+    inVokedIn: 'VIEW',
   }
 }
 
