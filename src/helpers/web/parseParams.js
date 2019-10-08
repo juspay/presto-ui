@@ -340,6 +340,10 @@ function parseLayoutProps(type, config, key) {
     }
   }
 
+  if (key == "hint"){
+    config.attributes.placeholder = config.hint;
+  }
+
   if (key == "contentEditable" && config.contentEditable){
     config.attributes.contenteditable = true;
   }
