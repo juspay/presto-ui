@@ -35,7 +35,7 @@ function parseJson(str) {
   try {
     return JSON.parse(str);
   } catch (e) {
-    return {};
+    return str;
   }
 } 
 
@@ -87,10 +87,15 @@ module.exports = {
   callAPI: function callAPI(method, url, data, headers, type, callback) {
     headers = parseJson(headers)
     data = parseJson(data)
+    if (headers["Content-Type"] === "application/x-www-form-urlencoded"){
+      if(typeof data == "object"){
+        data =qs.stringify(data);
+      }
+    }
     axios({
       method: method,
       url: url,
-      data:  headers["Content-Type"] === "application/x-www-form-urlencoded" ? qs.stringify(data): data,
+      data: data,
       headers: headers
     }).then(function (resp) {
       window.callJSCallback(callback, "success", btoa(JSON.stringify(resp.data)), resp.status);
