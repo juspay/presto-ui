@@ -265,18 +265,17 @@ function executePostProcess(cb) {
     if (JBridge && JBridge.setShadow) {
       for (var tag in window.shadowObject) {
         JBridge.setShadow(window.shadowObject[tag]["level"],
-                          JSON.stringify(window.shadowObject[tag]["viewId"]),
-                          JSON.stringify(window.shadowObject[tag]["backgroundColor"]),
-                          JSON.stringify(window.shadowObject[tag]["blurValue"]),
-                          JSON.stringify(window.shadowObject[tag]["shadowColor"]),
-                          JSON.stringify(window.shadowObject[tag]["dx"]),
-                          JSON.stringify(window.shadowObject[tag]["dy"]),
-                          JSON.stringify(window.shadowObject[tag]["spread"]),
-                          JSON.stringify(window.shadowObject[tag]["factor"]));
+            JSON.stringify(window.shadowObject[tag]["viewId"]),
+            JSON.stringify(window.shadowObject[tag]["backgroundColor"]),
+            JSON.stringify(window.shadowObject[tag]["blurValue"]),
+            JSON.stringify(window.shadowObject[tag]["shadowColor"]),
+            JSON.stringify(window.shadowObject[tag]["dx"]),
+            JSON.stringify(window.shadowObject[tag]["dy"]),
+            JSON.stringify(window.shadowObject[tag]["spread"]),
+            JSON.stringify(window.shadowObject[tag]["factor"])
+        );
       }
-    } else {
-      console.warn("experimental feature: JBridge is not available in native");
-    }
+    } 
   }
 }
 

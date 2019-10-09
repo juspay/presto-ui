@@ -40,32 +40,19 @@ if (window.__OS == "WEB") {
 }
 
 window.PrestoUI = require("./PrestoUIInterface");
-window.__ENV = 0;
+window.callJSCallback = require("./helpers").android.callbackMapper.callJSCallback;
 
-const getScreenDetails = () => {
-  try {
-    let details = JSON.parse(Android.getScreenDimensions());
-    return {
-      screen_width: details.width + "",
-      screen_height: details.height + ""
-    };
-  } catch (err) {
-    console.error(
-      "error in gettting screen dimensions, setting default values", err);
-    return {
-      screen_width: "1080",
-      screen_height: "1920"
-    };
-  }
-};
-
-if (!window.__ENV) {
-  window.__DEVICE_DETAILS = getScreenDetails();
+if (window.__DEVICE_DETAILS && window.__DEVICE_DETAILS.hasOwnProperty("screen_width")){
+  window.__WIDTH = window.__DEVICE_DETAILS.screen_width;
+}else{
+  window.__WIDTH = "1080";
 }
 
-window.callJSCallback = require("./helpers").android.callbackMapper.callJSCallback;
-window.__WIDTH = window.__DEVICE_DETAILS.screen_width;
-window.__HEIGHT = window.__DEVICE_DETAILS.screen_height;
+if (window.__DEVICE_DETAILS && window.__DEVICE_DETAILS.hasOwnProperty("screen_height")){
+  window.__HEIGHT = window.__DEVICE_DETAILS.screen_height;
+}else{
+  window.__HEIGHT = "1920";
+}
 
 /* Components */
 window.__COM_EVENT = false
@@ -199,32 +186,6 @@ window.onclick = (event) => {
   }
 }
 
-window.onresize = (iosData) => {
-  return;
-  
-  if (window.__OS == "WEB") {
-    const content = document.getElementById('content');
-    const id = content.firstElementChild.id;
-    const view = __VIEWS[id];
-    Android.recompute(view);
-  }
-  return;
-
-  if (window.__OS == "IOS") {
-    let tag = iosData.tag;
-    if (tag == "keyboardWillHide") {
-      if (window.__OLD_HEIGHT) {
-        window.__HEIGHT = window.__OLD_HEIGHT;
-        delete window.__OLD_HEIGHT;
-      }
-    } else if (!window.__OLD_HEIGHT) {
-      window.__OLD_HEIGHT = window.__HEIGHT;
-      window.__HEIGHT = window.__HEIGHT * 1 - iosData.data.height * 1 + '';
-    }
-    iosAndroidInterface.recompute()
-  }
-}
-
 window.callUICallback = function () {
   let args = (arguments.length === 1 ? [arguments[0]] : Array.apply(null,
     arguments));
@@ -236,7 +197,7 @@ window.callUICallback = function () {
   // backward compatibility for single arg events in presto-dom
   functionArgs = functionArgs.length == 1 ? functionArgs[0] : functionArgs
 
-  if (window.__ALL_ONCLICKS.indexOf(fName) != -1 && args[2] == "feedback") {
+  if (window.__ALL_ONCLICKS.indexOf(fName) != -1 && args[2] == "feedback" && JBridge && JBridge.setClickFeedback) {
     return JBridge.setClickFeedback(args[1]);
   }
 
@@ -247,7 +208,6 @@ window.callUICallback = function () {
     timeDiff = currTime - window.__LAST_FN_CALLED.timeStamp;
 
     if (timeDiff >= 300) {
-      JBridge.trackEvent("BUTTON_CLICKED", "BUTTON_CLICKED_" + window.__CURR_SCREEN);
       window.__PROXY_FN[fName].call(null, functionArgs);
       window.__LAST_FN_CALLED.timeStamp = currTime;
     } else {
@@ -255,7 +215,6 @@ window.callUICallback = function () {
       console.warn("time diff", timeDiff);
     }
   } else {
-    JBridge.trackEvent("BUTTON_CLICKED", "BUTTON_CLICKED_" + window.__CURR_SCREEN);
     window.__PROXY_FN[fName].call(null, functionArgs);
     window.__LAST_FN_CALLED = {
       timeStamp: (new Date()).getTime(),
