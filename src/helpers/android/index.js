@@ -26,5 +26,5 @@
 module.exports = {
 	parseParams : require("./parseParams"),
 	mapPrams : require("./mapParams"),
-	callbackMapper : require("./callbackMapper")
+	callbackMapper : require("../common/callbackMapper")
 }

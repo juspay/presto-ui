@@ -25,7 +25,7 @@
 
 var mapParams = require('./mapParams');
 var objMap = require('./objMap');
-var callbackMapper  = require("./callbackMapper");
+var callbackMapper  = require("../common/callbackMapper")
 let R = require('ramda');
 
 var globalObjMap = {};

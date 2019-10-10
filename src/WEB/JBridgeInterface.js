@@ -69,7 +69,7 @@ module.exports = {
       parentView.type = "listView";
       let elem = Renderer.inflateView(x.view, parent);
       elem.addEventListener("click", function () {
-        window.callJSCallback(callback, [i]);
+        window.callUICallback(callback, [i]);
       });
       Android.runInUI(x.value);
     });
@@ -93,10 +93,10 @@ module.exports = {
       data:  headers["Content-Type"] === "application/x-www-form-urlencoded" ? qs.stringify(data): data,
       headers: headers
     }).then(function (resp) {
-      window.callJSCallback(callback, "success", btoa(JSON.stringify(resp.data)), resp.status);
+      window.callUICallback(callback, "success", btoa(JSON.stringify(resp.data)), resp.status);
     }).catch(function (err) {
       console.log(err);
-      window.callJSCallback(callback, "failure", btoa("{}"), 50);
+      window.callUICallback(callback, "failure", btoa("{}"), 50);
     });
   },
 

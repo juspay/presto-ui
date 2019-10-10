@@ -30,5 +30,6 @@ module.exports = {
 	views : require("./src/views"),
 	baseView : require("./src/baseView"),
 	init: require("./src/init"),
-	animations: require('./src/animations')
+	animations: require('./src/animations'),
+	callbackMapper: require('./src/helpers/common/callbackMapper')
 }

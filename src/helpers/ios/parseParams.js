@@ -25,7 +25,7 @@
 import colors from "./colors";
 import flattenObject from "./flattenObject";
 
-var callbackMapper  = require("./callbackMapper");
+var callbackMapper  = require("../common/callbackMapper")
 
 let getSetType = 1;
 
