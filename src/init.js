@@ -215,11 +215,11 @@ window.callUICallback = function () {
     // backward compatibility for single arg events in presto-dom
     functionArgs = functionArgs.length == 1 ? functionArgs[0] : functionArgs
 
-    if (window.__ALL_ONCLICKS.indexOf(fName) != -1 && args[2] == "feedback" && JBridge && JBridge.setClickFeedback) {
+    if (window.__ALL_ONCLICKS && window.__ALL_ONCLICKS.indexOf(fName) != -1 && args[2] == "feedback" && JBridge && JBridge.setClickFeedback) {
         return JBridge.setClickFeedback(args[1]);
     }
 
-    if (window.__THROTTELED_ACTIONS.indexOf(fName) == -1) {
+    if (window.__THROTTELED_ACTIONS && window.__THROTTELED_ACTIONS.indexOf(fName) == -1) {
         window.__PROXY_FN[fName].call(null, functionArgs);
     } else if (window.__LAST_FN_CALLED && (fName == window.__LAST_FN_CALLED.fName)) {
         currTime = getCurrTime();
@@ -241,11 +241,11 @@ window.callUICallback = function () {
     }
 };
 
-module.exports = (meta, main, jbridgeOverrides) => {
-    if (typeof jbridgeOverrides == "function") {
-        let overrides = jbridgeOverrides();
-        window.JBridge = merge(window.JBridge, overrides);
-    }
-    containers.registerScreenMeta(meta);
-    main();
-};
+// module.exports = (meta, main, jbridgeOverrides) => {
+//     if (typeof jbridgeOverrides == "function") {
+//         let overrides = jbridgeOverrides();
+//         window.JBridge = merge(window.JBridge, overrides);
+//     }
+//     containers.registerScreenMeta(meta);
+//     main();
+// };

@@ -895,23 +895,7 @@ var map = {
     fnName: 'setChecked',
     inVokedIn: 'VIEW',
   },
-  "alignParentBottom": {
-    values: [{
-      type: 'b',
-    }],
-    'dontMap': true,
-    fnName: 'setAlignParentBottom',
-    inVokedIn: 'VIEW',
-  },
-  "alignParentLeft": {
-    values: [{
-      type: 'b',
-    }],
-    'dontMap': true,
-    fnName: 'setAlignParentLeft',
-    inVokedIn: 'VIEW',
-  },
-  /*'alignParentBottom': {
+  'alignParentBottom': {
     values: [{
       type: 'i',
       'true': 12,
@@ -958,7 +942,7 @@ var map = {
     }, ],
     inVokedIn: 'PARAMS',
     fnName: "addRule",
-  },*/
+  },
   'leftOf': {
     values: [{
       type: 'i',
