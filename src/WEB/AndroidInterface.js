@@ -25,7 +25,6 @@
 
 var Render = require("./Render");
 var helper = require('../helper');
-const R = require('ramda');
 
 module.exports = {
   getScreenDimensions: function () {
@@ -46,7 +45,7 @@ module.exports = {
 
       if(elem){
         let view = window.__VIEWS[id]
-        view.props = R.merge(view.props, cmd)
+        view.props = helper.merge(view.props, cmd)
         
         let parentId = null
         let parentElem = null

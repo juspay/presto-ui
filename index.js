@@ -32,5 +32,7 @@ module.exports = {
 	baseView : require("./src/baseView"),
 	animations: require('./src/animations'),
 	callbackMapper: require('./src/helpers/common/callbackMapper'),
-	getOS: require('./src/helper').getOS
+	getOS: require('./src/helper').getOS,
+	prestoMerge: require('./src/helper').merge,
+	prestoClone: require('./src/helper').clone
 }

@@ -73,20 +73,6 @@ function getOS() {
   return "WEB";
 }
 
-function merge(a, b) {
-  if (typeof a != "object")
-    return b;
-
-  if (typeof b != "object")
-    return a;
-
-  for (let key in b) {
-    a[key] = b[key];
-  }
-
-  return a;
-}
-
 function clearViewExternals(view) {
   if (!view)
     return;
@@ -166,6 +152,21 @@ function clone(o, m){
   }
   return n
 }
+
+function merge() {
+  var obj = {},
+      i = 0,
+      il = arguments.length,
+      key;
+  for (; i < il; i++) {
+      for (key in arguments[i]) {
+          if (arguments[i].hasOwnProperty(key)) {
+              obj[key] = arguments[i][key];
+          }
+      }
+  }
+  return obj;
+};
 
 module.exports = {
   shouldMove,

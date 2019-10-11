@@ -26,7 +26,6 @@
 const parseParams = require('../helpers/ios/parseParams');
 const {computeChildDimens} = require('../computeIOS');
 const helper = require('../helper');
-const R = require('ramda');
 
 function sumChildDimens(view) {
   const isVertical = view.props.orientation == "vertical";
@@ -115,7 +114,7 @@ function runInUI(cmd, fromInflate) {
     var view = window.__VIEWS[id];
     if (view) {
         var parent = window.__VIEWS[view.props.parentId];
-        view.props = R.merge(view.props, each);
+        view.props = helper.merge(view.props, each);
         //Adding as stop gag solution for editText in ios where text 
         //was getting set empty in case other properties were modified.
         if (!each.hasOwnProperty('text')) {

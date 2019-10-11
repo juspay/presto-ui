@@ -25,8 +25,7 @@
 
 let { computeChildDimens } = require("../compute") 
 let { renderComponent } = require("../component")
-//let helper = require("../helper")
-let R = require("ramda")
+let helper = require("../helper")
 
 function createTextElement(elem, config) {
   let children = elem.childNodes;
@@ -1030,7 +1029,7 @@ let runInUI = function (cmd) {
     }
 
     let view = window.__VIEWS[elem.id];
-    view.props = R.merge(view.props, each);
+    view.props = helper.merge(view.props, each);
     
     setAttributes(view.type, elem, view.props, false);
   });

@@ -11,8 +11,7 @@
     "moment": "^2.24.0",
     "object-assign": "^4.1.0",
     "promise": "^7.1.1",
-    "qs": "^6.6.0",
-    "ramda": "^0.26.1"
+    "qs": "^6.6.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
