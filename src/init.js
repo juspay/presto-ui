@@ -26,8 +26,6 @@
 /*
  Used to initialize defaults for window funcions and variables.
 */
-const containers = require('./container')
-const iosAndroidInterface = require('./IOS/AndroidInterface')
 const getOS = require('./helper').getOS
 const merge = require('./helper').merge
 window.PrestoUI = require("./PrestoUIInterface");
@@ -148,24 +146,10 @@ if (window.__OS == "WEB") {
     }
 
     const duiShowScreen = (callback, state) => {
-        let stackLen = window.__SCREEN_STACK.length;
-
         let popupMenu = document.getElementsByClassName("popupMenu");
         for (let i = 0; i < popupMenu.length; i++) {
             popupMenu[i].style.display = "none";
         }
-
-        if (state.screen == window.__CURR_SCREEN) {
-            let fn = window.__CACHED_SCREENS[__CURR_SCREEN].screen.handleStateChange(state);
-            if (typeof fn === "function")
-                fn(state);
-            return;
-        }
-
-        if (stackLen >= 2 && window.__SCREEN_STACK[stackLen - 2] == state.screen)
-            return containers.changeScreen("GO_BACK", state);
-
-        containers.changeScreen(state.screen, state);
     };
     window.__duiShowScreen = duiShowScreen;
 
@@ -211,41 +195,29 @@ window.callUICallback = function () {
     var functionArgs = args.slice(1)
     var currTime;
     var timeDiff;
-
-    // backward compatibility for single arg events in presto-dom
-    functionArgs = functionArgs.length == 1 ? functionArgs[0] : functionArgs
-
+    
     if (window.__ALL_ONCLICKS && window.__ALL_ONCLICKS.indexOf(fName) != -1 && args[2] == "feedback" && JBridge && JBridge.setClickFeedback) {
         return JBridge.setClickFeedback(args[1]);
     }
 
     if (window.__THROTTELED_ACTIONS && window.__THROTTELED_ACTIONS.indexOf(fName) == -1) {
-        window.__PROXY_FN[fName].call(null, functionArgs);
+        window.__PROXY_FN[fName].apply(null, functionArgs);
     } else if (window.__LAST_FN_CALLED && (fName == window.__LAST_FN_CALLED.fName)) {
         currTime = getCurrTime();
         timeDiff = currTime - window.__LAST_FN_CALLED.timeStamp;
 
         if (timeDiff >= 300) {
-            window.__PROXY_FN[fName].call(null, functionArgs);
+            window.__PROXY_FN[fName].apply(null, functionArgs);
             window.__LAST_FN_CALLED.timeStamp = currTime;
         } else {
             console.warn("function throtteled", fName);
             console.warn("time diff", timeDiff);
         }
     } else {
-        window.__PROXY_FN[fName].call(null, functionArgs);
+        window.__PROXY_FN[fName].apply(null, functionArgs);
         window.__LAST_FN_CALLED = {
             timeStamp: (new Date()).getTime(),
             fName: fName
         }
     }
 };
-
-// module.exports = (meta, main, jbridgeOverrides) => {
-//     if (typeof jbridgeOverrides == "function") {
-//         let overrides = jbridgeOverrides();
-//         window.JBridge = merge(window.JBridge, overrides);
-//     }
-//     containers.registerScreenMeta(meta);
-//     main();
-// };

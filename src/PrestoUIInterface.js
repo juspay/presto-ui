@@ -27,8 +27,7 @@ var prestoDom = require("./doms");
 var webParseParams = require("./helpers").web.parseParams;
 var iOSParseParams = require("./helpers").ios.parseParams;
 var parseParams = require("./helpers").android.parseParams;
-
-var R = require("ramda");
+const helper = require('./helper');
 
 function domAll(elem) {
   if (!elem.__ref) {
@@ -39,8 +38,8 @@ function domAll(elem) {
     elem.__ref.__id = parseInt(elem.props.id, 10) || elem.__ref.__id;
   }
 
-  var type = R.clone(elem.type);
-  var props = R.clone(elem.props);
+  var type = helper.clone(elem.type,null);
+  var props = helper.clone(elem.props,null);
 
   if (props.focus == false &&  window.__OS === "ANDROID") {
     delete props.focus;
@@ -142,7 +141,7 @@ function applyProp(element, attribute, set) {
 
 function replaceView(element, attribute, removeProp) {
   // console.log("REPLACE VIEW", element.__ref.__id, element.props);
-  var props = R.clone(element.props);
+  var props = helper.clone(element.props,null);
   props.id = element.__ref.__id;
   var rep;
   var viewGroups = ["linearLayout", "relativeLayout", "scrollView", "frameLayout", "horizontalScrollView"];

@@ -25,7 +25,6 @@
 
 const render = require('./Render');
 const helper = require('../helper');
-const R = require('ramda');
 const parseParams = require('../helpers').ios.parseParams;
 
 let rootid;
@@ -37,7 +36,7 @@ function clearViewExternals(view) {
 }
 
 function getSerializeableView(view, recurse) {
-  var obj = parseParams(view.type, R.clone(view.props), "set");
+  var obj = parseParams(view.type, helper.clone(view.props,null), "set");
   var newView = {};
   newView.props = obj.config;
   newView.type = obj.type[0].toUpperCase() + obj.type.substr(1, obj.type.length);
@@ -167,7 +166,7 @@ module.exports = {
     }
     var oldview = window.__VIEWS[id];
     var parentid = oldview.props.parentId;
-    oldview.props = R.clone(view.props);
+    oldview.props = helper.clone(view.props,null);
     oldview.props.parentId = parentid;
     var parent = window.__VIEWS[parentid];
     var index = parent.children.indexOf(oldview);

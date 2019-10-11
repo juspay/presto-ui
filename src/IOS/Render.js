@@ -67,7 +67,7 @@ function inflate(view) {
     }
     helper.cacheDimen(view);
     window.__VIEWS[id] = view;
-    const newView = R.clone(view);
+    const newView = helper.clone(view,null);
     view.children.forEach((child, i) => {
       newView.children[i] = inflate(child);
     });
@@ -78,7 +78,6 @@ function inflate(view) {
   }
 
   const move = helper.shouldMove(view);
-  const inflateChilds = helper.shouldInfateChilds(view);
   helper.cacheDimen(view);
   let ranRunInUI = false;
   if (move) {

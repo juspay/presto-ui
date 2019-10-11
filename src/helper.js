@@ -24,8 +24,6 @@
 */
 
 // Following functions are used by WEB and IOS Render
-const R = require('ramda');
-
 function cacheDimen(view) {
   let props = view.props;
   let dimen = {
@@ -62,35 +60,6 @@ function shouldMove(view) {
   if (changed)
     return dimen;
   return null;
-}
-
-function shouldInfateChilds(view) {
-  return true;
-  let props = view.props;
-
-  let dimen = {
-    w: props.w,
-    h: props.h,
-    gravity: props.gravity,
-    padding: props.padding,
-    orientation: props.orientation,
-    stroke: props.stroke ? props.stroke.split(",")[0] * 1 : 0,
-    bacche: view.children.length
-  };
-
-  let changed = false;
-  let cachedDimen = window.__VIEW_DIMENSIONS[props.id];
-  if (!cachedDimen)
-    return true;
-  if (props.visibility == "gone")
-    return null;
-  for (let key in dimen) {
-    if (cachedDimen[key] != dimen[key]) {
-      changed = true;
-      break;
-    }
-  }
-  return changed;
 }
 
 function getOS() {
@@ -131,11 +100,78 @@ function clearViewExternals(view) {
   view.children.forEach(clearViewExternals);
 }
 
+// use: clone( <thing to copy> ) returns <new copy>
+function clone(o, m){
+  // return non object values
+  if('object' !==typeof o) return o
+  // m: a map of old refs to new object refs to stop recursion
+  if('object' !==typeof m || null ===m) m =new WeakMap()
+  var n =m.get(o)
+  if('undefined' !==typeof n) return n
+  // shallow/leaf clone object
+  var c =Object.getPrototypeOf(o).constructor
+  // TODO: specialize copies for expected built in types i.e. Date etc
+  switch(c) {
+    // shouldn't be copied, keep reference
+    case Boolean:
+    case Error:
+    case Function:
+    case Number:
+    case Promise:
+    case String:
+    case Symbol:
+    case WeakMap:
+    case WeakSet:
+      n =o
+      break;
+    // array like/collection objects
+    case Array:
+      m.set(o, n =o.slice(0))
+      // recursive copy for child objects
+      n.forEach(function(v,i){
+        if('object' ===typeof v) n[i] =clone(v, m)
+      });
+      break;
+    case ArrayBuffer:
+      m.set(o, n =o.slice(0))
+      break;
+    case DataView:
+      m.set(o, n =new (c)(clone(o.buffer, m), o.byteOffset, o.byteLength))
+      break;
+    case Map:
+    case Set:
+      m.set(o, n =new (c)(clone(Array.from(o.entries()), m)))
+      break;
+    case Int8Array:
+    case Uint8Array:
+    case Uint8ClampedArray:
+    case Int16Array:
+    case Uint16Array:
+    case Int32Array:
+    case Uint32Array:
+    case Float32Array:
+    case Float64Array:
+      m.set(o, n =new (c)(clone(o.buffer, m), o.byteOffset, o.length))
+      break;
+    // use built in copy constructor
+    case Date:
+    case RegExp:
+      m.set(o, n =new (c)(o))
+      break;
+    // fallback generic object copy
+    default:
+      m.set(o, n =Object.assign(new (c)(), o))
+      // recursive copy for child objects
+      for(c in n) if('object' ===typeof n[c]) n[c] =clone(n[c], m)
+  }
+  return n
+}
+
 module.exports = {
-  shouldInfateChilds,
   shouldMove,
   cacheDimen,
   getOS,
   merge,
   clearViewExternals,
+  clone,
 }
