@@ -570,7 +570,7 @@ function setAttributes(type, elem, props, firstRender) {
 
     /* Events */
     if (firstRender) {
-        let events = ['onClick', 'onEnterPressedEvent', 'onChange', 'onMouseDown', 'onMouseUp', 'onMouseEnter', 'onMouseOver', 'onMouseMove', 'onMouseOut', 'onMouseLeave']
+        let events = ['onClick', 'onEnterPressedEvent', 'onChange', 'onMouseDown', 'onMouseUp', 'onMouseEnter', 'onMouseOver', 'onMouseMove', 'onMouseOut', 'onMouseLeave', 'onFocus']
 
         for (let i = 0; i < events.length; i++) {
             let key = events[i]
@@ -589,6 +589,13 @@ function setAttributes(type, elem, props, firstRender) {
                 if (eventType == "change") {
                     elem.addEventListener('keyup', (e) => {
                         (props[key])(e.target.value)
+                    })
+                } else if (eventType == "focus"){
+                    elem.addEventListener('focus', (e) => {
+                        (props[key])(true)
+                    })
+                    elem.addEventListener('blur', (e) => {
+                        (props[key])(false)
                     })
                 } else {
                     elem.addEventListener(eventType, (e) => {
