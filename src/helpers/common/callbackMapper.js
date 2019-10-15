@@ -27,7 +27,7 @@ module.exports.map = (fn) => {
 	if(typeof window.__FN_INDEX !== 'undefined' && window.__FN_INDEX !== null) {
 		var proxyFnName = 'F' + window.__FN_INDEX;
 		if (window.__payload && window.__payload.service){
-			proxyFnName = window.__payload.service + ":" + proxyFnName;
+			proxyFnName = window.__payload.service + "_" + proxyFnName;
 		}
 		window.__PROXY_FN[proxyFnName] = fn;
 	  	window.__FN_INDEX++;
