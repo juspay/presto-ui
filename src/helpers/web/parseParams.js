@@ -220,6 +220,26 @@ function parseLayoutProps(type, config, key) {
       config.style.fontWeight = fontWeight;
   }
 
+  if (key == 'visibility') {
+    let visibility = config.visibility;
+    if (visibility == 'invisible')
+      config.style.visibility = "hidden";
+    else if (visibility == 'gone')
+      config.style.display = "none";
+    else {
+      config.style.visibility = '';
+    }
+  } 
+
+  if (key == 'expand') {
+    let visibility = config.expand + '';
+    if (visibility == 'true'){
+      config.style.visibility = '';
+    }
+    else
+      config.style.display = "none";
+  }
+
   if (key == "stroke") {
     let values = config.stroke.split(",");
 

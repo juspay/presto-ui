@@ -332,6 +332,17 @@ function setAttributes(type, elem, props, firstRender) {
     } else {
         initializeShow(elem, props, type);
     }
+
+    if (props.hasOwnProperty('expand')) {
+        let visibility = props.expand + '';
+        if (visibility == 'true'){
+            elem.style.visibility = '';
+            initializeShow(elem, props, type);
+        }
+        else
+            elem.style.display = "none";
+    }
+
     /* Render global styles end */
 
     let scrollBarX = true;
