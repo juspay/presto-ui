@@ -23,11 +23,15 @@
     "babel-preset-stage-0": "^6.24.1",
     "es6-promise": "latest",
     "webpack": "^4.16.4",
-    "webpack-cli": "^3.1.0"
+    "webpack-cli": "^3.1.0",
+    "webpack-merge": "^4.2.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "webpack --mode development --config webpack.config.js --progress --colors",
+    "compile:web": "webpack --mode production --config webpack.web.js --colors",
+    "compile:ios": "webpack --mode production --config webpack.ios.js --colors",
+    "compile:android": "webpack --mode production --config webpack.android.js --colors",
+    "compile": "npm run compile:web; npm run compile:ios; npm run compile:android",
     "watch": "webpack --mode development --config webpack.config.js --watch --progress --colors"
   },
   "repository": {

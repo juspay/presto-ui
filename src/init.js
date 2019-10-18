@@ -32,7 +32,7 @@ window.PrestoUI = require("./PrestoUIInterface");
 
 const getCurrTime = () => (new Date()).getTime()
 
-window.__OS = getOS()
+// window.__OS = getOS()
 
 if (window.__OS == "WEB") {
     window.Android = require("./WEB/AndroidInterface")
