@@ -184,10 +184,13 @@ module.exports = {
   },
 
   removeView: function (id) {
+    debugger;
     const view = window.__VIEWS[id];
     const parent = window.__VIEWS[view.props.parentId];
-    const index = parent.children.indexOf(view);
-    parent.children.splice(index, 1);
+    const index = parent ? parent.children.indexOf(view) : 0;
+    if(parent){
+      parent.children.splice(index, 1);
+    }
     clearViewExternals(view);
     window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
       methodName: "removeView",
@@ -196,7 +199,9 @@ module.exports = {
         index,
       }
     }));
-    this.recomputeView(parent);
+    if(parent){
+      this.recomputeView(parent);
+    }
   },
 
   startAnim: function(id, cbName) {
