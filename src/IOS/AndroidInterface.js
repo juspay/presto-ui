@@ -184,7 +184,6 @@ module.exports = {
   },
 
   removeView: function (id) {
-    debugger;
     const view = window.__VIEWS[id];
     const parent = window.__VIEWS[view.props.parentId];
     const index = parent ? parent.children.indexOf(view) : 0;
