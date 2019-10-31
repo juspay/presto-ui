@@ -348,7 +348,7 @@ function parseLayoutProps(type, config, key) {
   if (key == "a_duration") {
     config.animation.transition = config[key] + 'ms all';
   }
-
+  
   if (type == "textView" && key == "gravity" && config.gravity) {
     config.style.textAlign = config.gravity;
     if (config.gravity == "center_vertical") {
@@ -356,6 +356,11 @@ function parseLayoutProps(type, config, key) {
       config.style.display = "flex";
     } else if (config.gravity == "center_horizontal") {
       config.style.display = "flex";
+      config.style["justify-content"] = "center";
+    }
+    else if (config.gravity == "center"){
+      config.style.display = "flex";
+      config.style["align-items"] = "center";
       config.style["justify-content"] = "center";
     }
   }
@@ -472,7 +477,37 @@ function setDefaults(type, config) {
     config.orientation = config.orientation;
   }
 }
-
+function this_inlineAnimation(config) {
+  var con=modifyTranslation(config);
+  var element = document.getElementById(con.name);
+}
+function modifyTranslation(config){
+  var x = config.x || "0";
+  var y = config.y || "0";
+  var animationArray = JSON.parse(config.inlineAnimation);
+  var animationArray = animationArray.map(function(a){
+    if(a.hasOwnProperty("fromX")){
+      a.fromX = parseInt(a.fromX) + parseInt(x) + '';
+      if(!a.hasOwnProperty("toX")){
+        a.toX = 0 + parseInt(x) + '';
+      }
+    }
+    if(a.hasOwnProperty("toX")){
+      a.toX = parseInt(a.toX) + parseInt(x) + '';
+    }
+    if(a.hasOwnProperty("fromY")){
+      a.fromY = parseInt(a.fromY) + parseInt(y) + '';
+      if(!a.hasOwnProperty("toY")){
+        a.toY = 0 + parseInt(y) + '';
+      }
+    }
+    if(a.hasOwnProperty("toY")){
+      a.toY = parseInt(a.toY) + parseInt(y) + '';
+    }
+    return a;
+  })
+  return (animationArray);
+}
 module.exports = function (type, config, getSetType) {
   config = flattenObject(config);
   setDefaults(type, config);
@@ -487,6 +522,9 @@ module.exports = function (type, config, getSetType) {
 
   if (config.style.transform == "") {
     delete config.style.transform;
+  }
+  if (config.hasOwnProperty("inlineAnimation")) {
+    this_inlineAnimation(config);
   }
 
   return config;
