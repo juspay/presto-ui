@@ -465,92 +465,23 @@ function setAttributes(type, elem, props, firstRender) {
                 eventType = "input";
             }
 
-            if (props.label) {
-                elem.addEventListener('blur', function () {
-                    var inputValue = elem.value;
-                    if (inputValue == "") {
-                        elem.classList.remove("filled");
-                        elem.parentNode.classList.remove('focused');
-                    } else {
-                        elem.classList.add('filled');
-                    }
-                });
-
-                if (type == "editText" && elem.tagName.toLowerCase() == "input") {
-                    elem.addEventListener('keydown', function (key) {
-                        key.stopPropagation();
-                        try {
-                            var keycode = key.keyCode;
-                            var valid = (keycode > 47 && keycode < 58) || // number keys
-                                (keycode > 64 && keycode < 91) || // letter keys
-                                (keycode > 95 && keycode < 112) || // numpad keys
-                                (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
-                                (keycode > 218 && keycode < 223); // [\]' (in order)
-                            if (valid) {
-                                var inputId = key.path[0].getAttribute("id");
-                                var input = document.getElementById(inputId);
-                                var currentInput = key.key;
-                                var currentData = input.value;
-
-                                if (input.getAttribute("pattern")) {
-                                    var data = input.getAttribute("pattern").split(',');
-                                    var length = parseInt(data.pop());
-                                    var regexString = data.join('');
-                                    if (length) {
-                                        if (currentData.length + 1 > length) {
-                                            input.value = currentData;
-                                            key.preventDefault();
-                                        }
-                                    }
-                                    if (regexString) {
-                                        var finalData = currentData + currentInput;
-                                        var regexPattern = new RegExp(regexString);
-                                        if (!regexPattern.test(finalData)) {
-                                            key.preventDefault();
-                                        }
-                                    }
-                                    var separator = input.getAttribute("separator");
-                                    var separatorRepeat = parseInt(input.getAttribute("separatorRepeat"));
-                                    var finalData = (currentData + currentInput).replace(/[^a-zA-Z0-9]/g, "");
-                                    if (regexString) {
-                                        var regexPattern = new RegExp(regexString);
-                                        if (!regexPattern.test(finalData)) {
-                                            key.preventDefault();
-                                            return;
-                                        }
-                                    }
-                                    if (separator && separatorRepeat) {
-                                        key.preventDefault();
-                                        var cursorPosition = input.selectionStart;
-                                        var formattedString = "";
-                                        for (let index = 0; index < finalData.length; index++) {
-                                            var element = finalData[index];
-                                            formattedString += element;
-                                            var factor = 0;
-                                            if (formattedString.length && formattedString.replace(/[^a-zA-Z0-9]/g, "").length % (separatorRepeat + factor) == 0) {
-                                                formattedString += separator;
-                                            }
-                                        }
-                                        if (formattedString[formattedString.length - 1] == separator) {
-                                            formattedString = formattedString.substring(0, formattedString.length - 1);
-                                        }
-                                        input.value = formattedString;
-                                        console.log("formattedString----", formattedString);
-                                    }
-                                }
-                            }
-                        } catch (error) {}
-                    });
+            elem.addEventListener('blur', function () {
+                var inputValue = elem.value;
+                if (inputValue == "") {
+                    elem.classList.remove("filled");
+                    elem.parentNode.classList.remove('focused');
+                } else {
+                    elem.classList.add('filled');
                 }
+            });
 
-                elem['onfocus'] = function (e) {
-                    elem.parentNode.classList.add('focused');
-                    if (eventType == "focus") {
-                        e.stopPropagation();
-                        elemCB(e);
-                    }
-                };
-            }
+            elem['onfocus'] = function (e) {
+                elem.parentNode.classList.add('focused');
+                if (eventType == "focus") {
+                    e.stopPropagation();
+                    elemCB(e);
+                }
+            };
         }
         //TODO: Repeated code to be removed later
         //   if (props.label) {
@@ -573,6 +504,77 @@ function setAttributes(type, elem, props, firstRender) {
         // }
     }
 
+
+    if (type == "editText" && elem.tagName.toLowerCase() == "input") {
+        elem.addEventListener('keydown', function (ev) {
+            ev.stopPropagation();
+            try {
+                var keycode = ev.keyCode;
+                var valid = (keycode > 47 && keycode < 58) || // number keys
+                    (keycode > 64 && keycode < 91) || // letter keys
+                    (keycode > 95 && keycode < 112) || // numpad keys
+                    (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
+                    (keycode > 218 && keycode < 223); // [\]' (in order)
+                if (valid) {
+                    var inputId = ev.path[0].getAttribute("id");
+                    var input = document.getElementById(inputId);
+                    var currentInput = ev.key;
+                    var currentData = input.value;
+
+                    if (input.getAttribute("pattern")) {
+                        var data = input.getAttribute("pattern").split(',');
+                        var length = parseInt(data.pop());
+                        var regexString = data.join('');
+                        const newValue = currentData + currentInput
+                        // const newValue = currentData
+                        if (length) {
+                            if (currentData.length + 1 > length) {
+                                input.value = currentData;
+                                ev.preventDefault();
+                            }
+                        }
+                        if (regexString) {
+                            var finalData = newValue;
+                            var regexPattern = new RegExp(regexString);
+                            if (!regexPattern.test(finalData)) {
+                                ev.preventDefault();
+                            }
+                        }
+                        var separator = input.getAttribute("separator");
+                        var separatorRepeat = parseInt(input.getAttribute("separatorRepeat"));
+                        var finalData = newValue.replace(/[^a-zA-Z0-9]/g, "");
+                        if (regexString) {
+                            var regexPattern = new RegExp(regexString);
+                            if (!regexPattern.test(finalData)) {
+                                ev.preventDefault();
+                                return;
+                            }
+                        }
+                        if (separator && separatorRepeat) {
+                            ev.preventDefault();
+                            var cursorPosition = input.selectionStart;
+                            var formattedString = "";
+                            for (let index = 0; index < finalData.length; index++) {
+                                var element = finalData[index];
+                                formattedString += element;
+                                var factor = 0;
+                                if (formattedString.length && formattedString.replace(/[^a-zA-Z0-9]/g, "").length % (separatorRepeat + factor) == 0) {
+                                    formattedString += separator;
+                                }
+                            }
+                            if (formattedString[formattedString.length - 1] == separator) {
+                                formattedString = formattedString.substring(0, formattedString.length - 1);
+                            }
+                            input.value = formattedString;
+                            console.log("formattedString----", formattedString);
+                        }
+                    }
+                }
+            } catch (error) {}
+        });
+    }
+
+
     if ((props.style.transform || props.style.opacity) && props.animation.transition) {
         setTimeout(afterTransition, 100);
     } else if (props.animation.transition) {
@@ -588,30 +590,31 @@ function setAttributes(type, elem, props, firstRender) {
             let eventType = key.substring(2, key.length).toLowerCase()
 
             if (props.hasOwnProperty(key) && typeof props[key] == "function") {
+                const callback = props[key]
                 if (key == "onEnterPressedEvent") {
                     elem.addEventListener('keyup', (e) => {
                         e.stopPropagation()
 
                         if (e.keyCode == 13) {
-                            (props[key])(e)
+                            callback(e)
                         }
                     })
                 }
                 if (eventType == "change") {
                     elem.addEventListener('keyup', (e) => {
-                        (props[key])(e.target.value)
+                        callback(e.target.value)
                     })
                 } else if (eventType == "focus"){
                     elem.addEventListener('focus', (e) => {
-                        (props[key])(true)
+                        callback(true)
                     })
                     elem.addEventListener('blur', (e) => {
-                        (props[key])(false)
+                        callback(false)
                     })
                 } else {
                     elem.addEventListener(eventType, (e) => {
                         e.stopPropagation();
-                        (props[key])(e)
+                        callback(e)
                     })
                 }
             }
