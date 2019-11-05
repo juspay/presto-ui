@@ -270,6 +270,10 @@ function setAttributes(type, elem, props, firstRender) {
     if (props.hasOwnProperty('height')) {
         if (props.height == 'match_parent') {
             elem.style.height = '100%';
+        } 
+        else if (props.height == 'wrap_content') {
+            elem.style.height = "auto";
+            // You see below
         } else if (!isNaN(props.height)) {
             if (props.hasOwnProperty('percentHeight') && props.percentHeight)
                 elem.style.height = props.height + '%';
