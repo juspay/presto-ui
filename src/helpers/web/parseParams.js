@@ -392,6 +392,9 @@ function parseLayoutProps(type, config, key) {
     } else if (config.inputType == "numeric") {
         inputType = "number"
     }
+    if (config.separator) {
+      inputType = "text"
+    }
 
     config.attributes.type = inputType
   }

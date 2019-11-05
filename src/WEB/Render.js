@@ -525,12 +525,19 @@ function setAttributes(type, elem, props, firstRender) {
                         var data = input.getAttribute("pattern").split(',');
                         var length = parseInt(data.pop());
                         var regexString = data.join('');
-                        const newValue = currentData + currentInput
-                        // const newValue = currentData
+                        var selectionStart = input.selectionStart;
+                        var selectionEnd = input.selectionEnd;
+
+                        const splittedString = currentData.split("")
+                        splittedString
+                            .splice(selectionStart, selectionEnd-selectionStart, currentInput)
+
+                        const newValue = splittedString.join("");
                         if (length) {
                             if (currentData.length + 1 > length) {
                                 input.value = currentData;
                                 ev.preventDefault();
+                                return;
                             }
                         }
                         if (regexString) {
@@ -552,7 +559,6 @@ function setAttributes(type, elem, props, firstRender) {
                         }
                         if (separator && separatorRepeat) {
                             ev.preventDefault();
-                            var cursorPosition = input.selectionStart;
                             var formattedString = "";
                             for (let index = 0; index < finalData.length; index++) {
                                 var element = finalData[index];
@@ -566,6 +572,12 @@ function setAttributes(type, elem, props, firstRender) {
                                 formattedString = formattedString.substring(0, formattedString.length - 1);
                             }
                             input.value = formattedString;
+                            let cursorPosition = selectionStart + 1
+                            if ((cursorPosition % (separatorRepeat + 1) ) === 0) {
+                                cursorPosition += 1
+                            }
+                            input.selectionStart = cursorPosition
+                            input.selectionEnd = cursorPosition
                             console.log("formattedString----", formattedString);
                         }
                     }
