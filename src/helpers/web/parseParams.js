@@ -357,6 +357,10 @@ function parseLayoutProps(type, config, key) {
     } else if (config.gravity == "center_horizontal") {
       config.style.display = "flex";
       config.style["justify-content"] = "center";
+    } else if (config.gravity == "center") {
+      config.style.display = "flex";
+      config.style["align-items"] = "center";
+      config.style["justify-content"] = "center";
     }
   }
 
