@@ -343,9 +343,9 @@ function parseLayoutProps(type, config, key) {
 
   if (key == "translationZ") {
     var v = config[key];
-    config.style["-webkit-box-shadow"] = "0 0 "+v.toString()+"px rgba(0,0,0, .5)";
-    config.style["-moz-box-shadow"]= "0 0 "+v.toString()+"px rgba(0,0,0, .5)";
-    config.style["box-shadow"]=  "0 0 "+v.toString()+"px rgba(0,0,0, .5)";
+    config.style["-webkit-box-shadow"] = "0 0 "+v.toString()+"px rgba(0,0,0, .3)";
+    config.style["-moz-box-shadow"]= "0 0 "+v.toString()+"px rgba(0,0,0, .3)";
+    config.style["box-shadow"]=  "0 0 "+v.toString()+"px rgba(0,0,0, .3)";
     
   }
 
