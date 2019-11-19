@@ -342,7 +342,11 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "translationZ") {
-    config.style["z-index"] = config[key];
+    var v = config[key];
+    config.style["-webkit-box-shadow"] = "0 0 "+v.toString()+"px rgba(0,0,0, .5)";
+    config.style["-moz-box-shadow"]= "0 0 "+v.toString()+"px rgba(0,0,0, .5)";
+    config.style["box-shadow"]=  "0 0 "+v.toString()+"px rgba(0,0,0, .5)";
+    
   }
 
   if (key == "a_duration") {
@@ -415,6 +419,7 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "shadow") {
+    alert("HEY")
     var shadowValues = config.shadow.split(',');
     var shadowBlur = rWS(cS(shadowValues[2]));
     var shadowSpread = rWS(cS(shadowValues[3]));
