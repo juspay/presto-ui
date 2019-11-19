@@ -314,18 +314,6 @@ function setAttributes(type, elem, props, firstRender) {
     else
         elem.className = type
 
-    let afterTransition = (x) => {
-        let animation = props.animation;
-        let myElem = elem;
-        let pro = props;
-        if (animation.transition) {
-            myElem.style.transition = animation.transition;
-            myElem.style.transform = animation.transform;
-            if (animation.opacity)
-                myElem.style.opacity = animation.opacity;
-        }
-    };
-
     elem.style.transition = props.transition;
 
     /* New Style */
@@ -587,24 +575,30 @@ function setAttributes(type, elem, props, firstRender) {
         // }
     }
 
+    if (props.animation.transition) {
+        const afterTransition = () => {
+            const animation = props.animation;
+            elem.style.transition = animation.transition;
+            elem.style.transform = animation.transform;
+            if (animation.opacity) {
+                elem.style.opacity = animation.opacity;
+            }
+        };
 
-    if (type == "editText" && elem.tagName.toLowerCase() == "input") {
-        // If we already registered a keydown handler but failed to clean up,
-        // removeEventListener will make sure that we don't hook the same 
-        // event handler twice.
-        elem.removeEventListener('keydown', separatorInputKeyDownHandler);
-        elem.addEventListener('keydown', separatorInputKeyDownHandler);
-    }
-
-
-    if ((props.style.transform || props.style.opacity) && props.animation.transition) {
-        setTimeout(afterTransition, 100);
-    } else if (props.animation.transition) {
-        afterTransition();
+        if (props.style.transform || props.style.opacity) {
+            setTimeout(afterTransition, 100);
+        } else {
+            afterTransition();
+        }
     }
 
     /* Events */
     if (firstRender) {
+        if (type == "editText" && elem.tagName.toLowerCase() == "input") {
+            elem.addEventListener('keydown', separatorInputKeyDownHandler);
+        }
+    
+
         let events = ['onClick', 'onEnterPressedEvent', 'onChange', 'onMouseDown', 'onMouseUp', 'onMouseEnter', 'onMouseOver', 'onMouseMove', 'onMouseOut', 'onMouseLeave', 'onFocus']
 
         for (let i = 0; i < events.length; i++) {
