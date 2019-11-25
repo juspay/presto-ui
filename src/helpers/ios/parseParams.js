@@ -741,7 +741,7 @@ function _UILabelLayer_setCornerRadius(radius) {
     "fromStore":"true",
     "storeKey":"layer" + window.__LAYER_INDEX,
     "invokeOn": "_UILabelLayer",
-    "methodName":"setCornerRadius:",
+    "methodName":"setMJPCornerRadius:",
     "values":[
       {"name": radius + "", "type": "f"}
     ]
@@ -754,7 +754,7 @@ function _UILabelLayer_setBorderWidth(width) {
     "fromStore":"true",
     "storeKey":"layer" + window.__LAYER_INDEX,
     "invokeOn": "_UILabelLayer",
-    "methodName":"setBorderWidth:",
+    "methodName":"setMJPBorderWidth:",
     "values":[
       {"name": width + "",  "type": "f"}
     ]
@@ -767,7 +767,7 @@ function _UILabelLayer_setBorderColor() {
     "fromStore":"true",
     "storeKey":"layer" + window.__LAYER_INDEX,
     "invokeOn": "_UILabelLayer",
-    "methodName":"setBorderColor:",
+    "methodName":"setMJPBorderColor:",
     "values":[
       {"name": "color" + window.__COLOR_INDEX, "computed": "true", type: "cgcolor"}
     ]
@@ -834,7 +834,7 @@ function _UILabelLayer_setMasksToBounds() {
     "fromStore":"true",
     "storeKey":"layer" + window.__LAYER_INDEX,
     "invokeOn": "_UILabelLayer",
-    "methodName":"setMasksToBounds:",
+    "methodName":"setMJPMasksToBounds:",
     "values":[
       {"name": "1", type: "i"}
     ]
@@ -958,6 +958,17 @@ function this_setLetterSpacing(data) {
     "invokeOn": getSetType ? "this" : "MJPTextField",
     "methodName": "setLetterSpacing:",
     "values": [{ "name": data, "type": "s" }]
+  };
+}
+
+function this_setCaretColor() {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName": "setTintColor:",
+    "values": [{ "name": 'color' + window.__COLOR_INDEX, "computed": "true" }]
   };
 }
 
@@ -1349,6 +1360,11 @@ module.exports = function(type, config, _getSetType) {
 
   if (config.letterSpacing && !config.hasOwnProperty("text")) {
     config.methods.push(this_setLetterSpacing(config.letterSpacing));
+  }
+
+  if (config.hasOwnProperty("caretColor")) {
+    config.methods.push(UIColor_setColor(config.caretColor));
+    config.methods.push(this_setCaretColor());
   }
 
   // background
