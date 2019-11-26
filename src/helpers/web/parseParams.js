@@ -487,15 +487,11 @@ module.exports = function (type, config, getSetType) {
     parseLayoutProps(type, config, keys[i]);
   }
 
-  if (config.hasOwnProperty("hasAnimation")) {
-    console.log('props', config)
-  }
-
-  /*config.transition = "0ms all";
+  config.transition = "0ms all";
 
   if (config.style.transform == "") {
     delete config.style.transform;
-  }*/
+  }
 
   return config;
 }

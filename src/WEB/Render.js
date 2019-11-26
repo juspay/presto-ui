@@ -167,6 +167,131 @@ function setGravityStylesForColumn(elem, props) {
     }
 }
 
+function setAnimationStyles(elem, props) {
+  if (!props.hasOwnProperty('hasAnimation') || !props.hasAnimation) {
+    return
+  }
+
+  const keyframeName = "keyframe_" + props.id
+  if (!window.__RENDERED_KEYFRAMES.includes(keyframeName)) {
+    let styleElem = document.getElementById(window.__STYLE_ID)
+
+    if (!styleElem) {
+      return
+    }
+
+    let data = null
+
+    if (props.inlineAnimation) {
+      data = JSON.parse(props.inlineAnimation)
+      if (data && data.length > 0) {
+        data = data[0]
+      }
+    }
+
+    if (!data) {
+      return
+    }
+
+    let css = ""
+    css += "@keyframes " + keyframeName + "{"
+      css += "from {"
+        if (data.hasOwnProperty('fromX')) {
+          css += "margin-left: " + data.fromX + "px;"
+        }
+
+        if (data.hasOwnProperty('fromY')) {
+          css += "margin-top: " + data.fromY + "px;"
+        }
+        
+        if (data.hasOwnProperty('fromAlpha')) {
+          css += "opacity: " + data.fromAlpha + ";"
+        }
+        
+        if (data.hasOwnProperty('fromScale')) {
+          css += "transform: scale(" + data.fromScale + ");"
+        } else if (data.hasOwnProperty('fromScaleX') && data.hasOwnProperty('fromScaleY')) {
+          css += "transform: scale(" + data.fromScaleX + ", " + data.fromScaleY + ");"
+        } else if(data.hasOwnProperty('fromScaleX')) {
+          css += "transform: scaleX(" + data.fromScaleX + ");"
+        } else if(data.hasOwnProperty('fromScaleY')) {
+          css += "transform: scaleY(" + data.fromScaleY + ");"
+        }
+
+        if (data.hasOwnProperty('fromRotation')) {
+          css += "transform: rotate(" + data.fromRotation + ");"
+        } else {
+          if(data.hasOwnProperty('fromRotationX')) {
+            css += "transform: rotateX(" + data.fromRotationX + ");"
+          } else if(data.hasOwnProperty('fromRotationY')) {
+            css += "transform: rotateY(" + data.fromRotationY + ");"
+          }
+        } 
+      css += "} "
+      css += "to {"
+        if (data.hasOwnProperty('toX')) {
+          css += "margin-left: " + data.toX + "px;"
+        }
+
+        if (data.hasOwnProperty('toY')) {
+          css += "margin-top: " + data.toY + "px;"
+        }
+        
+        if (data.hasOwnProperty('toAlpha')) {
+          css += "opacity: " + data.toAlpha + ";"
+        }
+        
+        if (data.hasOwnProperty('toScale')) {
+          css += "transform: scale(" + data.toScale + ");"
+        } else if (data.hasOwnProperty('toScaleX') && data.hasOwnProperty('toScaleY')) {
+          css += "transform: scale(" + data.toScaleX + ", " + data.toScaleY + ");"
+        } else if(data.hasOwnProperty('toScaleX')) {
+          css += "transform: scaleX(" + data.toScaleX + ");"
+        } else if(data.hasOwnProperty('toScaleY')) {
+          css += "transform: scaleY(" + data.toScaleY + ");"
+        }
+
+        if (data.hasOwnProperty('toRotation')) {
+          css += "transform: rotate(" + data.toRotation + ");"
+        } else {
+          if(data.hasOwnProperty('toRotationX')) {
+            css += "transform: rotateX(" + data.toRotationX + ");"
+          } else if(data.hasOwnProperty('toRotationY')) {
+            css += "transform: rotateY(" + data.toRotationY + ");"
+          }
+        } 
+      css += "} "
+    css += "}"
+
+    if(styleElem.styleSheet){
+      styleElem.styleSheet.cssText += css;
+    }else{
+      styleElem.appendChild(document.createTextNode(css));
+    }
+
+    elem.style.animationName = keyframeName
+    elem.style.animationDuration = "1s"
+    if (data.hasOwnProperty('duration') && !isNaN(data.duration)) {
+      const duration = parseFloat(parseFloat(data.duration) / 1000).toFixed(2)
+      elem.style.animationDuration = duration + "s"
+    }
+
+    if (data.hasOwnProperty('repeatCount')) {
+      if (data.repeatCount == "-1" || data.repeatCount == -1) {
+        elem.style.animationIterationCount = "infinite"
+      } else {
+        elem.style.animationIterationCount = data.repeatCount
+      }
+    }
+
+    if (data.hasOwnProperty("interpolator")) {
+      elem.style.animationTimingFunction = "cubic-bezier(" + data.interpolator + ")";
+    }
+
+    window.__RENDERED_KEYFRAMES.push(keyframeName)
+  }
+}
+
 function setComputedStyles(elem, props) {
     /* Computed Styles */
     // LinearLayout Styles
@@ -406,6 +531,20 @@ function setAttributes(type, elem, props, firstRender) {
             elem.style.overflowY = 'hidden';
     } else if (type == 'relativeLayout') {
         elem.style.position = 'relative';
+
+        if (props.hasOwnProperty('scrollBarX')) {
+          if (props.scrollBarX)
+              elem.style.overflowX = 'auto'
+          else
+              elem.style.overflowX = 'hidden'
+        }
+
+        if (props.hasOwnProperty('scrollBarY')) {
+          if (props.scrollBarY)
+              elem.style.overflowY = 'auto'
+          else
+              elem.style.overflowY = 'hidden'
+        }
     } else if (type == 'imageView') {
         if (props.imageUrl) {
             let imageUrl = props.imageUrl
@@ -1004,6 +1143,7 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
         computeChildDimens(view);
 
     setComputedStyles(elem, view.props);
+    setAnimationStyles(elem, view.props);
 
     if (!stopChild) {
         if (view.hasOwnProperty('children') && view.children.length > 0) {

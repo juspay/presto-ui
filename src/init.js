@@ -119,6 +119,7 @@ if (window.__OS == "WEB") {
 
     /* Modal */
     window.__STYLE_ID = 'style_' + guid
+    window.__RENDERED_KEYFRAMES = []
     window.__MODAL_PROPS = {}
     window.__CONTENTMODAL_CLASS = 'PDC_modal'
     window.__OPENMODAL_CLASS = 'PDC_modal-open'
