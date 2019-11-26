@@ -95,6 +95,25 @@ module.exports = {
   },
 
   Render: function (view, cb) {
+    /* Global Style Tag */
+    let style_id = window.__STYLE_ID;
+    
+    let styleElem = document.getElementById(style_id);
+    if(!styleElem || styleElem == undefined){
+      styleElem = document.createElement('style');
+      styleElem.setAttribute('id', style_id);
+      styleElem.type = 'text/css';
+      
+      if(styleElem.styleSheet){
+        styleElem.styleSheet.cssText = "";
+      }else{
+        styleElem.appendChild(document.createTextNode(""));
+      }
+
+      document.head.appendChild(styleElem);
+    }
+    /* Global Style Tag End */
+
     let parentElement = document.getElementById("content");
     let parentView = {
       type: "linearLayout",

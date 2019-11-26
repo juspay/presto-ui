@@ -54,6 +54,8 @@ if (window.__DEVICE_DETAILS && window.__DEVICE_DETAILS.hasOwnProperty("screen_he
     window.__HEIGHT = "1920";
 }
 
+const guid = Math.random().toString(36).substr(2, 9)
+
 //Intializing defaults
 if (window.__OS == "WEB") {
     /* Components */
@@ -116,6 +118,7 @@ if (window.__OS == "WEB") {
     /* Components End */
 
     /* Modal */
+    window.__STYLE_ID = 'style_' + guid
     window.__MODAL_PROPS = {}
     window.__CONTENTMODAL_CLASS = 'PDC_modal'
     window.__OPENMODAL_CLASS = 'PDC_modal-open'

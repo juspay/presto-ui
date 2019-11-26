@@ -345,7 +345,7 @@ function parseLayoutProps(type, config, key) {
     config.style["z-index"] = config[key];
   }
 
-  if (key == "a_duration") {
+  if (key == "a_duration" && !isNaN(config[key])) {
     config.animation.transition = config[key] + 'ms all';
   }
 
@@ -487,11 +487,15 @@ module.exports = function (type, config, getSetType) {
     parseLayoutProps(type, config, keys[i]);
   }
 
-  config.transition = "0ms all";
+  if (config.hasOwnProperty("hasAnimation")) {
+    console.log('props', config)
+  }
+
+  /*config.transition = "0ms all";
 
   if (config.style.transform == "") {
     delete config.style.transform;
-  }
+  }*/
 
   return config;
 }
