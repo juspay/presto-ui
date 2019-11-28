@@ -371,7 +371,9 @@ function parseLayoutProps(type, config, key) {
   if (type == "linearLayout" && key == "gravity" && config.gravity){
     if (config.margin && config.gravity=="center_vertical"){
       var margin=config.margin.split(",");
-      config.style.width="calc(100% - "+(parseInt(margin[0])+parseInt(margin[2])).toString()+"px )";
+      if (config.width == "match_parent"){
+         config.style.width="calc(100% - "+(parseInt(margin[0])+parseInt(margin[2])).toString()+"px )";
+      }
     }
   }
 
