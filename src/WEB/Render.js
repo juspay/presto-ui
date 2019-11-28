@@ -226,8 +226,31 @@ function setComputedStyles(elem, props) {
 
 function separatorInputKeyDownHandler(ev) {
     ev.stopPropagation();
+    try{
+        if(ev.keyCode === 229){
+            var evPath = ev.path[0];
+            evPath.addEventListener("input",function(e){
+                var key = null;//e.data;
+                var inputId = evPath.getAttribute("id");
+                var input = document.getElementById(inputId);
+                var inputValue = input.value;
+                var keycode = e.data.charCodeAt(0);
+                return separatorInputKeyDownHandlerWithKey(ev, key, inputValue, keycode);
+            })
+        } else {
+            var inputId = ev.path[0].getAttribute("id");
+            var input = document.getElementById(inputId);
+            return separatorInputKeyDownHandlerWithKey(ev, ev.key, input.value, ev.keyCode);
+        }
+    } catch(err){
+        console.error(err);
+    }
+}
+
+function separatorInputKeyDownHandlerWithKey(ev, key, keyData, keycode) {
+    ev.stopPropagation();
     try {
-        var keycode = ev.keyCode;
+        // var keycode = ev.keyCode;
         var valid = (keycode > 47 && keycode < 58) || // number keys
             (keycode > 64 && keycode < 91) || // letter keys
             (keycode > 95 && keycode < 112) || // numpad keys
@@ -236,9 +259,8 @@ function separatorInputKeyDownHandler(ev) {
         if (valid) {
             var inputId = ev.path[0].getAttribute("id");
             var input = document.getElementById(inputId);
-            var currentInput = ev.key;
-            var currentData = input.value;
-
+            var currentInput = key//ev.key;
+            var currentData = keyData//input.value;
             if (input.getAttribute("pattern")) {
                 var data = input.getAttribute("pattern").split(',');
                 var length = parseInt(data.pop());
@@ -253,7 +275,7 @@ function separatorInputKeyDownHandler(ev) {
                 const newValue = splittedString.join("");
                 if (length) {
                     if (currentData.length + 1 > length) {
-                        input.value = currentData;
+                        input.value = currentData.substring(0, length);
                         ev.preventDefault();
                         return;
                     }
@@ -300,7 +322,9 @@ function separatorInputKeyDownHandler(ev) {
                 }
             }
         }
-    } catch (error) {}
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 function setAttributes(type, elem, props, firstRender) {
