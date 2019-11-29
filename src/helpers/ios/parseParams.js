@@ -367,6 +367,19 @@ function this_setOnFocusCallback(callback) {
   }
  }
 
+function this_setOnMerchantViewHeightChangeCallback(callback) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setOnMerchantViewHeightChange:",
+    "values":[
+      { "name": callbackMapper.map(callback), "type": "s" },
+    ]
+  }
+ }
+
 function this_setOn(enabled) {
  return {
    "return": "false",
@@ -1618,6 +1631,10 @@ module.exports = function(type, config, _getSetType) {
 
   if(config.onFocus){
     config.methods.push(this_setOnFocusCallback(config.onFocus));
+  }
+
+  if(config.hasOwnProperty("onMerchantViewHeightChange")){
+    config.methods.push(this_setOnMerchantViewHeightChangeCallback(config.onMerchantViewHeightChange));
   }
 
   if (config.hasOwnProperty("pivotX")) {
