@@ -539,6 +539,14 @@ var map = {
       fnName: 'setColors',
       inVokedIn: 'DRAWABLE'
   },
+  "gradientAngle": {
+    values: [{
+      type: 's'
+    }],
+    'dontMap': true,
+    fnName: 'setOrientation',
+    inVokedIn: 'DRAWABLE'
+},
   "lineHeight": {
     values: [{
       type: 'dp'

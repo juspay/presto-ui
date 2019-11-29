@@ -340,12 +340,17 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
     prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + attrs.value + "\.ttf;";
     currTransVal = "get_type";
   }
+  
+  if (attrs.key == "gradientAngle") {
+    orientation += "set_dr=this->getBackground;set_o=android.graphics.drawable.GradientDrawable$Orientation->valueOf:s_"+attrs.value+";"
+    prePend += orientation;
+    currTransVal = "get_o" 
+  }
 
   if (attrs.key == "gradient") {
     var gradientObj = JSON.parse(attrs.value);
     var orientation = "";
     if (gradientObj.type == "linear") {
-      // orientation += "set_o=setOrientation:"
     } else {}
 
     var intClass = "set_cc=java.lang.Class->forName:s_java.lang.Integer;";
