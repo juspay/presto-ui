@@ -68,7 +68,7 @@ function getOS() {
     return console.error(new Error("UserAgent is null"));
   if (userAgent.indexOf("Android") != -1 && userAgent.indexOf("Version") != -1)
     return "ANDROID";
-  if (userAgent.indexOf("iPhone") != -1 && userAgent.indexOf("Version") == -1)
+  if ((userAgent.indexOf("iPhone") != -1 || userAgent.indexOf("iPad") != -1 || userAgent.indexOf("Macintosh") != -1) && userAgent.indexOf("Version") == -1)
     return "IOS";
   return "WEB";
 }
