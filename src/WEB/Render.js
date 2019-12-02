@@ -224,109 +224,77 @@ function setComputedStyles(elem, props) {
     /* Computed Styles End */
 }
 
-function separatorInputKeyDownHandler(ev) {
+function separatorInputKeyDownHandler(ev){
     ev.stopPropagation();
     try{
-        if(ev.keyCode === 229){
-            var evPath = ev.path[0];
-            evPath.addEventListener("input",function(e){
-                var key = null;//e.data;
-                var inputId = evPath.getAttribute("id");
-                var input = document.getElementById(inputId);
-                var inputValue = input.value;
-                var keycode = e.data.charCodeAt(0);
-                return separatorInputKeyDownHandlerWithKey(ev, key, inputValue, keycode);
-            })
-        } else {
-            var inputId = ev.path[0].getAttribute("id");
-            var input = document.getElementById(inputId);
-            return separatorInputKeyDownHandlerWithKey(ev, ev.key, input.value, ev.keyCode);
+        var inputId = ev.path[0].getAttribute("id");
+        var input = document.getElementById(inputId)
+        var oldValidValue = "";
+        if(input.oldValidValue){
+            oldValidValue = input.oldValidValue;
+        }
+        if(input.value.length===0){
+            input.oldValidValue = input.value;
+            return;
+        }
+        if (input.getAttribute("pattern")) {
+            var data = input.getAttribute("pattern").split(',');
+            var length = parseInt(data.pop());
+            var regexString = data.join('');
+            var selectionStart = input.selectionStart;
+            var selectionEnd = input.selectionEnd;
+            const newValue = input.value;
+            if (length) {
+                if (oldValidValue.length < input.value.length && oldValidValue.length + 1 > length) {
+                    input.value = oldValidValue;
+                    ev.preventDefault();
+                    input.selectionStart = selectionStart;
+                    input.selectionEnd = selectionEnd;
+                    return;
+                }
+            }
+            var finalData = newValue.replace(/[^a-zA-Z0-9]/g, "");
+            if (regexString) {
+                var regexPattern = new RegExp(regexString);
+                if (!regexPattern.test(finalData)) {
+                    ev.preventDefault();
+                    input.value = oldValidValue;
+                    input.selectionStart = selectionStart- (selectionEnd-selectionStart)-1;
+                    input.selectionEnd = selectionEnd- (selectionEnd - selectionStart)-1;
+                    return;
+                }
+            }
+            var separator = input.getAttribute("separator");
+            var separatorRepeat = parseInt(input.getAttribute("separatorRepeat"));
+            if (separator && separatorRepeat) {
+                ev.preventDefault();
+                var formattedString = "";
+                for (let index = 0; index < finalData.length; index++) {
+                    var element = finalData[index];
+                    formattedString += element;
+                    var factor = 0;
+                    if (formattedString.length && formattedString.replace(/[^a-zA-Z0-9]/g, "").length % (separatorRepeat + factor) == 0) {
+                        formattedString += separator;
+                    }
+                }
+                if (formattedString[formattedString.length - 1] == separator) {
+                    formattedString = formattedString.substring(0, formattedString.length - 1);
+                }
+                input.value = formattedString;
+                let cursorPosition = selectionStart;
+                if ((cursorPosition % (separatorRepeat + 1) ) === 0) {
+                    cursorPosition += 1
+                }
+                input.oldValidValue = formattedString;
+                input.selectionStart = cursorPosition;
+                input.selectionEnd = cursorPosition;
+                console.log("formattedString----", formattedString);
+            }
         }
     } catch(err){
         console.error(err);
     }
 }
-
-function separatorInputKeyDownHandlerWithKey(ev, key, keyData, keycode) {
-    ev.stopPropagation();
-    try {
-        // var keycode = ev.keyCode;
-        var valid = (keycode > 47 && keycode < 58) || // number keys
-            (keycode > 64 && keycode < 91) || // letter keys
-            (keycode > 95 && keycode < 112) || // numpad keys
-            (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
-            (keycode > 218 && keycode < 223); // [\]' (in order)
-        if (valid) {
-            var inputId = ev.path[0].getAttribute("id");
-            var input = document.getElementById(inputId);
-            var currentInput = key//ev.key;
-            var currentData = keyData//input.value;
-            if (input.getAttribute("pattern")) {
-                var data = input.getAttribute("pattern").split(',');
-                var length = parseInt(data.pop());
-                var regexString = data.join('');
-                var selectionStart = input.selectionStart;
-                var selectionEnd = input.selectionEnd;
-
-                const splittedString = currentData.split("")
-                splittedString
-                    .splice(selectionStart, selectionEnd-selectionStart, currentInput)
-
-                const newValue = splittedString.join("");
-                if (length) {
-                    if (currentData.length + 1 > length) {
-                        input.value = currentData.substring(0, length);
-                        ev.preventDefault();
-                        return;
-                    }
-                }
-                if (regexString) {
-                    var finalData = newValue;
-                    var regexPattern = new RegExp(regexString);
-                    if (!regexPattern.test(finalData)) {
-                        ev.preventDefault();
-                    }
-                }
-                var separator = input.getAttribute("separator");
-                var separatorRepeat = parseInt(input.getAttribute("separatorRepeat"));
-                var finalData = newValue.replace(/[^a-zA-Z0-9]/g, "");
-                if (regexString) {
-                    var regexPattern = new RegExp(regexString);
-                    if (!regexPattern.test(finalData)) {
-                        ev.preventDefault();
-                        return;
-                    }
-                }
-                if (separator && separatorRepeat) {
-                    ev.preventDefault();
-                    var formattedString = "";
-                    for (let index = 0; index < finalData.length; index++) {
-                        var element = finalData[index];
-                        formattedString += element;
-                        var factor = 0;
-                        if (formattedString.length && formattedString.replace(/[^a-zA-Z0-9]/g, "").length % (separatorRepeat + factor) == 0) {
-                            formattedString += separator;
-                        }
-                    }
-                    if (formattedString[formattedString.length - 1] == separator) {
-                        formattedString = formattedString.substring(0, formattedString.length - 1);
-                    }
-                    input.value = formattedString;
-                    let cursorPosition = selectionStart + 1
-                    if ((cursorPosition % (separatorRepeat + 1) ) === 0) {
-                        cursorPosition += 1
-                    }
-                    input.selectionStart = cursorPosition
-                    input.selectionEnd = cursorPosition
-                    console.log("formattedString----", formattedString);
-                }
-            }
-        }
-    } catch (error) {
-        console.error(error);
-    }
-}
-
 function setAttributes(type, elem, props, firstRender) {
     if (type == 'modal') {
         setModalAttributes(elem, props, firstRender);
@@ -619,7 +587,7 @@ function setAttributes(type, elem, props, firstRender) {
     /* Events */
     if (firstRender) {
         if (type == "editText" && elem.tagName.toLowerCase() == "input") {
-            elem.addEventListener('keydown', separatorInputKeyDownHandler);
+            elem.addEventListener('input', separatorInputKeyDownHandler);
         }
     
 
