@@ -373,8 +373,8 @@ function separatorInputKeyDownHandler(ev){
                 if (oldValidValue.length < input.value.length && oldValidValue.length + 1 > length) {
                     input.value = oldValidValue;
                     ev.preventDefault();
-                    input.selectionStart = selectionStart;
-                    input.selectionEnd = selectionEnd;
+                    input.selectionStart = selectionStart- (selectionEnd-selectionStart)-1;
+                    input.selectionEnd = selectionEnd- (selectionEnd - selectionStart)-1;
                     return;
                 }
             }
@@ -408,12 +408,21 @@ function separatorInputKeyDownHandler(ev){
                 input.value = formattedString;
                 let cursorPosition = selectionStart;
                 if ((cursorPosition % (separatorRepeat + 1) ) === 0) {
-                    cursorPosition += 1
+                    if(input.oldValidValue.length < formattedString.length){
+                        cursorPosition += 1
+                    } else {
+                        cursorPosition -= 1
+                    }
+                }
+                if(cursorPosition<0){
+                    cursorPosition = 0;
                 }
                 input.oldValidValue = formattedString;
                 input.selectionStart = cursorPosition;
                 input.selectionEnd = cursorPosition;
                 console.log("formattedString----", formattedString);
+            } else {
+                input.oldValidValue = finalData;
             }
         }
     } catch(err){
