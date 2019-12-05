@@ -410,7 +410,7 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "pattern") {
-    config.attributes.pattern = config.pattern;
+    config.attributes["data-pattern"] = config.pattern;
   }
 
   if (key == "separator") {

@@ -362,8 +362,9 @@ function separatorInputKeyDownHandler(ev){
             input.oldValidValue = input.value;
             return;
         }
-        if (input.getAttribute("pattern")) {
-            var data = input.getAttribute("pattern").split(',');
+        var dataPattern = input.getAttribute("data-pattern");
+        if (dataPattern) {
+            var data = dataPattern.split(',');
             var length = parseInt(data.pop());
             var regexString = data.join('');
             var selectionStart = input.selectionStart;
