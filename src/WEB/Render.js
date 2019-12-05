@@ -352,7 +352,7 @@ function setComputedStyles(elem, props) {
 function separatorInputKeyDownHandler(ev){
     ev.stopPropagation();
     try{
-        var inputId = ev.path[0].getAttribute("id");
+        var inputId = ev.target.id;
         var input = document.getElementById(inputId)
         var oldValidValue = "";
         if(input.oldValidValue){
