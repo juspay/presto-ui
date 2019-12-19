@@ -393,6 +393,24 @@ function parseLayoutProps(type, config, key) {
     config.attributes.id = config.id;
   }
 
+
+  if (key == "gradient") {
+    var gradientObj =JSON.parse(config.gradient);
+    console.log(gradientObj);
+    if (gradientObj.type == "linear") {
+      var angle = gradientObj.angle;
+      var values = gradientObj.values;
+      var colors = values.join(", ");
+      config.style["background-image"] = "linear-gradient("+angle+"deg, "+colors+")"
+    }
+     else {
+      var values = gradientObj.values;
+      var colors = values.join(", ");
+      config.style["background-image"] = "radial-gradient("+colors+")"
+     }
+  }
+
+
   if (key == "inputType") {
     var inputType = "text"
     if (config.inputType == "numericPassword" || config.inputType == "password") {
