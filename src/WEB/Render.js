@@ -633,7 +633,7 @@ function setAttributes(type, elem, props, firstRender) {
                 let exts = ["jpeg", "jpg", "png", "bmp", "svg", "gif"]
                 ext = ext.toLowerCase()
 
-                if (!exts.includes(ext)) {
+                if(!imageUrl.includes("data:image/svg+xml") && !exts.includes(ext)) {
                     imageUrl += '.png'
                 }
             }
