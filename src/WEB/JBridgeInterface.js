@@ -24,12 +24,8 @@
 */
 
 var ViewPageAdapter = require("./ViewPageAdapter");
-var axios = require('axios');
 var Renderer = require("./Render");
-const es6promise = require('es6-promise');
-const immu = require('immu');
-const assign = require('object-assign');
-const qs = require("qs")
+const qsstringify = require("qs/lib/stringify")
 
 function parseJson(str) {
   try {
@@ -89,16 +85,17 @@ module.exports = {
     data = parseJson(data)
     if (headers["Content-Type"] === "application/x-www-form-urlencoded"){
       if(typeof data == "object"){
-        data =qs.stringify(data);
+        data =qsstringify(data);
       }
     }
-    axios({
+    fetch(url, {
       method: method,
-      url: url,
-      data: data,
+      body: JSON.stringify(data),
       headers: headers
     }).then(function (resp) {
-      window.callUICallback(callback, "success", btoa(JSON.stringify(resp.data)), resp.status);
+      resp.json().then(json => {
+        window.callUICallback(callback, "success", btoa(JSON.stringify(json)), resp.status);
+      })
     }).catch(function (err) {
       console.log(err);
       window.callUICallback(callback, "failure", btoa("{}"), 50);
@@ -127,12 +124,6 @@ module.exports = {
 
   setKey: function (key, value) {
     return localStorage.setItem(key, value);
-  },
-
-  newpromsie: function (key, value) {
-    var value = assign(value, {});
-    if (es6promise)
-      es6promise(immu(key)).then(value);
   },
 
   getResourceByName: function getResourceByName(tag) {
