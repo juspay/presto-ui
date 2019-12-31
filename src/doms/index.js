@@ -23,24 +23,14 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-const getOS = require('../helper').getOS;
-
 function run() {
-  let OS = getOS();
-
-  let type;
-  switch (OS) {
-  case "IOS":
-    type = require("./ios")
-    break;
-  case "WEB":
-    type = require("./web")
-    break;
-  default:
-    type = require("./android")
+  if (window.__OS === "IOS") {
+    return require("./ios")
+  } else if (window.__OS === "WEB") {
+    return require("./web")
+  } else {
+    return require("./android")
   }
-
-  return type;
 }
 
 module.exports = run();

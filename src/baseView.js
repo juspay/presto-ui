@@ -35,9 +35,6 @@ Array.prototype.addCmd = function(data) {
   return this;
 };
 
-if (!window.__OS)
-  window.__OS = getOS();
-
 let parseParams;
 if (window.__OS == "ANDROID")
   parseParams = require('./helpers/android/parseParams');

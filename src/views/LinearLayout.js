@@ -25,7 +25,6 @@
 
 var dom = require('../doms');
 var View = require('../baseView');
-var parseParams = require('../helpers/ios/parseParams');
 
 class LinearLayout extends View {
   constructor(props, children) {
