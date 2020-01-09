@@ -149,6 +149,10 @@ function parseLayoutProps(type, config, key) {
     config.style.color = parseColors(config.color);
   }
 
+  if(key == "position") {
+    config.style.position = config.position;
+  }
+
   if (key == "cornerRadius") {
     config.style.borderRadius = config.cornerRadius + "px";
   }
