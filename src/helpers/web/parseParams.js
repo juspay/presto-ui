@@ -418,7 +418,12 @@ function parseLayoutProps(type, config, key) {
   if (key == "inputType") {
     var inputType = "text"
     if (config.inputType == "numericPassword" || config.inputType == "password") {
+      if(config.inputTypeI == 4){
+        inputType = "text";
+        config.style["-webkit-text-security"] = "disc";
+      } else {
         inputType = "password"
+      }
     } else if (config.inputType == "disabled") {
         config.attributes.disabled = 'disabled'
     } else if (config.inputType == "numeric") {
@@ -433,6 +438,12 @@ function parseLayoutProps(type, config, key) {
 
   if (key == "pattern") {
     config.attributes["data-pattern"] = config.pattern;
+  }
+  if(key == "inputTypeI"){
+    if(config.inputTypeI == 4){
+      config.attributes["inputmode"] = "numeric";
+    }
+    
   }
 
   if (key == "separator") {
