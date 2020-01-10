@@ -421,6 +421,8 @@ function parseLayoutProps(type, config, key) {
       if(config.inputTypeI == 4){
         inputType = "text";
         config.style["-webkit-text-security"] = "disc";
+        config.style["-moz-text-security"] = "disc";
+        config.style["text-security"] = "disc";
       } else {
         inputType = "password"
       }
