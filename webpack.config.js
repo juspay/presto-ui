@@ -53,7 +53,7 @@ let config = {
         use: {
           loader: "babel-loader",
           options: {
-            presets: [ "env" , "stage-0" ],
+            presets: [ "env" , "stage-2" ],
             plugins: [ ["transform-react-jsx" , { "pragma": "dom" } ] ]
           }
         }

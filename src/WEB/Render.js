@@ -30,6 +30,8 @@ let {
     renderComponent
 } = require("../component")
 let helper = require("../helper")
+let computeListViewChildren = require("./computeListViewChildren")
+
 
 function createTextElement(elem, config) {
     let children = elem.childNodes;
@@ -664,7 +666,9 @@ function setAttributes(type, elem, props, firstRender) {
                 elem.setAttribute(innerKey, props.attributes[innerKey]);
             }
         } else if (key == "className") {
-            elem.classList.add(props[key]);
+            if ((props[key] || "").trim() !== "") {
+                elem.classList.add(props[key]); 
+            }
         } else if (key == "classList") {
             JSON.parse(props[key]).forEach(function (obj) {
                 elem.classList.add(obj);
@@ -982,6 +986,14 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
         view = handleWrapContent(view, parentElement)
     }
 
+    if (view.type == 'listView') {
+        // console.log("listView", view, elem)
+        view.children = computeListViewChildren(view)//.slice(0,2)
+        if (elem) {
+            elem.innerHTML = ""
+        }
+    }
+
     if (!elem) {
         if (view.type == "webView") {
             elem = document.createElement('iframe')
@@ -1058,7 +1070,7 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
                 elem.placeholder = view.props.hint || "";
             }
         } else
-            elem = document.createElement("div");
+            elem = document.createElement(view.elName || "div");
 
         /* Tooltip */
         if (
