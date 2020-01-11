@@ -153,6 +153,16 @@ function parseLayoutProps(type, config, key) {
     config.style.position = config.position;
   }
 
+  if(key == "bottomFixed") {
+    config.style.bottom = config.bottomFixed;
+  }
+
+  if(key == "autofocus"){
+    if(config.autofocus == "true"){
+      config.style.autofocus = "autofocus";  
+    }
+  }
+
   if (key == "cornerRadius") {
     config.style.borderRadius = config.cornerRadius + "px";
   }
