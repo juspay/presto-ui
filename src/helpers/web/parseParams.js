@@ -158,8 +158,8 @@ function parseLayoutProps(type, config, key) {
   }
 
   if(key == "autofocus"){
-    if(config.autofocus == "true"){
-      config.style.autofocus = "autofocus";  
+    if(config.autofocus){
+      config.attributes["autofocus"] = "autofocus";  
     }
   }
 
