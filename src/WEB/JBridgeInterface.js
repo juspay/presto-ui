@@ -83,14 +83,21 @@ module.exports = {
   callAPI: function callAPI(method, url, data, headers, type, callback) {
     headers = parseJson(headers)
     data = parseJson(data)
+    let something = false
     if (headers["Content-Type"] === "application/x-www-form-urlencoded"){
       if(typeof data == "object"){
+        something = true
         data =qsstringify(data);
       }
+    } else {
+      data = JSON.stringify(data)
+    }
+    if (['GET', 'HEAD'].includes(method)) {
+      data = undefined
     }
     fetch(url, {
       method: method,
-      body: JSON.stringify(data),
+      body: data,
       headers: headers
     }).then(function (resp) {
       resp.json().then(json => {
