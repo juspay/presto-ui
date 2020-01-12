@@ -740,6 +740,9 @@ function setAttributes(type, elem, props, firstRender) {
     /* Events */
     if (firstRender) {
         if (type == "editText" && elem.tagName.toLowerCase() == "input") {
+            if (props.autofocus) {
+                elem.focus()
+            }
             elem.addEventListener('input', separatorInputKeyDownHandler);
         }
     
