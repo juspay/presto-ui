@@ -1,4 +1,4 @@
-var { domAll} = require("../PrestoUIInterface")
+var { domAll } = require("../PrestoUIInterface");
 
 function applyItemPropertiesToChildren(
   item,
@@ -27,7 +27,16 @@ function applyItemPropertiesToChildren(
   }
 }
 
+const prevResult = {};
+
 function computeListViewChildren(elem) {
+  if (
+    prevResult.listItem === elem.props.listItem &&
+    prevResult.listData === elem.props.listData
+  ) {
+    return prevResult.children;
+  }
+
   var listItem = JSON.parse(elem.props.listItem);
   var listData = JSON.parse(elem.props.listData);
   console.log("domAll xyz", elem.props.id, {
@@ -61,7 +70,7 @@ function computeListViewChildren(elem) {
       holderIDProperties
     );
 
-    console.log("clonedItemView", [listItem.itemView, clonedItemView]);
+    // console.log("clonedItemView", [listItem.itemView, clonedItemView]);
 
     // clonedItemView.props.id = elem2.__id
 
@@ -81,9 +90,14 @@ function computeListViewChildren(elem) {
     listItems[ix] = domAll(clonedItemView);
   }
 
-  var children = listItems
+  var children = listItems;
   console.log("computeListViewChildren listItems", elem, listItems);
-  return children
+
+  prevResult.listItem = elem.props.listItem;
+  prevResult.listData = elem.props.listData;
+  prevResult.children = children;
+
+  return children;
 }
 
-module.exports = computeListViewChildren
+module.exports = computeListViewChildren;
