@@ -80,9 +80,10 @@ module.exports = {
     }
   },
 
-  callAPI: function callAPI(method, url, data, headers, type, callback) {
+  callAPI: async function callAPI(method, url, data, headers, type, callback) {
     headers = parseJson(headers)
     data = parseJson(data)
+    console.log(data)
     let something = false
     if (headers["Content-Type"] === "application/x-www-form-urlencoded"){
       if(typeof data == "object"){
@@ -95,18 +96,14 @@ module.exports = {
     if (['GET', 'HEAD'].includes(method)) {
       data = undefined
     }
-    fetch(url, {
-      method: method,
-      body: data,
-      headers: headers
-    }).then(function (resp) {
-      resp.json().then(json => {
-        window.callUICallback(callback, "success", btoa(JSON.stringify(json)), resp.status);
-      })
-    }).catch(function (err) {
-      console.log(err);
+    try {
+      const resp = await fetch(url, { method, body: data, headers })
+      const json = await resp.json()
+      window.callUICallback(callback, "success", btoa(JSON.stringify(json)), resp.status);
+    } catch(err) {
+      console.log("ERR" ,err);
       window.callUICallback(callback, "failure", btoa("{}"), 50);
-    });
+    }
   },
 
   getFromSharedPrefs: function (key) {
