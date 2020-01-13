@@ -23,13 +23,9 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-const getOS = require('../helper').getOS;
-
 function run() {
-  let OS = getOS();
-
   let type;
-  switch (OS) {
+  switch (window.__OS) {
   case "IOS":
     type = require("./ios")
     break;
