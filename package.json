@@ -11,7 +11,8 @@
     "moment": "^2.24.0",
     "object-assign": "^4.1.0",
     "promise": "^7.1.1",
-    "qs": "^6.6.0"
+    "qs": "^6.6.0",
+    "webpack-merge": "^4.2.2"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
@@ -27,8 +28,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "webpack --mode production --config webpack.config.js --progress --colors",
-    "watch": "webpack --mode development --config webpack.config.js --watch --progress --colors"
+    "compile": "webpack --mode production --config webpack.prod.js --progress --colors",
+    "watch": "webpack --mode development --config webpack.dev.js --watch --progress --colors"
   },
   "repository": {
     "type": "git",

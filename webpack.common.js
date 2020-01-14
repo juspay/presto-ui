@@ -23,7 +23,6 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 const path = require('path')
-const TerserPlugin = require('terser-webpack-plugin')
 
 let config = { 
   devtool: "inline-cheap-module-source-map",
@@ -34,17 +33,6 @@ let config = {
     path: path.join(__dirname,"/lib"),
     filename: "index.js",
     libraryTarget: 'commonjs2'
-  },
-  optimization: {
-    minimize: true,
-    minimizer: [
-      new TerserPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: true, // Must be set to true if using source-maps in production
-        terserOptions: {}
-      })
-    ]
   },
   module: {
     rules: [
