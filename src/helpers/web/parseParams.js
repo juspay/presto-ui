@@ -144,6 +144,9 @@ function parseLayoutProps(type, config, key) {
   if (key == "background") {
     config.style.background = config.background;
   }
+  if (key == "backgroundDrawable") {
+    config.style["background-image"] = "url('"+config.backgroundDrawable+"')";
+  }
 
   if (key == "color") {
     config.style.color = parseColors(config.color);

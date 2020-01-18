@@ -740,6 +740,9 @@ function setAttributes(type, elem, props, firstRender) {
     /* Events */
     if (firstRender) {
         if (type == "editText" && elem.tagName.toLowerCase() == "input") {
+            if (props.autofocus) {
+                elem.focus()
+            }
             elem.addEventListener('input', separatorInputKeyDownHandler);
         }
     
@@ -970,10 +973,16 @@ let inflateModal = function (view, parentElement, stopChild) {
     return backdropElem;
 }
 
+window.inflateTimings = {
+    lastUpdatedAt: null
+}
+
 // Creates the DOM element if it has not been already inflated
 // View: Object of ReactDOM, {type, props, children}
 // parentElement: DOM Object
 let inflateView = function (view, parentElement, siblingView, stopChild, stopObserver, renderStyle) {
+    const start = performance.now();
+
     if (view.type == 'modal') {
         return inflateModal(view, parentElement, stopChild);
     }
@@ -1202,6 +1211,11 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
 
         cb(elem, view);
     }
+
+    const end = performance.now();
+
+    window.inflateTimings[view.props.id] = end - start
+    window.inflateTimings.lastUpdatedAt = end
 
     return elem;
 };
