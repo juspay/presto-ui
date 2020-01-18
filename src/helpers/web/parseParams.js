@@ -453,7 +453,7 @@ function parseLayoutProps(type, config, key) {
 
   if (key == "rotateImage") {
     if(config.rotateImage){
-      config.style["animation-duration"] = "8s";
+      config.style["animation-duration"] = "4s";
       config.style["animation-timing-function"] = "linear";
       config.style["animation-delay"] = "0s";
       config.style["animation-iteration-count"] = "infinite";
