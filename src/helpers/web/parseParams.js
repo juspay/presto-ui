@@ -448,6 +448,20 @@ function parseLayoutProps(type, config, key) {
     config.attributes.type = inputType
   }
 
+  if (key == "rotateImage") {
+    if(config.rotateImage){
+      config.style["animation-duration"] = "8s";
+      config.style["animation-timing-function"] = "linear";
+      config.style["animation-delay"] = "0s";
+      config.style["animation-iteration-count"] = "infinite";
+      config.style["animation-direction"] = "normal";
+      config.style["animation-fill-mode"] = "none";
+      config.style["animation-play-state"] = "running";
+      config.style["animation-name"] = "rotation";
+
+    }
+  }
+
   if (key == "pattern") {
     config.attributes["data-pattern"] = config.pattern;
   }
