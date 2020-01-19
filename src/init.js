@@ -31,6 +31,26 @@ window.PrestoUI = require("./PrestoUIInterface");
 
 const getCurrTime = () => (new Date()).getTime()
 
+if(window.__OS == "ANDROID"){
+    var getScreenDetails = function() {
+    try {
+        let details = JSON.parse(Android.getScreenDimensions());
+        return {
+            screen_width: details.width + "",
+            screen_height: details.height + ""
+        };
+    } catch (err) {
+        console.error(
+            "error in gettting screen dimensions, setting default values", err);
+            return {
+                screen_width: "1080",
+                screen_height: "1920"
+            };
+        }
+    };
+    window.__DEVICE_DETAILS = getScreenDetails();
+}
+
 if (window.__OS == "WEB") {
     window.Android = require("./WEB/AndroidInterface")
     window.JBridge = require("./WEB/JBridgeInterface")
