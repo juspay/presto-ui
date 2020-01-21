@@ -83,7 +83,13 @@ module.exports = {
   callAPI: async function callAPI(method, url, data, headers, type, callback) {
     headers = parseJson(headers)
     data = parseJson(data)
-    console.log(data)
+    if (data.upi_vpa){
+      var order=JSON.parse(data.order_details);
+      if (order.customer_id == ""){
+        order.customer_id = "juspay_demo_user";
+      }
+      data.order_details = order;
+    }
     let something = false
     if (headers["Content-Type"] === "application/x-www-form-urlencoded"){
       if(typeof data == "object"){
