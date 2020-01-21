@@ -1,13 +1,13 @@
 const webpack = require("webpack");
-const merge = require('webpack-merge');
-const common = require('./webpack.common.js');
-const TerserPlugin = require('terser-webpack-plugin');
+const merge = require("webpack-merge");
+const common = require("./webpack.common.js");
+const TerserPlugin = require("terser-webpack-plugin");
 
-module.exports = merge(common, {
-  mode: 'production',
+const prodConfig = merge(common, {
+  mode: "production",
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify("production"),
+      "process.env.NODE_ENV": JSON.stringify("production")
     })
   ],
   optimization: {
@@ -20,5 +20,24 @@ module.exports = merge(common, {
         terserOptions: {}
       })
     ]
-  },
+  }
 });
+
+function getPlatformOverride(platform) {
+  return merge(prodConfig, {
+    output: {
+      filename: `index.${platform.toLowerCase()}.js`
+    },
+    plugins: [
+      new webpack.DefinePlugin({
+        "window.__OS": JSON.stringify(platform)
+      })
+    ]
+  });
+}
+
+module.exports = [
+  getPlatformOverride("ANDROID"),
+  getPlatformOverride("IOS"),
+  getPlatformOverride("WEB")
+];
