@@ -23,7 +23,6 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-const getOS = require('./helper').getOS;
 const merge =  require("./helper").merge;
 
 String.prototype.addCmd = function(data) {

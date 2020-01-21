@@ -103,8 +103,11 @@ function parseLayoutProps(type, config, key) {
   if (!config.style.className)
     config.style.className = "";
 
-  if (key == "onClick" || key == "onClickEvent") {
-    config.style.cursor = "pointer";
+  if ((key == "onClick" || key == "onClickEvent")) {
+    const isMobile = window.innerWidth < 650
+    if(!isMobile){
+      config.style.cursor = "pointer";
+    }
   }
 
   if (key == "textSize")
@@ -449,6 +452,20 @@ function parseLayoutProps(type, config, key) {
     }
 
     config.attributes.type = inputType
+  }
+
+  if (key == "rotateImage") {
+    if(config.rotateImage){
+      config.style["animation-duration"] = "4s";
+      config.style["animation-timing-function"] = "linear";
+      config.style["animation-delay"] = "0s";
+      config.style["animation-iteration-count"] = "infinite";
+      config.style["animation-direction"] = "normal";
+      config.style["animation-fill-mode"] = "none";
+      config.style["animation-play-state"] = "running";
+      config.style["animation-name"] = "rotation";
+
+    }
   }
 
   if (key == "pattern") {

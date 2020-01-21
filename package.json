@@ -23,12 +23,13 @@
     "babel-preset-stage-2": "^6.24.1",
     "es6-promise": "latest",
     "webpack": "^4.16.4",
-    "webpack-cli": "^3.1.0"
+    "webpack-cli": "^3.1.0",
+    "webpack-merge": "^4.2.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "webpack --mode production --config webpack.config.js --progress --colors",
-    "watch": "webpack --mode development --config webpack.config.js --watch --progress --colors"
+    "compile": "webpack --mode production --config webpack.prod.js --progress --colors",
+    "watch": "webpack --mode development --config webpack.dev.js --watch --progress --colors"
   },
   "repository": {
     "type": "git",

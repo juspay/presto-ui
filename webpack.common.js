@@ -23,28 +23,15 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 const path = require('path')
-const TerserPlugin = require('terser-webpack-plugin')
+const webpack = require('webpack');
 
 let config = { 
   devtool: "inline-cheap-module-source-map",
   //devtool: "inline-source-map",
-  //entry: "./index.js",
-  entry: ['babel-polyfill', './index.js'],
   output: {
     path: path.join(__dirname,"/lib"),
     filename: "index.js",
     libraryTarget: 'commonjs2'
-  },
-  optimization: {
-    minimize: true,
-    minimizer: [
-      new TerserPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: true, // Must be set to true if using source-maps in production
-        terserOptions: {}
-      })
-    ]
   },
   module: {
     rules: [
@@ -53,13 +40,19 @@ let config = {
         use: {
           loader: "babel-loader",
           options: {
-            presets: [ "env" , "stage-2" ],
+            presets: [ "env"  ],
             plugins: [ ["transform-react-jsx" , { "pragma": "dom" } ] ]
           }
         }
       },
     ]
-  }
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      // Set this to false to create a build that contains DateRangePicker for web
+      '__ignoreDateRangePickerWeb': JSON.stringify(true)
+    }),
+  ]
 }
 
 module.exports = config

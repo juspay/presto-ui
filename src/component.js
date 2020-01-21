@@ -1,9 +1,14 @@
 const DropdownBox = require('./components/DropdownBox')
 const DropdownSearchBox = require('./components/DropdownSearchBox') 
 const NavBar = require('./components/NavBar')
-const DateRangePicker = require('./components/DateRangePicker')
+// const DateRangePicker = require('./components/DateRangePicker')
 const SwitchButton = require('./components/SwitchButton')
 const Button = require('./components/Button')
+
+let DateRangePicker
+if (!__ignoreDateRangePickerWeb) {
+     DateRangePicker = require('./components/DateRangePicker')
+}
 
 /* Components */
 function closeAllActiveComponents() {
@@ -13,7 +18,7 @@ function closeAllActiveComponents() {
         DropdownSearchBox._closeByGUID(window.__COM_ACTIVE.DSB)
     if(window.__COM_ACTIVE.DB != '')
         DropdownBox._closeByGUID(window.__COM_ACTIVE.DB)
-}    
+}
 
 function renderComponent(elem, props, firstRender) {
     if(!props.componentType)
