@@ -28,9 +28,6 @@ const webpack = require('webpack');
 let config = { 
   devtool: "inline-cheap-module-source-map",
   //devtool: "inline-source-map",
-  //entry: "./index.js",
-  // entry: ['babel-polyfill', './index.js'],
-  entry: ['./index.js'],
   output: {
     path: path.join(__dirname,"/lib"),
     filename: "index.js",
