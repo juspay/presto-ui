@@ -85,6 +85,7 @@ function parseColors(color) {
 }
 
 function parseLayoutProps(type, config, key) {
+  const isMobile = window.innerWidth < 700
   if (typeof config[key] == "undefined" || config[key] == null) {
     delete config[key];
     return;
@@ -104,7 +105,6 @@ function parseLayoutProps(type, config, key) {
     config.style.className = "";
 
   if ((key == "onClick" || key == "onClickEvent")) {
-    const isMobile = window.innerWidth < 650
     if(!isMobile){
       config.style.cursor = "pointer";
     }
@@ -432,9 +432,10 @@ function parseLayoutProps(type, config, key) {
 
 
   if (key == "inputType") {
-    var inputType = "text"
+    var inputType = "text";
+    console.log("input type ", config.inputType, "  ", config.inputTypeI)
     if (config.inputType == "numericPassword" || config.inputType == "password") {
-      if(config.inputTypeI == 4){
+      if(config.inputTypeI == 4 && isMobile){
         inputType = "text";
         config.style["-webkit-text-security"] = "disc";
         config.style["-moz-text-security"] = "disc";
