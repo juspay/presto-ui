@@ -974,6 +974,17 @@ function this_setLetterSpacing(data) {
   };
 }
 
+function this_setLineSpacing(data) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "MJPLabel",
+    "methodName": "setLineSpacing:",
+    "values": [{ "name": data, "type": "s" }]
+  };
+}
+
 function this_setCaretColor() {
   return {
     "return": "false",
@@ -1373,6 +1384,10 @@ module.exports = function(type, config, _getSetType) {
 
   if (config.letterSpacing && !config.hasOwnProperty("text")) {
     config.methods.push(this_setLetterSpacing(config.letterSpacing));
+  }
+
+  if (config.lineSpacing) {
+    config.methods.push(this_setLineSpacing(config.lineSpacing));
   }
 
   if (config.hasOwnProperty("caretColor")) {
