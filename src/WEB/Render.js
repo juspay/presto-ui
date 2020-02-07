@@ -68,7 +68,6 @@ function createTextElement(elem, config) {
 function createTextElement2(elem, config) {
     let children = elem.childNodes;
     let article = null
-    console.log(config)
     if (children.length) {
         for (let i = 0; i < children.length; i++) {
             if (children[i].nodeName.toLowerCase() == 'article') {
