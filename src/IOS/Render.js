@@ -27,43 +27,12 @@ const parseParams = require('../helpers/ios/parseParams');
 const {computeChildDimens} = require('../computeIOS');
 const helper = require('../helper');
 
-function sumChildDimens(view) {
-  const isVertical = view.props.orientation == "vertical";
-  const dimenKey = (!isVertical) ? "w" : "h";
-  const axisKey = (!isVertical) ? "x" : "y";
-  const contentKey = (!isVertical) ? "contentWidth" : "contentHeight";
-  const index = (!isVertical) ? 3: 2;
-  let lastChild;
-
-  view.props.contentWidth = view.props.w;
-  view.props.contentHeight = view.props.h;
-
-  for (let i = view.children.length - 1; i >= 0 ; i--) {
-    lastChild = view.children[i];
-    if (lastChild.props.visibility != "gone")
-      break;
-    lastChild = null;
-  }
-
-  if (!lastChild) {
-    return;
-  }
-
-  const margin = lastChild.props.margin ? lastChild.props.margin.split(',').map(a => a*1):[0,0,0,0];
-  const padding = view.props.padding ? view.props.padding.split(',').map(a => a*1):[0,0,0,0];
-  const dimen = lastChild.props[axisKey] * 1 + lastChild.props[dimenKey] * 1 + margin[index] + padding[index];
-  view.props[contentKey] = dimen + '';
-}
 
 function inflate(view) {
   const id = view.props.id;
-  const isScroll = view.type.toLocaleLowerCase().indexOf("scroll") != -1;
 
   if (!window.__VIEWS.hasOwnProperty(id)) {
     computeChildDimens(view);
-    if (isScroll) {
-      sumChildDimens(view);
-    }
     helper.cacheDimen(view);
     window.__VIEWS[id] = view;
     const newView = helper.clone(view,null);
@@ -87,16 +56,6 @@ function inflate(view) {
 
   computeChildDimens(view)
   view.children.forEach(inflate);
-
-  if (isScroll) {
-    sumChildDimens(view);
-    const cmd = {
-      id,
-      contentWidth: view.props.contentWidth,
-      contentHeight: view.props.contentHeight,
-    };
-    runInUI(cmd, true);
-  }
   return ranRunInUI;
 }
 
@@ -110,19 +69,20 @@ function runInUI(cmd, fromInflate) {
     }));
   }else{
     cmd.forEach(function (each) {
-    var id = each.id;
-    var view = window.__VIEWS[id];
-    if (view) {
+      var id = each.id;
+      each.useConstraits = true;
+      var view = window.__VIEWS[id];
+      if (view) {
         var parent = window.__VIEWS[view.props.parentId];
         view.props = helper.merge(view.props, each);
+        if(view.props && view.props.hasOwnProperty("listItem") && each.hasOwnProperty("listData") && !each.hasOwnProperty("listItem")){
+          each.listItem = view.props.listItem
+        }
         //Adding as stop gag solution for editText in ios where text 
         //was getting set empty in case other properties were modified.
         if (!each.hasOwnProperty('text')) {
           delete view.props.text;
         }
-        // if (each.visibility !== "visible") {
-        //   runInUIHelper(view.type, view.props);
-        // }
         if (parent && !fromInflate) {
           if (parent.type.indexOf("scroll") != -1) {
             inflate(parent);
@@ -130,7 +90,7 @@ function runInUI(cmd, fromInflate) {
           computeChildDimens(parent);
           var children = parent.children;
           if (!inflate(view)) {
-            runInUIHelper(view.type, view.props, true);
+            runInUIHelper(view.type, each, true);
           };
           for (var i = 0, len = children.length; i < len; i++) {
             if (view != children[i]) {
@@ -138,11 +98,8 @@ function runInUI(cmd, fromInflate) {
             }
           }
         } else {
-          runInUIHelper(view.type, view.props);
+          runInUIHelper(view.type, each);
         }
-        // if (each.visibility === "visible") {
-        //   runInUIHelper(view.type, view.props);
-        // }
       }
     });
   }

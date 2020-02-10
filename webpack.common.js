@@ -38,15 +38,15 @@ let config = {
     libraryTarget: 'commonjs2'
   },
   optimization: {
-    minimize: true,
-    minimizer: [
-      new TerserPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: true, // Must be set to true if using source-maps in production
-        terserOptions: {}
-      })
-    ]
+    // minimize: true,
+    // minimizer: [
+    //   new TerserPlugin({
+    //     cache: true,
+    //     parallel: true,
+    //     sourceMap: true, // Must be set to true if using source-maps in production
+    //     terserOptions: {}
+    //   })
+    // ]
   },
   module: {
     rules: [
