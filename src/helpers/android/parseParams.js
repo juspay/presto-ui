@@ -26,20 +26,12 @@
 var mapParams = require('./mapParams');
 var objMap = require('./objMap');
 var callbackMapper  = require("../common/callbackMapper")
+import isURL from "../common/helper.js";
 
 var globalObjMap = {};
 var command = "";
 var elementType;
 var getSetType;
-
-function isURL(str) {
-  try {
-    var url = new URL(str);
-    return true;
-  } catch(err) {
-    return false;
-  }
-}
 
 function attachFeedback(config, keys, i) {
   var feedbackFn = function() {};
@@ -180,15 +172,6 @@ function getCtr(viewGroup) {
   }
 
   return  viewGroupMap[viewGroup];
-}
-
-function isURL(str) {
-  try {
-    var url = new URL(str);
-    return true;
-  } catch(err) {
-    return false;
-  }
 }
 
 function handleSpecialChars(value) {

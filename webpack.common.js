@@ -27,10 +27,6 @@ const path = require('path')
 const TerserPlugin = require('terser-webpack-plugin')
 
 let config = { 
-  devtool: "inline-cheap-module-source-map",
-  //devtool: "inline-source-map",
-  //entry: "./index.js",
-  // entry: ['babel-polyfill', './index.js'],
   entry: ['./index.js'],
   output: {
     path: path.join(__dirname,"/lib"),
@@ -38,15 +34,15 @@ let config = {
     libraryTarget: 'commonjs2'
   },
   optimization: {
-    // minimize: true,
-    // minimizer: [
-    //   new TerserPlugin({
-    //     cache: true,
-    //     parallel: true,
-    //     sourceMap: true, // Must be set to true if using source-maps in production
-    //     terserOptions: {}
-    //   })
-    // ]
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        cache: true,
+        parallel: true,
+        sourceMap: false, // Must be set to true if using source-maps in production
+        terserOptions: {}
+      })
+    ]
   },
   module: {
     rules: [
@@ -55,8 +51,7 @@ let config = {
         use: {
           loader: "babel-loader",
           options: {
-            presets: [ "env"  ],
-            plugins: [ ["transform-react-jsx" , { "pragma": "dom" } ] ]
+            presets: [ '@babel/preset-env' ]
           }
         }
       },

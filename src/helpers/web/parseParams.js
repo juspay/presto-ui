@@ -23,6 +23,8 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
+import convertHexToRgb from "../common/helper.js";
+
 Array.prototype.rotate = (function () {
   // save references to array functions to make lookup faster
   var push = Array.prototype.push,
@@ -40,14 +42,6 @@ Array.prototype.rotate = (function () {
     return this;
   };
 })();
-
-function convertHexToRgb(hex) {
-  var r = (parseInt(hex.substring(0, 2), 16));
-  var g = (parseInt(hex.substring(2, 4), 16));
-  var b = (parseInt(hex.substring(4, 6), 16));
-
-  return r + "," + g + "," + b;
-}
 
 function flattenObject(ob) {
   var toReturn = {};
@@ -453,14 +447,6 @@ function convertColorToRgba(color) {
     b: parseInt(rWS(values[2])),
     a: parseFloat(alpha)
   };
-}
-
-function convertHexToRgb(hex) {
-  var r = (parseInt(hex.substring(0, 2), 16) / 255).toFixed(2);
-  var g = (parseInt(hex.substring(2, 4), 16) / 255).toFixed(2);
-  var b = (parseInt(hex.substring(4, 6), 16) / 255).toFixed(2);
-
-  return r + "," + g + "," + b;
 }
 
 function cS(value) {

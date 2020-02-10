@@ -8,22 +8,16 @@
     "daterangepicker": "^3.0.5",
     "immu": "^2.0.1",
     "jquery": "^3.4.1",
-    "moment": "^2.24.0",
-    "object-assign": "^4.1.0",
-    "promise": "^7.1.1",
-    "qs": "^6.6.0"
+    "qs": "^6.6.0",
+    "es6-promise": "latest"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.5",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-react": "^6.24.1",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-0": "^6.24.1",
-    "es6-promise": "latest",
-    "webpack": "^4.16.4",
-    "webpack-cli": "^3.1.0",
+    "@babel/core": "^7.8.4",
+    "@babel/polyfill": "^7.8.3",
+    "@babel/preset-env": "^7.8.4",
+    "babel-loader": "^8.0.6",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
     "webpack-merge": "^4.2.2"
   },
   "scripts": {

@@ -22,8 +22,9 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
-import colors from "./colors";
 import flattenObject from "./flattenObject";
+import convertHexToRgb from "../common/helper.js";
+import isURL from "../common/helper.js";
 
 var callbackMapper  = require("../common/callbackMapper")
 
@@ -52,14 +53,6 @@ function convertColorToRgba(color){
     b: rWS(values[2]),
     a: alpha
   };
-}
-
-function convertHexToRgb(hex) {
-  var r = (parseInt(hex.substring(0,2), 16)/255).toFixed(2);
-  var g = (parseInt(hex.substring(2,4), 16)/255).toFixed(2);
-  var b = (parseInt(hex.substring(4,6), 16)/255).toFixed(2);
-
-  return r + "," + g + "," + b;
 }
 
 function cS(value) {
@@ -1243,18 +1236,6 @@ function this_setEnableSwype(value) {
         "methodName": "setSwipeEnabled:",
         "values": [{ "name": value ? "true" : "false", type: "s" }]
     };
-}
-
-function UIView_bounds() {
-  window.__RECT_INDEX++;
-
-  return {
-    "return": "rect" + window.__RECT_INDEX,
-    "fromStore": "true",
-    "storeKey":"view" + window.__VIEW_INDEX,
-    "invokeOn": "UIView",
-    "methodName":"bounds",
-  }
 }
 
 function this_bringSubViewToFront(params){
