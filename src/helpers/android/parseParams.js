@@ -26,7 +26,7 @@
 var mapParams = require('./mapParams');
 var objMap = require('./objMap');
 var callbackMapper  = require("../common/callbackMapper")
-import isURL from "../common/helper.js";
+var isURL = require("../common/helper").isURL;
 
 var globalObjMap = {};
 var command = "";

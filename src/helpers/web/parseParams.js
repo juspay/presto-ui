@@ -23,7 +23,7 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-import convertHexToRgb from "../common/helper.js";
+var convertHexToRgb = require("../common/helper").convertHexToRgb;
 
 Array.prototype.rotate = (function () {
   // save references to array functions to make lookup faster

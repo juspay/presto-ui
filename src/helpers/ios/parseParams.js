@@ -23,8 +23,7 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 import flattenObject from "./flattenObject";
-import convertHexToRgb from "../common/helper.js";
-import isURL from "../common/helper.js";
+var convertHexToRgb = require("../common/helper").convertHexToRgb;
 
 var callbackMapper  = require("../common/callbackMapper")
 
