@@ -24,7 +24,6 @@
 */
 const webpack = require('webpack');
 const path = require('path')
-const TerserPlugin = require('terser-webpack-plugin')
 
 let config = { 
   entry: ['./index.js'],
@@ -32,18 +31,7 @@ let config = {
     path: path.join(__dirname,"/lib"),
     filename: "index.js",
     libraryTarget: 'commonjs2'
-  },
-  optimization: {
-    minimize: true,
-    minimizer: [
-      new TerserPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: false, // Must be set to true if using source-maps in production
-        terserOptions: {}
-      })
-    ]
-  },
+  },  
   module: {
     rules: [
       { test: /\.js$/,
