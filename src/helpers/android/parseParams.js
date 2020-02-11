@@ -26,12 +26,20 @@
 var mapParams = require('./mapParams');
 var objMap = require('./objMap');
 var callbackMapper  = require("../common/callbackMapper")
-var isURL = require("../common/helper").isURL;
 
 var globalObjMap = {};
 var command = "";
 var elementType;
 var getSetType;
+
+function isURL(str) {
+  try {
+    var url = new URL(str);
+    return true;
+  } catch(err) {
+    return false;
+  }
+}
 
 function attachFeedback(config, keys, i) {
   var feedbackFn = function() {};

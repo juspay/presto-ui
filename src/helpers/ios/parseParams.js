@@ -23,11 +23,19 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 import flattenObject from "./flattenObject";
-var convertHexToRgb = require("../common/helper").convertHexToRgb;
 
 var callbackMapper  = require("../common/callbackMapper")
 
 let getSetType = 1;
+
+
+function convertHexToRgb (hex){
+  var r = (parseInt(hex.substring(0,2), 16)/255).toFixed(2);
+  var g = (parseInt(hex.substring(2,4), 16)/255).toFixed(2);
+  var b = (parseInt(hex.substring(4,6), 16)/255).toFixed(2);
+
+  return r + "," + g + "," + b;
+}
 
 function convertColorToRgba(color){
   color = rWS(cS(color));
