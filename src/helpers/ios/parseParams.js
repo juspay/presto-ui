@@ -22,20 +22,12 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
+import colors from "./colors";
 import flattenObject from "./flattenObject";
 
 var callbackMapper  = require("../common/callbackMapper")
 
 let getSetType = 1;
-
-
-function convertHexToRgb (hex){
-  var r = (parseInt(hex.substring(0,2), 16)/255).toFixed(2);
-  var g = (parseInt(hex.substring(2,4), 16)/255).toFixed(2);
-  var b = (parseInt(hex.substring(4,6), 16)/255).toFixed(2);
-
-  return r + "," + g + "," + b;
-}
 
 function convertColorToRgba(color){
   color = rWS(cS(color));
@@ -60,6 +52,14 @@ function convertColorToRgba(color){
     b: rWS(values[2]),
     a: alpha
   };
+}
+
+function convertHexToRgb(hex) {
+  var r = (parseInt(hex.substring(0,2), 16)/255).toFixed(2);
+  var g = (parseInt(hex.substring(2,4), 16)/255).toFixed(2);
+  var b = (parseInt(hex.substring(4,6), 16)/255).toFixed(2);
+
+  return r + "," + g + "," + b;
 }
 
 function cS(value) {
@@ -1474,7 +1474,6 @@ function changeKeys(config, type) {
 // fromStore methods dont  use invokeOn
 // the extract className out of the stored object in the store
 module.exports = function(type, config, _getSetType) {
-  debugger;
   config = changeKeys(flattenObject(config), type);
   type = generateType(type, config);
   getSetType = (_getSetType == "set")?1:0;

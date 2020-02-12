@@ -41,6 +41,14 @@ Array.prototype.rotate = (function () {
   };
 })();
 
+function convertHexToRgb (hex){
+  var r = (parseInt(hex.substring(0,2), 16)/255).toFixed(2);
+  var g = (parseInt(hex.substring(2,4), 16)/255).toFixed(2);
+  var b = (parseInt(hex.substring(4,6), 16)/255).toFixed(2);
+
+  return r + "," + g + "," + b;
+}
+
 function flattenObject(ob) {
   var toReturn = {};
   for (var i in ob) {
@@ -58,14 +66,6 @@ function flattenObject(ob) {
   }
 
   return toReturn;
-}
-
-function convertHexToRgb (hex){
-  var r = (parseInt(hex.substring(0,2), 16)/255).toFixed(2);
-  var g = (parseInt(hex.substring(2,4), 16)/255).toFixed(2);
-  var b = (parseInt(hex.substring(4,6), 16)/255).toFixed(2);
-
-  return r + "," + g + "," + b;
 }
 
 function parseColors(color) {
