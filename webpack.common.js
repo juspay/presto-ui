@@ -22,16 +22,16 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
-const webpack = require('webpack');
 const path = require('path')
 
 let config = { 
+  devtool: "inline-cheap-module-source-map",
   entry: ['./index.js'],
   output: {
     path: path.join(__dirname,"/lib"),
     filename: "index.js",
     libraryTarget: 'commonjs2'
-  },  
+  },
   module: {
     rules: [
       { test: /\.js$/,
@@ -39,7 +39,7 @@ let config = {
         use: {
           loader: "babel-loader",
           options: {
-            presets: [ '@babel/preset-env' ]
+            presets: ["env"]
           }
         }
       },
