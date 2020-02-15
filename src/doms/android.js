@@ -40,9 +40,9 @@ var excluded = {
   "PagerTitleStrip": "android.support.v4.view.",
   "TabLayout": "in.org.npci.upiapp.",
   "ShimmerFrameLayout": "com.facebook.shimmer.",
-  "SwypeLayout": "in.juspay.godel.core.",
-  "SwypeScroll": "in.juspay.godel.core.",
-  "AccordionLayout": "in.juspay.godel.core.",
+  "SwypeLayout": "in.juspay.mystique.",
+  "SwypeScroll": "in.juspay.mystique.",
+  "AccordionLayout": "in.juspay.mystique.",
   "Shape": "in.juspay.mystique.",
   "LottieAnimationView": "com.airbnb.lottie."
 }
