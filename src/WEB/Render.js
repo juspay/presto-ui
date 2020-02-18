@@ -32,11 +32,9 @@ let {
 let helper = require("../helper")
 let computeListViewChildren = require("./computeListViewChildren")
 
-
 function createTextElement(elem, config) {
     let children = elem.childNodes;
     let article = null
-
     if (children.length) {
         for (let i = 0; i < children.length; i++) {
             if (children[i].nodeName.toLowerCase() == 'article') {
@@ -55,6 +53,39 @@ function createTextElement(elem, config) {
         article.innerHTML = config.text
     else
         article.innerText = config.text
+
+    if (!config.text && config.hint)
+        article.innerText = config.hint
+
+    article.style.wordBreak = "break-word"
+
+    if (config.letterSpacing)
+        elem["style"]["letter-spacing"] = config.letterSpacing
+
+    elem.appendChild(article)
+}
+
+function createTextElement2(elem, config) {
+    let children = elem.childNodes;
+    let article = null
+    if (children.length) {
+        for (let i = 0; i < children.length; i++) {
+            if (children[i].nodeName.toLowerCase() == 'article') {
+                article = children[i]
+                break
+            }
+        }
+    }
+
+    if (!article)
+        article = document.createElement('ARTICLE')
+
+    elem.style.whiteSpace = "initial"
+
+    if (config.isHtmlContent)
+        article.innerHTML = config.textFromHtml
+    else
+        article.innerHTML = config.textFromHtml
 
     if (!config.text && config.hint)
         article.innerText = config.hint
@@ -654,7 +685,13 @@ function setAttributes(type, elem, props, firstRender) {
                 elem.value = props[key]
             else
                 createTextElement(elem, props)
-        } else if (key == "style") {
+        }else if (key == "textFromHtml") {
+            if (type == "editText")
+                elem.value = props[key]
+            else
+                createTextElement2(elem, props)
+        } 
+        else if (key == "style") {
             for (let innerKey in props.style) {
                 if (innerKey == "className") {
                     elem.className += " " + props.style[innerKey];

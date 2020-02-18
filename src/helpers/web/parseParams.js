@@ -416,7 +416,6 @@ function parseLayoutProps(type, config, key) {
 
   if (key == "gradient") {
     var gradientObj =JSON.parse(config.gradient);
-    console.log(gradientObj);
     if (gradientObj.type == "linear") {
       var angle = gradientObj.angle;
       var values = gradientObj.values;
@@ -433,7 +432,6 @@ function parseLayoutProps(type, config, key) {
 
   if (key == "inputType") {
     var inputType = "text";
-    console.log("input type ", config.inputType, "  ", config.inputTypeI)
     if (config.inputType == "numericPassword" || config.inputType == "password") {
       if(config.inputTypeI == 4 && isMobile){
         inputType = "text";
