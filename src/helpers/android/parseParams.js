@@ -539,7 +539,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
 
 
       prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
-      "set_resolvedName=in.juspay.android_lib.data.FileProviderService->appendSdkNameAndVersion:s_" + image + ";" +
+      "set_resolvedName=in.juspay.hypersdk.services.FileProviderService->appendSdkNameAndVersion:s_" + image + ";" +
       "set_resolvedFile=java.io.File->new:get_directory,get_resolvedName;" +
       "set_resolvedPath=get_resolvedFile->toString;" + 
       "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;";
@@ -563,7 +563,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
 
   if (attrs.key == "dynamicUrl") {
     prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
-    "set_resolvedName=in.juspay.android_lib.data.FileProviderService->appendSdkNameAndVersion:s_" + attrs.value + ";" +
+    "set_resolvedName=in.juspay.hypersdk.services.FileProviderService->appendSdkNameAndVersion:s_" + attrs.value + ";" +
     "set_resolvedFile=java.io.File->new:get_directory,get_resolvedName;" +
     "set_resolvedPath=get_resolvedFile->toString;" + 
     "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;";
