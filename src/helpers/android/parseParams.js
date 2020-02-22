@@ -358,7 +358,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
     prePend += "set_gd=android.graphics.drawable.GradientDrawable->new;";
     prePend += arrList + ";";
     prePend += "set_c=java.lang.Class->forName:s_java.lang.Integer;";
-    prePend += "in.juspay.mystique.InflateView->convertAndStoreArray:get_arr,get_c,s_pArr,b_true;";
+    prePend += "infl->convertAndStoreArray:get_arr,get_c,s_pArr,b_true;";
     currTransVal = "get_pArr";
   }
 
@@ -375,7 +375,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
     prePend += arrList + ";";
     prePend += "set_c=java.lang.Class->forName:s_java.lang.Float;";
     prePend += floatArray.join("");
-    prePend += "in.juspay.mystique.InflateView->convertAndStoreArray:get_arr,get_c,s_pArr,b_true;";
+    prePend += "infl->convertAndStoreArray:get_arr,get_c,s_pArr,b_true;";
     currTransVal = "get_pArr";
   }
 
