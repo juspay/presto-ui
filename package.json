@@ -28,7 +28,7 @@
     "compile:ios": "webpack --mode production --config webpack.ios.js --colors",
     "compile:android": "webpack --mode production --config webpack.android.js --colors",
     "compile": "npm run compile:web; npm run compile:ios; npm run compile:android",
-    "watch": "webpack --mode development --config webpack.config.js --watch --progress --colors"
+    "watch": "webpack --mode development --config webpack.android.js --watch --progress --colors"
   },
   "repository": {
     "type": "git",
