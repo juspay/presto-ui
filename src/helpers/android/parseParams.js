@@ -329,13 +329,12 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
 
   if (attrs.key == "fontStyle") {
     if(isURL(attrs.value)) {
-      debugger
       if(typeof window.__PROXY_FN == "undefined") {
         window.__PROXY_FN = {};
       }
       var font = attrs.value.substr(attrs.value.lastIndexOf('/') + 1)
 
-      var filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(image);
+      var filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(font);
       if (!filePresent) {
         var callback = callbackMapper.map(function (isNew, url, fileName) {
           const id = allProps.find(a => a.key === "id");
