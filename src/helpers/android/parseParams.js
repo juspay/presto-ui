@@ -328,8 +328,38 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
   }
 
   if (attrs.key == "fontStyle") {
-    prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + attrs.value + "\.ttf;";
-    currTransVal = "get_type";
+    if(isURL(attrs.value)) {
+      debugger
+      if(typeof window.__PROXY_FN == "undefined") {
+        window.__PROXY_FN = {};
+      }
+      var font = attrs.value.substr(attrs.value.lastIndexOf('/') + 1)
+
+      var filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(image);
+      if (!filePresent) {
+        var callback = callbackMapper.map(function (isNew, url, fileName) {
+          const id = allProps.find(a => a.key === "id");
+          if (!id) return;
+          var urlSetCommands = "set_directory=ctx->getDir:s_juspay,i_0;" +
+                                "set_resolvedFile=java.io.File->new:get_directory,s_" + fileName + ";" +
+                                "set_resolvedPath=get_resolvedFile->toString;" + 
+                                "set_dfont=android.graphics.Typeface->createFromFile:get_resolvedPath;" +
+                                "set_textV=ctx->findViewById:i_" + id.value + ";" + 
+                                "get_textV->setTypeface:get_dfont"
+                                Android.runInUI(urlSetCommands ,null)
+                              });
+        JBridge.renewFile(attrs.value, font, callback);
+      } else if(JBridge.getFilePath) {
+        prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
+                    "set_resolvedFile=java.io.File->new:get_directory,s_" + JBridge.getFilePath(font) + ";" +
+                    "set_resolvedPath=get_resolvedFile->toString;" + 
+                    "set_dfont=android.graphics.Typeface->createFromFile:get_resolvedPath;"
+        currTransVal = "get_dfont"; 
+      }
+    } else {
+      prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + attrs.value + "\.ttf;";
+      currTransVal = "get_type";
+    }
   }
   
   if (attrs.key == "gradientAngle") {
