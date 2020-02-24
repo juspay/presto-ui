@@ -170,7 +170,10 @@ function parseLayoutProps(type, config, key) {
   }
   if(key=="focus") {
     if (config.focus && config.id){
-      document.getElementById(config.id).focus();
+      var doc = document.getElementById(config.id);
+      if (doc){
+        doc.focus();
+      }
 
     }
   }
