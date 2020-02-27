@@ -171,6 +171,15 @@ function parseLayoutProps(type, config, key) {
       config.attributes["autofocus"] = "autofocus";  
     }
   }
+  if(key=="focus") {
+    if (config.focus && config.id){
+      var doc = document.getElementById(config.id);
+      if (doc){
+        doc.focus();
+      }
+
+    }
+  }
 
   if (key == "cornerRadius") {
     config.style.borderRadius = config.cornerRadius + "px";
