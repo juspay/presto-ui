@@ -162,6 +162,9 @@ function parseLayoutProps(type, config, key) {
   if(key == "bottomFixed") {
     config.style.bottom = config.bottomFixed;
   }
+  if(key == "topFixed") {
+    config.style.top = config.topFixed;
+  }
 
   if(key == "autofocus"){
     if(config.autofocus){
