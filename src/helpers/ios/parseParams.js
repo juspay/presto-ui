@@ -1785,8 +1785,8 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_bringSubViewToFront(viewTag));
   }
 
-  if (type == 'mJPImageView') {
-    let contentMode = cS(config.contentMode || 1);
+  if (config.hasOwnProperty("contentMode")) {
+    let contentMode = cS(config.contentMode);
     config.methods.push(this_setContentMode(contentMode));
   }
 
