@@ -35,7 +35,7 @@ var getSetType;
 function isURL(str) {
   try {
     var url = new URL(str);
-    return true;
+    return (str.indexOf(".") != -1) ;
   } catch(err) {
     return false;
   }
@@ -540,8 +540,11 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
   }
 
   if (attrs.key == "imageUrl") {
+    debugger;
     
     if(isURL(attrs.value)) {
+      debugger;
+      console.log("attrs", attrs.value);
       if(typeof window.__PROXY_FN == "undefined") {
         window.__PROXY_FN = {};
       }
