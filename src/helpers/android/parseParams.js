@@ -35,7 +35,7 @@ var getSetType;
 function isURL(str) {
   try {
     var url = new URL(str);
-    return (str.indexOf(".") != -1) ;
+    return (str.indexOf(".") != -1);
   } catch(err) {
     return false;
   }
