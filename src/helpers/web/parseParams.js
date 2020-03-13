@@ -611,6 +611,9 @@ module.exports = function (type, config, getSetType) {
   var keys = Object.keys(config);
 
   for (var i = 0; i < keys.length; i++) {
+    if ((config.style && config.style.display === 'none') && keys[i] === 'gravity')  {
+      continue;
+    }
     parseLayoutProps(type, config, keys[i]);
   }
 
