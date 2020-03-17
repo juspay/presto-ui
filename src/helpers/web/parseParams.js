@@ -85,7 +85,7 @@ function parseColors(color) {
 }
 
 function parseLayoutProps(type, config, key) {
-  const isMobile = window.innerWidth < 500
+  const isMobile = window.innerWidth < 700
   if (typeof config[key] == "undefined" || config[key] == null) {
     delete config[key];
     return;
