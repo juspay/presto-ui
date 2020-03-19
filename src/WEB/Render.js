@@ -412,7 +412,7 @@ function separatorInputKeyDownHandler(ev){
                     return;
                 }
             }
-            var finalData = newValue.replace(/[^a-zA-Z0-9@]/g, "");
+            var finalData = newValue.replace(/[^a-zA-Z0-9@.]/g, "");
             if (regexString) {
                 var regexPattern = new RegExp(regexString);
                 if (!regexPattern.test(finalData)) {
@@ -432,7 +432,7 @@ function separatorInputKeyDownHandler(ev){
                     var element = finalData[index];
                     formattedString += element;
                     var factor = 0;
-                    if (formattedString.length && formattedString.replace(/[^a-zA-Z0-9@]/g, "").length % (separatorRepeat + factor) == 0) {
+                    if (formattedString.length && formattedString.replace(/[^a-zA-Z0-9@.]/g, "").length % (separatorRepeat + factor) == 0) {
                         formattedString += separator;
                     }
                 }
