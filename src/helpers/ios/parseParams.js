@@ -667,7 +667,7 @@ function UIFont_fontWithName(name, size) {
 
   return {
     "return": "font" + window.__FONT_INDEX,
-    "invokeOn": "UIFont",
+    "invokeOn": "MJPFont",
     "methodName":"fontWithName:size:",
     "values":[
       {"name": name, "type": "s"},
