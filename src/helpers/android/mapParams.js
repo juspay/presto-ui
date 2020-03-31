@@ -1209,6 +1209,22 @@ var map = {
     dontMap: 'true',
     fnName: 'setImeOptions',
     inVokedIn: 'VIEW',
+  },
+  "horizontalFade": {
+    values: [{
+      type: 'b',
+    }],
+    'dontMap': true,
+    fnName: 'setHorizontalFadingEdgeEnabled',
+    inVokedIn: 'VIEW',
+  },
+  "fadingEdgeLength": {
+    values: [{
+      type: 'i'
+    }],
+    'dontMap': true,
+    fnName: 'setFadingEdgeLength',
+    inVokedIn: 'VIEW',
   }
 }
 
