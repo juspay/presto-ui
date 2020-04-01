@@ -33,29 +33,7 @@ function parseJson(str) {
   } catch (e) {
     return str;
   }
-} 
-
-const logsList = []
-
-let isRequestActive = false
-
-setInterval(async () => {
-  if (!isRequestActive && logsList.length > 0) {
-    const pushArr = logsList.splice(0,75)
-    console.log("logs being pushed", pushArr)
-
-    isRequestActive = true
-    await fetch("https://logs.juspay.in/godel/analytics", {
-      method: 'POST',
-      mode: 'no-cors',
-      body: JSON.stringify({ data: pushArr }),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-    isRequestActive = false
-  }
-}, 1000)
+}
 
 module.exports = {
   getSymbol: function (type) {
@@ -179,7 +157,12 @@ module.exports = {
   },
 
   addToLogList: function addToLogList(data) {
-    logsList.push(JSON.parse(data))
+    const newLog = JSON.parse(data);
+    const logsArr = Array.isArray(newLog) ? newLog : [newLog];
+    navigator.sendBeacon(
+      "https://logs.juspay.in/godel/analytics",
+      JSON.stringify({ data: logsArr })
+    );
   },
 
   postLogs(endPoint, logs) {
