@@ -1374,17 +1374,15 @@ function generateType(type, config) {
       modifiedType = "mJPTextView";
     }
     break;
-    case "scrollView":
-      if(config.hasOwnProperty('height')&& config.height == 'wrap_content'){
-        modifiedType = "mJPLinearLayout";  
+    case "scrollView": {
+        modifiedType = "mJPScrollView"; 
+        config.orientation = "vertical"; 
         break;
-      }
-    case "horizontalScrollView":{
-      if(config.hasOwnProperty('width')&& config.width == 'wrap_content'){
-        modifiedType = "mJPLinearLayout";  
+    }
+    case "horizontalScrollView": {
+        modifiedType = "mJPScrollView";
+        config.orientation = "horizontal";
         break;
-      }
-      modifiedType = "mJPScrollView";
     }
     break;
     case "tableView":
