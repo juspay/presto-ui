@@ -1376,7 +1376,7 @@ function generateType(type, config) {
     break;
     case "scrollView": {
         if (config.hasOwnProperty('height')&& config.height == 'wrap_content'){
-            modifiedType = "mJPLinearLayout";
+            modifiedType = "mJPScrollView";
         } else {
             modifiedType = "mJPScrollView";
         }
@@ -1385,7 +1385,7 @@ function generateType(type, config) {
     }
     case "horizontalScrollView": {
         if (config.hasOwnProperty('width')&& config.width == 'wrap_content'){
-            modifiedType = "mJPLinearLayout";  
+            modifiedType = "mJPScrollView";  
         } else {
             modifiedType = "mJPScrollView";
         }
