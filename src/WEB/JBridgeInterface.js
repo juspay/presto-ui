@@ -165,6 +165,12 @@ module.exports = {
     );
   },
   saveToLocal: function(a,b,c){
+    try{
+    window.localStorage.removeItem("defOptionType");
+    window.localStorage.removeItem("defOption");
+    window.localStorage.removeItem("merchant");
+    }
+    catch(e){}
     window.localStorage.setItem('defOptionType', a);
     window.localStorage.setItem('defOption', JSON.stringify(b));
     window.localStorage.setItem('merchant', JSON.stringify(c));
