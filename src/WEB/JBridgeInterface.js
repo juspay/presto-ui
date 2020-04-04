@@ -164,7 +164,17 @@ module.exports = {
       JSON.stringify({ data: logsArr })
     );
   },
+  saveToLocal: function(a,b,c){
+    window.localStorage.setItem('defOptionType', a);
+    window.localStorage.setItem('defOption', JSON.stringify(b));
+    window.localStorage.setItem('merchant', JSON.stringify(c));
 
+  },
+  deleteFromLocal: function(){},
+  loadFromLocal: function(key){
+    const a =  JSON.parse(window.localStorage.getItem(key));
+    return a
+  },
   postLogs(endPoint, logs) {
     return;
   },
