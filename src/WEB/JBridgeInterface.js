@@ -172,8 +172,16 @@ module.exports = {
   },
   deleteFromLocal: function(){},
   loadFromLocal: function(key){
+    if (window.localStorage.getItem(key)==undefined)
+      return ""
+    try{
     const a =  JSON.parse(window.localStorage.getItem(key));
+    if (a==undefined)
+      return ""
     return a
+    } catch(e){
+      return window.localStorage.getItem(key)
+    }
   },
   postLogs(endPoint, logs) {
     return;
