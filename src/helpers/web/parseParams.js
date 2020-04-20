@@ -285,6 +285,9 @@ function parseLayoutProps(type, config, key) {
         config.style.borderLeft = values[0] + "px solid " + values[1];
         config.style.borderRight = values[0] + "px solid " + values[1];
       }
+      else if (values[2] == "b"){
+        config.style.borderBottom = values[0] + "px solid " + values[1];
+      }
       else
         config.style.border = values[0] + "px " + values[1] + " " + values[2];
     }
