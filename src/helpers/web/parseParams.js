@@ -105,11 +105,13 @@ function parseLayoutProps(type, config, key) {
     config.style.className = "";
 
   if ((key == "onClick" || key == "onClickEvent")) {
-    if(!isMobile){
+    if(!isMobile && !config.cursorType){
       config.style.cursor = "pointer";
     }
   }
-
+  if(key == "cursorType") {
+    config.style.cursor = config.cursorType;
+  }
   if (key == "textSize")
     config.style.fontSize = config.textSize + 'px';
   if (key == 'fontSize')
