@@ -277,8 +277,19 @@ function parseLayoutProps(type, config, key) {
 
     if(values.length == 2)
       config.style.border = values[0] + "px solid " + values[1];
-    else if(values.length == 3)
-      config.style.border = values[0] + "px " + values[1] + " " + values[2];
+    else if(values.length == 3){
+      if (values[2] == "top")
+        config.style.borderTop = values[0] + "px solid " + values[1];
+      else if (values[2] == "bottom")
+        config.style.borderTop = values[0] + "px solid " + values[1];
+      else if (values[2] == "left")
+        config.style.borderLeft = values[0] + "px solid " + values[1];
+      else if (values[2] == "right")
+        config.style.borderRight = values[0] + "px solid " + values[1];
+      else
+        config.style.border = values[0] + "px " + values[1] + " " + values[2];
+    }
+    
   }
 
   if (key == "strokeTop") {
