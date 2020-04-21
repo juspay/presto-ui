@@ -1086,7 +1086,7 @@ function this_setExpand(value) {
     "return": "false",
     "fromStore": getSetType ? "false" : "true",
     "storeKey": "view" + window.__VIEW_INDEX,
-    "invokeOn": getSetType ? "this" : "mJPLinearLayout",
+    "invokeOn": getSetType ? "this" : "MJPExpandableCell",
     "methodName": "setExpand:",
     "values": [{"name": value, "type": "s"}]
   };
@@ -1097,7 +1097,7 @@ function this_setExpandDuration(value) {
     "return": "false",
     "fromStore": getSetType ? "false" : "true",
     "storeKey": "view" + window.__VIEW_INDEX,
-    "invokeOn": getSetType ? "this" : "mJPLinearLayout",
+    "invokeOn": getSetType ? "this" : "MJPExpandableCell",
     "methodName": "setExpandDuration:",
     "values": [{"name": value, "type": "s"}]
   };
@@ -1108,7 +1108,7 @@ function this_setExpandAlpha(value) {
     "return": "false",
     "fromStore": getSetType ? "false" : "true",
     "storeKey": "view" + window.__VIEW_INDEX,
-    "invokeOn": getSetType ? "this" : "mJPLinearLayout",
+    "invokeOn": getSetType ? "this" : "MJPExpandableCell",
     "methodName": "setExpandAlpha:",
     "values": [{"name": value, "type": "s"}]
   };
@@ -1421,7 +1421,7 @@ function generateType(type, config) {
     }
     break;
     case "accordionLayout": {
-      modifiedType = "mJPLinearLayout";
+      modifiedType = "mJPExpandableCell";
     }
     break;
     case "linearLayout": {
