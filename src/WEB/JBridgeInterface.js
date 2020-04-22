@@ -1,31 +1,31 @@
 /*
-* Copyright (c) 2012-2017 "JUSPAY Technologies"
-* JUSPAY Technologies Pvt. Ltd. [https://www.juspay.in]
-*
-* This file is part of JUSPAY Platform.
-*
-* JUSPAY Platform is free software: you can redistribute it and/or modify
-* it for only educational purposes under the terms of the GNU Affero General
-* Public License (GNU AGPL) as published by the Free Software Foundation,
-* either version 3 of the License, or (at your option) any later version.
-* For Enterprise/Commerical licenses, contact <info@juspay.in>.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  The end user will
-* be liable for all damages without limitation, which is caused by the
-* ABUSE of the LICENSED SOFTWARE and shall INDEMNIFY JUSPAY for such
-* damages, claims, cost, including reasonable attorney fee claimed on Juspay.
-* The end user has NO right to claim any indemnification based on its use
-* of Licensed Software. See the GNU Affero General Public License for more details.
-*
-* You should have received a copy of the GNU Affero General Public License
-* along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
-*/
+ * Copyright (c) 2012-2017 "JUSPAY Technologies"
+ * JUSPAY Technologies Pvt. Ltd. [https://www.juspay.in]
+ *
+ * This file is part of JUSPAY Platform.
+ *
+ * JUSPAY Platform is free software: you can redistribute it and/or modify
+ * it for only educational purposes under the terms of the GNU Affero General
+ * Public License (GNU AGPL) as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ * For Enterprise/Commerical licenses, contact <info@juspay.in>.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  The end user will
+ * be liable for all damages without limitation, which is caused by the
+ * ABUSE of the LICENSED SOFTWARE and shall INDEMNIFY JUSPAY for such
+ * damages, claims, cost, including reasonable attorney fee claimed on Juspay.
+ * The end user has NO right to claim any indemnification based on its use
+ * of Licensed Software. See the GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
+ */
 
 var ViewPageAdapter = require("./ViewPageAdapter");
 var Renderer = require("./Render");
-const qsstringify = require("qs/lib/stringify")
+const qsstringify = require("qs/lib/stringify");
 
 function parseJson(str) {
   try {
@@ -35,19 +35,34 @@ function parseJson(str) {
   }
 }
 
+function sendAnalytics(data) {
+  const url = "https://logs.juspay.in/godel/analytics";
+  if (navigator.sendBeacon) {
+    navigator.sendBeacon(url, JSON.stringify({ data }));
+  } else {
+    try {
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url, false); // third parameter of `false` means synchronous
+      xhr.send(JSON.stringify({data}));   
+    } catch(err) {
+      //
+    }
+  }
+}
+
 module.exports = {
-  getSymbol: function (type) {
+  getSymbol: function(type) {
     switch (type) {
-    case "tick":
-      return "\u2713";
-    case "rupee":
-      return "\u20B9";
-    default:
-      return "symbol";
+      case "tick":
+        return "\u2713";
+      case "rupee":
+        return "\u20B9";
+      default:
+        return "symbol";
     }
   },
 
-  listViewAdapter: function (id, jsx, callback, type, more) {
+  listViewAdapter: function(id, jsx, callback, type, more) {
     let parent = document.getElementById(id);
     if (!parent) {
       console.error(new Error("Listview parent null"));
@@ -64,75 +79,80 @@ module.exports = {
       Renderer.computeChildDimens(parentView);
       parentView.type = "listView";
       let elem = Renderer.inflateView(x.view, parent);
-      elem.addEventListener("click", function () {
+      elem.addEventListener("click", function() {
         window.callUICallback(callback, [i]);
       });
       Android.runInUI(x.value);
     });
     if (more) {
-      let elem = document.createElement('div');
+      let elem = document.createElement("div");
       elem.style.width = "100%";
       elem.style.height = "100px";
       elem.style.borderBottom = "1px solid #eee";
       parent.appendChild(elem);
-      
+
       Renderer.inflateView(JSON.parse(more), elem);
     }
   },
 
   callAPI: async function callAPI(method, url, data, headers, type, callback) {
-    headers = parseJson(headers)
-    data = parseJson(data)
-    if (data.upi_vpa){
-      var order=JSON.parse(data.order_details);
-      if (order.customer_id == ""){
+    headers = parseJson(headers);
+    data = parseJson(data);
+    if (data.upi_vpa) {
+      var order = JSON.parse(data.order_details);
+      if (order.customer_id == "") {
         order.customer_id = "juspay_demo_user";
       }
       data.order_details = order;
     }
-    let something = false
-    if (headers["Content-Type"] === "application/x-www-form-urlencoded"){
-      if(typeof data == "object"){
-        something = true
-        data =qsstringify(data);
+    let something = false;
+    if (headers["Content-Type"] === "application/x-www-form-urlencoded") {
+      if (typeof data == "object") {
+        something = true;
+        data = qsstringify(data);
       }
     } else {
-      data = JSON.stringify(data)
+      data = JSON.stringify(data);
     }
-    if (['GET', 'HEAD'].includes(method)) {
-      data = undefined
+    if (["GET", "HEAD"].includes(method)) {
+      data = undefined;
     }
     try {
-      const resp = await fetch(url, { method, body: data, headers })
-      const json = await resp.json()
-      window.callUICallback(callback, "success", btoa(JSON.stringify(json)), resp.status);
-    } catch(err) {
-      console.log("ERR" ,err);
+      const resp = await fetch(url, { method, body: data, headers });
+      const json = await resp.json();
+      window.callUICallback(
+        callback,
+        "success",
+        btoa(JSON.stringify(json)),
+        resp.status
+      );
+    } catch (err) {
+      console.log("ERR", err);
       window.callUICallback(callback, "failure", btoa("{}"), 50);
     }
   },
 
-  getFromSharedPrefs: function (key) {
+  getFromSharedPrefs: function(key) {
     return localStorage.getItem(key) || "__failed";
   },
 
-  setInSharedPrefs: function (key, value) {
+  setInSharedPrefs: function(key, value) {
     localStorage.setItem(key, value);
   },
 
-  viewPagerAdapter: function (id, jsx, tabJsx, cb) {
+  viewPagerAdapter: function(id, jsx, tabJsx, cb) {
     ViewPageAdapter.createTabs(id, jsx, tabJsx, cb);
   },
 
-  switchToViewPagerIndex: function (index) {
+  switchToViewPagerIndex: function(index) {
     ViewPageAdapter.toggleView(index);
   },
 
-  getKey: function (key, defaultValue) {
+  getKey: function(key, defaultValue) {
     return localStorage.getItem(key) || defaultValue;
   },
 
-  setKey: function (key, value) {
+  setKey: function(key, value) {
     return localStorage.setItem(key, value);
   },
 
@@ -141,7 +161,7 @@ module.exports = {
   },
 
   getSessionAttribute: function getSessionAttribute(v1, v2) {
-    return { a: v1};
+    return { a: v1 };
   },
 
   setAnalyticsEndPoint: function setAnalyticsEndPoint(url) {
@@ -159,10 +179,7 @@ module.exports = {
   addToLogList: function addToLogList(data) {
     const newLog = JSON.parse(data);
     const logsArr = Array.isArray(newLog) ? newLog : [newLog];
-    navigator.sendBeacon(
-      "https://logs.juspay.in/godel/analytics",
-      JSON.stringify({ data: logsArr })
-    );
+    sendAnalytics(logsArr)
   },
   saveToLocal: function(a,b,c){
     try{
@@ -207,6 +224,5 @@ module.exports = {
 
   isOnline: function isOnline() {
     return true;
-  }
-
-}
+  },
+};
