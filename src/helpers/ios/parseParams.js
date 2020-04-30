@@ -906,7 +906,7 @@ function this_setBackgroundImage() {
     "return": "false",
     "fromStore": getSetType ? "false" : "true",
     "storeKey": "view" + window.__VIEW_INDEX,
-    "invokeOn": "MJPView",
+    "invokeOn": getSetType?"this":"UIView",
     "methodName": "setBackgroundImage:",
     "values": [{
       "name": "image" + window.__IMAGE_INDEX,
@@ -1442,7 +1442,6 @@ function generateType(type, config) {
 function changeKeys(config, type) {
   var map = {
     "imageUrl": "imageNamed",
-    "packageIcon": "imageNamed",
     "color": "textColor"
   };
 
