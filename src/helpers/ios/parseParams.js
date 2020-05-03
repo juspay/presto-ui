@@ -679,7 +679,7 @@ function UIFont_fontWithName(name, size) {
 function this_setFont() {
   return {
     "return": "false",
-    "fromStore": getSetType ? "false" : "true",
+    "fromStore": "true",
     "storeKey": "view" + window.__VIEW_INDEX,
     "invokeOn": getSetType ? "this" : "UIView",
     "methodName": "setFont:",
@@ -1429,6 +1429,10 @@ function generateType(type, config) {
     }
     break;
     case "relativeLayout": {
+      modifiedType = "mJPRelativeLayout";
+    }
+    break;
+    case "frameLayout": {
       modifiedType = "mJPRelativeLayout";
     }
     break;
