@@ -1446,6 +1446,7 @@ function generateType(type, config) {
 function changeKeys(config, type) {
   var map = {
     "imageUrl": "imageNamed",
+    "packageIcon" : "imageNamed",
     "color": "textColor"
   };
 
