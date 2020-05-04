@@ -41,14 +41,6 @@ Array.prototype.rotate = (function () {
   };
 })();
 
-function convertHexToRgb(hex) {
-  var r = (parseInt(hex.substring(0, 2), 16));
-  var g = (parseInt(hex.substring(2, 4), 16));
-  var b = (parseInt(hex.substring(4, 6), 16));
-
-  return r + "," + g + "," + b;
-}
-
 function flattenObject(ob) {
   var toReturn = {};
   for (var i in ob) {
@@ -514,8 +506,7 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "shadow") {
-    alert("HEY")
-    var shadowValues = config.shadow.split(',');
+    var shadowValues = config.shadow.split(config.shadowSeparator || ',');
     var shadowBlur = rWS(cS(shadowValues[2]));
     var shadowSpread = rWS(cS(shadowValues[3]));
     var shadowOpacity = rWS(cS(shadowValues[5]));

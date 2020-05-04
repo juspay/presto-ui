@@ -182,15 +182,6 @@ function getCtr(viewGroup) {
   return  viewGroupMap[viewGroup];
 }
 
-function isURL(str) {
-  try {
-    var url = new URL(str);
-    return true;
-  } catch(err) {
-    return false;
-  }
-}
-
 function handleSpecialChars(value) {
   value =  value.indexOf(',')>-1?value.replace(/\,/g, '\\\\,'):value;
   value =  value.indexOf(':')>-1?value.replace(/\:/g, '\\\\:'):value;

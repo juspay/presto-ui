@@ -1160,18 +1160,6 @@ function this_setEnableSwype(value) {
     };
 }
 
-function UIView_bounds() {
-  window.__RECT_INDEX++;
-
-  return {
-    "return": "rect" + window.__RECT_INDEX,
-    "fromStore": "true",
-    "storeKey":"view" + window.__VIEW_INDEX,
-    "invokeOn": "UIView",
-    "methodName":"bounds",
-  }
-}
-
 function this_bringSubViewToFront(params){
   return {
     "return": "false",
