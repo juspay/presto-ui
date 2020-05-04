@@ -40,8 +40,7 @@ let config = {
         use: {
           loader: "babel-loader",
           options: {
-            presets: [ "env"  ],
-            plugins: [ ["transform-react-jsx" , { "pragma": "dom" } ] ]
+            presets: ["env"]
           }
         }
       },

@@ -464,6 +464,83 @@ function self_rectFromDictionary(x,y,w,h) {
   }
 }
 
+function this_updateLayoutParams(config) {
+  var data = {
+    "width": config.width,
+    "height": config.height,
+    "margin": config.margin,
+    "padding": config.padding,
+    "weight": config.weight,
+    "gravity": config.gravity,
+    "visibility": config.visibility,
+    "orientation": config.orientation,
+    "alignment_rules" : config.alignment_rules
+    }
+  if(data.alignment_rules && data.alignment_rules.length == 0){
+    delete data.alignment_rules;
+  }
+  return {
+    "return": "false",
+    "invokeOn": "this",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "methodName": "updateLayoutParams:",
+    "values": [{ 
+        "name": JSON.stringify(data), 
+        "type": 's' 
+    }]
+  };
+}
+ 
+
+function this_setPadding(padding) {
+  return {
+    "return": "false",
+    "invokeOn": getSetType?"this":"MJPViewAL",
+    "methodName":"setPaddingLeft:Top:Right:Bottom:",
+    "values": padding.split(',').map(makeUnit)
+  }
+}
+
+function this_setMargin(margin) {
+  return {
+    "return": "false",
+    "invokeOn": getSetType?"this":"MJPViewAL",
+    "methodName":"setMarginLeft:Top:Right:Bottom:",
+    "values": margin.split(',').map(makeUnit)
+  }
+}
+
+function makeUnit (v,i,arr) {
+  return {name : v+'', type : 'f'}
+}
+
+function this_setHeight(height) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"MJPViewAL",
+    "methodName":"setHeight:",
+    "values":[
+      {"name": height +'', "type": 'i'}
+    ]
+  }
+}
+
+function this_setWidth(width) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"MJPViewAL",
+    "methodName":"setWidth:",
+    "values":[
+      {"name": width +'', "type": 'i'}
+    ]
+  }
+}
+
 function this_setFrame() {
   return {
     "return": "false",
@@ -513,7 +590,7 @@ function this_setText(text) {
     "return": "false",
     "fromStore": getSetType?"false":"true",
     "storeKey": "view" + window.__VIEW_INDEX,
-  "invokeOn": getSetType?"this":"UIView",
+    "invokeOn": getSetType?"this":"UIView",
     "methodName":"setText:",
     "values":[
           {"name": encodeURI(text), "type": "s"}
@@ -534,15 +611,15 @@ function this_setRegularExpression(text) {
   }
 }
 
-function self_setHTMLText(props) {
+function this_setHTMLText(text) {
   return {
     "return": "false",
-    "invokeOn": "self",
+    "invokeOn" : "MJPTextView",
+    "fromStore": getSetType?"false":"true",
     "methodName":"setHtmlText:",
     "values": [
-      {
-        "text": props.text,
-        "viewTag": props.id,
+      { "name": text
+      , "type": "s"
       }
     ]
   }
@@ -566,7 +643,7 @@ function this_setPlaceholderProperties(data) {
     "return": "false",
     "fromStore": getSetType ? "false" : "true",
     "storeKey": "view" + window.__VIEW_INDEX,
-    "invokeOn": getSetType ? "this" : "MJPLabel",
+    "invokeOn": getSetType ? "this" : "MJPTextView",
     "methodName": "setPlaceholderProperties:",
     "values": [{"name": data, "type": "s"}]
   };
@@ -590,11 +667,11 @@ function UIFont_fontWithName(name, size) {
 
   return {
     "return": "font" + window.__FONT_INDEX,
-    "invokeOn": "UIFont",
+    "invokeOn": "MJPFont",
     "methodName":"fontWithName:size:",
     "values":[
       {"name": name, "type": "s"},
-      {"name": size, "type": "f"},
+      {"name": size.length<1?size:"14", "type": "f"},
     ]
   }
 }
@@ -602,7 +679,7 @@ function UIFont_fontWithName(name, size) {
 function this_setFont() {
   return {
     "return": "false",
-    "fromStore": getSetType ? "false" : "true",
+    "fromStore": "true",
     "storeKey": "view" + window.__VIEW_INDEX,
     "invokeOn": getSetType ? "this" : "UIView",
     "methodName": "setFont:",
@@ -824,19 +901,16 @@ function this_setGradient(data) {
   };
 }
 
-function this_setBackgroundImage(data) {
+function this_setBackgroundImage() {
   return {
     "return": "false",
     "fromStore": getSetType ? "false" : "true",
     "storeKey": "view" + window.__VIEW_INDEX,
-    "invokeOn": "MJPView",
-    "methodName": "setBackgroundImage::",
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName": "setBackgroundImage:",
     "values": [{
       "name": "image" + window.__IMAGE_INDEX,
       "computed": "true"
-    }, {
-      "name": data,
-      "type": "s"
     }]
   };
 }
@@ -955,7 +1029,7 @@ function this_setTextProperties(data) {
     "return": "false",
     "fromStore": getSetType ? "false" : "true",
     "storeKey": "view" + window.__VIEW_INDEX,
-    "invokeOn": getSetType ? "this" : "MJPLabel",
+    "invokeOn": getSetType ? "this" : "MJPTextView",
     "methodName": "setTextProperties:",
     "values": [
       {"name": data,"type": "s"}]
@@ -968,8 +1042,19 @@ function this_setLetterSpacing(data) {
     "return": "false",
     "fromStore": getSetType ? "false" : "true",
     "storeKey": "view" + window.__VIEW_INDEX,
-    "invokeOn": getSetType ? "this" : "MJPTextField",
+    "invokeOn": getSetType ? "this" : "MJPEditText",
     "methodName": "setLetterSpacing:",
+    "values": [{ "name": data, "type": "s" }]
+  };
+}
+
+function this_setLineSpacing(data) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "MJPLabel",
+    "methodName": "setLineSpacing:",
     "values": [{ "name": data, "type": "s" }]
   };
 }
@@ -1212,6 +1297,20 @@ function this_setClipsToBounds(bounds) {
   };
 }
 
+function this_fontWithName(name) {
+  window.__FONT_INDEX++;
+  return {
+    "return": "font" + window.__FONT_INDEX,
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName":"fontWithName:",
+    "values":[
+      {"name": name, "type": "s"}
+    ]
+  }
+}
+
 function UIColor_setColor(color) {
   let values;
   let alpha = "1.00";
@@ -1261,41 +1360,93 @@ function transformKeys(config) {
 }
 
 function generateType(type, config) {
-   var generatedType = "mJPView";
-   if (type == "editText") {
-      generatedType = "mJPTextField";
-   } else if (type == "imageView") {
-      generatedType = "mJPImageView";
-   } else if (type == "textView") {
-      generatedType = "mJPLabel";
-   } else if (type == "scrollView" || type == "horizontalScrollView") {
-      generatedType = "mJPScrollView";
-   } else if (type == "collectionView" || type == "viewPager") {
-      generatedType = "mJPCollectionView";
-   } else if (type == "tableView" || type == "listView") {
+  var modifiedType  = "mJPView";
+  switch(type){
+    case "editText":{
+      modifiedType = "mJPEditText";
+    }
+    break;
+    case "imageView":{
+      modifiedType = "mJPImageView";
+    }
+    break;
+    case "textView":{
+      modifiedType = "mJPTextView";
+    }
+    break;
+    case "scrollView": {
+        if (config.hasOwnProperty('height')&& config.height == 'wrap_content'){
+            modifiedType = "mJPScrollView";
+        } else {
+            modifiedType = "mJPScrollView";
+        }
+        config.orientation = "vertical"; 
+        break;
+    }
+    case "horizontalScrollView": {
+        if (config.hasOwnProperty('width')&& config.width == 'wrap_content'){
+            modifiedType = "mJPScrollView";  
+        } else {
+            modifiedType = "mJPScrollView";
+        }
+        config.orientation = "horizontal";
+        break;
+    }
+    break;
+    case "tableView":
+    case "listView": {
       if (config.hasOwnProperty("listData") && config.hasOwnProperty("listItem")) {
-         generatedType = "mJPRepeatTableView";
-      } else {
-         generatedType = "mJPTableView";
+        modifiedType = "mJPRepeatTableView";
       }
-   } else if (type == "progressBar") {
-      generatedType = "mJPActivityIndicator";
-   } else if (type == "switch") {
-      generatedType = "mJPSwitch";
-   } else if (type == "swypeLayout"){
-      generatedType = "mJPSwypeLayoutCell";
-   } else if (type == "accordionLayout"){
-      generatedType = "mJPExpandableCell";
-   } else {
-      generatedType = "mJPView";
-   }
-   
-   return generatedType;
+      else{
+        modifiedType = "mJPTableView";
+      }
+    }
+    break;
+    case "collectionView":
+    case "viewPager":{
+      modifiedType = "mJPCollectionView";
+    }
+    break;
+    case "progressBar": {
+      modifiedType = "mJPActivityIndicator";
+    }
+    break;
+    case "switch": {
+      modifiedType = "mJPSwitch";
+    }
+    break;
+    case "swypeLayout": {
+      modifiedType = "mJPSwypeLayoutCell";
+    }
+    break;
+    case "accordionLayout": {
+      modifiedType = "mJPExpandableCell";
+    }
+    break;
+    case "linearLayout": {
+      modifiedType = "mJPLinearLayout";
+    }
+    break;
+    case "relativeLayout": {
+      modifiedType = "mJPRelativeLayout";
+    }
+    break;
+    case "frameLayout": {
+      modifiedType = "mJPRelativeLayout";
+    }
+    break;
+    default: {
+      modifiedType = "mJPView";
+    }
+  }
+  return modifiedType;
 }
 
 function changeKeys(config, type) {
   var map = {
     "imageUrl": "imageNamed",
+    "packageIcon" : "imageNamed",
     "color": "textColor"
   };
 
@@ -1313,16 +1464,18 @@ function changeKeys(config, type) {
     config.borderColor = config.stroke.split(",")[1];
   }
 
-  if (config.alignParentBottom){
-    delete config.alignParentBottom;
+  // Add all view based prop injections below.
+  switch (type.toLowerCase()){
+    case "scrollview":{
+      config.orientation = "vertical"
+    }
+    break;
+    case "horizontalscrollview":{
+      config.orientation = "horizontal"
+    }
+    break;
   }
-
-  if (type == "textView" && config.gravity) {
-    let value = config.gravity;
-    config.textAlignment = value;
-    delete config.gravity;
-  }
-
+  // Add all view based prop injections above.
   return config;
 }
 
@@ -1336,6 +1489,7 @@ module.exports = function(type, config, _getSetType) {
   type = generateType(type, config);
   getSetType = (_getSetType == "set")?1:0;
   config.methods = [];
+  config.alignment_rules = [];
 
   // tag set
   if (config.id)  {
@@ -1349,7 +1503,7 @@ module.exports = function(type, config, _getSetType) {
   }
 
   // frame
-  if (config.x || config.y || config.w || config.h) {
+  if (!config.useConstraits && (config.x || config.y || config.w || config.h)) {
     let x = rWS(cS(config.x)) ||  "0";
     let y =  rWS(cS(config.y))|| "0";
     let width = rWS(cS(config.w)) || "0";
@@ -1359,8 +1513,40 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setFrame());
   }
 
+  if (config.hasOwnProperty("useConstraits") && config.useConstraits && config.hasOwnProperty("expand")){
+    config.visibility = config.expand ? (config.visibility ? config.visibility : "visible") : "gone";
+  }
+
+  if (config.hasOwnProperty("alignParentBottom") && config.alignParentBottom == "true,-1"){
+    config.alignment_rules.push('align_parent_bottom');
+  }
+
+  if (config.useConstraits) {
+    config.methods.push(this_updateLayoutParams(config));
+  }
+
+  // if(config.useConstraits && config.paddingConstraints){
+  //   config.methods.push(this_setPadding(config.paddingConstraints)); 
+  // }
+
+  // if(config.useConstraits && config.marginConstartints){
+  //   config.methods.push(this_setMargin(config.marginConstartints));
+  // }
+
+  // if(config.useConstraits && config.hh){
+  //   config.methods.push(this_setHeight(config.hh));
+  // }
+
+  // if(config.useConstraits && config.ww){
+  //   config.methods.push(this_setWidth(config.ww));
+  // }
+
   if (config.letterSpacing && !config.hasOwnProperty("text")) {
     config.methods.push(this_setLetterSpacing(config.letterSpacing));
+  }
+
+  if (config.lineSpacing) {
+    config.methods.push(this_setLineSpacing(config.lineSpacing));
   }
 
   if (config.hasOwnProperty("caretColor")) {
@@ -1388,8 +1574,7 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(this_setGradient(gradient));
     } else if (config.hasOwnProperty("backgroundDrawable")) {
       config.methods.push(UIImage_imageNamed(config.backgroundDrawable));
-      var frame = { "width": config.w, "height": config.h };
-      config.methods.push(this_setBackgroundImage(JSON.stringify(frame)));
+      config.methods.push(this_setBackgroundImage());
     } else {
       config.methods.push(UIColor_setColor(config.background));
       config.methods.push(this_setBackgroundColor());
@@ -1409,7 +1594,6 @@ module.exports = function(type, config, _getSetType) {
     if (config.cornerRadius) {
       let arg = rWS(cS(config.cornerRadius));
       config.methods.push(_UILabelLayer_setCornerRadius(arg));
-      config.methods.push(_UILabelLayer_setMasksToBounds());
     }
 
     if (config.borderWidth) {
@@ -1514,13 +1698,27 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(this_setTextAlignment(rWS(cS(config.textAlignment))));
   }
 
+  if (config.hasOwnProperty("textFromHtml")) {
+    //TODO: FIX THIS BRING IT OUTSIDE
+      config.methods.push(this_setHTMLText(config.textFromHtml));
+  }
+
   if (config.textColor) {
     config.methods.push(UIColor_setColor(config.textColor));
     config.methods.push(this_setTextColor());
   }
 
-  if (config.fontStyle) {
-    config.methods.push(UIFont_fontWithName(config.fontStyle, config.textSize));
+  if (config.hasOwnProperty("fontStyle")) {
+    if (config.hasOwnProperty("textSize")) {
+        config.methods.push(UIFont_fontWithName(config.fontStyle, config.textSize));
+    }else{
+      config.methods.push(this_fontWithName(config.fontStyle));
+    }
+    config.methods.push(this_setFont());
+  }
+
+  if (!config.hasOwnProperty("fontStyle") && config.hasOwnProperty("textSize")){
+    config.methods.push(UIFont_systemFontOfSize(config.textSize));
     config.methods.push(this_setFont());
   }
 
@@ -1541,7 +1739,7 @@ module.exports = function(type, config, _getSetType) {
     }
   }
 
-  if (config.visibility) {
+  if (!config.useConstraits && config.visibility) {
     config.methods.push(this_setHidden(config.visibility));
   }
 
@@ -1590,21 +1788,7 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (config.htmlText) {
-    //TODO: FIX THIS BRING IT OUTSIDE
-    let props = {
-        "text": config.htmlText,
-        "id": config.id,
-     };
-      config.methods.push(self_setHTMLText(props));
-  }
-
-  if (config.hasOwnProperty("textFromHtml")) {
-    //TODO: FIX THIS BRING IT OUTSIDE
-    let props = {
-        "text": config.textFromHtml,
-        "id": config.id,
-     };
-      config.methods.push(self_setHTMLText(props));
+    config.methods.push(this_setHTMLText(config.htmlText));
   }
 
   if (config.hasOwnProperty("bringSubViewToFront")) {
@@ -1612,8 +1796,8 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_bringSubViewToFront(viewTag));
   }
 
-  if (type == 'mJPImageView') {
-    let contentMode = cS(config.contentMode || 1);
+  if (config.hasOwnProperty("contentMode")) {
+    let contentMode = cS(config.contentMode);
     config.methods.push(this_setContentMode(contentMode));
   }
 
@@ -1645,13 +1829,6 @@ if (config.hasOwnProperty("pivotY")) {
     config.methods.push(this_setOnItemClick(config.onItemClick));
   }
 
-  if (type == 'uIScrollView') {
-    let width = cS(config.contentWidth) || "0";
-    let height = cS(config.contentHeight) || "0";
-
-    config.methods.push(self_sizeFromDictionary(width, height));
-    config.methods.push(this_setContentSize());
-  }
 
   if (config.statusBarStyle) {
     let enabled = cS(config.statusBarStyle);
