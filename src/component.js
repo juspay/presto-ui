@@ -5,10 +5,7 @@ const NavBar = require('./components/NavBar')
 const SwitchButton = require('./components/SwitchButton')
 const Button = require('./components/Button')
 
-let DateRangePicker
-if (!__ignoreDateRangePickerWeb) {
-     DateRangePicker = require('./components/DateRangePicker')
-}
+
 
 /* Components */
 function closeAllActiveComponents() {
@@ -47,12 +44,12 @@ function renderComponent(elem, props, firstRender) {
         case 'DRP': 
             elem.classList.add(window.__COM_CLASS_GROUP.DRP)
 
-            DateRangePicker._renderMain(elem, props, firstRender)
+          //   DateRangePicker._renderMain(elem, props, firstRender)
         break
         case 'DRP_BODY':
             elem.classList.add(window.__COM_CLASS_GROUP.DRP_BODY)
 
-            DateRangePicker._renderBody(elem, props, firstRender)
+          //   DateRangePicker._renderBody(elem, props, firstRender)
         break
         // Nav Bar
         case 'NAVBAR':
