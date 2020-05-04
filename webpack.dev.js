@@ -15,7 +15,8 @@ const devConfig = merge(common, {
 function getPlatformOverride(platform) {
   if (platform === "WEB") {
     // Needed for async/await support
-    entry = ["babel-polyfill", "./index.js"];
+    // entry = ["babel-polyfill", "./index.js"];
+    entry = ["./index.js"];
   } else {
     entry = ["./index.js"];
   }
