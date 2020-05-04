@@ -387,7 +387,8 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "a_duration" && !isNaN(config[key])) {
-    config.animation.transition = config[key] + 'ms all';
+    const suffix = config.transitionTimingFunction ? (" " + config.transitionTimingFunction) : "";
+    config.animation.transition = config[key] + 'ms all' + suffix;
   }
   
   if (type == "textView" && key == "gravity" && config.gravity) {
@@ -621,7 +622,8 @@ module.exports = function (type, config, getSetType) {
     parseLayoutProps(type, config, keys[i]);
   }
 
-  config.transition = "0ms all";
+  const transitionTimingFunction = config.transitionTimingFunction ? (" " + config.transitionTimingFunction) : "";
+  config.transition = "0ms all" + transitionTimingFunction;
 
   if (config.style.transform == "") {
     delete config.style.transform;
