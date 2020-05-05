@@ -41,14 +41,6 @@ Array.prototype.rotate = (function () {
   };
 })();
 
-function convertHexToRgb(hex) {
-  var r = (parseInt(hex.substring(0, 2), 16));
-  var g = (parseInt(hex.substring(2, 4), 16));
-  var b = (parseInt(hex.substring(4, 6), 16));
-
-  return r + "," + g + "," + b;
-}
-
 function flattenObject(ob) {
   var toReturn = {};
   for (var i in ob) {
@@ -395,7 +387,8 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "a_duration" && !isNaN(config[key])) {
-    config.animation.transition = config[key] + 'ms all';
+    const suffix = config.transitionTimingFunction ? (" " + config.transitionTimingFunction) : "";
+    config.animation.transition = config[key] + 'ms all' + suffix;
   }
   
   if (type == "textView" && key == "gravity" && config.gravity) {
@@ -514,8 +507,7 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "shadow") {
-    alert("HEY")
-    var shadowValues = config.shadow.split(',');
+    var shadowValues = config.shadow.split(config.shadowSeparator || ',');
     var shadowBlur = rWS(cS(shadowValues[2]));
     var shadowSpread = rWS(cS(shadowValues[3]));
     var shadowOpacity = rWS(cS(shadowValues[5]));
@@ -630,7 +622,8 @@ module.exports = function (type, config, getSetType) {
     parseLayoutProps(type, config, keys[i]);
   }
 
-  config.transition = "0ms all";
+  const transitionTimingFunction = config.transitionTimingFunction ? (" " + config.transitionTimingFunction) : "";
+  config.transition = "0ms all" + transitionTimingFunction;
 
   if (config.style.transform == "") {
     delete config.style.transform;

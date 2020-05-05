@@ -30,7 +30,6 @@ let {
     renderComponent
 } = require("../component")
 let helper = require("../helper")
-let computeListViewChildren = require("./computeListViewChildren")
 
 function createTextElement(elem, config) {
     let children = elem.childNodes;
@@ -412,7 +411,7 @@ function separatorInputKeyDownHandler(ev){
                     return;
                 }
             }
-            var finalData = newValue.replace(/[^a-zA-Z0-9@.]/g, "");
+            var finalData = newValue.replace(/[^a-zA-Z0-9@.-]/g, "");
             if (regexString) {
                 var regexPattern = new RegExp(regexString);
                 if (!regexPattern.test(finalData)) {
@@ -432,7 +431,7 @@ function separatorInputKeyDownHandler(ev){
                     var element = finalData[index];
                     formattedString += element;
                     var factor = 0;
-                    if (formattedString.length && formattedString.replace(/[^a-zA-Z0-9@.]/g, "").length % (separatorRepeat + factor) == 0) {
+                    if (formattedString.length && formattedString.replace(/[^a-zA-Z0-9@.-]/g, "").length % (separatorRepeat + factor) == 0) {
                         formattedString += separator;
                     }
                 }
@@ -510,28 +509,28 @@ function setAttributes(type, elem, props, firstRender) {
     }
 
     if (props.hasOwnProperty('minWidth') && !isNaN(props.minWidth)) {
-        if (props.hasOwnProperty('percentMinWidth') && props.percentMinWidth)
+        if (props.percentMinWidth)
             elem.style.minWidth = props.minWidth + '%';
         else
             elem.style.minWidth = props.minWidth + 'px';
     }
 
     if (props.hasOwnProperty('minHeight') && !isNaN(props.minHeight)) {
-        if (props.hasOwnProperty('percentMinHeight') && props.percentMinHeight)
+        if (props.percentMinHeight)
             elem.style.minHeight = props.minHeight + '%';
         else
             elem.style.minHeight = props.minHeight + 'px';
     }
 
     if (props.hasOwnProperty('maxWidth') && !isNaN(props.maxWidth)) {
-        if (props.hasOwnProperty('percentMaxWidth') && props.percentMaxWidth)
+        if (props.percentMaxWidth)
             elem.style.maxWidth = props.maxWidth + '%';
         else
             elem.style.maxWidth = props.maxWidth + 'px';
     }
 
     if (props.hasOwnProperty('maxHeight') && !isNaN(props.maxHeight)) {
-        if (props.hasOwnProperty('percentMaxHeight') && props.percentMaxHeight)
+        if (props.percentMaxHeight)
             elem.style.maxHeight = props.maxHeight + '%';
         else
             elem.style.maxHeight = props.maxHeight + 'px';
@@ -704,7 +703,9 @@ function setAttributes(type, elem, props, firstRender) {
             }
         } else if (key == "className") {
             if ((props[key] || "").trim() !== "") {
-                elem.classList.add(props[key]); 
+                props[key].split(" ").map(className => {
+                    elem.classList.add(className); 
+                })
             }
         } else if (key == "classList") {
             JSON.parse(props[key]).forEach(function (obj) {
@@ -757,6 +758,9 @@ function setAttributes(type, elem, props, firstRender) {
         // }
     }
 
+    if (!props.animation) {
+        console.error("animaiton not found", props)
+    }
     if (props.animation.transition) {
         const afterTransition = () => {
             const animation = props.animation;
@@ -1030,14 +1034,6 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
 
     if (view.props.x == "NaN" || view.props.y == "NaN") {
         view = handleWrapContent(view, parentElement)
-    }
-
-    if (view.type == 'listView') {
-        // console.log("listView", view, elem)
-        view.children = computeListViewChildren(view)//.slice(0,2)
-        if (elem) {
-            elem.innerHTML = ""
-        }
     }
 
     if (!elem) {

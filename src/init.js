@@ -26,7 +26,7 @@
 /*
  Used to initialize defaults for window funcions and variables.
 */
-const merge = require('./helper').merge
+const { merge } = require('./helper');
 window.PrestoUI = require("./PrestoUIInterface");
 
 const getCurrTime = () => (new Date()).getTime()

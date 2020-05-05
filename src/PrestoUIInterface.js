@@ -26,14 +26,14 @@
 var prestoDom = require("./doms");
 var helpers = require("./helpers")
 var webParseParams;
-// var iOSParseParams;
+var iOSParseParams;
 var parseParams;
 const helper = require('./helper');
 
 if (window.__OS === "WEB") {
   webParseParams = helpers.web.parseParams;
 } else if (window.__OS === "IOS") {
-  // iOSParseParams = require("./helpers").ios.parseParams;
+  iOSParseParams = helpers.ios.parseParams;
 } else if (window.__OS === "ANDROID") {
   parseParams = helpers.android.parseParams;
 }
