@@ -517,8 +517,9 @@ function parseLayoutProps(type, config, key) {
       };
 
     var shadowColor = convertColorToRgba(shadowValues[4]);
+    var shadowType = config.shadowType ? `${config.shadowType} ` : ''
 
-    config["style"]["box-shadow"] = parseInt(shadowOffset.x) + "px " + parseInt(shadowOffset.y) + "px " + parseInt(shadowBlur) + "px " + parseInt(shadowSpread) + "px rgba(" + shadowColor.r + ", " +  shadowColor.g + ", " +  shadowColor.b + ", " +  shadowColor.a + ")" ;
+    config["style"]["box-shadow"] = shadowType + parseInt(shadowOffset.x) + "px " + parseInt(shadowOffset.y) + "px " + parseInt(shadowBlur) + "px " + parseInt(shadowSpread) + "px rgba(" + shadowColor.r + ", " +  shadowColor.g + ", " +  shadowColor.b + ", " +  shadowColor.a + ")" ;
   }
 
   if (key == "lineHeight")
@@ -558,9 +559,9 @@ function convertColorToRgba(color) {
 }
 
 function convertHexToRgb(hex) {
-  var r = (parseInt(hex.substring(0, 2), 16) / 255).toFixed(2);
-  var g = (parseInt(hex.substring(2, 4), 16) / 255).toFixed(2);
-  var b = (parseInt(hex.substring(4, 6), 16) / 255).toFixed(2);
+  var r = (parseInt(hex.substring(0, 2), 16)).toFixed(2);
+  var g = (parseInt(hex.substring(2, 4), 16)).toFixed(2);
+  var b = (parseInt(hex.substring(4, 6), 16)).toFixed(2);
 
   return r + "," + g + "," + b;
 }
@@ -622,8 +623,13 @@ module.exports = function (type, config, getSetType) {
     parseLayoutProps(type, config, keys[i]);
   }
 
-  const transitionTimingFunction = config.transitionTimingFunction ? (" " + config.transitionTimingFunction) : "";
-  config.transition = "0ms all" + transitionTimingFunction;
+  config.transition = [
+    String(config.a_duration || 0) +"ms",
+    "all",
+    config.transitionTimingFunction
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   if (config.style.transform == "") {
     delete config.style.transform;
