@@ -260,5 +260,8 @@ module.exports = {
   },
   hideKeyboardOnNavigation: function hideKeyboardOnNavigation() {
     return;
+  },
+  runInJuspayBrowser: function runInJuspayBrowser(eventName, arg2, arg3) {
+    //
   }
 };
