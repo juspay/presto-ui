@@ -154,7 +154,7 @@ module.exports = {
   },
 
   getSessionAttribute: function getSessionAttribute(v1, v2) {
-    return { a: v1 };
+    return JSON.stringify({ a: v1 });
   },
 
   setAnalyticsEndPoint: function setAnalyticsEndPoint(url) {
@@ -218,4 +218,47 @@ module.exports = {
   isOnline: function isOnline() {
     return true;
   },
+
+  getDeviceDetails: function getDeviceDetails() {
+    const deviceDetails = {
+      appVersion: "",
+      osVersion: "",
+      os: "",
+      macAddress: "",
+      isDual: "",
+      manufacturer: "",
+      isRooted: "",
+      androidId: "",
+      appPackageName: "",
+      networkOperator: "",
+      simOperatorName: "",
+      screenHeight: "",
+      screenWidth: "",
+      screenPpi: "",
+      brand: "",
+      model: "",
+    }
+    return JSON.stringify(deviceDetails);
+  },
+
+  getDeviceInfo: function getDeviceInfo() {
+    return JSON.stringify({})
+  },
+
+  getUUID: function getUUID() {
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+              .toString(16)
+              .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+            s4() + '-' + s4() + s4() + s4();  
+  },
+
+  renewFile: function renewFile(file) {
+    return;
+  },
+  hideKeyboardOnNavigation: function hideKeyboardOnNavigation() {
+    return;
+  }
 };
