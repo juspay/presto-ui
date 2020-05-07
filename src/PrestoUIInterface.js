@@ -24,10 +24,19 @@
 */
 
 var prestoDom = require("./doms");
-var webParseParams = require("./helpers").web.parseParams;
-var iOSParseParams = require("./helpers").ios.parseParams;
-var parseParams = require("./helpers").android.parseParams;
+var helpers = require("./helpers")
+var webParseParams;
+var iOSParseParams;
+var parseParams;
 const helper = require('./helper');
+
+if (window.__OS === "WEB") {
+  webParseParams = helpers.web.parseParams;
+} else if (window.__OS === "IOS") {
+  iOSParseParams = helpers.ios.parseParams;
+} else if (window.__OS === "ANDROID") {
+  parseParams = helpers.android.parseParams;
+}
 
 function domAll(elem) {
   if (!elem.__ref) {

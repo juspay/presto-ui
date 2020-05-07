@@ -23,10 +23,11 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 const path = require('path')
+const webpack = require('webpack');
 
 let config = { 
   devtool: "inline-cheap-module-source-map",
-  entry: ['./index.js'],
+  //devtool: "inline-source-map",
   output: {
     path: path.join(__dirname,"/lib"),
     filename: "index.js",
@@ -45,6 +46,12 @@ let config = {
       },
     ]
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      // Set this to false to create a build that contains DateRangePicker for web
+      '__ignoreDateRangePickerWeb': JSON.stringify(true)
+    }),
+  ]
 }
 
 module.exports = config

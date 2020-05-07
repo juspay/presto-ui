@@ -41,14 +41,6 @@ Array.prototype.rotate = (function () {
   };
 })();
 
-function convertHexToRgb (hex){
-  var r = (parseInt(hex.substring(0,2), 16)/255).toFixed(2);
-  var g = (parseInt(hex.substring(2,4), 16)/255).toFixed(2);
-  var b = (parseInt(hex.substring(4,6), 16)/255).toFixed(2);
-
-  return r + "," + g + "," + b;
-}
-
 function flattenObject(ob) {
   var toReturn = {};
   for (var i in ob) {
@@ -85,6 +77,7 @@ function parseColors(color) {
 }
 
 function parseLayoutProps(type, config, key) {
+  const isMobile = window.innerWidth < 700
   if (typeof config[key] == "undefined" || config[key] == null) {
     delete config[key];
     return;
@@ -103,10 +96,14 @@ function parseLayoutProps(type, config, key) {
   if (!config.style.className)
     config.style.className = "";
 
-  if (key == "onClick" || key == "onClickEvent") {
-    config.style.cursor = "pointer";
+  if ((key == "onClick" || key == "onClickEvent")) {
+    if(!isMobile && !config.cursorType){
+      config.style.cursor = "pointer";
+    }
   }
-
+  if(key == "cursorType") {
+    config.style.cursor = config.cursorType;
+  }
   if (key == "textSize")
     config.style.fontSize = config.textSize + 'px';
   if (key == 'fontSize')
@@ -144,9 +141,38 @@ function parseLayoutProps(type, config, key) {
   if (key == "background") {
     config.style.background = config.background;
   }
+  if (key == "backgroundDrawable") {
+    config.style["background-image"] = "url('"+config.backgroundDrawable+"')";
+  }
 
   if (key == "color") {
     config.style.color = parseColors(config.color);
+  }
+
+  if(key == "position") {
+    config.style.position = config.position;
+  }
+
+  if(key == "bottomFixed") {
+    config.style.bottom = config.bottomFixed;
+  }
+  if(key == "topFixed") {
+    config.style.top = config.topFixed;
+  }
+
+  if(key == "autofocus"){
+    if(config.autofocus){
+      config.attributes["autofocus"] = "autofocus";  
+    }
+  }
+  if(key=="focus") {
+    if (config.focus && config.id){
+      var doc = document.getElementById(config.id);
+      if (doc){
+        doc.focus();
+      }
+
+    }
   }
 
   if (key == "cornerRadius") {
@@ -245,8 +271,19 @@ function parseLayoutProps(type, config, key) {
 
     if(values.length == 2)
       config.style.border = values[0] + "px solid " + values[1];
-    else if(values.length == 3)
-      config.style.border = values[0] + "px " + values[1] + " " + values[2];
+    else if(values.length == 3){
+      if (values[2] == "rbl"){
+        config.style.borderBottom = values[0] + "px solid " + values[1];
+        config.style.borderLeft = values[0] + "px solid " + values[1];
+        config.style.borderRight = values[0] + "px solid " + values[1];
+      }
+      else if (values[2] == "b"){
+        config.style.borderBottom = values[0] + "px solid " + values[1];
+      }
+      else
+        config.style.border = values[0] + "px " + values[1] + " " + values[2];
+    }
+    
   }
 
   if (key == "strokeTop") {
@@ -342,13 +379,18 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "translationZ") {
-    config.style["z-index"] = config[key];
+    var v = config[key];
+    config.style["-webkit-box-shadow"] = "0 0 "+v.toString()+"px rgba(0,0,0, .1)";
+    config.style["-moz-box-shadow"]= "0 0 "+v.toString()+"px rgba(0,0,0, .1)";
+    config.style["box-shadow"]=  "0 0 "+v.toString()+"px rgba(0,0,0, .1)";
+    
   }
 
-  if (key == "a_duration") {
-    config.animation.transition = config[key] + 'ms all';
+  if (key == "a_duration" && !isNaN(config[key])) {
+    const suffix = config.transitionTimingFunction ? (" " + config.transitionTimingFunction) : "";
+    config.animation.transition = config[key] + 'ms all' + suffix;
   }
-
+  
   if (type == "textView" && key == "gravity" && config.gravity) {
     config.style.textAlign = config.gravity;
     if (config.gravity == "center_vertical") {
@@ -361,6 +403,19 @@ function parseLayoutProps(type, config, key) {
       config.style.display = "flex";
       config.style["align-items"] = "center";
       config.style["justify-content"] = "center";
+    }
+    else if (config.gravity == "center"){
+      config.style.display = "flex";
+      config.style["align-items"] = "center";
+      config.style["justify-content"] = "center";
+    }
+  }
+  if (type == "linearLayout" && key == "gravity" && config.gravity){
+    if (config.margin && config.gravity=="center_vertical"){
+      var margin=config.margin.split(",");
+      if (config.width == "match_parent"){
+         config.style.width="calc(100% - "+(parseInt(margin[0])+parseInt(margin[2])).toString()+"px )";
+      }
     }
   }
 
@@ -376,21 +431,68 @@ function parseLayoutProps(type, config, key) {
     config.attributes.id = config.id;
   }
 
+
+  if (key == "gradient") {
+    var gradientObj =JSON.parse(config.gradient);
+    if (gradientObj.type == "linear") {
+      var angle = gradientObj.angle;
+      var values = gradientObj.values;
+      var colors = values.join(", ");
+      config.style["background-image"] = "linear-gradient("+angle+"deg, "+colors+")"
+    }
+     else {
+      var values = gradientObj.values;
+      var colors = values.join(", ");
+      config.style["background-image"] = "radial-gradient("+colors+")"
+     }
+  }
+
+
   if (key == "inputType") {
-    var inputType = "text"
+    var inputType = "text";
     if (config.inputType == "numericPassword" || config.inputType == "password") {
+      if(config.inputTypeI == 4 && isMobile){
+        inputType = "text";
+        config.style["-webkit-text-security"] = "disc";
+        config.style["-moz-text-security"] = "disc";
+        config.style["text-security"] = "disc";
+      } else {
         inputType = "password"
+      }
     } else if (config.inputType == "disabled") {
         config.attributes.disabled = 'disabled'
     } else if (config.inputType == "numeric") {
         inputType = "number"
     }
+    if (config.separator) {
+      inputType = "text"
+    }
 
     config.attributes.type = inputType
   }
 
+  if (key == "rotateImage") {
+    if(config.rotateImage){
+      config.style["animation-duration"] = "4s";
+      config.style["animation-timing-function"] = "linear";
+      config.style["animation-delay"] = "0s";
+      config.style["animation-iteration-count"] = "infinite";
+      config.style["animation-direction"] = "normal";
+      config.style["animation-fill-mode"] = "none";
+      config.style["animation-play-state"] = "running";
+      config.style["animation-name"] = "rotation";
+
+    }
+  }
+
   if (key == "pattern") {
-    config.attributes.pattern = config.pattern;
+    config.attributes["data-pattern"] = config.pattern;
+  }
+  if(key == "inputTypeI"){
+    if(config.inputTypeI == 4){
+      config.attributes["inputmode"] = "numeric";
+    }
+    
   }
 
   if (key == "separator") {
@@ -405,7 +507,7 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "shadow") {
-    var shadowValues = config.shadow.split(',');
+    var shadowValues = config.shadow.split(config.shadowSeparator || ',');
     var shadowBlur = rWS(cS(shadowValues[2]));
     var shadowSpread = rWS(cS(shadowValues[3]));
     var shadowOpacity = rWS(cS(shadowValues[5]));
@@ -415,8 +517,9 @@ function parseLayoutProps(type, config, key) {
       };
 
     var shadowColor = convertColorToRgba(shadowValues[4]);
+    var shadowType = config.shadowType ? `${config.shadowType} ` : ''
 
-    config["style"]["box-shadow"] = parseInt(shadowOffset.x) + "px " + parseInt(shadowOffset.y) + "px " + parseInt(shadowBlur) + "px " + parseInt(shadowSpread) + "px rgba(" + shadowColor.r + ", " +  shadowColor.g + ", " +  shadowColor.b + ", " +  shadowColor.a + ")" ;
+    config["style"]["box-shadow"] = shadowType + parseInt(shadowOffset.x) + "px " + parseInt(shadowOffset.y) + "px " + parseInt(shadowBlur) + "px " + parseInt(shadowSpread) + "px rgba(" + shadowColor.r + ", " +  shadowColor.g + ", " +  shadowColor.b + ", " +  shadowColor.a + ")" ;
   }
 
   if (key == "lineHeight")
@@ -455,6 +558,14 @@ function convertColorToRgba(color) {
   };
 }
 
+function convertHexToRgb(hex) {
+  var r = (parseInt(hex.substring(0, 2), 16)).toFixed(2);
+  var g = (parseInt(hex.substring(2, 4), 16)).toFixed(2);
+  var b = (parseInt(hex.substring(4, 6), 16)).toFixed(2);
+
+  return r + "," + g + "," + b;
+}
+
 function cS(value) {
   return value ? value + '' : "";
 }
@@ -468,7 +579,37 @@ function setDefaults(type, config) {
     config.orientation = config.orientation;
   }
 }
-
+function this_inlineAnimation(config) {
+  var con=modifyTranslation(config);
+  var element = document.getElementById(con.name);
+}
+function modifyTranslation(config){
+  var x = config.x || "0";
+  var y = config.y || "0";
+  var animationArray = JSON.parse(config.inlineAnimation);
+  var animationArray = animationArray.map(function(a){
+    if(a.hasOwnProperty("fromX")){
+      a.fromX = parseInt(a.fromX) + parseInt(x) + '';
+      if(!a.hasOwnProperty("toX")){
+        a.toX = 0 + parseInt(x) + '';
+      }
+    }
+    if(a.hasOwnProperty("toX")){
+      a.toX = parseInt(a.toX) + parseInt(x) + '';
+    }
+    if(a.hasOwnProperty("fromY")){
+      a.fromY = parseInt(a.fromY) + parseInt(y) + '';
+      if(!a.hasOwnProperty("toY")){
+        a.toY = 0 + parseInt(y) + '';
+      }
+    }
+    if(a.hasOwnProperty("toY")){
+      a.toY = parseInt(a.toY) + parseInt(y) + '';
+    }
+    return a;
+  })
+  return (animationArray);
+}
 module.exports = function (type, config, getSetType) {
   config = flattenObject(config);
   setDefaults(type, config);
@@ -476,13 +617,25 @@ module.exports = function (type, config, getSetType) {
   var keys = Object.keys(config);
 
   for (var i = 0; i < keys.length; i++) {
+    if ((config.style && config.style.display === 'none') && keys[i] === 'gravity')  {
+      continue;
+    }
     parseLayoutProps(type, config, keys[i]);
   }
 
-  config.transition = "0ms all";
+  config.transition = [
+    String(config.a_duration || 0) +"ms",
+    "all",
+    config.transitionTimingFunction
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   if (config.style.transform == "") {
     delete config.style.transform;
+  }
+  if (config.hasOwnProperty("inlineAnimation")) {
+    this_inlineAnimation(config);
   }
 
   return config;

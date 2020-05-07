@@ -24,19 +24,13 @@
 */
 
 function run() {
-  let type;
-  switch (window.__OS) {
-  case "IOS":
-    type = require("./ios")
-    break;
-  case "WEB":
-    type = require("./web")
-    break;
-  default:
-    type = require("./android")
+  if (window.__OS === "IOS") {
+    return require("./ios")
+  } else if (window.__OS === "WEB") {
+    return require("./web")
+  } else {
+    return require("./android")
   }
-
-  return type;
 }
 
 module.exports = run();

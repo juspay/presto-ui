@@ -1,9 +1,11 @@
 const DropdownBox = require('./components/DropdownBox')
 const DropdownSearchBox = require('./components/DropdownSearchBox') 
 const NavBar = require('./components/NavBar')
-const DateRangePicker = require('./components/DateRangePicker')
+// const DateRangePicker = require('./components/DateRangePicker')
 const SwitchButton = require('./components/SwitchButton')
 const Button = require('./components/Button')
+
+
 
 /* Components */
 function closeAllActiveComponents() {
@@ -13,7 +15,7 @@ function closeAllActiveComponents() {
         DropdownSearchBox._closeByGUID(window.__COM_ACTIVE.DSB)
     if(window.__COM_ACTIVE.DB != '')
         DropdownBox._closeByGUID(window.__COM_ACTIVE.DB)
-}    
+}
 
 function renderComponent(elem, props, firstRender) {
     if(!props.componentType)
@@ -42,12 +44,12 @@ function renderComponent(elem, props, firstRender) {
         case 'DRP': 
             elem.classList.add(window.__COM_CLASS_GROUP.DRP)
 
-            DateRangePicker._renderMain(elem, props, firstRender)
+          //   DateRangePicker._renderMain(elem, props, firstRender)
         break
         case 'DRP_BODY':
             elem.classList.add(window.__COM_CLASS_GROUP.DRP_BODY)
 
-            DateRangePicker._renderBody(elem, props, firstRender)
+          //   DateRangePicker._renderBody(elem, props, firstRender)
         break
         // Nav Bar
         case 'NAVBAR':

@@ -16,19 +16,21 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
-    "babel-preset-env": "^1.7.0",
     "babel-loader": "^7.1.5",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-2": "^6.24.1",
+    "es6-promise": "latest",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
     "webpack-merge": "^4.2.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile:web": "webpack --mode production --config webpack.web.js --colors",
-    "compile:ios": "webpack --mode production --config webpack.ios.js --colors",
-    "compile:android": "webpack --mode production --config webpack.android.js --colors",
-    "compile": "npm run compile:web; npm run compile:ios; npm run compile:android",
-    "watch": "webpack --mode development --config webpack.android.js --watch --progress --colors"
+    "compile": "webpack --mode production --config webpack.prod.js --progress --colors",
+    "watch": "webpack --mode development --config webpack.dev.js --watch --progress --colors"
   },
   "repository": {
     "type": "git",

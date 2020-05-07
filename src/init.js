@@ -26,11 +26,12 @@
 /*
  Used to initialize defaults for window funcions and variables.
 */
-const merge = require('./helper').merge
+const { merge } = require('./helper');
 window.PrestoUI = require("./PrestoUIInterface");
 
 const getCurrTime = () => (new Date()).getTime()
 
+// window.__OS = getOS()
 if(window.__OS == "ANDROID"){
     var getScreenDetails = function() {
     try {
@@ -70,6 +71,8 @@ if (window.__DEVICE_DETAILS && window.__DEVICE_DETAILS.hasOwnProperty("screen_he
 } else {
     window.__HEIGHT = "1920";
 }
+
+const guid = Math.random().toString(36).substr(2, 9)
 
 //Intializing defaults
 if (window.__OS == "WEB") {
@@ -133,6 +136,8 @@ if (window.__OS == "WEB") {
     /* Components End */
 
     /* Modal */
+    window.__STYLE_ID = 'style_' + guid
+    window.__RENDERED_KEYFRAMES = []
     window.__MODAL_PROPS = {}
     window.__CONTENTMODAL_CLASS = 'PDC_modal'
     window.__OPENMODAL_CLASS = 'PDC_modal-open'
