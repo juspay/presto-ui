@@ -176,14 +176,12 @@ module.exports = {
   },
   saveToLocal: function(a,b,c){
     try{
-    window.localStorage.removeItem("defOptionType");
-    window.localStorage.removeItem("defOption");
-    window.localStorage.removeItem("merchant");
+    window.localStorage.removeItem(c+":"+"defOptionType");
+    window.localStorage.removeItem(c+":"+"defOption");
     }
     catch(e){}
-    window.localStorage.setItem('defOptionType', a);
-    window.localStorage.setItem('defOption', JSON.stringify(b));
-    window.localStorage.setItem('merchant', JSON.stringify(c));
+    window.localStorage.setItem(c+":"+'defOptionType', a);
+    window.localStorage.setItem(c+":"+'defOption', JSON.stringify(b));
 
   },
   deleteFromLocal: function(){},
