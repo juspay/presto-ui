@@ -1265,6 +1265,17 @@ function this_setContentMode(mode) {
   };
 }
 
+function this_adjustViewWithKeyboard(status) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setAdjustViewWithKeyboard:",
+    "values":[{"name": status, type: "s"}]
+  };
+}
+
 function self_setPopupMenu(popupMenu, onMenuItemClick) {
   var callback = callbackMapper.map(onMenuItemClick);
   return {
@@ -1525,22 +1536,6 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_updateLayoutParams(config));
   }
 
-  // if(config.useConstraits && config.paddingConstraints){
-  //   config.methods.push(this_setPadding(config.paddingConstraints)); 
-  // }
-
-  // if(config.useConstraits && config.marginConstartints){
-  //   config.methods.push(this_setMargin(config.marginConstartints));
-  // }
-
-  // if(config.useConstraits && config.hh){
-  //   config.methods.push(this_setHeight(config.hh));
-  // }
-
-  // if(config.useConstraits && config.ww){
-  //   config.methods.push(this_setWidth(config.ww));
-  // }
-
   if (config.letterSpacing && !config.hasOwnProperty("text")) {
     config.methods.push(this_setLetterSpacing(config.letterSpacing));
   }
@@ -1579,11 +1574,6 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(UIColor_setColor(config.background));
       config.methods.push(this_setBackgroundColor());
     }
-  }
-
-  if (config.backgroundDrawable) {
-    // console.log("Config-",JSON.stringify(config.w));
-
   }
 
   // borderColor, radius and width
@@ -1640,6 +1630,10 @@ module.exports = function(type, config, _getSetType) {
     } else {
       config.methods.push(this_setImageURL(id, config.imageNamed, placeholder));
     }
+  }
+  
+  if (config.hasOwnProperty("adjustViewWithKeyboard")) {
+      config.methods.push(this_adjustViewWithKeyboard(config.adjustViewWithKeyboard));
   }
 
   if (config.hasOwnProperty("playGif")){
