@@ -133,6 +133,18 @@ module.exports = {
     localStorage.setItem(key, value);
   },
 
+  getKeysInSharedPrefs: function (key) {
+    return localStorage.getItem(key) || "__failed";
+  },
+
+  setKeysInSharedPrefs: function (key, value) {
+    localStorage.setItem(key, value);
+  },
+
+  removeKeysInSharedPrefs: function (key) {
+    localStorage.removeItem(key);
+  },
+
   viewPagerAdapter: function(id, jsx, tabJsx, cb) {
     ViewPageAdapter.createTabs(id, jsx, tabJsx, cb);
   },
