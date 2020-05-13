@@ -614,8 +614,8 @@ function this_setRegularExpression(text) {
 function this_setHTMLText(text) {
   return {
     "return": "false",
-    "invokeOn" : "MJPTextView",
-    "fromStore": getSetType?"false":"true",
+    "fromStore": "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
     "methodName":"setHtmlText:",
     "values": [
       { "name": text
