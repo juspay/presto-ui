@@ -337,7 +337,7 @@ function setComputedStyles(elem, props) {
             if (activeDimen == 'w') {
                 //elem.style.width = 'auto';
             } else {
-                // elem.style.height = 'auto';
+                elem.style.height = 'auto';
             }
         } else {
             elem.style.flex = 'none';
