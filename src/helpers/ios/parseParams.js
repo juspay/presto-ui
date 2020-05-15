@@ -614,8 +614,8 @@ function this_setRegularExpression(text) {
 function this_setHTMLText(text) {
   return {
     "return": "false",
-    "invokeOn" : "MJPTextView",
-    "fromStore": getSetType?"false":"true",
+    "fromStore": "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
     "methodName":"setHtmlText:",
     "values": [
       { "name": text
@@ -664,14 +664,13 @@ function UIFont_systemFontOfSize(size) {
 
 function UIFont_fontWithName(name, size) {
   window.__FONT_INDEX++;
-
   return {
     "return": "font" + window.__FONT_INDEX,
     "invokeOn": "MJPFont",
     "methodName":"fontWithName:size:",
     "values":[
       {"name": name, "type": "s"},
-      {"name": size.length<1?size:"14", "type": "f"},
+      {"name": size.length>0?size:"14", "type": "f"},
     ]
   }
 }
@@ -1701,18 +1700,15 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(UIColor_setColor(config.textColor));
     config.methods.push(this_setTextColor());
   }
-
   if (config.hasOwnProperty("fontStyle")) {
     if (config.hasOwnProperty("textSize")) {
-        config.methods.push(UIFont_fontWithName(config.fontStyle, config.textSize));
-    }else{
+        config.methods.push(UIFont_fontWithName(config.fontStyle, config.textSize+""));
+    } else{
       config.methods.push(this_fontWithName(config.fontStyle));
     }
     config.methods.push(this_setFont());
-  }
-
-  if (!config.hasOwnProperty("fontStyle") && config.hasOwnProperty("textSize")){
-    config.methods.push(UIFont_systemFontOfSize(config.textSize));
+  } else if (config.hasOwnProperty("textSize")){
+    config.methods.push(UIFont_systemFontOfSize(config.textSize+""));
     config.methods.push(this_setFont());
   }
 
