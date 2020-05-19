@@ -824,12 +824,12 @@ function this_layer() {
   }
 }
 
-function _UILabelLayer_setCornerRadius(radius) {
+function setCornerRadius(radius) {
   return {
     "return": "false",
-    "fromStore":"true",
-    "storeKey":"layer" + window.__LAYER_INDEX,
-    "invokeOn": "_UILabelLayer",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
     "methodName":"setMJPCornerRadius:",
     "values":[
       {"name": radius + "", "type": "f"}
@@ -837,12 +837,12 @@ function _UILabelLayer_setCornerRadius(radius) {
   }
 }
 
-function _UILabelLayer_setBorderWidth(width) {
+function setBorderWidth(width) {
   return {
     "return": "false",
-    "fromStore":"true",
-    "storeKey":"layer" + window.__LAYER_INDEX,
-    "invokeOn": "_UILabelLayer",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
     "methodName":"setMJPBorderWidth:",
     "values":[
       {"name": width + "",  "type": "f"}
@@ -850,12 +850,12 @@ function _UILabelLayer_setBorderWidth(width) {
   }
 }
 
-function _UILabelLayer_setBorderColor() {
+function setBorderColor() {
   return {
     "return": "false",
-    "fromStore":"true",
-    "storeKey":"layer" + window.__LAYER_INDEX,
-    "invokeOn": "_UILabelLayer",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
     "methodName":"setMJPBorderColor:",
     "values":[
       {"name": "color" + window.__COLOR_INDEX, "computed": "true", type: "cgcolor"}
@@ -1535,11 +1535,11 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_updateLayoutParams(config));
   }
 
-  if (config.letterSpacing && !config.hasOwnProperty("text")) {
+  if (config.hasOwnProperty("letterSpacing")) {
     config.methods.push(this_setLetterSpacing(config.letterSpacing));
   }
 
-  if (config.lineSpacing) {
+  if (config.hasOwnProperty("lineSpacing")) {
     config.methods.push(this_setLineSpacing(config.lineSpacing));
   }
 
@@ -1577,26 +1577,24 @@ module.exports = function(type, config, _getSetType) {
 
   // borderColor, radius and width
   // will work only for uiView and uiLabel
-  if (config.cornerRadius || config.borderWidth) {
+  if (config.hasOwnProperty("cornerRadius")) {
+    let arg = rWS(cS(config.cornerRadius));
+    config.methods.push(setCornerRadius(arg));
+  }
+
+  if (config.hasOwnProperty("borderWidth")) {
+    let arg = rWS(cS(config.borderWidth));
+    config.methods.push(setBorderWidth(arg));
+  }
+
+  if (config.hasOwnProperty("borderColor")) {
+    config.methods.push(UIColor_setColor(config.borderColor));
+    config.methods.push(setBorderColor());
+  }
+  
+  if (config.debug) {
     config.methods.push(this_layer());
-
-    if (config.cornerRadius) {
-      let arg = rWS(cS(config.cornerRadius));
-      config.methods.push(_UILabelLayer_setCornerRadius(arg));
-    }
-
-    if (config.borderWidth) {
-      let arg = rWS(cS(config.borderWidth));
-      config.methods.push(_UILabelLayer_setBorderWidth(arg));
-    }
-
-    if (config.borderColor) {
-      config.methods.push(UIColor_setColor(config.borderColor));
-      config.methods.push(_UILabelLayer_setBorderColor());
-    }
-  } else if (config.debug) {
-    config.methods.push(this_layer());
-    config.methods.push(_UILabelLayer_setBorderWidth("1"));
+    config.methods.push(setBorderWidth("1"));
   }
 
   if (config.shadow) {
@@ -1621,7 +1619,7 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setFrame());
   }
 
-  if (config.imageNamed) {
+  if (config.hasOwnProperty("imageNamed")) {
     let id = cS(config.id);
     let placeholder = config.placeHolder || "";
     if (config.imageNamed.endsWith(".gif")){
