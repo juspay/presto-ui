@@ -451,6 +451,7 @@ function separatorInputKeyDownHandler(ev){
                     cursorPosition = 0;
                 }
                 input.oldValidValue = formattedString;
+                input.focus();
                 input.selectionStart = cursorPosition;
                 input.selectionEnd = cursorPosition;
                 console.log("formattedString----", formattedString);

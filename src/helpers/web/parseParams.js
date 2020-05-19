@@ -452,7 +452,7 @@ function parseLayoutProps(type, config, key) {
     var inputType = "text";
     if (config.inputType == "numericPassword" || config.inputType == "password") {
       if(config.inputTypeI == 4 && isMobile){
-        inputType = "text";
+        inputType = "tel";
         config.style["-webkit-text-security"] = "disc";
         config.style["-moz-text-security"] = "disc";
         config.style["text-security"] = "disc";
@@ -465,7 +465,11 @@ function parseLayoutProps(type, config, key) {
         inputType = "number"
     }
     if (config.separator) {
-      inputType = "text"
+      if(config.inputType == "numeric"){
+        inputType = "tel"  
+      } else {
+        inputType = "text"
+      }
     }
 
     config.attributes.type = inputType
@@ -488,12 +492,12 @@ function parseLayoutProps(type, config, key) {
   if (key == "pattern") {
     config.attributes["data-pattern"] = config.pattern;
   }
-  if(key == "inputTypeI"){
-    if(config.inputTypeI == 4){
-      config.attributes["inputmode"] = "numeric";
-    }
+  // if(key == "inputTypeI"){
+  //   if(config.inputTypeI == 4){
+  //     config.attributes["inputmode"] = "numeric";
+  //   }
     
-  }
+  // }
 
   if (key == "separator") {
     config.attributes["separator"] = config.separator;
