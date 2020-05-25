@@ -126,28 +126,30 @@ function UIColor_colorWithRGBA(r,g,b,a) {
   }
 }
 
-function self_pivotX(data) {
+function this_pivotX(value) {
   return {
     "return": "false",
-    "invokeOn": "self",
-    "methodName": "setPivotX:",
-    "values": [{
-      id:data.id+"",
-      value:data.value+""
-    }]
-  };
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setPivotX:",
+    "values":[
+      {"name": value+"", "type": "s"},
+    ]
+  }
 }
 
-function self_pivotY(data) {
+function this_pivotY(data) {
   return {
     "return": "false",
-    "invokeOn": "self",
-    "methodName": "setPivotY:",
-    "values": [{
-      id:data.id+"",
-      value:data.value+""
-    }]
-  };
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setPivotY:",
+    "values":[
+      {"name": value+"", "type": "s"},
+    ]
+  }
 }
 
 function self_animate_translation(obj, props) {
@@ -1798,19 +1800,11 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (config.hasOwnProperty("pivotX")) {
-    var data = {
-      "value": config.pivotX,
-      "id": config.id
-    };
-    config.methods.push(self_pivotX(data));
+    config.methods.push(this_pivotX(config.pivotX+""));
   }
 
 if (config.hasOwnProperty("pivotY")) {
-    var data = {
-      "value": config.pivotY,
-      "id": config.id
-    };
-    config.methods.push(self_pivotY(data));
+    config.methods.push(this_pivotY(config.pivotY+""));
   }
 
   if(config.hasOwnProperty("onItemClick")){
