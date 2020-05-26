@@ -159,6 +159,16 @@ function parseLayoutProps(type, config, key) {
   if(key == "topFixed") {
     config.style.top = config.topFixed;
   }
+  if(key == "leftFixed") {
+    config.style.left = config.leftFixed;
+  }
+  if(key == "rightFixed") {
+    config.style.right = config.rightFixed;
+  }
+
+  if(key == "zIndex") {
+    config.style["z-index"] = config.zIndex;
+  }
 
   if(key == "autofocus"){
     if(config.autofocus){
