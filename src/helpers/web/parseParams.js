@@ -519,7 +519,9 @@ function parseLayoutProps(type, config, key) {
   if (key == "myAttr") {
     config.attributes["myAttr"] = config.myAttr;
   }
-
+  if (key == "blurBackground" && config.blurBackground){
+    config.style["backdrop-filter"] = "blur(3px)";
+  }
   if (key == "shadow") {
     var shadowValues = config.shadow.split(config.shadowSeparator || ',');
     var shadowBlur = rWS(cS(shadowValues[2]));
