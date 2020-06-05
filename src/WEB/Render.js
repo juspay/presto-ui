@@ -1157,9 +1157,9 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
             if (siblingElement && siblingElement != undefined) {
                 if (parentElement == siblingElement) { // Prepend
                     if (subElem) {
-                        parentElement.prepend(subElem);
+                        parentElement.appendChild(subElem);
                     }
-                    parentElement.prepend(elem);
+                    parentElement.appendChild(elem);
                 } else { // Insert in specified position
                     let nextSiblingElement = siblingElement.nextSibling;
 
