@@ -159,6 +159,16 @@ function parseLayoutProps(type, config, key) {
   if(key == "topFixed") {
     config.style.top = config.topFixed;
   }
+  if(key == "leftFixed") {
+    config.style.left = config.leftFixed;
+  }
+  if(key == "rightFixed") {
+    config.style.right = config.rightFixed;
+  }
+
+  if(key == "zIndex") {
+    config.style["z-index"] = config.zIndex;
+  }
 
   if(key == "autofocus"){
     if(config.autofocus){
@@ -452,7 +462,7 @@ function parseLayoutProps(type, config, key) {
     var inputType = "text";
     if (config.inputType == "numericPassword" || config.inputType == "password") {
       if(config.inputTypeI == 4 && isMobile){
-        inputType = "text";
+        inputType = "tel";
         config.style["-webkit-text-security"] = "disc";
         config.style["-moz-text-security"] = "disc";
         config.style["text-security"] = "disc";
@@ -465,7 +475,11 @@ function parseLayoutProps(type, config, key) {
         inputType = "number"
     }
     if (config.separator) {
-      inputType = "text"
+      if(config.inputType == "numeric"){
+        inputType = "tel"  
+      } else {
+        inputType = "text"
+      }
     }
 
     config.attributes.type = inputType
@@ -488,12 +502,12 @@ function parseLayoutProps(type, config, key) {
   if (key == "pattern") {
     config.attributes["data-pattern"] = config.pattern;
   }
-  if(key == "inputTypeI"){
-    if(config.inputTypeI == 4){
-      config.attributes["inputmode"] = "numeric";
-    }
+  // if(key == "inputTypeI"){
+  //   if(config.inputTypeI == 4){
+  //     config.attributes["inputmode"] = "numeric";
+  //   }
     
-  }
+  // }
 
   if (key == "separator") {
     config.attributes["separator"] = config.separator;
@@ -505,7 +519,9 @@ function parseLayoutProps(type, config, key) {
   if (key == "myAttr") {
     config.attributes["myAttr"] = config.myAttr;
   }
-
+  if (key == "blurBackground" && config.blurBackground){
+    config.style["backdrop-filter"] = "blur(3px)";
+  }
   if (key == "shadow") {
     var shadowValues = config.shadow.split(config.shadowSeparator || ',');
     var shadowBlur = rWS(cS(shadowValues[2]));

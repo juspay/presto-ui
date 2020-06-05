@@ -337,7 +337,7 @@ function setComputedStyles(elem, props) {
             if (activeDimen == 'w') {
                 //elem.style.width = 'auto';
             } else {
-                // elem.style.height = 'auto';
+                elem.style.height = 'auto';
             }
         } else {
             elem.style.flex = 'none';
@@ -451,6 +451,7 @@ function separatorInputKeyDownHandler(ev){
                     cursorPosition = 0;
                 }
                 input.oldValidValue = formattedString;
+                input.focus();
                 input.selectionStart = cursorPosition;
                 input.selectionEnd = cursorPosition;
                 console.log("formattedString----", formattedString);
@@ -665,7 +666,7 @@ function setAttributes(type, elem, props, firstRender) {
                 let exts = ["jpeg", "jpg", "png", "bmp", "svg", "gif"]
                 ext = ext.toLowerCase()
 
-                if(!imageUrl.includes("data:image/svg+xml") && !exts.includes(ext)) {
+                if(!imageUrl.includes("data:image/") && !exts.includes(ext)) {
                     imageUrl += '.png'
                 }
             }
