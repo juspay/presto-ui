@@ -25,6 +25,7 @@
 
 var ViewPageAdapter = require("./ViewPageAdapter");
 var Renderer = require("./Render");
+var axios = require('axios')
 const qsstringify = require("qs/lib/stringify");
 
 function parseJson(str) {
@@ -40,13 +41,13 @@ function sendAnalytics(data) {
   if (navigator.sendBeacon) {
     navigator.sendBeacon(url, JSON.stringify({ data }));
   } else {
-    try {
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", url, false); // third parameter of `false` means synchronous
-      xhr.send(JSON.stringify({data}));   
-    } catch(err) {
-      //
-    }
+    // try {
+    //   var xhr = new XMLHttpRequest();
+    //   xhr.open("POST", url, false); // third parameter of `false` means synchronous
+    //   xhr.send(JSON.stringify({data}));   
+    // } catch(err) {
+    //   //
+    // }
   }
 }
 
@@ -111,8 +112,8 @@ module.exports = {
       data = undefined;
     }
     try {
-      const resp = await fetch(url, { method, body: data, headers });
-      const json = await resp.json();
+      const resp = await axios({url, method, data, headers });
+      const json = resp.data;//await resp.data.json();
       window.callUICallback(
         callback,
         "success",

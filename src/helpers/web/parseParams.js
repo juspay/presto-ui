@@ -487,6 +487,7 @@ function parseLayoutProps(type, config, key) {
 
   if (key == "rotateImage") {
     if(config.rotateImage){
+      config.style["-webkit-animation"] = "load3 4s infinite linear";
       config.style["animation-duration"] = "4s";
       config.style["animation-timing-function"] = "linear";
       config.style["animation-delay"] = "0s";
