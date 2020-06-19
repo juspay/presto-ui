@@ -502,6 +502,11 @@ function parseLayoutProps(type, config, key) {
 
   if (key == "pattern") {
     config.attributes["data-pattern"] = config.pattern;
+    var data = config.pattern.split(',');
+    var length = parseInt(data.pop());
+    if(length>10) {length = 10;}
+    config.attributes["size"] =length;
+
   }
   // if(key == "inputTypeI"){
   //   if(config.inputTypeI == 4){
