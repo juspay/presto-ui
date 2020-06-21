@@ -29,6 +29,22 @@ var callbackMapper  = require("../common/callbackMapper")
 
 let getSetType = 1;
 
+/**
+ * Checks the native set window.__DEVICE_DETAILS.mystique_version 
+ * and checks if mystique version is greater than the passed version.
+ * @param {string} version number to be checked against. If passed empty returns true.
+ * @return {bool} true if mystique version is greater than passed version else false. Defaults to true.
+ */
+function isMystiqueVersionGreaterThan(version) {
+  if (window.__DEVICE_DETAILS && window.__DEVICE_DETAILS.mystique_version) {
+    var sdkVersion = parseFloat(window.__DEVICE_DETAILS.mystique_version);
+    if (sdkVersion>0) {
+        return sdkVersion>parseFloat(version)?true:false;
+    } 
+  }
+  return false;
+}
+
 function convertColorToRgba(color){
   color = rWS(cS(color));
 
@@ -618,9 +634,10 @@ function this_setHTMLText(text) {
     "return": "false",
     "fromStore": "true",
     "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
     "methodName":"setHtmlText:",
     "values": [
-      { "name": text
+      { "name": isMystiqueVersionGreaterThan("0")?btoa(text) : text
       , "type": "s"
       }
     ]
@@ -1692,7 +1709,6 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (config.hasOwnProperty("textFromHtml")) {
-    //TODO: FIX THIS BRING IT OUTSIDE
       config.methods.push(this_setHTMLText(config.textFromHtml));
   }
 
@@ -1777,8 +1793,8 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(self_animate(props));
   }
 
-  if (config.htmlText) {
-    config.methods.push(this_setHTMLText(config.htmlText));
+  if (config.hasOwnProperty("htmlText")) {
+     config.methods.push(this_setHTMLText(config.htmlText));
   }
 
   if (config.hasOwnProperty("bringSubViewToFront")) {
