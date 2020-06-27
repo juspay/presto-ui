@@ -172,7 +172,8 @@ function getCtr(viewGroup) {
     'ratingBar': 'android.widget.LinearLayout$LayoutParams->new',
     'accordionLayout': 'android.widget.FrameLayout$LayoutParams->new',
     'swypeLayout': 'android.widget.FrameLayout$LayoutParams->new',
-    'swypeScroll': 'android.widget.LinearLayout$LayoutParams->new'
+    'swypeScroll': 'android.widget.LinearLayout$LayoutParams->new',
+    "shimmerFrameLayout": "android.widget.FrameLayout$LayoutParams->new"
   };
 
   if(!viewGroupMap[viewGroup]) {
@@ -267,7 +268,7 @@ function parseColor(color, setterName) {
   return setterName + '=android.graphics.Color->parseColor:s_' + color + ';';
 }
 
-function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
+function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
   if (getSetType == "get" && (attrs.key == "width" || attrs.key == "height")) {
     // get case i.e during patch
     if(!isNaN(attrs.value * 1)) {
@@ -615,6 +616,85 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
     currTransVal = "get_interp";
   }
 
+  if(attrs.key=="shimmer") {
+    try {
+      var shimmerMode = "com.facebook.shimmer.Shimmer$ColorHighlightBuilder";
+      var shimmerCmd = "set_sdrw=com.facebook.shimmer.ShimmerDrawable->new;";
+      var shimmerJson = JSON.parse(attrs.value);
+      console.log(shimmerJson, shimmerJson.contents, attrs, attrs, obj, belongsTo, transformFn, allProps, type)
+      // if(shimmerJson && shimmerJson.contents){
+
+        shimmerJson = shimmerJson.contents
+      // }
+      if (shimmerJson && shimmerJson.shimmerType == "alpha"){
+        shimmerMode = "com.facebook.shimmer.Shimmer$AlphaHighlightBuilder"
+        shimmerCmd += "set_builder=" + shimmerMode + "->new;"
+        if(shimmerJson.base){
+          shimmerCmd += "get_builder->setBaseAlpha:f_" + shimmerJson.base + ";"
+        }
+        if(shimmerJson.highlight){
+          shimmerCmd += "get_builder->setHighlightAlpha:f_" + shimmerJson.highlight + ";"
+        }
+      } else {
+        shimmerCmd += "set_builder=" + shimmerMode + "->new;"
+        if(shimmerJson.base){
+          shimmerCmd += parseColor(shimmerJson.base , "set_baseColor") + ";"
+          shimmerCmd += "get_builder->setBaseColor:get_baseColor;"
+        }
+        if(shimmerJson.highlight){
+          shimmerCmd += parseColor(shimmerJson.highlight , "set_baseColor") + ";"
+          shimmerCmd += "get_builder->setHighlightColor:get_baseColor;"
+        }
+      }
+      
+      if(shimmerJson.tilt){
+        shimmerCmd += "get_builder->setTilt:f_" + shimmerJson.tilt + ";"
+      }
+      if(shimmerJson.intensity){
+        shimmerCmd += "get_builder->setIntensity:f_" + shimmerJson.intensity + ";"
+      }
+      if(shimmerJson.direction){
+        shimmerCmd += "get_builder->setDirection:i_" + shimmerJson.direction + ";"
+      }
+      if(shimmerJson.duration){
+        shimmerCmd += "get_builder->setDuration:l_" + shimmerJson.direction + ";"
+      }
+      if(shimmerJson.repeatCount){
+        shimmerCmd += "get_builder->setRepeatCount:i_" + shimmerJson.repeatCount + ";"
+      }
+      if(shimmerJson.repeatDelay){
+        shimmerCmd += "get_builder->setRepeatDelay:l_" + shimmerJson.repeatDelay + ";"
+      }
+      if(shimmerJson.clipToChildren){
+        shimmerCmd += "get_builder->setClipToChildren:b_" + shimmerJson.clipToChildren + ";"
+      }
+      if(shimmerJson.shape){
+        shimmerCmd += "get_builder->setShape:i_" + shimmerJson.shape + ";"
+      }
+      if(shimmerJson.dropOff){
+        shimmerCmd += "get_builder->setDropoff:f_" + shimmerJson.dropOff + ";"
+      }
+      shimmerCmd += "set_shimmer=get_builder->build;"
+      if(type == "shimmerFrameLayout"){
+        attrs.key = "shimmerView"
+        currTransVal = "get_shimmer";
+        obj.fnName = obj.alternateFnName
+      } else {
+        shimmerCmd += "get_sdrw->setShimmer:get_shimmer;"
+        if(shimmerJson.active){
+          afterCmd += "get_sdrw->startShimmer;"
+        } else {
+          afterCmd += "get_sdrw->stopShimmer;"
+        }
+        currTransVal = "get_sdrw";
+      }
+    } catch (e) {
+      console.error("unable to set shimmer")
+    }
+    console.log(shimmerCmd)
+    prePend =  shimmerCmd;
+  }
+
   if(attrs.key=="focus") {
     afterCmd =  "set_win=ctx->getWindow;get_win->setSoftInputMode:5;";
   }
@@ -680,11 +760,13 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps) {
     console.log(beforeCmd  + prePend + _cmd + afterCmd);
     return finalCmd;
   }
-
+  if(type == "shimmerFrameLayout"){
+    console.log(beforeCmd  + prePend + _cmd + afterCmd)
+  }
   return beforeCmd  + prePend + _cmd + afterCmd
 }
 
-function parseAttrs(attrs, belongsTo, transformFn) {
+function parseAttrs(attrs, belongsTo, transformFn, type) {
   var obj;
   var retVal;
   var cmd = '';
@@ -693,7 +775,7 @@ function parseAttrs(attrs, belongsTo, transformFn) {
   for (var i =0 ;i<attrs.length; i++) {
     obj = mapParams[attrs[i].key];
     if (obj) {
-      cmd += mashThis(attrs[i], obj, belongsTo, transformFn, attrs);
+      cmd += mashThis(attrs[i], obj, belongsTo, transformFn, attrs, type);
     }
   }
 
@@ -712,16 +794,16 @@ function parseGroups(type, groups, config) {
       if (!globalObjMap[keys[i]]) {
         if (getSetType == "set") {
           globalObjMap[keys[i]] = {ctr: "android.graphics.drawable.GradientDrawable->new",  val:  keys[i] };
-          command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true)
+          command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true, type)
             + 'this->' + "setForeground" + ':' + 'get_' +  globalObjMap[keys[i]].val + ';'
         } else {
           globalObjMap[keys[i]] = {ctr: 'get_view->getForeground',  val:  keys[i] };
-          command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true);
+          command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true, type);
         }
       }
     } else if (keys[i] == "LAYOUT_TRANSITION") {
         globalObjMap.LAYOUT_TRANSITION = {ctr: 'android.animation.LayoutTransition->new', val: "LAYOUT_TRANSITION"};
-        command +=  'set_' +  globalObjMap.LAYOUT_TRANSITION.val + '=' +  parseAttrs(groups.PARAMS, 'LAYOUT_TRANSITION', true)
+        command +=  'set_' +  globalObjMap.LAYOUT_TRANSITION.val + '=' +  parseAttrs(groups.PARAMS, 'LAYOUT_TRANSITION', true, type)
              + 'this->' + "setLayoutTransition" + ':get_'  + globalObjMap.LAYOUT_TRANSITION.val + ';';
     } else if (keys[i] == "VIEW") {
       if (!globalObjMap.VIEW) {
@@ -731,7 +813,7 @@ function parseGroups(type, groups, config) {
         globalObjMap.VIEW = {ctr: "get_view", val: "get_view"};
       }
 
-      command +=  parseAttrs(groups.VIEW, 'VIEW', true)
+      command +=  parseAttrs(groups.VIEW, 'VIEW', true, type)
 
     } else if (keys[i] == "PARAMS") {
       if (getSetType == "set") {
@@ -740,7 +822,7 @@ function parseGroups(type, groups, config) {
           globalObjMap.PARAMS = {ctr: ctr, val: "PARAMS" };
         }
 
-        command +=  'set_' +  globalObjMap.PARAMS.val + '=' +  parseAttrs(groups.PARAMS, 'PARAMS', true)
+        command +=  'set_' +  globalObjMap.PARAMS.val + '=' +  parseAttrs(groups.PARAMS, 'PARAMS', true, type)
              + 'this->' + objMap.PARAMS.viewMethod.split(',')[0] + ':get_'  + globalObjMap.PARAMS.val + ';';
       } else {
         if (!globalObjMap.PARAMS) {
@@ -748,7 +830,7 @@ function parseGroups(type, groups, config) {
           globalObjMap.PARAMS = {ctr: ctr, val: "PARAMS" };
         }
 
-        command += 'set_' +  globalObjMap.PARAMS.val + '=' +  parseAttrs(groups[keys[i]], keys[i], true);
+        command += 'set_' +  globalObjMap.PARAMS.val + '=' +  parseAttrs(groups[keys[i]], keys[i], true, type);
       }
 
     } else if (keys[i] == "MUTATEBG") {
@@ -756,7 +838,7 @@ function parseGroups(type, groups, config) {
         globalObjMap.MUTATEBG = {ctr: 'this->getBackground', val: "MUTATEBG"};
       }
 
-      command += 'set_' +  globalObjMap.MUTATEBG.val + '=' +  parseAttrs(groups[keys[i]], keys[i], true);
+      command += 'set_' +  globalObjMap.MUTATEBG.val + '=' +  parseAttrs(groups[keys[i]], keys[i], true, type);
     } else if (keys[i] == "ANIMATION") {
       if (!globalObjMap.ANIMATION) {
         if (getSetType == "set")
@@ -765,18 +847,18 @@ function parseGroups(type, groups, config) {
         globalObjMap.ANIMATION = {ctr: 'get_view->animate', val: "ANIMATION"};
       }
 
-      command += 'set_' +  globalObjMap.ANIMATION.val + '=' +  parseAttrs(groups[keys[i]], keys[i], false);
+      command += 'set_' +  globalObjMap.ANIMATION.val + '=' +  parseAttrs(groups[keys[i]], keys[i], false, type);
 
     }  else {
       // Works only for drawable
       if (!globalObjMap[keys[i]]) {
         if (getSetType == "set") {
           globalObjMap[keys[i]] = {ctr: objMap[keys[i]].ctr,  val:  keys[i] };
-          command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true)
+          command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true, type)
             + 'this->' + objMap[keys[i]].viewMethod.split(',')[0] + ':' + 'get_' +  globalObjMap[keys[i]].val + ';'
         } else {
           globalObjMap[keys[i]] = {ctr: 'get_view->getBackground',  val:  keys[i] };
-          command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true);
+          command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true, type);
         }
       }
     }

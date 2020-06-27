@@ -1225,6 +1225,25 @@ var map = {
     'dontMap': true,
     fnName: 'setFadingEdgeLength',
     inVokedIn: 'VIEW',
+  },
+  "shimmer": {
+    values: [{
+      type: 'b'
+    }],
+    'dontMap': true,
+    fnName: 'setBackground',
+    alternateFnName: 'setShimmer',
+    inVokedIn: 'VIEW',
+  },
+  "shimmerActive": {
+    'dontMap': true,
+    fnName: 'startShimmer',
+    inVokedIn: 'VIEW',
+  },
+  "shimmerInactive": {
+    'dontMap': true,
+    fnName: 'stopShimmer',
+    inVokedIn: 'VIEW',
   }
 }
 

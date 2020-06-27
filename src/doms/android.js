@@ -68,6 +68,7 @@ function getCtr(viewGroup) {
     'accordionLayout': 'android.widget.FrameLayout$LayoutParams->new',
     'swypeLayout': 'android.widget.FrameLayout$LayoutParams->new',
     'swypeScroll': 'android.widget.LinearLayout$LayoutParams->new',
+    'shimmerFrameLayout': 'android.widget.FrameLayout$LayoutParams->new'
   }
 
   return viewGroupMap[viewGroup];
