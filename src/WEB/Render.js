@@ -695,6 +695,10 @@ function setAttributes(type, elem, props, firstRender) {
             for (let innerKey in props.style) {
                 if (innerKey == "className") {
                     elem.className += " " + props.style[innerKey];
+                } else if (props.buttonClickOverlay !== undefined && ["background", "background-image"].includes(innerKey)) {
+                    elem.style[innerKey] = `linear-gradient(to right, rgba(0,0,0,${props.buttonClickOverlay}) 50%, transparent 50%), ` + props.style[innerKey];
+                    elem.style["background-position"] = "right bottom";
+                    elem.style["background-size"] = "200% 100%, 100% 100%";
                 } else
                     elem.style[innerKey] = props.style[innerKey];
             }
