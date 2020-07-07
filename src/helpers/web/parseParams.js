@@ -77,7 +77,7 @@ function parseColors(color) {
 }
 
 function parseLayoutProps(type, config, key) {
-  const isMobile = window.innerWidth < 700
+  const isMobile = window.innerWidth < 550
   if (typeof config[key] == "undefined" || config[key] == null) {
     delete config[key];
     return;
@@ -552,6 +552,9 @@ function parseLayoutProps(type, config, key) {
 
   if (key == "clickable") {
     config.style.pointerEvents = config.clickable ? "auto" : "none";
+  }
+  if (key == "display") {
+    config.style.display = config.display
   }
 }
 
