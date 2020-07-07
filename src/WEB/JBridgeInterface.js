@@ -27,7 +27,12 @@ var ViewPageAdapter = require("./ViewPageAdapter");
 var Renderer = require("./Render");
 var axios = require('axios')
 const qsstringify = require("qs/lib/stringify");
-
+var hasLocalStorage = true;
+try {
+  typeof window.localStorage !== undefined;
+} catch(e){
+  hasLocalStorage = false;
+}
 function parseJson(str) {
   try {
     return JSON.parse(str);
@@ -127,23 +132,26 @@ module.exports = {
   },
 
   getFromSharedPrefs: function(key) {
-    return localStorage.getItem(key) || "__failed";
+    return hasLocalStorage?(localStorage.getItem(key) || "__failed"): "__failed";
   },
 
   setInSharedPrefs: function(key, value) {
-    localStorage.setItem(key, value);
+    if(hasLocalStorage)
+      localStorage.setItem(key, value);
   },
 
   getKeysInSharedPrefs: function (key) {
-    return localStorage.getItem(key) || "__failed";
+    return hasLocalStorage?(localStorage.getItem(key) || "__failed"): "__failed";
   },
 
   setKeysInSharedPrefs: function (key, value) {
-    localStorage.setItem(key, value);
+    if(hasLocalStorage)
+      localStorage.setItem(key, value);
   },
 
   removeKeysInSharedPrefs: function (key) {
-    localStorage.removeItem(key);
+    if(hasLocalStorage)
+      localStorage.removeItem(key);
   },
 
   viewPagerAdapter: function(id, jsx, tabJsx, cb) {
@@ -155,11 +163,11 @@ module.exports = {
   },
 
   getKey: function(key, defaultValue) {
-    return localStorage.getItem(key) || defaultValue;
+    return hasLocalStorage? (localStorage.getItem(key) || defaultValue): defaultValue;
   },
 
   setKey: function(key, value) {
-    return localStorage.setItem(key, value);
+    return hasLocalStorage?localStorage.setItem(key, value): value;
   },
 
   getResourceByName: function getResourceByName(tag) {
@@ -188,26 +196,30 @@ module.exports = {
     sendAnalytics(logsArr)
   },
   saveToLocal: function(a,b,c){
-    try{
-    window.localStorage.removeItem(c+":"+"defOptionType");
-    window.localStorage.removeItem(c+":"+"defOption");
+    if (hasLocalStorage){
+      try{
+      window.localStorage.removeItem(c+":"+"defOptionType");
+      window.localStorage.removeItem(c+":"+"defOption");
+      }
+      catch(e){}
+      window.localStorage.setItem(c+":"+'defOptionType', a);
+      window.localStorage.setItem(c+":"+'defOption', JSON.stringify(b));
     }
-    catch(e){}
-    window.localStorage.setItem(c+":"+'defOptionType', a);
-    window.localStorage.setItem(c+":"+'defOption', JSON.stringify(b));
 
   },
   deleteFromLocal: function(){},
   loadFromLocal: function(key){
-    if (window.localStorage.getItem(key)==undefined)
-      return ""
-    try{
-    const a =  JSON.parse(window.localStorage.getItem(key));
-    if (a==undefined)
-      return ""
-    return a
-    } catch(e){
-      return window.localStorage.getItem(key)
+    if (hasLocalStorage){
+      if (window.localStorage.getItem(key)==undefined)
+        return ""
+      try{
+      const a =  JSON.parse(window.localStorage.getItem(key));
+      if (a==undefined)
+        return ""
+      return a
+      } catch(e){
+        return window.localStorage.getItem(key)
+      }
     }
   },
   postLogs(endPoint, logs) {
