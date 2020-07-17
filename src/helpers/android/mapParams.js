@@ -1236,13 +1236,42 @@ var map = {
     inVokedIn: 'VIEW',
   },
   "shimmerActive": {
+    values : [],
     'dontMap': true,
     fnName: 'startShimmer',
     inVokedIn: 'VIEW',
   },
   "shimmerInactive": {
+    values : [],
     'dontMap': true,
     fnName: 'stopShimmer',
+    inVokedIn: 'VIEW',
+  },
+  "peakHeight": {
+    values : [{
+      type: 'dp'
+    }],
+    'dontMap': true,
+    fnName: 'setPeakHeight',
+    inVokedIn: 'VIEW',
+  },
+  "sheetState": {
+    values : [{
+      type: 'i',
+      expanded : 3,
+      collapsed : 4,
+      hidden : 5,
+      halfExpanded : 6
+    }],
+    fnName: 'setState',
+    inVokedIn: 'VIEW',
+  },
+  "halfExpandedRatio": {
+    values : [{
+      type: 'f'
+    }],
+    'dontMap': true,
+    fnName: 'setHalfExpandedRatio',
     inVokedIn: 'VIEW',
   }
 }
