@@ -155,13 +155,13 @@ function getConfigGroups(config) {
 function getCtr(viewGroup) {
   var viewGroupMap =  {
     'linearLayout': 'android.widget.LinearLayout$LayoutParams->new',
-    'coordinatorLayout': 'android.widget.CoordinatorLayout$LayoutParams->new',
+    'coordinatorLayout': 'androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams->new',
     'scrollView': 'android.widget.LinearLayout$LayoutParams->new',
     'horizontalScrollView': 'android.widget.LinearLayout$LayoutParams->new',
     'relativeLayout': 'android.widget.RelativeLayout$LayoutParams->new',
     'frameLayout': 'android.widget.FrameLayout$LayoutParams->new',
     'toolbar': 'android.support.v7.widget.Toolbar$LayoutParams->new',
-    'collapsingToolbarLayout': 'android.support.design.widget.CoordinatorLayout$LayoutParams->new',
+    'collapsingToolbarLayout': 'androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams->new',
     'appBarLayout': 'android.support.design.widget.AppBarLayout$LayoutParams->new',
     'view': 'android.widget.LinearLayout$LayoutParams->new',
     'tabLayout': 'android.widget.LinearLayout$LayoutParams->new',
@@ -173,7 +173,8 @@ function getCtr(viewGroup) {
     'accordionLayout': 'android.widget.FrameLayout$LayoutParams->new',
     'swypeLayout': 'android.widget.FrameLayout$LayoutParams->new',
     'swypeScroll': 'android.widget.LinearLayout$LayoutParams->new',
-    "shimmerFrameLayout": "android.widget.FrameLayout$LayoutParams->new"
+    "shimmerFrameLayout": "android.widget.FrameLayout$LayoutParams->new",
+    "bottomSheetLayout": 'android.widget.FrameLayout$LayoutParams->new'
   };
 
   if(!viewGroupMap[viewGroup]) {
