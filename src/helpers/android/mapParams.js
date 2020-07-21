@@ -1273,6 +1273,14 @@ var map = {
     'dontMap': true,
     fnName: 'setHalfExpandedRatio',
     inVokedIn: 'VIEW',
+  },
+  "hideable": {
+    values : [{
+      type: 'b'
+    }],
+    'dontMap': true,
+    fnName: 'setHideable',
+    inVokedIn: 'VIEW',
   }
 }
 
