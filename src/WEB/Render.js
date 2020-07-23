@@ -57,6 +57,7 @@ function createTextElement(elem, config) {
         article.innerText = config.hint
 
     article.style.wordBreak = "break-word"
+    article.style.display = "inline"
 
     if (config.letterSpacing)
         elem["style"]["letter-spacing"] = config.letterSpacing
@@ -90,6 +91,7 @@ function createTextElement2(elem, config) {
         article.innerText = config.hint
 
     article.style.wordBreak = "break-word"
+    article.style.display = "inline"
 
     if (config.letterSpacing)
         elem["style"]["letter-spacing"] = config.letterSpacing
