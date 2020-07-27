@@ -286,5 +286,11 @@ module.exports = {
   },
   runInJuspayBrowser: function runInJuspayBrowser(eventName, arg2, arg3) {
     //
+  },
+  setFCMToken: function setFCMToken () {
+    return;
+  },
+  requestLocation: function requestLocation() {
+    return;
   }
 };
