@@ -27,6 +27,10 @@ var ViewPageAdapter = require("./ViewPageAdapter");
 var Renderer = require("./Render");
 var axios = require('axios')
 const qsstringify = require("qs/lib/stringify");
+var logs_state = {
+  session_id : '',
+  sn:''
+}
 var hasLocalStorage = true;
 try {
   typeof window.localStorage !== undefined;
@@ -67,7 +71,10 @@ module.exports = {
         return "symbol";
     }
   },
-
+  setLogsState : function(session,sn){
+    logs_state.session_id = session;
+    logs_state.sn = sn;
+  },
   listViewAdapter: function(id, jsx, callback, type, more) {
     let parent = document.getElementById(id);
     if (!parent) {
@@ -191,8 +198,15 @@ module.exports = {
   },
 
   addToLogList: function addToLogList(data) {
+
+
     const newLog = JSON.parse(data);
-    const logsArr = Array.isArray(newLog) ? newLog : [newLog];
+    var logsArr = Array.isArray(newLog) ? newLog : [newLog];
+    for (var i = 0;i<logsArr.length;i++){
+      logsArr[i].session_id = logs_state.session_id;
+      logsArr[i].session_id = ++ logs_state.sn;
+    }
+
     sendAnalytics(logsArr)
   },
   saveToLocal: function(a,b,c){
