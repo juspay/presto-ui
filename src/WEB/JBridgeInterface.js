@@ -204,7 +204,7 @@ module.exports = {
     var logsArr = Array.isArray(newLog) ? newLog : [newLog];
     for (var i = 0;i<logsArr.length;i++){
       logsArr[i].session_id = logs_state.session_id;
-      logsArr[i].session_id = ++ logs_state.sn;
+      logsArr[i].sn = ++ logs_state.sn;
     }
     console.warn(logsArr)
 
