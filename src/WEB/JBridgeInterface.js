@@ -178,7 +178,7 @@ module.exports = {
   },
 
   getResourceByName: function getResourceByName(tag) {
-    return -1;
+    return 2;
   },
 
   getSessionAttribute: function getSessionAttribute(v1, v2) {
@@ -206,6 +206,7 @@ module.exports = {
       logsArr[i].session_id = logs_state.session_id;
       logsArr[i].session_id = ++ logs_state.sn;
     }
+    console.warn(logsArr)
 
     sendAnalytics(logsArr)
   },
