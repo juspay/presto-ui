@@ -287,9 +287,21 @@ module.exports = {
   runInJuspayBrowser: function runInJuspayBrowser(eventName, arg2, arg3) {
     //
   },
+  /**
+   * @method setFCMToken
+   * @description Sets token for GCM notifications
+   * 
+   * Note: Only for Android/iOS. This is just an empty stub in web
+   */
   setFCMToken: function setFCMToken () {
     return;
   },
+  /**
+   * @method requestLocation
+   * @description Requests permission to access location
+   * 
+   * Note: Only for Android/iOS. This is just an empty stub in web
+   */
   requestLocation: function requestLocation() {
     return;
   }
