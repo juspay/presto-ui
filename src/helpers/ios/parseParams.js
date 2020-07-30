@@ -1719,7 +1719,6 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (config.hasOwnProperty("textFromHtml")) {
-    debugger;
       config.methods.push(this_setHTMLText(config.textFromHtml));
   }
 
@@ -1805,7 +1804,6 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (config.hasOwnProperty("htmlText")) {
-    debugger;
      config.methods.push(this_setHTMLText(config.htmlText));
   }
 
