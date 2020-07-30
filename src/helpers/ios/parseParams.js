@@ -155,7 +155,7 @@ function this_pivotX(value) {
   }
 }
 
-function this_pivotY(data) {
+function this_pivotY(value) {
   return {
     "return": "false",
     "fromStore": getSetType?"false":"true",
@@ -629,6 +629,16 @@ function this_setRegularExpression(text) {
   }
 }
 
+function getEncodedData(text) {
+  var encodedString = text;
+  if (isMystiqueVersionGreaterThan("1")) {
+    encodedString = btoa(encodeURIComponent(text));
+  } else if (isMystiqueVersionGreaterThan("0")) {
+    encodedString = btoa(text.replace(/[^\x00-\x7F]/g, ""));
+  }
+  return encodedString;
+}
+
 function this_setHTMLText(text) {
   return {
     "return": "false",
@@ -637,7 +647,7 @@ function this_setHTMLText(text) {
     "invokeOn": getSetType?"this":"UIView",
     "methodName":"setHtmlText:",
     "values": [
-      { "name": isMystiqueVersionGreaterThan("0")?btoa(text) : text
+      { "name": getEncodedData(text)
       , "type": "s"
       }
     ]
