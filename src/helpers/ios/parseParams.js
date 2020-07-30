@@ -629,6 +629,16 @@ function this_setRegularExpression(text) {
   }
 }
 
+function getEncodedData(text) {
+  var encodedString = text;
+  if (isMystiqueVersionGreaterThan("1")) {
+    encodedString = btoa(encodeURIComponent(text));
+  } else if (isMystiqueVersionGreaterThan("0")) {
+    encodedString = btoa(text.replace(/[^\x00-\x7F]/g, ""));
+  }
+  return encodedString;
+}
+
 function this_setHTMLText(text) {
   return {
     "return": "false",
@@ -637,7 +647,7 @@ function this_setHTMLText(text) {
     "invokeOn": getSetType?"this":"UIView",
     "methodName":"setHtmlText:",
     "values": [
-      { "name": isMystiqueVersionGreaterThan("0")?btoa(text) : text
+      { "name": getEncodedData(text)
       , "type": "s"
       }
     ]
@@ -1709,6 +1719,7 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (config.hasOwnProperty("textFromHtml")) {
+    debugger;
       config.methods.push(this_setHTMLText(config.textFromHtml));
   }
 
@@ -1794,6 +1805,7 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (config.hasOwnProperty("htmlText")) {
+    debugger;
      config.methods.push(this_setHTMLText(config.htmlText));
   }
 
