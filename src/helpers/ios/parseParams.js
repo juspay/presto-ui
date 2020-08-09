@@ -155,7 +155,7 @@ function this_pivotX(value) {
   }
 }
 
-function this_pivotY(data) {
+function this_pivotY(value) {
   return {
     "return": "false",
     "fromStore": getSetType?"false":"true",
