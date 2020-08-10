@@ -171,7 +171,8 @@ function parseLayoutProps(type, config, key) {
   }
 
   if(key == "autofocus"){
-    if(config.autofocus){
+    var isIPhone = (navigator.userAgent.indexOf("iPhone") !== -1)
+    if(config.autofocus && !isIPhone){
       config.attributes["autofocus"] = "autofocus";  
     }
   }
