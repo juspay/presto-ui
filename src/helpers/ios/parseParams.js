@@ -30,7 +30,7 @@ var callbackMapper  = require("../common/callbackMapper")
 let getSetType = 1;
 
 /**
- * Checks the native set window.__DEVICE_DETAILS.mystique_version 
+ * Checks the native set window.__DEVICE_DETAILS.mystique_version
  * and checks if mystique version is greater than the passed version.
  * @param {string} version number to be checked against. If passed empty returns true.
  * @return {bool} true if mystique version is greater than passed version else false. Defaults to true.
@@ -40,7 +40,7 @@ function isMystiqueVersionGreaterThan(version) {
     var sdkVersion = parseFloat(window.__DEVICE_DETAILS.mystique_version);
     if (sdkVersion>0) {
         return sdkVersion>parseFloat(version)?true:false;
-    } 
+    }
   }
   return false;
 }
@@ -503,13 +503,13 @@ function this_updateLayoutParams(config) {
     "fromStore": getSetType?"false":"true",
     "storeKey": "view" + window.__VIEW_INDEX,
     "methodName": "updateLayoutParams:",
-    "values": [{ 
-        "name": JSON.stringify(data), 
-        "type": 's' 
+    "values": [{
+        "name": JSON.stringify(data),
+        "type": 's'
     }]
   };
 }
- 
+
 
 function this_setPadding(padding) {
   return {
@@ -1419,12 +1419,12 @@ function generateType(type, config) {
         } else {
             modifiedType = "mJPScrollView";
         }
-        config.orientation = "vertical"; 
+        config.orientation = "vertical";
         break;
     }
     case "horizontalScrollView": {
         if (config.hasOwnProperty('width')&& config.width == 'wrap_content'){
-            modifiedType = "mJPScrollView";  
+            modifiedType = "mJPScrollView";
         } else {
             modifiedType = "mJPScrollView";
         }
@@ -1620,7 +1620,7 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(UIColor_setColor(config.borderColor));
     config.methods.push(setBorderColor());
   }
-  
+
   if (config.debug) {
     config.methods.push(this_layer());
     config.methods.push(setBorderWidth("1"));
@@ -1657,7 +1657,7 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(this_setImageURL(id, config.imageNamed, placeholder));
     }
   }
-  
+
   if (config.hasOwnProperty("adjustViewWithKeyboard")) {
       config.methods.push(this_adjustViewWithKeyboard(config.adjustViewWithKeyboard));
   }
@@ -1665,7 +1665,7 @@ module.exports = function(type, config, _getSetType) {
   if (config.hasOwnProperty("playGif")){
     if (config.playGif)
       config.methods.push(this_startGif());
-    else 
+    else
       config.methods.push(this_stopGif());
   }
 
@@ -1712,14 +1712,26 @@ module.exports = function(type, config, _getSetType) {
   if (config.hasOwnProperty("expandAlpha")) {
     config.methods.push(this_setExpandAlpha(cS(config.expandAlpha)));
   }
-  
+
   //Updated to handle 0 being passed for default alignment
   if (config.hasOwnProperty("textAlignment")) {
       config.methods.push(this_setTextAlignment(rWS(cS(config.textAlignment))));
   }
 
   if (config.hasOwnProperty("textFromHtml")) {
-      config.methods.push(this_setHTMLText(config.textFromHtml));
+      debugger;
+      var modifiedHtmlString = "<span style=\""
+      if (config.hasOwnProperty("fontStyle")) {
+          modifiedHtmlString += "font-family:"+config.fontStyle+";"
+      }
+      if (config.hasOwnProperty("textSize")) {
+          modifiedHtmlString += "font-size:"+config.textSize+";"
+      }
+      if (config.hasOwnProperty("textColor")) {
+          modifiedHtmlString += "font-size:"+config.textColor+";"
+      }
+      modifiedHtmlString +="\">"+config.textFromHtml+"</span>";
+      config.methods.push(this_setHTMLText(modifiedHtmlString));
   }
 
   if (config.textColor) {
