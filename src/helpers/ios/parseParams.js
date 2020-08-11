@@ -1727,7 +1727,7 @@ module.exports = function(type, config, _getSetType) {
           modifiedHtmlString += "font-size:"+config.textSize+";"
       }
       if (config.hasOwnProperty("textColor")) {
-          modifiedHtmlString += "font-size:"+config.textColor+";"
+          modifiedHtmlString += "color:"+config.textColor+";"
       }
       modifiedHtmlString +="\">"+config.textFromHtml+"</span>";
       config.methods.push(this_setHTMLText(modifiedHtmlString));
