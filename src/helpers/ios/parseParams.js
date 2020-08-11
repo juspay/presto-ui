@@ -1719,7 +1719,6 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (config.hasOwnProperty("textFromHtml")) {
-      debugger;
       var modifiedHtmlString = "<span style=\""
       if (config.hasOwnProperty("fontStyle")) {
           modifiedHtmlString += "font-family:"+config.fontStyle+";"
