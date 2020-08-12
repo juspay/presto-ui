@@ -788,7 +788,8 @@ function setAttributes(type, elem, props, firstRender) {
     /* Events */
     if (firstRender) {
         if (type == "editText" && elem.tagName.toLowerCase() == "input") {
-            if (props.autofocus) {
+            var isIPhone = (navigator.userAgent.indexOf("iPhone") !== -1)
+            if (props.autofocus && !isIPhone) {
                 elem.focus()
             }
             elem.addEventListener('input', separatorInputKeyDownHandler);
