@@ -814,7 +814,7 @@ function setAttributes(type, elem, props, firstRender) {
                     })
                 }
                 if (eventType == "change") {
-                    elem.addEventListener('keyup', (e) => {
+                    elem.addEventListener('input', (e) => {
                         callback(e.target.value)
                     })
                 } else if (eventType == "focus"){
