@@ -382,6 +382,81 @@ function setComputedStyles(elem, props) {
     }
     /* Computed Styles End */
 }
+function separatorInputKeyDownHandlerNew(ev){
+    ev.stopPropagation();
+    try {
+        var inputId = ev.target.id;
+        var inputType = ev.inputType;
+        var input = document.getElementById(inputId);
+        var oldValidValue = "";
+        if(input.oldValidValue){
+            oldValidValue = input.oldValidValue;
+        }
+        if(input.value.length===0){
+            input.oldValidValue = input.value;
+            return;
+        }
+        var dataPattern = input.getAttribute("data-pattern");
+        if (dataPattern){
+          var data = dataPattern.split(',');
+          var length = parseInt(data.pop());
+          var regexPattern = new RegExp(data.join(''));
+          var selectionStart = input.selectionStart;
+          var selectionEnd = input.selectionEnd;
+          var separator = input.getAttribute("separator");
+          var separatorRepeat = parseInt(input.getAttribute("separatorRepeat"));
+          var value = input.value.replace(/[^a-zA-Z0-9@.-]/g, "");
+          //If existing value itself greater than equal to max length
+          if (length) {
+            input.setAttribute("maxlength", length);
+          }
+          // If code doesn't matches regex pattern
+          if (!regexPattern.test(value)) {
+            input.value = oldValidValue;
+            input.selectionStart = selectionStart- (selectionEnd-selectionStart)-1;
+            input.selectionEnd = selectionEnd- (selectionEnd - selectionStart)-1;
+            return;
+          }
+          //Insert separator 
+          if(separator && separatorRepeat){
+            ev.preventDefault();
+            var formattedString = "";
+            for(var i =0;i<value.length;i++){
+              var element = value[i];
+              formattedString += element;
+              var factor = 0;
+              if (formattedString.length && formattedString.replace(/[^a-zA-Z0-9@.-]/g, "").length % (separatorRepeat + factor) == 0) {
+                  formattedString += separator;
+              }
+            }
+            if (formattedString[length] == separator) {
+              formattedString = formattedString.substring(0, formattedString.length - 1);
+            }
+            input.value = formattedString;
+            if(inputType == "deleteContentBackward"){
+              let cursorPosition = selectionStart;
+              if ((cursorPosition % (separatorRepeat + 1) ) === 0) {
+                  if(input.oldValidValue.length < formattedString.length){
+                      cursorPosition += 1
+                  } else {
+                      cursorPosition -= 1
+                  }
+              }
+              if(cursorPosition<0){
+                  cursorPosition = 0;
+              }
+              input.oldValidValue = formattedString;
+              input.focus();
+              input.selectionStart = cursorPosition;
+              input.selectionEnd = cursorPosition;
+            }
+          }
+          input.oldValidValue = input.value;
+        }
+    } catch(err){
+        console.error(err);
+    }
+}
 
 function separatorInputKeyDownHandler(ev){
     ev.stopPropagation();
@@ -792,7 +867,11 @@ function setAttributes(type, elem, props, firstRender) {
             if (props.autofocus && !isIPhone) {
                 elem.focus()
             }
-            elem.addEventListener('input', separatorInputKeyDownHandler);
+            if(window.preponeSpace){
+                elem.addEventListener('input', separatorInputKeyDownHandlerNew);
+            } else {
+                elem.addEventListener('input', separatorInputKeyDownHandler);
+            }
         }
     
 
