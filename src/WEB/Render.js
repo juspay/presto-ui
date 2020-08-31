@@ -793,7 +793,14 @@ function setAttributes(type, elem, props, firstRender) {
             JSON.parse(props[key]).forEach(function (obj) {
                 elem.classList.add(obj);
             });
-        } else if (props[key] && typeof props[key] == "function") {
+        }
+        else if (key == "removeClassList"){
+                        JSON.parse(props[key]).forEach(function (obj) {
+                           elem.classList.remove(obj);
+                       });
+                   }
+        else if (props[key] && typeof props[key] == "function") {
+
             var eventType = key.substring(2, key.length).toLowerCase();
             var elemCB = props[key];
             elem.style.userSelect = 'none';
