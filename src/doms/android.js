@@ -103,7 +103,6 @@ module.exports = function(type, props, ...children) {
     props = {};
 
   if(typeof type === "object") {
-    debugger;
     paramType = getCtr(type.parentType);
     props = parseParams(type.elemType, props, "set");
     props = setAutogenId(props);
