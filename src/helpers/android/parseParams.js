@@ -533,7 +533,9 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
 
   if (attrs.key == "url") {
     prePend = "set_Setting=this->getSettings;get_Setting->setJavaScriptEnabled:b_true;get_Setting->setDomStorageEnabled:b_true;";
-    currTransVal = appendArgs(attrs, obj);
+    var convertToString = "set_1127=android.util.Base64->decode:s_" + btoa(attrs.value) + ",i_0;set_url=java.lang.String->new:get_1127;"
+    prePend += convertToString;
+    currTransVal = "get_url";
   }
 
   if (attrs.key == "packageIcon") {
