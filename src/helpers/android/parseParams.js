@@ -81,17 +81,33 @@ function getConfigGroups(config) {
     if (typeof config[keys[i]] == "undefined" || config[keys[i]] == null) {
       delete config[keys[i]];
     } else if (typeof config[keys[i]] == "function") {
-      config[keys[i]] = callbackMapper.map(config[keys[i]]);
+      if (keys[i] == "afterRender" && window.__dui_screen){
+        /**
+         * we are handling afterRender prop in JS itself
+         * While doing patch over previous dom, the newly added `afterRender` property
+         * is needed to be added in container where we are controlling the behaviour
+         * In case of prepare screen we store the screen after patch is done. Because of which
+         * in successive run we don't generate this prop again and it doesn't get called again.
+         * Its because of this we are handling it in JS
+         *
+         */
+        window["afterRender"] = window["afterRender"] || {};
+        window["afterRender"][window.__dui_screen] = window["afterRender"][window.__dui_screen] || {};
+        window["afterRender"][window.__dui_screen][config["id"]] = config["afterRender"];
+        delete config["afterRender"];
+      }else{
+        config[keys[i]] = callbackMapper.map(config[keys[i]]);
 
+        if (keys[i] == "onClick"){
+          window.__FN_MAP[config[keys[i]]] = config.text || config.id || "";
 
-      if (keys[i] == "onClick"){
-        window.__FN_MAP[config[keys[i]]] = config.text || config.id || "";
+          if(!config.allowMultipleClicks || config.allowMultipleClick=="false"){
+            window.__THROTTELED_ACTIONS.push(config[keys[i]]);
+          }
 
-        if(!config.allowMultipleClicks || config.allowMultipleClick=="false"){
-          window.__THROTTELED_ACTIONS.push(config[keys[i]]);
         }
-
       }
+
     } else {
       if (keys[i].indexOf('_') && keys[i].split('_')[0] == 'a') {
         objType = mapParams[keys[i].split('_')[1]];
@@ -343,9 +359,9 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
           if (!id) return;
           var urlSetCommands = "set_directory=ctx->getDir:s_juspay,i_0;" +
                                 "set_resolvedFile=java.io.File->new:get_directory,s_" + fileName + ";" +
-                                "set_resolvedPath=get_resolvedFile->toString;" + 
+                                "set_resolvedPath=get_resolvedFile->toString;" +
                                 "set_dfont=android.graphics.Typeface->createFromFile:get_resolvedPath;" +
-                                "set_textV=ctx->findViewById:i_" + id.value + ";" + 
+                                "set_textV=ctx->findViewById:i_" + id.value + ";" +
                                 "get_textV->setTypeface:get_dfont"
                                 Android.runInUI(urlSetCommands ,null)
                               });
@@ -353,20 +369,20 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
       } else if(JBridge.getFilePath) {
         prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
                     "set_resolvedFile=java.io.File->new:get_directory,s_" + JBridge.getFilePath(font) + ";" +
-                    "set_resolvedPath=get_resolvedFile->toString;" + 
+                    "set_resolvedPath=get_resolvedFile->toString;" +
                     "set_dfont=android.graphics.Typeface->createFromFile:get_resolvedPath;"
-        currTransVal = "get_dfont"; 
+        currTransVal = "get_dfont";
       }
     } else {
       prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + attrs.value + "\.ttf;";
       currTransVal = "get_type";
     }
   }
-  
+
   if (attrs.key == "gradientAngle") {
     orientation += "set_dr=this->getBackground;set_o=android.graphics.drawable.GradientDrawable$Orientation->valueOf:s_"+attrs.value+";"
     prePend += orientation;
-    currTransVal = "get_o" 
+    currTransVal = "get_o"
   }
 
   if (attrs.key == "gradient") {
@@ -544,7 +560,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
   }
 
   if (attrs.key == "imageUrl") {
-    
+
     if(isURL(attrs.value)) {
       if(typeof window.__PROXY_FN == "undefined") {
         window.__PROXY_FN = {};
@@ -559,9 +575,9 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
           if (!id) return;
           var urlSetCommands = "set_directory=ctx->getDir:s_juspay,i_0;" +
                                 "set_resolvedFile=java.io.File->new:get_directory,s_" + fileName + ";" +
-                                "set_resolvedPath=get_resolvedFile->toString;" + 
+                                "set_resolvedPath=get_resolvedFile->toString;" +
                                 "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;" +
-                                "set_imgV=ctx->findViewById:i_" + id.value + ";" + 
+                                "set_imgV=ctx->findViewById:i_" + id.value + ";" +
                                 "get_imgV->setImageDrawable:get_dimage"
                                 Android.runInUI(urlSetCommands ,null)
                               });
@@ -569,9 +585,9 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
       } else if(JBridge.getFilePath) {
         prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
                     "set_resolvedFile=java.io.File->new:get_directory,s_" + JBridge.getFilePath(image) + ";" +
-                    "set_resolvedPath=get_resolvedFile->toString;" + 
+                    "set_resolvedPath=get_resolvedFile->toString;" +
                     "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;"
-        currTransVal = "get_dimage"; 
+        currTransVal = "get_dimage";
       }
     } else {
       prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_"+  attrs.value +",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;"
@@ -593,7 +609,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
     "set_resolvedName=in.juspay.hypersdk.services.FileProviderService->appendSdkNameAndVersion:s_" + attrs.value + ";" +
     "set_resolvedFile=java.io.File->new:get_directory,get_resolvedName;" +
-    "set_resolvedPath=get_resolvedFile->toString;" + 
+    "set_resolvedPath=get_resolvedFile->toString;" +
     "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;";
 
     currTransVal = "get_dimage";
@@ -649,7 +665,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
           shimmerCmd += "get_builder->setHighlightColor:get_baseColor;"
         }
       }
-      
+
       if(shimmerJson.tilt){
         shimmerCmd += "get_builder->setTilt:f_" + shimmerJson.tilt + ";"
       }
@@ -732,7 +748,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     prePend += "this->setStartY:f_" + arg.y + ";"
     return prePend
   }
-    
+
   if (attrs.key == "endPoint") {
     var arg = JSON.parse(attrs.value)
     prePend = "this->setEndX:f_" + arg.x + ";"
