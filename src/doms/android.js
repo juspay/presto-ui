@@ -103,11 +103,14 @@ module.exports = function(type, props, ...children) {
     props = {};
 
   if(typeof type === "object") {
-
+    debugger;
     paramType = getCtr(type.parentType);
     props = parseParams(type.elemType, props, "set");
     props = setAutogenId(props);
     props.runInUI = props.runInUI.replace('PARAM_CTR_HOLDER', paramType);
+    if(type.elemType == "webView") {
+      props.runInUI = "set_xyz=android.webkit.WebViewClient->new;this->setWebViewClient:get_xyz;" + props.runInUI;
+    }
     var finalType = type.elemType;
     finalType = finalType[0].toUpperCase() + finalType.substr(1, finalType.length);
     for (var excludedType in excluded) {
