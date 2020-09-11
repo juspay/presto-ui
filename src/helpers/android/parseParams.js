@@ -81,19 +81,12 @@ function getConfigGroups(config) {
     if (typeof config[keys[i]] == "undefined" || config[keys[i]] == null) {
       delete config[keys[i]];
     } else if (typeof config[keys[i]] == "function") {
-      if (keys[i] == "afterRender" && window.__dui_screen){
+      if (keys[i] == "afterRender" && typeof window.removeAfterRenderProp == "function"){
         /**
-         * we are handling afterRender prop in JS itself
-         * While doing patch over previous dom, the newly added `afterRender` property
-         * is needed to be added in container where we are controlling the behaviour
-         * In case of prepare screen we store the screen after patch is done. Because of which
-         * in successive run we don't generate this prop again and it doesn't get called again.
-         * Its because of this we are handling it in JS
-         *
+         * if the function is present then we are handling afterRender
+         * prop in JS itself
          */
-        window["afterRender"] = window["afterRender"] || {};
-        window["afterRender"][window.__dui_screen] = window["afterRender"][window.__dui_screen] || {};
-        window["afterRender"][window.__dui_screen][config["id"]] = config["afterRender"];
+        window.removeAfterRenderProp(config["id"], config["afterRender"]);
         delete config["afterRender"];
       }else{
         config[keys[i]] = callbackMapper.map(config[keys[i]]);
