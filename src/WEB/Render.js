@@ -661,6 +661,12 @@ function setAttributes(type, elem, props, firstRender) {
     if (props.hasOwnProperty('scrollBarY'))
         scrollBarY = props.scrollBarY;
 
+    if (props.hasOwnProperty('overFlowVisible')) {
+        if (props.overFlowVisible) {
+            elem.style.overflow = "visible"
+        }
+    }
+
     /* Render type specific styles */
     if (type == 'linearLayout') {
         elem.style["box-sizing"] = "border-box";
