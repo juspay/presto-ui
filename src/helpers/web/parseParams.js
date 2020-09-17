@@ -76,6 +76,24 @@ function parseColors(color) {
   return rgbaColor;
 }
 
+function lookAndReplaceProp(str,match, val){
+  var output = match + "(" + val + "px)";
+  if (!str) return output; 
+  var start = str.indexOf(match); 
+  if (start >= 0){
+    var end = str.substr(start).indexOf("px"); 
+    if (end >= 0) {
+      var found = str.substr(start,end+3); 
+      return str.replace(found,output); 
+    }
+    else {
+      return str+output; 
+    }
+  } 
+  else return str+output; 
+}
+
+
 function parseLayoutProps(type, config, key) {
   const isMobile = window.innerWidth < 550
   if (typeof config[key] == "undefined" || config[key] == null) {
@@ -347,7 +365,7 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "translationY") {
-    config.style.transform += "translateY(" + config[key] + "px) ";
+    config.style.transform = lookAndReplaceProp(config.style.transform,"translateY",config[key]);
   }
 
   if (key == "a_translationY") {
@@ -355,7 +373,7 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "translationX") {
-    config.style.transform += "translateX(" + config[key] + "px) ";
+    config.style.transform = lookAndReplaceProp(config.style.transform,"translateX",config[key]);
   }
 
   if (key == "a_translationX") {
@@ -650,10 +668,8 @@ function modifyTranslation(config){
   return (animationArray);
 }
 module.exports = function (type, config, getSetType) {
-  // console.log("config is ",config)
   config = flattenObject(config);
   setDefaults(type, config);
-  // console.log("after flatten config c is ",config)
 
   var keys = Object.keys(config);
 
@@ -664,7 +680,6 @@ module.exports = function (type, config, getSetType) {
     parseLayoutProps(type, config, keys[i]);
   }
 
-  // console.log("after parse props, the config is this ",config)
   
   config.transition = [
     String(config.a_duration || 0) +"ms",
