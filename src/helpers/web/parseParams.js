@@ -84,8 +84,14 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (!config.style) {
+    var t = ""
+    var ele_id = document.getElementById(config.id)
+    if (ele_id) {
+      if (ele_id.style)
+        t = (ele_id.style.transform) ? ele_id.style.transform  : "" 
+    }
     config.style = {};
-    config.style.transform = "";
+    config.style.transform = t; 
     config.animation = {};
     config.animation.transform = "";
   }
@@ -644,8 +650,10 @@ function modifyTranslation(config){
   return (animationArray);
 }
 module.exports = function (type, config, getSetType) {
+  // console.log("config is ",config)
   config = flattenObject(config);
   setDefaults(type, config);
+  // console.log("after flatten config c is ",config)
 
   var keys = Object.keys(config);
 
@@ -656,6 +664,8 @@ module.exports = function (type, config, getSetType) {
     parseLayoutProps(type, config, keys[i]);
   }
 
+  // console.log("after parse props, the config is this ",config)
+  
   config.transition = [
     String(config.a_duration || 0) +"ms",
     "all",
