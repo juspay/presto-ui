@@ -158,6 +158,10 @@ function setGravityStylesForRow(elem, props) {
             elem.style['align-items'] = 'flex-start';
             elem.style['justify-content'] = 'flex-end';
             break;
+        case 'stretch':
+            elem.style['align-items'] = 'stretch';
+            elem.style['justify-content'] = 'flex-start';
+            break; 
         default:
             elem.style['align-items'] = 'flex-start';
             elem.style['justify-content'] = 'flex-start';
@@ -194,6 +198,10 @@ function setGravityStylesForColumn(elem, props) {
             elem.style['align-items'] = 'flex-end';
             elem.style['justify-content'] = 'flex-start';
             break;
+        case 'stretch':
+            elem.style['align-items'] = 'stretch';
+            elem.style['justify-content'] = 'flex-start';
+            break; 
         default:
             elem.style['align-items'] = 'flex-start';
             elem.style['justify-content'] = 'flex-start';
