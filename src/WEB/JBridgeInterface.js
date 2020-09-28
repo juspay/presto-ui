@@ -178,7 +178,7 @@ module.exports = {
   },
 
   getResourceByName: function getResourceByName(tag) {
-    return 2;
+    return "2.0";
   },
 
   getSessionAttribute: function getSessionAttribute(v1, v2) {
@@ -222,7 +222,16 @@ module.exports = {
     }
 
   },
-  deleteFromLocal: function(){},
+  deleteFromLocal: function(c){
+
+    if (hasLocalStorage){
+      try{
+      window.localStorage.removeItem(c+":"+"defOptionType");
+      window.localStorage.removeItem(c+":"+"defOption");
+      }
+      catch(e){}
+    }
+  },
   loadFromLocal: function(key){
     if (hasLocalStorage){
       if (window.localStorage.getItem(key)==undefined)
