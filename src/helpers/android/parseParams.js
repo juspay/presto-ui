@@ -32,6 +32,18 @@ var command = "";
 var elementType;
 var getSetType;
 
+function isValidFontStyleFormat(font){
+  try{
+    if(font == undefined) return false; 
+    if(isNaN(parseInt(font)) ){
+      return /^\w\d*\w*[.](otf|ttf|xml)[,](assets|res)(\/|$)/.test(font) ;
+    }
+    else return /^\d+$/.test(font) ;
+  }
+  catch(err){}
+  return false;
+}
+
 function isURL(str) {
   try {
     var url = new URL(str);
@@ -338,37 +350,48 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     }
   }
 
-  if (attrs.key == "fontStyle") {
-    if(isURL(attrs.value)) {
-      if(typeof window.__PROXY_FN == "undefined") {
-        window.__PROXY_FN = {};
-      }
-      var font = attrs.value.substr(attrs.value.lastIndexOf('/') + 1)
+  if(attrs.key == "fontStyle"){
+    /**
+     * supported inputs ->
+      *   attrs.value = "${font_filename}.ttf,${dir}"   or   "${integer_resID}" 
+      *   ${dir} = "res/.." or "assets/.."   
+      * Flow -> 
+      *   search for fonts in android assets or resources, create typeface and return it 
+     */
+    try{
+      console.log("-- fontStyle -- ", attrs.value) ;
+      console.log(isValidFontStyleFormat(attrs.value)) ;
+      
+      if(isValidFontStyleFormat(attrs.value)){
+        if(parseInt(attrs.value) != NaN){
+          //resID
+          var fontResID = parseInt(attrs.value) ;
+          prepend = "set_resobj=ctx->getResources;set_type=get_resobj->getFont:"+fontResID+";" ;
+          console.log("-- prependFontAssets -> " + prePend) ;
+          currTransVal = "get_type" ;
+        }
+        else{
+          //file,dir
+          var fontFile = attrs.value.split(",")[0] ;
+          var fontDir = attrs.value.split(",")[1] ;
+          if(fontDir[fontDir.length -1 ] != "/") fontDir += "/" ;
 
-      var filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(font);
-      if (!filePresent) {
-        var callback = callbackMapper.map(function (isNew, url, fileName) {
-          const id = allProps.find(a => a.key === "id");
-          if (!id) return;
-          var urlSetCommands = "set_directory=ctx->getDir:s_juspay,i_0;" +
-                                "set_resolvedFile=java.io.File->new:get_directory,s_" + fileName + ";" +
-                                "set_resolvedPath=get_resolvedFile->toString;" +
-                                "set_dfont=android.graphics.Typeface->createFromFile:get_resolvedPath;" +
-                                "set_textV=ctx->findViewById:i_" + id.value + ";" +
-                                "get_textV->setTypeface:get_dfont"
-                                Android.runInUI(urlSetCommands ,null)
-                              });
-        JBridge.renewFile(attrs.value, font, callback);
-      } else if(JBridge.getFilePath) {
-        prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
-                    "set_resolvedFile=java.io.File->new:get_directory,s_" + JBridge.getFilePath(font) + ";" +
-                    "set_resolvedPath=get_resolvedFile->toString;" +
-                    "set_dfont=android.graphics.Typeface->createFromFile:get_resolvedPath;"
-        currTransVal = "get_dfont";
-      }
-    } else {
-      prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + attrs.value + "\.ttf;";
-      currTransVal = "get_type";
+          if(fontDir.indexOf("assets/") != -1){
+            prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_"+ fontDir + fontFile +";" ;
+            console.log("-- prependFontAssets -> " + prePend) ;
+            currTransVal = "get_type";
+          }
+          else if(dir.indexOf("res/") != -1){
+            var fontName = font.split('.')[0] ;
+            prePend = "set_pkgname=ctx->getPackageName;set_resobj=ctx->getResources;set_resid=get_resobj->getIdentifier:s_"+fontName+",s_font,get_pkgname;set_type=get_resobj->getFont:get_resid;" ;
+            console.log("-- prepend -> " + prePend) ;
+            currTransVal = "get_type";          
+          }
+        }
+      }  
+    }
+    catch(err){
+      console.log("FONT_ERROR :: " + "error in fetching fonts from android " );
     }
   }
 
