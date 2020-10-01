@@ -36,7 +36,7 @@ function isValidFontStyleFormat(font){
   try{
     if(font == undefined) return false; 
     if(isNaN(parseInt(font)) ){
-      return /^\w\d*\w*[.](otf|ttf|xml)[,](assets|res)(\/|$)/.test(font) ;
+      return /^\w+[0-9a-zA-z\-\_]*[.](otf|ttf|xml)[,](assets|res)(\/|$)/.test(font) ;
     }
     else return /^\d+$/.test(font) ;
   }
@@ -363,7 +363,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
       console.log(isValidFontStyleFormat(attrs.value)) ;
       
       if(isValidFontStyleFormat(attrs.value)){
-        if(parseInt(attrs.value) != NaN){
+        if( !isNaN(parseInt(attrs.value)) ){
           //resID
           var fontResID = parseInt(attrs.value) ;
           prepend = "set_resobj=ctx->getResources;set_type=get_resobj->getFont:"+fontResID+";" ;
@@ -381,8 +381,9 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
             console.log("-- prependFontAssets -> " + prePend) ;
             currTransVal = "get_type";
           }
-          else if(dir.indexOf("res/") != -1){
-            var fontName = font.split('.')[0] ;
+          else if(fontDir.indexOf("res/") != -1){
+            var fontName = fontFile.split('.')[0] ;
+            console.log("res font name : " + fontName);
             prePend = "set_pkgname=ctx->getPackageName;set_resobj=ctx->getResources;set_resid=get_resobj->getIdentifier:s_"+fontName+",s_font,get_pkgname;set_type=get_resobj->getFont:get_resid;" ;
             console.log("-- prepend -> " + prePend) ;
             currTransVal = "get_type";          
