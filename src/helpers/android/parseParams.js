@@ -43,16 +43,6 @@ function isValidFontStyleFormat(font){
   catch(err){}
   return false;
 }
-
-function isURL(str) {
-  try {
-    var url = new URL(str);
-    return (str.indexOf(".") != -1);
-  } catch(err) {
-    return false;
-  }
-}
-
 function attachFeedback(config, keys, i) {
   var feedbackFn = function() {};
 
@@ -359,8 +349,8 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
       *   search for fonts in android assets or resources, create typeface and return it 
      */
     try{
-      console.log("-- fontStyle -- ", attrs.value) ;
-      console.log(isValidFontStyleFormat(attrs.value)) ;
+      // console.log("-- fontStyle -- ", attrs.value) ;
+      // console.log(isValidFontStyleFormat(attrs.value)) ;
       
       if(isValidFontStyleFormat(attrs.value)){
         if( !isNaN(parseInt(attrs.value)) ){
@@ -378,14 +368,12 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
 
           if(fontDir.indexOf("assets/") != -1){
             prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_"+ fontDir + fontFile +";" ;
-            console.log("-- prependFontAssets -> " + prePend) ;
             currTransVal = "get_type";
           }
           else if(fontDir.indexOf("res/") != -1){
             var fontName = fontFile.split('.')[0] ;
-            console.log("res font name : " + fontName);
+            // console.log("res font name : " + fontName);
             prePend = "set_pkgname=ctx->getPackageName;set_resobj=ctx->getResources;set_resid=get_resobj->getIdentifier:s_"+fontName+",s_font,get_pkgname;set_type=get_resobj->getFont:get_resid;" ;
-            console.log("-- prepend -> " + prePend) ;
             currTransVal = "get_type";          
           }
         }
