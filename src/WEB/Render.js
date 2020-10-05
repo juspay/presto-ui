@@ -896,12 +896,11 @@ function setAttributes(type, elem, props, firstRender) {
         }
     
 
-        let events = ['onClick', 'onEnterPressedEvent', 'onChange', 'onMouseDown', 'onMouseUp', 'onMouseEnter', 'onMouseOver', 'onMouseMove', 'onMouseOut', 'onMouseLeave', 'onFocus']
+        let events = ['onClick', 'onEnterPressedEvent', 'onChange', 'onMouseDown', 'onMouseUp', 'onMouseEnter', 'onMouseOver', 'onMouseMove', 'onMouseOut', 'onMouseLeave', 'onFocus', 'onPaste']
 
         for (let i = 0; i < events.length; i++) {
             let key = events[i]
             let eventType = key.substring(2, key.length).toLowerCase()
-
             if (props.hasOwnProperty(key) && typeof props[key] == "function") {
                 const callback = props[key]
                 if (key == "onEnterPressedEvent") {
