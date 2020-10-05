@@ -81,9 +81,9 @@ function lookAndReplaceProp(str,match, val){
   if (!str) return output; 
   var start = str.indexOf(match); 
   if (start >= 0){
-    var end = str.substr(start).indexOf("px"); 
+    var end = str.substr(start).indexOf(")"); 
     if (end >= 0) {
-      var found = str.substr(start,end+3); 
+      var found = str.substr(start,end+1); 
       return str.replace(found,output); 
     }
     else {
