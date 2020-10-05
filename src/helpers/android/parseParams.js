@@ -43,6 +43,14 @@ function isValidFontStyleFormat(font){
   catch(err){}
   return false;
 }
+function isURL(str) {
+  try{
+    var url = new URL(str);
+    return str.indexOf(".") != -1;
+  } catch (err) {
+    return false;
+  }
+}
 function attachFeedback(config, keys, i) {
   var feedbackFn = function() {};
 
@@ -349,33 +357,61 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
       *   search for fonts in android assets or resources, create typeface and return it 
      */
     try{
-      // console.log("-- fontStyle -- ", attrs.value) ;
-      // console.log(isValidFontStyleFormat(attrs.value)) ;
-      
       if(isValidFontStyleFormat(attrs.value)){
+        console.log("FONT_SUCC >> fonts from merchant being loaded");
         if( !isNaN(parseInt(attrs.value)) ){
           //resID
           var fontResID = parseInt(attrs.value) ;
           prepend = "set_resobj=ctx->getResources;set_type=get_resobj->getFont:"+fontResID+";" ;
-          console.log("-- prependFontAssets -> " + prePend) ;
           currTransVal = "get_type" ;
+          console.log( "FONT_SUCC >> " + " fonts are being loaded from resID " + toString(attrs.value));
         }
         else{
           //file,dir
           var fontFile = attrs.value.split(",")[0] ;
           var fontDir = attrs.value.split(",")[1] ;
           if(fontDir[fontDir.length -1 ] != "/") fontDir += "/" ;
-
+          console.log("FONT_SUCC >> " + fontFile + " from " + fontDir + " is being loaded" ) ;
           if(fontDir.indexOf("assets/") != -1){
             prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_"+ fontDir + fontFile +";" ;
             currTransVal = "get_type";
+            console.log("FONT_SUCC >> " + "fonts are loaded from assets") ;
           }
           else if(fontDir.indexOf("res/") != -1){
             var fontName = fontFile.split('.')[0] ;
-            // console.log("res font name : " + fontName);
             prePend = "set_pkgname=ctx->getPackageName;set_resobj=ctx->getResources;set_resid=get_resobj->getIdentifier:s_"+fontName+",s_font,get_pkgname;set_type=get_resobj->getFont:get_resid;" ;
             currTransVal = "get_type";          
+            console.log("FONT_SUCC >> " + "fonts are loaded from res");
           }
+        }
+      }
+      else if(isURL(attrs.value)) {
+        if(typeof window.__PROXY_FN == "undefined") {
+          window.__PROXY_FN = {};
+        }
+        console.log("FONT_SUCC >> " +  " downloading fonts from url") ;
+        var font = attrs.value.substr(attrs.value.lastIndexOf('/') + 1)
+  
+        var filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(font);
+        if (!filePresent) {
+          var callback = callbackMapper.map(function (isNew, url, fileName) {
+            const id = allProps.find(a => a.key === "id");
+            if (!id) return;
+            var urlSetCommands = "set_directory=ctx->getDir:s_juspay,i_0;" +
+                                  "set_resolvedFile=java.io.File->new:get_directory,s_" + fileName + ";" +
+                                  "set_resolvedPath=get_resolvedFile->toString;" +
+                                  "set_dfont=android.graphics.Typeface->createFromFile:get_resolvedPath;" +
+                                  "set_textV=ctx->findViewById:i_" + id.value + ";" +
+                                  "get_textV->setTypeface:get_dfont"
+                                  Android.runInUI(urlSetCommands ,null)
+                                });
+          JBridge.renewFile(attrs.value, font, callback);
+        } else if(JBridge.getFilePath) {
+          prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
+                      "set_resolvedFile=java.io.File->new:get_directory,s_" + JBridge.getFilePath(font) + ";" +
+                      "set_resolvedPath=get_resolvedFile->toString;" +
+                      "set_dfont=android.graphics.Typeface->createFromFile:get_resolvedPath;"
+          currTransVal = "get_dfont";
         }
       }  
     }
