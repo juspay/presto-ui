@@ -358,30 +358,27 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
      */
     try{
       if(isValidFontStyleFormat(attrs.value)){
-        console.log("FONT_SUCC >> fonts from merchant being loaded");
         if( !isNaN(parseInt(attrs.value)) ){
           //resID
-          var fontResID = parseInt(attrs.value) ;
-          prepend = "set_resobj=ctx->getResources;set_type=get_resobj->getFont:"+fontResID+";" ;
+          prePend = "set_resobj=ctx->getResources;set_type=get_resobj->getFont:i_"+attrs.value+";" ;
           currTransVal = "get_type" ;
-          console.log( "FONT_SUCC >> " + " fonts are being loaded from resID " + toString(attrs.value));
+          console.log( "FONT_SUCC >> " + " fonts are being loaded from resID " + attrs.value);
         }
         else{
           //file,dir
           var fontFile = attrs.value.split(",")[0] ;
           var fontDir = attrs.value.split(",")[1] ;
           if(fontDir[fontDir.length -1 ] != "/") fontDir += "/" ;
-          console.log("FONT_SUCC >> " + fontFile + " from " + fontDir + " is being loaded" ) ;
           if(fontDir.indexOf("assets/") != -1){
             prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_"+ fontDir + fontFile +";" ;
             currTransVal = "get_type";
-            console.log("FONT_SUCC >> " + "fonts are loaded from assets") ;
+            console.log("FONT_SUCC >> " + "fonts are loaded from assets file : " + fontFile + " and dir : "  + fontDir) ;
           }
           else if(fontDir.indexOf("res/") != -1){
             var fontName = fontFile.split('.')[0] ;
             prePend = "set_pkgname=ctx->getPackageName;set_resobj=ctx->getResources;set_resid=get_resobj->getIdentifier:s_"+fontName+",s_font,get_pkgname;set_type=get_resobj->getFont:get_resid;" ;
             currTransVal = "get_type";          
-            console.log("FONT_SUCC >> " + "fonts are loaded from res");
+            console.log("FONT_SUCC >> " + "fonts are loaded from res : " + fontName);
           }
         }
       }
@@ -389,7 +386,6 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
         if(typeof window.__PROXY_FN == "undefined") {
           window.__PROXY_FN = {};
         }
-        console.log("FONT_SUCC >> " +  " downloading fonts from url") ;
         var font = attrs.value.substr(attrs.value.lastIndexOf('/') + 1)
   
         var filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(font);
@@ -413,6 +409,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
                       "set_dfont=android.graphics.Typeface->createFromFile:get_resolvedPath;"
           currTransVal = "get_dfont";
         }
+        console.log("FONT_SUCC >> " + "font loaded from font_uri : " + attrs.value ) ;
       }  
     }
     catch(err){
