@@ -158,6 +158,10 @@ function setGravityStylesForRow(elem, props) {
             elem.style['align-items'] = 'flex-start';
             elem.style['justify-content'] = 'flex-end';
             break;
+        case 'stretch':
+            elem.style['align-items'] = 'stretch';
+            elem.style['justify-content'] = 'flex-start';
+            break; 
         default:
             elem.style['align-items'] = 'flex-start';
             elem.style['justify-content'] = 'flex-start';
@@ -194,6 +198,10 @@ function setGravityStylesForColumn(elem, props) {
             elem.style['align-items'] = 'flex-end';
             elem.style['justify-content'] = 'flex-start';
             break;
+        case 'stretch':
+            elem.style['align-items'] = 'stretch';
+            elem.style['justify-content'] = 'flex-start';
+            break; 
         default:
             elem.style['align-items'] = 'flex-start';
             elem.style['justify-content'] = 'flex-start';
@@ -661,6 +669,12 @@ function setAttributes(type, elem, props, firstRender) {
     if (props.hasOwnProperty('scrollBarY'))
         scrollBarY = props.scrollBarY;
 
+    if (props.hasOwnProperty('overFlowVisible')) {
+        if (props.overFlowVisible) {
+            elem.style.overflow = "visible"
+        }
+    }
+
     /* Render type specific styles */
     if (type == 'linearLayout') {
         elem.style["box-sizing"] = "border-box";
@@ -882,12 +896,11 @@ function setAttributes(type, elem, props, firstRender) {
         }
     
 
-        let events = ['onClick', 'onEnterPressedEvent', 'onChange', 'onMouseDown', 'onMouseUp', 'onMouseEnter', 'onMouseOver', 'onMouseMove', 'onMouseOut', 'onMouseLeave', 'onFocus']
+        let events = ['onClick', 'onEnterPressedEvent', 'onChange', 'onMouseDown', 'onMouseUp', 'onMouseEnter', 'onMouseOver', 'onMouseMove', 'onMouseOut', 'onMouseLeave', 'onFocus', 'onPaste']
 
         for (let i = 0; i < events.length; i++) {
             let key = events[i]
             let eventType = key.substring(2, key.length).toLowerCase()
-
             if (props.hasOwnProperty(key) && typeof props[key] == "function") {
                 const callback = props[key]
                 if (key == "onEnterPressedEvent") {

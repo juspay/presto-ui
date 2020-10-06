@@ -76,6 +76,24 @@ function parseColors(color) {
   return rgbaColor;
 }
 
+function lookAndReplaceProp(str,match, val){
+  var output = match + "(" + val + "px)";
+  if (!str) return output; 
+  var start = str.indexOf(match); 
+  if (start >= 0){
+    var end = str.substr(start).indexOf(")"); 
+    if (end >= 0) {
+      var found = str.substr(start,end+1); 
+      return str.replace(found,output); 
+    }
+    else {
+      return str+output; 
+    }
+  } 
+  else return str+output; 
+}
+
+
 function parseLayoutProps(type, config, key) {
   const isMobile = window.innerWidth < 550
   if (typeof config[key] == "undefined" || config[key] == null) {
@@ -84,8 +102,14 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (!config.style) {
+    var t = ""
+    var ele_id = document.getElementById(config.id)
+    if (ele_id) {
+      if (ele_id.style)
+        t = (ele_id.style.transform) ? ele_id.style.transform  : "" 
+    }
     config.style = {};
-    config.style.transform = "";
+    config.style.transform = t; 
     config.animation = {};
     config.animation.transform = "";
   }
@@ -341,7 +365,7 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "translationY") {
-    config.style.transform += "translateY(" + config[key] + "px) ";
+    config.style.transform = lookAndReplaceProp(config.style.transform,"translateY",config[key]);
   }
 
   if (key == "a_translationY") {
@@ -349,7 +373,7 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "translationX") {
-    config.style.transform += "translateX(" + config[key] + "px) ";
+    config.style.transform = lookAndReplaceProp(config.style.transform,"translateX",config[key]);
   }
 
   if (key == "a_translationX") {
@@ -656,6 +680,7 @@ module.exports = function (type, config, getSetType) {
     parseLayoutProps(type, config, keys[i]);
   }
 
+  
   config.transition = [
     String(config.a_duration || 0) +"ms",
     "all",
