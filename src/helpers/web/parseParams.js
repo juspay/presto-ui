@@ -500,6 +500,7 @@ function parseLayoutProps(type, config, key) {
         config.style["text-security"] = "disc";
       } else {
         inputType = "password"
+        config.attributes.autocomplete = "new-password"
       }
     } else if (config.inputType == "disabled") {
         config.attributes.disabled = 'disabled'
