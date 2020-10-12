@@ -348,41 +348,10 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     }
   }
 
-  if(attrs.key == "fontStyle"){
-    /**
-     * supported inputs ->
-      *   attrs.value = "${font_filename}.ttf,${dir}"   or   "${integer_resID}" 
-      *   ${dir} = "res/.." or "assets/.."   
-      * Flow -> 
-      *   search for fonts in android assets or resources, create typeface and return it 
-     */
+  if (attrs.key == "fontStyle") {
     try{
-      if(isValidFontStyleFormat(attrs.value)){
-        if( !isNaN(parseInt(attrs.value)) ){
-          //resID
-          prePend = "set_resobj=ctx->getResources;set_type=get_resobj->getFont:i_"+attrs.value+";" ;
-          currTransVal = "get_type" ;
-          console.log( "FONT_SUCC >> " + " fonts are being loaded from resID " + attrs.value);
-        }
-        else{
-          //file,dir
-          var fontFile = attrs.value.split(",")[0] ;
-          var fontDir = attrs.value.split(",")[1] ;
-          if(fontDir[fontDir.length -1 ] != "/") fontDir += "/" ;
-          if(fontDir.indexOf("assets/") != -1){
-            prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_"+ fontDir + fontFile +";" ;
-            currTransVal = "get_type";
-            console.log("FONT_SUCC >> " + "fonts are loaded from assets file : " + fontFile + " and dir : "  + fontDir) ;
-          }
-          else if(fontDir.indexOf("res/") != -1){
-            var fontName = fontFile.split('.')[0] ;
-            prePend = "set_pkgname=ctx->getPackageName;set_resobj=ctx->getResources;set_resid=get_resobj->getIdentifier:s_"+fontName+",s_font,get_pkgname;set_type=get_resobj->getFont:get_resid;" ;
-            currTransVal = "get_type";          
-            console.log("FONT_SUCC >> " + "fonts are loaded from res : " + fontName);
-          }
-        }
-      }
-      else if(isURL(attrs.value)) {
+      console.log("FONT_VALUE :: " + attrs.value);
+      if(isURL(attrs.value)) {
         if(typeof window.__PROXY_FN == "undefined") {
           window.__PROXY_FN = {};
         }
@@ -409,11 +378,40 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
                       "set_dfont=android.graphics.Typeface->createFromFile:get_resolvedPath;"
           currTransVal = "get_dfont";
         }
-        console.log("FONT_SUCC >> " + "font loaded from font_uri : " + attrs.value ) ;
-      }  
+      } else {
+        if(attrs.value == "") throw "font not provided" ;
+        var fontPrefix = attrs.value.split(",")[0], fontSuffix = attrs.value.split(",")[1];
+        if(fontPrefix == undefined || fontSuffix == undefined) throw "Incorrect Font format" ;
+        switch(fontPrefix){
+          case "name" :
+            prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + fontSuffix + "\.ttf;";
+            currTransVal = "get_type";
+            break ;
+          case "path" : 
+            if(fontSuffix.indexOf("assets/") != -1){
+              var fontPath = fontSuffix.replace("assets/", "");
+              prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_"+  fontPath +";" ;
+              currTransVal = "get_type";
+              console.log("FONT_SUCC >> " + "fonts are loaded from assets file : " + fontPath) ;
+            }
+            else if(fontSuffix.indexOf("res/") != -1){
+              var fontTempArr = fontSuffix.split("/");
+              var fontResName = fontTempArr[fontTempArr.length - 1].split(".")[0] ;
+              prePend = "set_pkgname=ctx->getPackageName;set_resobj=ctx->getResources;set_resid=get_resobj->getIdentifier:s_"+fontResName+",s_font,get_pkgname;set_type=get_resobj->getFont:get_resid;" ;
+              currTransVal = "get_type";      
+              console.log("FONT_SUCC >> " + "fonts are loaded from res : " + fontResName);
+            }
+            break;
+          case "resId" : 
+            prePend = "set_resobj=ctx->getResources;set_type=get_resobj->getFont:i_"+fontSuffix+";" ;
+            currTransVal = "get_type" ;
+            console.log( "FONT_SUCC >> " + " fonts are being loaded from resID " + fontSuffix);
+            break;
+        }
+      }
     }
     catch(err){
-      console.log("FONT_ERROR :: " + "error in fetching fonts from android " );
+      console.log("FONT_ERROR :: " + "error in fetching fonts : " + err ) ;
     }
   }
 
