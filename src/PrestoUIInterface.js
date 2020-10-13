@@ -141,6 +141,17 @@ function applyProp(element, attribute, set) {
       Android.runInUI(cmd.runInUI, null);
     }
   } else if (window.__OS == "IOS"){
+    if (attribute.value0 == 'textFromHtml' && element.props) {
+      if (element.props.hasOwnProperty('color')) {
+        prop['color'] = element.props.color;
+      }
+      if (element.props.hasOwnProperty('fontStyle')) {
+        prop['fontStyle'] = element.props.fontStyle;
+      }
+      if (element.props.hasOwnProperty('textSize')) {
+        prop['textSize'] = element.props.textSize;
+      }
+    }
     Android.runInUI(prop);
   } else {
     Android.runInUI(webParseParams("linearLayout", prop, "set"));
