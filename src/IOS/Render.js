@@ -83,6 +83,17 @@ function runInUI(cmd, fromInflate) {
         if (!each.hasOwnProperty('text')) {
           delete view.props.text;
         }
+        if (each.hasOwnProperty('textFromHtml')) {
+          if (view.props.hasOwnProperty('color')) {
+            each.color = view.props.color;
+          }
+          if (view.props.hasOwnProperty('fontStyle')) {
+            each.fontStyle = view.props.fontStyle;
+          }
+          if (view.props.hasOwnProperty('textSize')) {
+            each.textSize = view.props.textSize;
+          }
+        }
         if (parent && !fromInflate) {
           if (parent.type.indexOf("scroll") != -1) {
             inflate(parent);
