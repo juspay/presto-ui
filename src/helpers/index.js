@@ -23,9 +23,20 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-module.exports = {
-	android : require("./android"),
-	ios : require("./ios"),
-	web : require("./web"),
+const helpers = {
 	common : require("./common")
+};
+
+
+if (window.__OS == "ANDROID") {
+	helpers.android = require("./android")
 }
+else if (window.__OS == "WEB") {
+	helpers.web = require("./web");
+}
+else {
+	helpers.ios = require("./ios");
+}
+
+
+module.exports = helpers;
