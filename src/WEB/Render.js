@@ -539,7 +539,7 @@ function separatorInputKeyDownHandler(ev){
                 input.focus();
                 input.selectionStart = cursorPosition;
                 input.selectionEnd = cursorPosition;
-                console.log("formattedString----", formattedString);
+                // console.log("formattedString----", formattedString);
             } else {
                 input.oldValidValue = finalData;
             }
@@ -548,7 +548,10 @@ function separatorInputKeyDownHandler(ev){
         console.error(err);
     }
 }
+
+// what is first render?? 
 function setAttributes(type, elem, props, firstRender) {
+    // console.log("set Attributes -- props",props); 
     if (type == 'modal') {
         setModalAttributes(elem, props, firstRender);
         return;
@@ -578,7 +581,6 @@ function setAttributes(type, elem, props, firstRender) {
                 elem.style.width = props.width + 'px';
         }
     }
-
     if (props.hasOwnProperty('height')) {
         if (props.height == 'match_parent') {
             elem.style.height = '100%';
@@ -1128,14 +1130,18 @@ window.inflateTimings = {
 // Creates the DOM element if it has not been already inflated
 // View: Object of ReactDOM, {type, props, children}
 // parentElement: DOM Object
+
+// what is render style, sibling view, stopChild, stopObserver 
+
 let inflateView = function (view, parentElement, siblingView, stopChild, stopObserver, renderStyle) {
+    // debugger; 
     const start = performance.now();
 
     if (view.type == 'modal') {
         return inflateModal(view, parentElement, stopChild);
     }
 
-    let elem = document.getElementById(view.props.id);
+    let elem = document.getElementById(view.props.id); 
     let subElem = null;
     let newInflated = false;
 
@@ -1218,8 +1224,9 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
             } else if (view.props.hint) {
                 elem.placeholder = view.props.hint || "";
             }
-        } else
-            elem = document.createElement(view.elName || "div");
+        } else {
+            elem = document.createElement(view.elName || "div"); // create the element here 
+        }
 
         /* Tooltip */
         if (
@@ -1255,8 +1262,10 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
         }
         /* Tooltip End */
 
+
         newInflated = true;
 
+        // attach the element to the dom 
         if (parentElement) {
             let siblingElement = siblingView ? document.getElementById(siblingView.props.id) : null;
 
@@ -1282,6 +1291,7 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
             }
         }
 
+        // appened attributes, style to the elemenent 
         setAttributes(view.type, elem, view.props, true);
 
         /*if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
@@ -1348,7 +1358,6 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
                 elem.setAttribute('has_render', true);
             }
         }
-
         cb(elem, view);
     }
 

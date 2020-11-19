@@ -173,11 +173,11 @@ function moveView(id, index) {
 }
 
 function addViewToParent(id, view, index, cb, replace) {
-  let parentElem = document.getElementById(id)
+  let parentElement = document.getElementById(id)
   let parentView = window.__VIEWS[id]
   let siblingView = null
 
-  if(!parentElem || !parentView)
+  if(!parentElement || !parentView)
     return
 
   parentView.children.splice(index, 0, view)
@@ -187,7 +187,34 @@ function addViewToParent(id, view, index, cb, replace) {
   else
     siblingView = parentView.children[index-1]
   
-  inflateView(view, parentElem, siblingView)
+  var elem = inflateView(view, null, siblingView) // pass parent element as null, so that the element created doesn't immediately get attached to the DOM
+  // debugger; 
+  var subElem = null;  // this basically is being used for label property 
+
+  if (parentElement) {
+    let siblingElement = siblingView ? document.getElementById(siblingView.props.id) : null;
+
+    if (siblingElement && siblingElement != undefined) {
+        if (parentElement == siblingElement) { // Prepend
+            if (subElem) {
+                parentElement.insertBefore(subElem, parentElement.childNodes[0]);
+            }
+            parentElement.insertBefore(elem, parentElement.childNodes[0]);
+        } else { // Insert in specified position
+            let nextSiblingElement = siblingElement.nextSibling;
+
+            parentElement.insertBefore(elem, nextSiblingElement);
+            if (subElem) {
+                parentElement.insertBefore(subElem, nextSiblingElement);
+            }
+        }
+    } else {
+        parentElement.appendChild(elem);
+        if (subElem) {
+            parentElement.appendChild(subElem);
+        }
+    }
+  }
   
   if (cb)
     window.callUICallback(cb)
