@@ -629,6 +629,14 @@ var map = {
     fnName: 'setTypeface',
     inVokedIn: 'VIEW',
   },
+  "font" : {
+    values: [{
+      type: 's',
+    }],
+    dontMap: 'true',
+    fnName: 'setTypeface',
+    inVokedIn: 'VIEW',
+  },
   "textAllCaps": {
     values: [{
       type: 'b',

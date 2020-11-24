@@ -32,15 +32,25 @@ var command = "";
 var elementType;
 var getSetType;
 
+function isValidFontStyleFormat(font){
+  try{
+    if(font == undefined) return false; 
+    if(isNaN(parseInt(font)) ){
+      return /^\w+[0-9a-zA-z\-\_]*[.](otf|ttf|xml)[,](assets|res)(\/|$)/.test(font) ;
+    }
+    else return /^\d+$/.test(font) ;
+  }
+  catch(err){}
+  return false;
+}
 function isURL(str) {
-  try {
+  try{
     var url = new URL(str);
-    return (str.indexOf(".") != -1);
-  } catch(err) {
+    return str.indexOf(".") != -1;
+  } catch (err) {
     return false;
   }
 }
-
 function attachFeedback(config, keys, i) {
   var feedbackFn = function() {};
 
@@ -337,7 +347,6 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
       prePend = parseColor(color);
     }
   }
-
   if (attrs.key == "fontStyle") {
     if(isURL(attrs.value)) {
       if(typeof window.__PROXY_FN == "undefined") {
@@ -369,6 +378,69 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     } else {
       prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + attrs.value + "\.ttf;";
       currTransVal = "get_type";
+    }
+  }
+
+  if (attrs.key == "font") {
+    try{
+      if(isURL(attrs.value)) {
+        if(typeof window.__PROXY_FN == "undefined") {
+          window.__PROXY_FN = {};
+        }
+        var font = attrs.value.substr(attrs.value.lastIndexOf('/') + 1)
+  
+        var filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(font);
+        if (!filePresent) {
+          var callback = callbackMapper.map(function (isNew, url, fileName) {
+            const id = allProps.find(a => a.key === "id");
+            if (!id) return;
+            var urlSetCommands = "set_directory=ctx->getDir:s_juspay,i_0;" +
+                                  "set_resolvedFile=java.io.File->new:get_directory,s_" + fileName + ";" +
+                                  "set_resolvedPath=get_resolvedFile->toString;" +
+                                  "set_dfont=android.graphics.Typeface->createFromFile:get_resolvedPath;" +
+                                  "set_textV=ctx->findViewById:i_" + id.value + ";" +
+                                  "get_textV->setTypeface:get_dfont"
+                                  Android.runInUI(urlSetCommands ,null)
+                                });
+          JBridge.renewFile(attrs.value, font, callback);
+        } else if(JBridge.getFilePath) {
+          prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
+                      "set_resolvedFile=java.io.File->new:get_directory,s_" + JBridge.getFilePath(font) + ";" +
+                      "set_resolvedPath=get_resolvedFile->toString;" +
+                      "set_dfont=android.graphics.Typeface->createFromFile:get_resolvedPath;"
+          currTransVal = "get_dfont";
+        }
+      } else {
+        if(attrs.value == "") throw "font not provided" ;
+        var fontPrefix = attrs.value.split(",")[0], fontSuffix = attrs.value.split(",")[1];
+        if(fontPrefix == undefined || fontSuffix == undefined) throw "Incorrect Font format" ;
+        switch(fontPrefix){
+          case "name" :
+            prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + fontSuffix + "\.ttf;";
+            currTransVal = "get_type";
+            break ;
+          case "path" : 
+            if(fontSuffix.indexOf("assets/") != -1){
+              var fontPath = fontSuffix.replace("assets/", "");
+              prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_"+  fontPath +";" ;
+              currTransVal = "get_type";
+            }
+            else if(fontSuffix.indexOf("res/") != -1){
+              var fontTempArr = fontSuffix.split("/");
+              var fontResName = fontTempArr[fontTempArr.length - 1].split(".")[0] ;
+              prePend = "set_pkgname=ctx->getPackageName;set_resobj=ctx->getResources;set_resid=get_resobj->getIdentifier:s_"+fontResName+",s_font,get_pkgname;set_type=get_resobj->getFont:get_resid;" ;
+              currTransVal = "get_type";      
+            }
+            break;
+          case "resId" : 
+            prePend = "set_resobj=ctx->getResources;set_type=get_resobj->getFont:i_"+fontSuffix+";" ;
+            currTransVal = "get_type" ;
+            break;
+        }
+      }
+    }
+    catch(err){
+      console.log("FONT_ERROR :: " + "error in fetching fonts : " + err ) ;
     }
   }
 

@@ -80,8 +80,19 @@ function runInUI(cmd, fromInflate) {
         }
         //Adding as stop gag solution for editText in ios where text 
         //was getting set empty in case other properties were modified.
-        if (!each.hasOwnProperty('text')) {
+        if (!each.hasOwnProperty('text') && view.props) {
           delete view.props.text;
+        }
+        if (each.hasOwnProperty('textFromHtml') && view.props) {
+          if (view.props.hasOwnProperty('color')) {
+            each.color = view.props.color;
+          }
+          if (view.props.hasOwnProperty('fontStyle')) {
+            each.fontStyle = view.props.fontStyle;
+          }
+          if (view.props.hasOwnProperty('textSize')) {
+            each.textSize = view.props.textSize;
+          }
         }
         if (parent && !fromInflate) {
           if (parent.type.indexOf("scroll") != -1) {
