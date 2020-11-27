@@ -539,7 +539,7 @@ function separatorInputKeyDownHandler(ev){
                 input.focus();
                 input.selectionStart = cursorPosition;
                 input.selectionEnd = cursorPosition;
-                console.log("formattedString----", formattedString);
+                // console.log("formattedString----", formattedString);
             } else {
                 input.oldValidValue = finalData;
             }
@@ -548,7 +548,10 @@ function separatorInputKeyDownHandler(ev){
         console.error(err);
     }
 }
+
+// what is first render?? 
 function setAttributes(type, elem, props, firstRender) {
+    // console.log("set Attributes -- props",props); 
     if (type == 'modal') {
         setModalAttributes(elem, props, firstRender);
         return;
@@ -578,7 +581,6 @@ function setAttributes(type, elem, props, firstRender) {
                 elem.style.width = props.width + 'px';
         }
     }
-
     if (props.hasOwnProperty('height')) {
         if (props.height == 'match_parent') {
             elem.style.height = '100%';
@@ -1128,16 +1130,30 @@ window.inflateTimings = {
 // Creates the DOM element if it has not been already inflated
 // View: Object of ReactDOM, {type, props, children}
 // parentElement: DOM Object
-let inflateView = function (view, parentElement, siblingView, stopChild, stopObserver, renderStyle) {
-    const start = performance.now();
 
-    if (view.type == 'modal') {
+let inflateView = function (view, parentElement, siblingView, stopChild, stopObserver, renderStyle) {
+    // debugger; 
+
+    // if (view.hasOwnProperty('children') && view.children.length > 0) {
+    //     for (let i = 0; i < view.children.length; i++) {
+    //         if (view.children[i]) {
+    //             elem = document.createElement(view.elName || "div"); 
+    //             parentElement.appendChild(inflateView(view.children[i], elem)); 
+    //         }
+    //     }
+    // }
+
+
+
+    // const start = performance.now();
+
+    if (view.type == 'modal') { // need to test it out too 
         return inflateModal(view, parentElement, stopChild);
     }
 
-    let elem = document.getElementById(view.props.id);
-    let subElem = null;
-    let newInflated = false;
+    let elem = document.getElementById(view.props.id); // when is this true?? 
+    let subElem = null; //  this is being used only for lable property 
+    let newInflated = false; // new inflated -- no idea 
 
     if (view.props.x == "NaN" || view.props.y == "NaN") {
         view = handleWrapContent(view, parentElement)
@@ -1218,8 +1234,9 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
             } else if (view.props.hint) {
                 elem.placeholder = view.props.hint || "";
             }
-        } else
-            elem = document.createElement(view.elName || "div");
+        } else {
+            elem = document.createElement(view.elName || "div"); // create the element here 
+        }
 
         /* Tooltip */
         if (
@@ -1255,33 +1272,46 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
         }
         /* Tooltip End */
 
+
         newInflated = true;
 
-        if (parentElement) {
-            let siblingElement = siblingView ? document.getElementById(siblingView.props.id) : null;
+        // attach the element to the dom 
+        // debugger; 
+        // if (parentElement) {
+        //     let siblingElement = siblingView ? document.getElementById(siblingView.props.id) : null;
 
-            if (siblingElement && siblingElement != undefined) {
-                if (parentElement == siblingElement) { // Prepend
-                    if (subElem) {
-                        parentElement.insertBefore(subElem, parentElement.childNodes[0]);
-                    }
-                    parentElement.insertBefore(elem, parentElement.childNodes[0]);
-                } else { // Insert in specified position
-                    let nextSiblingElement = siblingElement.nextSibling;
+        //     if (siblingElement && siblingElement != undefined) {
+        //         // console.log("sibling element exists! this should never happen!"); 
+        //         if (parentElement == siblingElement) { // Prepend
+        //             if (subElem) {
+        //                 parentElement.insertBefore(subElem, parentElement.childNodes[0]);
+        //             }
+        //             parentElement.insertBefore(elem, parentElement.childNodes[0]);
+        //         } else { // Insert in specified position
+        //             let nextSiblingElement = siblingElement.nextSibling;
 
-                    parentElement.insertBefore(elem, nextSiblingElement);
-                    if (subElem) {
-                        parentElement.insertBefore(subElem, nextSiblingElement);
-                    }
-                }
-            } else {
-                parentElement.appendChild(elem);
-                if (subElem) {
-                    parentElement.appendChild(subElem);
-                }
+        //             parentElement.insertBefore(elem, nextSiblingElement);
+        //             if (subElem) {
+        //                 parentElement.insertBefore(subElem, nextSiblingElement);
+        //             }
+        //         }
+        //     } else {
+        //         // console.log("sibling element doesn't exists! this should always happen!"); 
+        //         parentElement.appendChild(elem);
+        //         if (subElem) {
+        //             parentElement.appendChild(subElem);
+        //         }
+        //     }
+        // }
+
+        if(parentElement){
+            parentElement.appendChild(elem);
+            if (subElem) { // TODO: subElement should be removed 
+                parentElement.appendChild(subElem);
             }
         }
 
+        // appened attributes, nodes & style to the elemenent 
         setAttributes(view.type, elem, view.props, true);
 
         /*if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
@@ -1321,12 +1351,30 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
         }
     }
 
-    if (!stopChild)
-        computeChildDimens(view);
+    // ------ BENCHMARK COMPUTE CHILD DIMENS 
+    // if (!window.hasOwnProperty('computeChildTime')) window.computeChildTime = {}
+    // if (!stopChild){
+    //     var timeit = performance.now(); 
+    //     computeChildDimens(view); // iterates over the childern ( just first level, no nested iteration) // takes 54ms
+    //     var timeit2 = performance.now(); 
+    //     var cx = window.computeChildTime["time"]; 
+    //     // console.log("cx is",cx); 
+    //     if ( (cx || cx == 0) && cx >= 0){
+    //         // console.log("cx is true",cx); 
+    //         window.computeChildTime["time"]+=(timeit2-timeit); 
+    //     }
+    //     else{
+    //         // console.log("cx is false",cx); 
+    //         window.computeChildTime["time"] = 0; 
+    //     }
+    // }
 
-    setComputedStyles(elem, view.props);
-    setAnimationStyles(elem, view.props);
+    if(!stopChild) computeChildDimens(view); 
 
+    setComputedStyles(elem, view.props); // more if & else, should be negligible impact on perf 
+    setAnimationStyles(elem, view.props); // more if & else 
+
+    // todo fix this! if/else is not required, sibling view is irrelevant 
     if (!stopChild) {
         if (view.hasOwnProperty('children') && view.children.length > 0) {
             for (let i = 0; i < view.children.length; i++) {
@@ -1334,28 +1382,24 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
                     if (i != 0)
                         inflateView(view.children[i], elem, view.children[i - 1], stopChild, stopObserver, renderStyle);
                     else
-                        inflateView(view.children[i], elem, view, stopChild, stopObserver, renderStyle);
+                        inflateView(view.children[i], elem, view, stopChild, stopObserver, renderStyle); // (view, parentElement, siblingView, stopChild, stopObserver, renderStyle)
                 }
             }
         }
     }
 
     if (newInflated) {
-        if (view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function") {
+        if (view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function") { // mutation observers are expensive 
             if (!stopObserver) {
                 // We should run observer for the element
                 observer(elem);
                 elem.setAttribute('has_render', true);
             }
         }
-
-        cb(elem, view);
+        cb(elem, view); // this is absolutely nothing 
     }
 
-    const end = performance.now();
-
-    window.inflateTimings[view.props.id] = end - start
-    window.inflateTimings.lastUpdatedAt = end
+    // const end = performance.now();
 
     return elem;
 };
