@@ -60,6 +60,10 @@ function sendAnalytics(data) {
   }
 }
 
+function utoa(data) {
+  return btoa(unescape(encodeURIComponent(data)));
+}
+
 module.exports = {
   getSymbol: function(type) {
     switch (type) {
@@ -129,7 +133,7 @@ module.exports = {
       window.callUICallback(
         callback,
         "success",
-        btoa(JSON.stringify(json)),
+        utoa(JSON.stringify(json)),
         resp.status
       );
     } catch (err) {
