@@ -172,25 +172,31 @@ function moveView(id, index) {
   })
 }
 
+
+// Android.addViewToParent(rootId, dom_all, length (window.__ROOTSCREEN.idSet.child) - 1 , callback, null); -- call to this function 
 function addViewToParent(id, view, index, cb, replace) {
-  let parentElem = document.getElementById(id)
+  // debugger; 
+  let parentElement = document.getElementById(id)
   let parentView = window.__VIEWS[id]
   let siblingView = null
 
-  if(!parentElem || !parentView)
+  if(!parentElement || !parentView)
     return
 
   parentView.children.splice(index, 0, view)
   
+  // siblingView is redundant, todo :: refractor code 
   if(index == 0)
     siblingView = parentView
   else
     siblingView = parentView.children[index-1]
   
-  inflateView(view, parentElem, siblingView)
+  var elem = inflateView(view, null, siblingView) // pass parent element as null, so that the element created doesn't immediately get attached to the DOM
+  parentElement.appendChild(elem); // attach the elem to live dom once the elem has been constructeed 
+
   
   if (cb)
-    window.callUICallback(cb)
+    window.callUICallback(cb) // callback defined by source i.e. hyper-widget, not required since globalEvents exist in prestoDOM 
 }
 
 function getChildModalViews(view) {
