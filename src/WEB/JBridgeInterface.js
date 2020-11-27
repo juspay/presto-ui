@@ -112,7 +112,7 @@ module.exports = {
     }
   },
 
-  callAPI: async function callAPI(method, url, data, headers, type, callback) {
+  callAPI: async function callAPI(method, url, data, headers, shouldEncodeToFormData, isSSLPinnedURL, callback) {
     headers = parseJson(headers);
     data = parseJson(data);
     let something = false;
@@ -182,7 +182,7 @@ module.exports = {
   },
 
   getResourceByName: function getResourceByName(tag) {
-    return "2.0";
+    return "2.0.0";
   },
 
   getSessionAttribute: function getSessionAttribute(v1, v2) {
@@ -315,6 +315,23 @@ module.exports = {
   runInJuspayBrowser: function runInJuspayBrowser(eventName, arg2, arg3) {
     //
   },
+  loadFileInDUI: function (fileName) {
+    console.log("coming here..");
+    return fileName;
+  },
+  setSessionAttribute: function() {
+
+  },
+  getMd5: function() {
+    return ""
+  },
+  setSessionDetails: function(key, value) {
+    window.session = window.session || {};
+    window.session[key] = value;
+  },
+  getSessionDetails: function() {
+    return JSON.stringify(window.session || {});
+  },
   /**
    * @method setFCMToken
    * @description Sets token for GCM notifications
@@ -332,5 +349,9 @@ module.exports = {
    */
   requestLocation: function requestLocation() {
     return;
+  },
+
+  doesSimplExist: function doesSimplExist () {
+    return "false";
   }
 };
