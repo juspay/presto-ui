@@ -409,6 +409,19 @@ function recompute() {
   Render(rootview, null);
 }
 
+function getNewID() {
+  window.JOS_PRESTO_ID = window.JOS_PRESTO_ID || 1;
+  return window.JOS_PRESTO_ID++;
+}
+
+function getWindow() {
+  return window;
+}
+
+function getDocument() {
+  return window.document;
+}
+
 module.exports = {
   getScreenDimensions: getScreenDimensions,
 
@@ -428,5 +441,11 @@ module.exports = {
 
   replaceView: replaceView,
 
-  recompute: recompute
+  recompute: recompute,
+
+  getNewID: getNewID,
+
+  getWindow: getWindow,
+
+  getDocument: getDocument
 };

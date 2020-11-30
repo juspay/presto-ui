@@ -94,6 +94,10 @@ function computeRelativeLayout(view) {
       props.fromLeft = 0;
       props.fromRight = 'auto';
     }
+    if(props.hasOwnProperty('alignParentRight') && props.alignParentRight){
+      props.fromLeft = 'auto';
+      props.fromRight = 0;
+    }
 
     if(props.hasOwnProperty('alignParentBottom') && props.alignParentBottom){
       props.fromTop = 'auto';

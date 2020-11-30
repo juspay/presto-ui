@@ -57,6 +57,7 @@ function createTextElement(elem, config) {
         article.innerText = config.hint
 
     article.style.wordBreak = "break-word"
+    article.style.display = "inline"
 
     if (config.letterSpacing)
         elem["style"]["letter-spacing"] = config.letterSpacing
@@ -90,6 +91,7 @@ function createTextElement2(elem, config) {
         article.innerText = config.hint
 
     article.style.wordBreak = "break-word"
+    article.style.display = "inline"
 
     if (config.letterSpacing)
         elem["style"]["letter-spacing"] = config.letterSpacing
@@ -156,6 +158,10 @@ function setGravityStylesForRow(elem, props) {
             elem.style['align-items'] = 'flex-start';
             elem.style['justify-content'] = 'flex-end';
             break;
+        case 'stretch':
+            elem.style['align-items'] = 'stretch';
+            elem.style['justify-content'] = 'flex-start';
+            break; 
         default:
             elem.style['align-items'] = 'flex-start';
             elem.style['justify-content'] = 'flex-start';
@@ -192,6 +198,10 @@ function setGravityStylesForColumn(elem, props) {
             elem.style['align-items'] = 'flex-end';
             elem.style['justify-content'] = 'flex-start';
             break;
+        case 'stretch':
+            elem.style['align-items'] = 'stretch';
+            elem.style['justify-content'] = 'flex-start';
+            break; 
         default:
             elem.style['align-items'] = 'flex-start';
             elem.style['justify-content'] = 'flex-start';
@@ -337,7 +347,7 @@ function setComputedStyles(elem, props) {
             if (activeDimen == 'w') {
                 //elem.style.width = 'auto';
             } else {
-                // elem.style.height = 'auto';
+                elem.style.height = 'auto';
             }
         } else {
             elem.style.flex = 'none';
@@ -379,6 +389,81 @@ function setComputedStyles(elem, props) {
         }
     }
     /* Computed Styles End */
+}
+function separatorInputKeyDownHandlerNew(ev){
+    ev.stopPropagation();
+    try {
+        var inputId = ev.target.id;
+        var inputType = ev.inputType;
+        var input = document.getElementById(inputId);
+        var oldValidValue = "";
+        if(input.oldValidValue){
+            oldValidValue = input.oldValidValue;
+        }
+        if(input.value.length===0){
+            input.oldValidValue = input.value;
+            return;
+        }
+        var dataPattern = input.getAttribute("data-pattern");
+        if (dataPattern){
+          var data = dataPattern.split(',');
+          var length = parseInt(data.pop());
+          var regexPattern = new RegExp(data.join(''));
+          var selectionStart = input.selectionStart;
+          var selectionEnd = input.selectionEnd;
+          var separator = input.getAttribute("separator");
+          var separatorRepeat = parseInt(input.getAttribute("separatorRepeat"));
+          var value = input.value.replace(/[^a-zA-Z0-9@.-]/g, "");
+          //If existing value itself greater than equal to max length
+          if (length) {
+            input.setAttribute("maxlength", length);
+          }
+          // If code doesn't matches regex pattern
+          if (!regexPattern.test(value)) {
+            input.value = oldValidValue;
+            input.selectionStart = selectionStart- (selectionEnd-selectionStart)-1;
+            input.selectionEnd = selectionEnd- (selectionEnd - selectionStart)-1;
+            return;
+          }
+          //Insert separator 
+          if(separator && separatorRepeat){
+            ev.preventDefault();
+            var formattedString = "";
+            for(var i =0;i<value.length;i++){
+              var element = value[i];
+              formattedString += element;
+              var factor = 0;
+              if (formattedString.length && formattedString.replace(/[^a-zA-Z0-9@.-]/g, "").length % (separatorRepeat + factor) == 0) {
+                  formattedString += separator;
+              }
+            }
+            if (formattedString[length] == separator) {
+              formattedString = formattedString.substring(0, formattedString.length - 1);
+            }
+            input.value = formattedString;
+            if(inputType == "deleteContentBackward"){
+              let cursorPosition = selectionStart;
+              if ((cursorPosition % (separatorRepeat + 1) ) === 0) {
+                  if(input.oldValidValue.length < formattedString.length){
+                      cursorPosition += 1
+                  } else {
+                      cursorPosition -= 1
+                  }
+              }
+              if(cursorPosition<0){
+                  cursorPosition = 0;
+              }
+              input.oldValidValue = formattedString;
+              input.focus();
+              input.selectionStart = cursorPosition;
+              input.selectionEnd = cursorPosition;
+            }
+          }
+          input.oldValidValue = input.value;
+        }
+    } catch(err){
+        console.error(err);
+    }
 }
 
 function separatorInputKeyDownHandler(ev){
@@ -451,6 +536,7 @@ function separatorInputKeyDownHandler(ev){
                     cursorPosition = 0;
                 }
                 input.oldValidValue = formattedString;
+                input.focus();
                 input.selectionStart = cursorPosition;
                 input.selectionEnd = cursorPosition;
                 console.log("formattedString----", formattedString);
@@ -583,6 +669,12 @@ function setAttributes(type, elem, props, firstRender) {
     if (props.hasOwnProperty('scrollBarY'))
         scrollBarY = props.scrollBarY;
 
+    if (props.hasOwnProperty('overFlowVisible')) {
+        if (props.overFlowVisible) {
+            elem.style.overflow = "visible"
+        }
+    }
+
     /* Render type specific styles */
     if (type == 'linearLayout') {
         elem.style["box-sizing"] = "border-box";
@@ -665,7 +757,7 @@ function setAttributes(type, elem, props, firstRender) {
                 let exts = ["jpeg", "jpg", "png", "bmp", "svg", "gif"]
                 ext = ext.toLowerCase()
 
-                if(!imageUrl.includes("data:image/svg+xml") && !exts.includes(ext)) {
+                if(!imageUrl.includes("data:image/") && !exts.includes(ext)) {
                     imageUrl += '.png'
                 }
             }
@@ -694,6 +786,10 @@ function setAttributes(type, elem, props, firstRender) {
             for (let innerKey in props.style) {
                 if (innerKey == "className") {
                     elem.className += " " + props.style[innerKey];
+                } else if (props.buttonClickOverlay !== undefined && ["background", "background-image"].includes(innerKey)) {
+                    elem.style[innerKey] = `linear-gradient(to right, rgba(0,0,0,${props.buttonClickOverlay}) 50%, transparent 50%), ` + props.style[innerKey];
+                    elem.style["background-position"] = "right bottom";
+                    elem.style["background-size"] = "200% 100%, 100% 100%";
                 } else
                     elem.style[innerKey] = props.style[innerKey];
             }
@@ -711,7 +807,14 @@ function setAttributes(type, elem, props, firstRender) {
             JSON.parse(props[key]).forEach(function (obj) {
                 elem.classList.add(obj);
             });
-        } else if (props[key] && typeof props[key] == "function") {
+        }
+        else if (key == "removeClassList"){
+                        JSON.parse(props[key]).forEach(function (obj) {
+                           elem.classList.remove(obj);
+                       });
+                   }
+        else if (props[key] && typeof props[key] == "function") {
+
             var eventType = key.substring(2, key.length).toLowerCase();
             var elemCB = props[key];
             elem.style.userSelect = 'none';
@@ -781,19 +884,23 @@ function setAttributes(type, elem, props, firstRender) {
     /* Events */
     if (firstRender) {
         if (type == "editText" && elem.tagName.toLowerCase() == "input") {
-            if (props.autofocus) {
+            var isIPhone = (navigator.userAgent.indexOf("iPhone") !== -1)
+            if (props.autofocus && !isIPhone) {
                 elem.focus()
             }
-            elem.addEventListener('input', separatorInputKeyDownHandler);
+            if(window.preponeSpace){
+                elem.addEventListener('input', separatorInputKeyDownHandlerNew);
+            } else {
+                elem.addEventListener('input', separatorInputKeyDownHandler);
+            }
         }
     
 
-        let events = ['onClick', 'onEnterPressedEvent', 'onChange', 'onMouseDown', 'onMouseUp', 'onMouseEnter', 'onMouseOver', 'onMouseMove', 'onMouseOut', 'onMouseLeave', 'onFocus']
+        let events = ['onClick', 'onEnterPressedEvent', 'onChange', 'onMouseDown', 'onMouseUp', 'onMouseEnter', 'onMouseOver', 'onMouseMove', 'onMouseOut', 'onMouseLeave', 'onFocus', 'onPaste']
 
         for (let i = 0; i < events.length; i++) {
             let key = events[i]
             let eventType = key.substring(2, key.length).toLowerCase()
-
             if (props.hasOwnProperty(key) && typeof props[key] == "function") {
                 const callback = props[key]
                 if (key == "onEnterPressedEvent") {
@@ -806,7 +913,7 @@ function setAttributes(type, elem, props, firstRender) {
                     })
                 }
                 if (eventType == "change") {
-                    elem.addEventListener('keyup', (e) => {
+                    elem.addEventListener('input', (e) => {
                         callback(e.target.value)
                     })
                 } else if (eventType == "focus"){
@@ -1156,9 +1263,9 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
             if (siblingElement && siblingElement != undefined) {
                 if (parentElement == siblingElement) { // Prepend
                     if (subElem) {
-                        parentElement.prepend(subElem);
+                        parentElement.insertBefore(subElem, parentElement.childNodes[0]);
                     }
-                    parentElement.prepend(elem);
+                    parentElement.insertBefore(elem, parentElement.childNodes[0]);
                 } else { // Insert in specified position
                     let nextSiblingElement = siblingElement.nextSibling;
 

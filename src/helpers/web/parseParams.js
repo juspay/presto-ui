@@ -76,16 +76,40 @@ function parseColors(color) {
   return rgbaColor;
 }
 
+function lookAndReplaceProp(str,match, val){
+  var output = match + "(" + val + "px)";
+  if (!str) return output; 
+  var start = str.indexOf(match); 
+  if (start >= 0){
+    var end = str.substr(start).indexOf(")"); 
+    if (end >= 0) {
+      var found = str.substr(start,end+1); 
+      return str.replace(found,output); 
+    }
+    else {
+      return str+output; 
+    }
+  } 
+  else return str+output; 
+}
+
+
 function parseLayoutProps(type, config, key) {
-  const isMobile = window.innerWidth < 700
+  const isMobile = window.innerWidth < 550
   if (typeof config[key] == "undefined" || config[key] == null) {
     delete config[key];
     return;
   }
 
   if (!config.style) {
+    var t = ""
+    var ele_id = document.getElementById(config.id)
+    if (ele_id) {
+      if (ele_id.style)
+        t = (ele_id.style.transform) ? ele_id.style.transform  : "" 
+    }
     config.style = {};
-    config.style.transform = "";
+    config.style.transform = t; 
     config.animation = {};
     config.animation.transform = "";
   }
@@ -159,9 +183,20 @@ function parseLayoutProps(type, config, key) {
   if(key == "topFixed") {
     config.style.top = config.topFixed;
   }
+  if(key == "leftFixed") {
+    config.style.left = config.leftFixed;
+  }
+  if(key == "rightFixed") {
+    config.style.right = config.rightFixed;
+  }
+
+  if(key == "zIndex") {
+    config.style["z-index"] = config.zIndex;
+  }
 
   if(key == "autofocus"){
-    if(config.autofocus){
+    var isIPhone = (navigator.userAgent.indexOf("iPhone") !== -1)
+    if(config.autofocus && !isIPhone){
       config.attributes["autofocus"] = "autofocus";  
     }
   }
@@ -280,6 +315,13 @@ function parseLayoutProps(type, config, key) {
       else if (values[2] == "b"){
         config.style.borderBottom = values[0] + "px solid " + values[1];
       }
+      else if (values[2] == "r"){
+        config.style.borderRight = values[0] + "px solid " + values[1];
+      }
+      else if (values[2] == "rb"){
+        config.style.borderBottom = values[0] + "px solid " + values[1];
+        config.style.borderRight = values[0] + "px solid " + values[1];
+      }
       else
         config.style.border = values[0] + "px " + values[1] + " " + values[2];
     }
@@ -323,7 +365,7 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "translationY") {
-    config.style.transform += "translateY(" + config[key] + "px) ";
+    config.style.transform = lookAndReplaceProp(config.style.transform,"translateY",config[key]);
   }
 
   if (key == "a_translationY") {
@@ -331,7 +373,7 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "translationX") {
-    config.style.transform += "translateX(" + config[key] + "px) ";
+    config.style.transform = lookAndReplaceProp(config.style.transform,"translateX",config[key]);
   }
 
   if (key == "a_translationX") {
@@ -452,12 +494,13 @@ function parseLayoutProps(type, config, key) {
     var inputType = "text";
     if (config.inputType == "numericPassword" || config.inputType == "password") {
       if(config.inputTypeI == 4 && isMobile){
-        inputType = "text";
+        inputType = "tel";
         config.style["-webkit-text-security"] = "disc";
         config.style["-moz-text-security"] = "disc";
         config.style["text-security"] = "disc";
       } else {
         inputType = "password"
+        config.attributes.autocomplete = "new-password"
       }
     } else if (config.inputType == "disabled") {
         config.attributes.disabled = 'disabled'
@@ -465,7 +508,11 @@ function parseLayoutProps(type, config, key) {
         inputType = "number"
     }
     if (config.separator) {
-      inputType = "text"
+      if(config.inputType == "numeric"){
+        inputType = "tel"  
+      } else {
+        inputType = "text"
+      }
     }
 
     config.attributes.type = inputType
@@ -473,6 +520,7 @@ function parseLayoutProps(type, config, key) {
 
   if (key == "rotateImage") {
     if(config.rotateImage){
+      config.style["-webkit-animation"] = "load3 4s infinite linear";
       config.style["animation-duration"] = "4s";
       config.style["animation-timing-function"] = "linear";
       config.style["animation-delay"] = "0s";
@@ -487,13 +535,18 @@ function parseLayoutProps(type, config, key) {
 
   if (key == "pattern") {
     config.attributes["data-pattern"] = config.pattern;
+    var data = config.pattern.split(',');
+    var length = parseInt(data.pop());
+    if(length>10) {length = 10;}
+    config.attributes["size"] =length;
+
   }
-  if(key == "inputTypeI"){
-    if(config.inputTypeI == 4){
-      config.attributes["inputmode"] = "numeric";
-    }
+  // if(key == "inputTypeI"){
+  //   if(config.inputTypeI == 4){
+  //     config.attributes["inputmode"] = "numeric";
+  //   }
     
-  }
+  // }
 
   if (key == "separator") {
     config.attributes["separator"] = config.separator;
@@ -505,7 +558,9 @@ function parseLayoutProps(type, config, key) {
   if (key == "myAttr") {
     config.attributes["myAttr"] = config.myAttr;
   }
-
+  if (key == "blurBackground" && config.blurBackground){
+    config.style["backdrop-filter"] = "blur(3px)";
+  }
   if (key == "shadow") {
     var shadowValues = config.shadow.split(config.shadowSeparator || ',');
     var shadowBlur = rWS(cS(shadowValues[2]));
@@ -530,6 +585,9 @@ function parseLayoutProps(type, config, key) {
 
   if (key == "clickable") {
     config.style.pointerEvents = config.clickable ? "auto" : "none";
+  }
+  if (key == "display") {
+    config.style.display = config.display
   }
 }
 
@@ -623,6 +681,7 @@ module.exports = function (type, config, getSetType) {
     parseLayoutProps(type, config, keys[i]);
   }
 
+  
   config.transition = [
     String(config.a_duration || 0) +"ms",
     "all",

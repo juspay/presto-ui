@@ -25,8 +25,18 @@
 
 var ViewPageAdapter = require("./ViewPageAdapter");
 var Renderer = require("./Render");
+var axios = require('axios')
 const qsstringify = require("qs/lib/stringify");
-
+var logs_state = {
+  session_id : '',
+  sn:''
+}
+var hasLocalStorage = true;
+try {
+  typeof window.localStorage !== undefined;
+} catch(e){
+  hasLocalStorage = false;
+}
 function parseJson(str) {
   try {
     return JSON.parse(str);
@@ -40,14 +50,18 @@ function sendAnalytics(data) {
   if (navigator.sendBeacon) {
     navigator.sendBeacon(url, JSON.stringify({ data }));
   } else {
-    try {
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", url, false); // third parameter of `false` means synchronous
-      xhr.send(JSON.stringify({data}));   
-    } catch(err) {
-      //
-    }
+    // try {
+    //   var xhr = new XMLHttpRequest();
+    //   xhr.open("POST", url, false); // third parameter of `false` means synchronous
+    //   xhr.send(JSON.stringify({data}));   
+    // } catch(err) {
+    //   //
+    // }
   }
+}
+
+function utoa(data) {
+  return btoa(unescape(encodeURIComponent(data)));
 }
 
 module.exports = {
@@ -61,7 +75,10 @@ module.exports = {
         return "symbol";
     }
   },
-
+  setLogsState : function(session,sn){
+    logs_state.session_id = session;
+    logs_state.sn = sn;
+  },
   listViewAdapter: function(id, jsx, callback, type, more) {
     let parent = document.getElementById(id);
     if (!parent) {
@@ -95,7 +112,7 @@ module.exports = {
     }
   },
 
-  callAPI: async function callAPI(method, url, data, headers, type, callback) {
+  callAPI: async function callAPI(method, url, data, headers, shouldEncodeToFormData, isSSLPinnedURL, callback) {
     headers = parseJson(headers);
     data = parseJson(data);
     let something = false;
@@ -111,12 +128,12 @@ module.exports = {
       data = undefined;
     }
     try {
-      const resp = await fetch(url, { method, body: data, headers });
-      const json = await resp.json();
+      const resp = await axios({url, method, data, headers });
+      const json = resp.data;//await resp.data.json();
       window.callUICallback(
         callback,
         "success",
-        btoa(JSON.stringify(json)),
+        utoa(JSON.stringify(json)),
         resp.status
       );
     } catch (err) {
@@ -126,11 +143,26 @@ module.exports = {
   },
 
   getFromSharedPrefs: function(key) {
-    return localStorage.getItem(key) || "__failed";
+    return hasLocalStorage?(localStorage.getItem(key) || "__failed"): "__failed";
   },
 
   setInSharedPrefs: function(key, value) {
-    localStorage.setItem(key, value);
+    if(hasLocalStorage)
+      localStorage.setItem(key, value);
+  },
+
+  getKeysInSharedPrefs: function (key) {
+    return hasLocalStorage?(localStorage.getItem(key) || "__failed"): "__failed";
+  },
+
+  setKeysInSharedPrefs: function (key, value) {
+    if(hasLocalStorage)
+      localStorage.setItem(key, value);
+  },
+
+  removeKeysInSharedPrefs: function (key) {
+    if(hasLocalStorage)
+      localStorage.removeItem(key);
   },
 
   viewPagerAdapter: function(id, jsx, tabJsx, cb) {
@@ -142,15 +174,15 @@ module.exports = {
   },
 
   getKey: function(key, defaultValue) {
-    return localStorage.getItem(key) || defaultValue;
+    return hasLocalStorage? (localStorage.getItem(key) || defaultValue): defaultValue;
   },
 
   setKey: function(key, value) {
-    return localStorage.setItem(key, value);
+    return hasLocalStorage?localStorage.setItem(key, value): value;
   },
 
   getResourceByName: function getResourceByName(tag) {
-    return -1;
+    return "2.0.0";
   },
 
   getSessionAttribute: function getSessionAttribute(v1, v2) {
@@ -170,33 +202,52 @@ module.exports = {
   },
 
   addToLogList: function addToLogList(data) {
+
+
     const newLog = JSON.parse(data);
-    const logsArr = Array.isArray(newLog) ? newLog : [newLog];
+    var logsArr = Array.isArray(newLog) ? newLog : [newLog];
+    for (var i = 0;i<logsArr.length;i++){
+      logsArr[i].session_id = logs_state.session_id;
+      logsArr[i].sn = ++ logs_state.sn;
+    }
+    // console.warn(logsArr)
+
     sendAnalytics(logsArr)
   },
   saveToLocal: function(a,b,c){
-    try{
-    window.localStorage.removeItem("defOptionType");
-    window.localStorage.removeItem("defOption");
-    window.localStorage.removeItem("merchant");
+    if (hasLocalStorage){
+      try{
+      window.localStorage.removeItem(c+":"+"defOptionType");
+      window.localStorage.removeItem(c+":"+"defOption");
+      }
+      catch(e){}
+      window.localStorage.setItem(c+":"+'defOptionType', a);
+      window.localStorage.setItem(c+":"+'defOption', JSON.stringify(b));
     }
-    catch(e){}
-    window.localStorage.setItem('defOptionType', a);
-    window.localStorage.setItem('defOption', JSON.stringify(b));
-    window.localStorage.setItem('merchant', JSON.stringify(c));
 
   },
-  deleteFromLocal: function(){},
+  deleteFromLocal: function(c){
+
+    if (hasLocalStorage){
+      try{
+      window.localStorage.removeItem(c+":"+"defOptionType");
+      window.localStorage.removeItem(c+":"+"defOption");
+      }
+      catch(e){}
+    }
+  },
   loadFromLocal: function(key){
-    if (window.localStorage.getItem(key)==undefined)
-      return ""
-    try{
-    const a =  JSON.parse(window.localStorage.getItem(key));
-    if (a==undefined)
-      return ""
-    return a
-    } catch(e){
-      return window.localStorage.getItem(key)
+    if (hasLocalStorage){
+      if (window.localStorage.getItem(key)==undefined)
+        return ""
+      try{
+      const a =  JSON.parse(window.localStorage.getItem(key));
+      if (a==undefined)
+        return ""
+      return a
+      } catch(e){
+        return window.localStorage.getItem(key)
+      }
     }
   },
   postLogs(endPoint, logs) {
@@ -263,5 +314,44 @@ module.exports = {
   },
   runInJuspayBrowser: function runInJuspayBrowser(eventName, arg2, arg3) {
     //
+  },
+  loadFileInDUI: function (fileName) {
+    console.log("coming here..");
+    return fileName;
+  },
+  setSessionAttribute: function() {
+
+  },
+  getMd5: function() {
+    return ""
+  },
+  setSessionDetails: function(key, value) {
+    window.session = window.session || {};
+    window.session[key] = value;
+  },
+  getSessionDetails: function() {
+    return JSON.stringify(window.session || {});
+  },
+  /**
+   * @method setFCMToken
+   * @description Sets token for GCM notifications
+   * 
+   * Note: Only for Android/iOS. This is just an empty stub in web
+   */
+  setFCMToken: function setFCMToken () {
+    return;
+  },
+  /**
+   * @method requestLocation
+   * @description Requests permission to access location
+   * 
+   * Note: Only for Android/iOS. This is just an empty stub in web
+   */
+  requestLocation: function requestLocation() {
+    return;
+  },
+
+  doesSimplExist: function doesSimplExist () {
+    return "false";
   }
 };
