@@ -113,6 +113,7 @@ module.exports = {
   },
 
   callAPI: async function callAPI(method, url, data, headers, shouldEncodeToFormData, isSSLPinnedURL, callback) {
+    callback = callback || isSSLPinnedURL; // backward comaptibility
     headers = parseJson(headers);
     data = parseJson(data);
     let something = false;
