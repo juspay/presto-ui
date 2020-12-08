@@ -1277,39 +1277,39 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
 
         // attach the element to the dom 
         // debugger; 
-        // if (parentElement) {
-        //     let siblingElement = siblingView ? document.getElementById(siblingView.props.id) : null;
+        if (parentElement) {
+            let siblingElement = siblingView ? document.getElementById(siblingView.props.id) : null;
 
-        //     if (siblingElement && siblingElement != undefined) {
-        //         // console.log("sibling element exists! this should never happen!"); 
-        //         if (parentElement == siblingElement) { // Prepend
-        //             if (subElem) {
-        //                 parentElement.insertBefore(subElem, parentElement.childNodes[0]);
-        //             }
-        //             parentElement.insertBefore(elem, parentElement.childNodes[0]);
-        //         } else { // Insert in specified position
-        //             let nextSiblingElement = siblingElement.nextSibling;
+            if (siblingElement && siblingElement != undefined) {
+                // console.log("sibling element exists! this should never happen!"); 
+                if (parentElement == siblingElement) { // Prepend
+                    if (subElem) {
+                        parentElement.insertBefore(subElem, parentElement.childNodes[0]);
+                    }
+                    parentElement.insertBefore(elem, parentElement.childNodes[0]);
+                } else { // Insert in specified position
+                    let nextSiblingElement = siblingElement.nextSibling;
 
-        //             parentElement.insertBefore(elem, nextSiblingElement);
-        //             if (subElem) {
-        //                 parentElement.insertBefore(subElem, nextSiblingElement);
-        //             }
-        //         }
-        //     } else {
-        //         // console.log("sibling element doesn't exists! this should always happen!"); 
-        //         parentElement.appendChild(elem);
-        //         if (subElem) {
-        //             parentElement.appendChild(subElem);
-        //         }
-        //     }
-        // }
-
-        if(parentElement){
-            parentElement.appendChild(elem);
-            if (subElem) { // TODO: subElement should be removed 
-                parentElement.appendChild(subElem);
+                    parentElement.insertBefore(elem, nextSiblingElement);
+                    if (subElem) {
+                        parentElement.insertBefore(subElem, nextSiblingElement);
+                    }
+                }
+            } else {
+                // console.log("sibling element doesn't exists! this should always happen!"); 
+                parentElement.appendChild(elem);
+                if (subElem) {
+                    parentElement.appendChild(subElem);
+                }
             }
         }
+
+        // if(parentElement){
+        //     parentElement.appendChild(elem);
+        //     if (subElem) { // TODO: subElement should be removed 
+        //         parentElement.appendChild(subElem);
+        //     }
+        // }
 
         // appened attributes, nodes & style to the elemenent 
         setAttributes(view.type, elem, view.props, true);
