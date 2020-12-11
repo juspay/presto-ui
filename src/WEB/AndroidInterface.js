@@ -190,9 +190,38 @@ function addViewToParent(id, view, index, cb, replace) {
     siblingView = parentView
   else
     siblingView = parentView.children[index-1]
+
   
   var elem = inflateView(view, null, siblingView) // pass parent element as null, so that the element created doesn't immediately get attached to the DOM
-  parentElement.appendChild(elem); // attach the elem to live dom once the elem has been constructeed 
+  var subElem = null;  // this basically is being used for label property 
+
+  if (parentElement) {
+    let siblingElement = siblingView ? document.getElementById(siblingView.props.id) : null;
+
+    if (siblingElement && siblingElement != undefined) {
+        if (parentElement == siblingElement) { // Prepend
+            if (subElem) {
+                parentElement.insertBefore(subElem, parentElement.childNodes[0]);
+            }
+            parentElement.insertBefore(elem, parentElement.childNodes[0]);
+        } else { // Insert in specified position
+            let nextSiblingElement = siblingElement.nextSibling;
+
+            parentElement.insertBefore(elem, nextSiblingElement);
+            if (subElem) {
+                parentElement.insertBefore(subElem, nextSiblingElement);
+            }
+        }
+    } else {
+        parentElement.appendChild(elem);
+        if (subElem) {
+            parentElement.appendChild(subElem);
+        }
+    }
+  }
+  
+
+  // parentElement.appendChild(elem); // attach the elem to live dom once the elem has been constructeed 
 
   
   if (cb)
