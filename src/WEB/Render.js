@@ -549,9 +549,7 @@ function separatorInputKeyDownHandler(ev){
     }
 }
 
-// what is first render?? 
 function setAttributes(type, elem, props, firstRender) {
-    // console.log("set Attributes -- props",props); 
     if (type == 'modal') {
         setModalAttributes(elem, props, firstRender);
         return;
