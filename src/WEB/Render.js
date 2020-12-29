@@ -1128,32 +1128,17 @@ window.inflateTimings = {
 }
 
 // Creates the DOM element if it has not been already inflated
-// View: Object of ReactDOM, {type, props, children}
+// View: Object similar to ReactDOM struct, {type, props, children}
 // parentElement: DOM Object
-
 let inflateView = function (view, parentElement, siblingView, stopChild, stopObserver, renderStyle) {
-    // debugger; 
 
-    // if (view.hasOwnProperty('children') && view.children.length > 0) {
-    //     for (let i = 0; i < view.children.length; i++) {
-    //         if (view.children[i]) {
-    //             elem = document.createElement(view.elName || "div"); 
-    //             parentElement.appendChild(inflateView(view.children[i], elem)); 
-    //         }
-    //     }
-    // }
-
-
-
-    // const start = performance.now();
-
-    if (view.type == 'modal') { // need to test it out too 
+    if (view.type == 'modal') { 
         return inflateModal(view, parentElement, stopChild);
     }
 
-    let elem = document.getElementById(view.props.id); // when is this true?? 
-    let subElem = null; //  this is being used only for lable property 
-    let newInflated = false; // new inflated -- no idea 
+    let elem = document.getElementById(view.props.id); 
+    let subElem = null; //  this is being used only for lablel property 
+    let newInflated = false; 
 
     if (view.props.x == "NaN" || view.props.y == "NaN") {
         view = handleWrapContent(view, parentElement)
@@ -1275,13 +1260,10 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
 
         newInflated = true;
 
-        // attach the element to the dom 
-        // debugger; 
         if (parentElement) {
             let siblingElement = siblingView ? document.getElementById(siblingView.props.id) : null;
 
             if (siblingElement && siblingElement != undefined) {
-                // console.log("sibling element exists! this should never happen!"); 
                 if (parentElement == siblingElement) { // Prepend
                     if (subElem) {
                         parentElement.insertBefore(subElem, parentElement.childNodes[0]);
@@ -1296,20 +1278,12 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
                     }
                 }
             } else {
-                // console.log("sibling element doesn't exists! this should always happen!"); 
                 parentElement.appendChild(elem);
                 if (subElem) {
                     parentElement.appendChild(subElem);
                 }
             }
         }
-
-        // if(parentElement){
-        //     parentElement.appendChild(elem);
-        //     if (subElem) { // TODO: subElement should be removed 
-        //         parentElement.appendChild(subElem);
-        //     }
-        // }
 
         // appened attributes, nodes & style to the elemenent 
         setAttributes(view.type, elem, view.props, true);
@@ -1351,30 +1325,11 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
         }
     }
 
-    // ------ BENCHMARK COMPUTE CHILD DIMENS 
-    // if (!window.hasOwnProperty('computeChildTime')) window.computeChildTime = {}
-    // if (!stopChild){
-    //     var timeit = performance.now(); 
-    //     computeChildDimens(view); // iterates over the childern ( just first level, no nested iteration) // takes 54ms
-    //     var timeit2 = performance.now(); 
-    //     var cx = window.computeChildTime["time"]; 
-    //     // console.log("cx is",cx); 
-    //     if ( (cx || cx == 0) && cx >= 0){
-    //         // console.log("cx is true",cx); 
-    //         window.computeChildTime["time"]+=(timeit2-timeit); 
-    //     }
-    //     else{
-    //         // console.log("cx is false",cx); 
-    //         window.computeChildTime["time"] = 0; 
-    //     }
-    // }
-
     if(!stopChild) computeChildDimens(view); 
 
-    setComputedStyles(elem, view.props); // more if & else, should be negligible impact on perf 
-    setAnimationStyles(elem, view.props); // more if & else 
+    setComputedStyles(elem, view.props); 
+    setAnimationStyles(elem, view.props); 
 
-    // todo fix this! if/else is not required, sibling view is irrelevant 
     if (!stopChild) {
         if (view.hasOwnProperty('children') && view.children.length > 0) {
             for (let i = 0; i < view.children.length; i++) {
@@ -1396,10 +1351,8 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
                 elem.setAttribute('has_render', true);
             }
         }
-        cb(elem, view); // this is absolutely nothing 
+        cb(elem, view); 
     }
-
-    // const end = performance.now();
 
     return elem;
 };
