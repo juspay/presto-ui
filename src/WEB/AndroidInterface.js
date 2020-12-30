@@ -38,6 +38,13 @@ function getScreenDimensions() {
   });
 }
 
+// Due to jos, PrestoDOM's document is different from the DOM Document which actaully contains the nodes. 
+// This utility function allows PrestoDOM to acquire an actual DOM object. 
+// This allows much more performant caching than iterating over the dom, which is done via `runInUI` function
+function getUIElement(id){
+  var ele = document.getElementById(id); 
+  return ele; 
+}
 
 function runInUI(cmd) {
   if (typeof cmd == "string")
@@ -445,6 +452,8 @@ function getDocument() {
 
 module.exports = {
   getScreenDimensions: getScreenDimensions,
+
+  getUIElement : getUIElement, 
 
   runInUI: runInUI,
 
