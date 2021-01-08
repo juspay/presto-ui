@@ -182,6 +182,24 @@ function moveView(id, index) {
 
 // Android.addViewToParent(rootId, dom_all, length (window.__ROOTSCREEN.idSet.child) - 1 , callback, null); -- call to this function 
 function addViewToParent(id, view, index, cb, replace) {
+
+  // let parseParams = require('../helpers/web').parseParams;
+  // let prestoClone = require('../helper').clone
+  // let t = prestoClone(dom.type); 
+  // let p = prestoClone(dom.props);
+
+  // let props = parseParams(t, p);
+    
+  // let view = {
+  //     props: props,
+  //     type: props.type,
+  //     children: props.children
+  // };
+
+  // window.__VIEWS[props.id] = view;
+  // window.__VIEW_DIMENSIONS[props.id] = null;
+
+
   let parentElement = document.getElementById(id)
   let parentView = window.__VIEWS[id]
   let siblingView = null

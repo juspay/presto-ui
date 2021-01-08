@@ -32,8 +32,6 @@ let {
 let helper = require("../helper")
 
 function createTextElement(elem, config) {
-
-    let text_style = ""; 
     let children = elem.childNodes;
     let article = null
     if (children.length) {
@@ -48,8 +46,7 @@ function createTextElement(elem, config) {
     if (!article)
         article = document.createElement('ARTICLE')
 
-    text_style += "white-space:initial;";
-    // elem.style.whiteSpace = "initial"
+    elem.style.whiteSpace = "initial"
 
     if (config.isHtmlContent)
         article.innerHTML = config.text
@@ -63,15 +60,11 @@ function createTextElement(elem, config) {
     article.style.display = "inline"
 
     if (config.letterSpacing)
-        text_style += "letter-spacing:"+config.letterSpacing+";";
-
-    // elem["style"]["letter-spacing"] = config.letterSpacing
+        elem["style"]["letter-spacing"] = config.letterSpacing
 
     elem.appendChild(article)
-    return text_style; 
 }
 
-// inefficient, no longer being used 
 function createTextElement2(elem, config) {
     let children = elem.childNodes;
     let article = null
@@ -106,7 +99,6 @@ function createTextElement2(elem, config) {
     elem.appendChild(article)
 }
 
-// not being used in hyper-widget web 
 function popup(elem, props) {
     let menuItems = props["popupMenu"].split(',');
     let menuBar = document.createElement("div");
@@ -138,9 +130,6 @@ function popup(elem, props) {
 }
 
 function setGravityStylesForRow(elem, props) {
-
-    var gravity_row_style = ""; 
-
     if (!props.hasOwnProperty('gravity') || !props.gravity) {
         props.gravity = '';
         //return;
@@ -148,58 +137,39 @@ function setGravityStylesForRow(elem, props) {
 
     switch (props.gravity) {
         case 'center_vertical':
-            gravity_row_style += "align-items: center;"; 
-            gravity_row_style += "justify-content: flex-start;"; 
-
-            // elem.gravity_row_style['align-items'] = 'center';
-            // elem.gravity_row_style['justify-content'] = 'flex-start';
+            elem.style['align-items'] = 'center';
+            elem.style['justify-content'] = 'flex-start';
             break;
         case 'center_horizontal':
-            gravity_row_style += "align-items: flex-start;"; 
-            gravity_row_style += "justify-content: center;"; 
-            // elem.gravity_row_style['align-items'] = 'flex-start';
-            // elem.gravity_row_style['justify-content'] = 'center';
+            elem.style['align-items'] = 'flex-start';
+            elem.style['justify-content'] = 'center';
             break;
         case 'center':
-            gravity_row_style += "align-items: center;"; 
-            gravity_row_style += "justify-content: center;"; 
-            // elem.gravity_row_style['align-items'] = "center";
-            // elem.gravity_row_style['justify-content'] = "center";
+            elem.style['align-items'] = "center";
+            elem.style['justify-content'] = "center";
             break;
         case 'left':
         case 'start':
-            gravity_row_style += "align-items: flex-start;"; 
-            gravity_row_style += "justify-content: flex-start;"; 
-            // elem.gravity_row_style['align-items'] = 'flex-start';
-            // elem.gravity_row_style['justify-content'] = 'flex-start';
+            elem.style['align-items'] = 'flex-start';
+            elem.style['justify-content'] = 'flex-start';
             break;
         case 'right':
         case 'end':
-            gravity_row_style += "align-items: flex-start;"; 
-            gravity_row_style += "justify-content: flex-end;"; 
-            // elem.gravity_row_style['align-items'] = 'flex-start';
-            // elem.gravity_row_style['justify-content'] = 'flex-end';
+            elem.style['align-items'] = 'flex-start';
+            elem.style['justify-content'] = 'flex-end';
             break;
         case 'stretch':
-            gravity_row_style += "align-items: stretch;"; 
-            gravity_row_style += "justify-content: flex-start;"; 
-            // elem.gravity_row_style['align-items'] = 'stretch';
-            // elem.gravity_row_style['justify-content'] = 'flex-start';
+            elem.style['align-items'] = 'stretch';
+            elem.style['justify-content'] = 'flex-start';
             break; 
         default:
-            gravity_row_style += "align-items: flex-start;"; 
-            gravity_row_style += "justify-content: flex-start;"; 
-            // elem.gravity_row_style['align-items'] = 'flex-start';
-            // elem.gravity_row_style['justify-content'] = 'flex-start';
+            elem.style['align-items'] = 'flex-start';
+            elem.style['justify-content'] = 'flex-start';
             break;
     }
-
-    return gravity_row_style; 
 }
 
 function setGravityStylesForColumn(elem, props) {
-
-    var gravity_col_style = ""; 
     if (!props.hasOwnProperty('gravity') || !props.gravity) {
         props.gravity = '';
         //return;
@@ -207,56 +177,39 @@ function setGravityStylesForColumn(elem, props) {
 
     switch (props.gravity) {
         case 'center_vertical':
-            gravity_col_style += "align-items: flex-start;";
-            gravity_col_style += "justify-content: center;";  
-            // elem.style['align-items'] = 'flex-start';
-            // elem.style['justify-content'] = 'center';
+            elem.style['align-items'] = 'flex-start';
+            elem.style['justify-content'] = 'center';
             break;
         case 'center_horizontal':
-            gravity_col_style += "align-items: center;"; 
-            gravity_col_style += "justify-content: flex-start;";  
-            // elem.style['align-items'] = 'center';
-            // elem.style['justify-content'] = 'flex-start';
+            elem.style['align-items'] = 'center';
+            elem.style['justify-content'] = 'flex-start';
             break;
         case 'center':
-            gravity_col_style += "align-items: center;"; 
-            gravity_col_style += "justify-content: center;";
-            // elem.style["align-items"] = "center";
-            // elem.style["justify-content"] = "center";
+            elem.style["align-items"] = "center";
+            elem.style["justify-content"] = "center";
             break;
         case 'left':
         case 'start':
-            gravity_col_style += "align-items: flex-start;"; 
-            gravity_col_style += "justify-content: flex-start;";
-            // elem.style['justify-content'] = 'flex-start';
-            // elem.style['align-items'] = 'flex-start';
+            elem.style['justify-content'] = 'flex-start';
+            elem.style['align-items'] = 'flex-start';
             break;
         case 'right':
         case 'end':
-            gravity_col_style += "align-items: flex-end;"; 
-            gravity_col_style += "justify-content: flex-start;";
-            // elem.style['align-items'] = 'flex-end';
-            // elem.style['justify-content'] = 'flex-start';
+            elem.style['align-items'] = 'flex-end';
+            elem.style['justify-content'] = 'flex-start';
             break;
         case 'stretch':
-            gravity_col_style += "align-items: stretch;"; 
-            gravity_col_style += "justify-content: flex-start;";
-            // elem.style['align-items'] = 'stretch';
-            // elem.style['justify-content'] = 'flex-start';
+            elem.style['align-items'] = 'stretch';
+            elem.style['justify-content'] = 'flex-start';
             break; 
         default:
-            gravity_col_style += "align-items: flex-start;"; 
-            gravity_col_style += "justify-content: flex-start;";
-            // elem.style['align-items'] = 'flex-start';
-            // elem.style['justify-content'] = 'flex-start';
+            elem.style['align-items'] = 'flex-start';
+            elem.style['justify-content'] = 'flex-start';
             break;
     }
-    return gravity_col_style; 
 }
 
 function setAnimationStyles(elem, props) {
-
-  var animation_style = ""; 
   if (!props.hasOwnProperty('hasAnimation') || !props.hasAnimation) {
     return
   }
@@ -358,39 +311,30 @@ function setAnimationStyles(elem, props) {
       styleElem.appendChild(document.createTextNode(css));
     }
 
-    animation_style += "animation-name:"+keyframeName+";";
-    animation_style += "animation-duration: 1s;";
-    
-    // elem.style.animationName = keyframeName
-    //elem.style.animationDuration = "1s"
+    elem.style.animationName = keyframeName
+    elem.style.animationDuration = "1s"
     if (data.hasOwnProperty('duration') && !isNaN(data.duration)) {
       const duration = parseFloat(parseFloat(data.duration) / 1000).toFixed(2)
-      animation_style += "animation-duration:"+duration+"s;";
-      //elem.style.animationDuration = duration + "s"
+      elem.style.animationDuration = duration + "s"
     }
 
     if (data.hasOwnProperty('repeatCount')) {
       if (data.repeatCount == "-1" || data.repeatCount == -1) {
-        animation_style += "animation-iteration-count:infinite;";
-        // elem.style.animationIterationCount = "infinite"
+        elem.style.animationIterationCount = "infinite"
       } else {
-        animation_style += "animation-iteration-count:"+data.repeatCount+";";
-        // elem.style.animationIterationCount = data.repeatCount
+        elem.style.animationIterationCount = data.repeatCount
       }
     }
 
     if (data.hasOwnProperty("interpolator")) {
-      animation_style += "animation-timing-function:"+"cubic-bezier(" + data.interpolator + ")"+";";        
-    //   elem.style.animationTimingFunction = "cubic-bezier(" + data.interpolator + ")";
+      elem.style.animationTimingFunction = "cubic-bezier(" + data.interpolator + ")";
     }
 
     window.__RENDERED_KEYFRAMES.push(keyframeName)
   }
-  return animation_style; 
 }
 
 function setComputedStyles(elem, props) {
-    let computed_styles = ""; 
     /* Computed Styles */
     // LinearLayout Styles
     if (props.hasOwnProperty('activeDimen') && props.hasOwnProperty('activeWeight')) {
@@ -398,70 +342,54 @@ function setComputedStyles(elem, props) {
         let weight = props.activeWeight;
 
         if (weight > 0) {
-            computed_styles += "flex:" + weight + ";"; 
-            //elem.style.flex = weight;
+            elem.style.flex = weight;
 
             if (activeDimen == 'w') {
                 //elem.style.width = 'auto';
             } else {
-                computed_styles += "height:auto;";
-               // elem.style.height = 'auto';
+                elem.style.height = 'auto';
             }
         } else {
-            computed_styles += "flex:none;";
-            //elem.style.flex = 'none';
+            elem.style.flex = 'none';
         }
     } else {
-        computed_styles += "flex:none;";
-//        elem.style.flex = 'none';
+        elem.style.flex = 'none';
     }
 
     // RelativeLayout Styles
     if (props.hasOwnProperty('absolute') && props.absolute) {
-        computed_styles += "position: absolute;";
-        //elem.style.position = 'absolute';
+        elem.style.position = 'absolute';
 
         if (props.hasOwnProperty("fromTop")) {
             if (isNaN(props.fromTop))
-                computed_styles += "top: " + props.fromTop + ";";    
-                // elem.style.top = props.fromTop;
+                elem.style.top = props.fromTop;
             else
-                computed_styles += "top: " + props.fromTop + "px;";    
-                // elem.style.top = props.fromTop + 'px';
+                elem.style.top = props.fromTop + 'px';
         }
 
         if (props.hasOwnProperty("fromBottom")) {
             if (isNaN(props.fromBottom))
-                computed_styles += "bottom: " + props.fromBottom + ";";    
-                //elem.style.bottom = props.fromBottom;
+                elem.style.bottom = props.fromBottom;
             else
-                computed_styles += "bottom: " + props.fromBottom + "px;";    
-                //elem.style.bottom = props.fromBottom + 'px';
+                elem.style.bottom = props.fromBottom + 'px';
         }
 
         if (props.hasOwnProperty("fromLeft")) {
             if (isNaN(props.fromLeft))
-                computed_styles += "left: " + props.fromLeft + ";";    
-                // elem.style.left = props.fromLeft;
+                elem.style.left = props.fromLeft;
             else
-                computed_styles += "left: " + props.fromLeft + "px;";    
-                // elem.style.left = props.fromLeft + 'px';
+                elem.style.left = props.fromLeft + 'px';
         }
 
         if (props.hasOwnProperty("fromRight")) {
             if (isNaN(props.fromRight))
-                computed_styles += "right: " + props.fromRight + ";";    
-                // elem.style.right = props.fromRight;
+                elem.style.right = props.fromRight;
             else
-                computed_styles += "right: " + props.fromRight + "px;";    
-            // elem.style.right = props.fromRight + 'px';
+                elem.style.right = props.fromRight + 'px';
         }
     }
     /* Computed Styles End */
-    return computed_styles; 
 }
-
-// what does this do? 
 function separatorInputKeyDownHandlerNew(ev){
     ev.stopPropagation();
     try {
@@ -537,7 +465,7 @@ function separatorInputKeyDownHandlerNew(ev){
         console.error(err);
     }
 }
-// what does this do?
+
 function separatorInputKeyDownHandler(ev){
     ev.stopPropagation();
     try{
@@ -625,8 +553,8 @@ function setAttributes(type, elem, props, firstRender) {
 
     let elem_style = ""; 
 
-    if (type == 'modal') {  // this is likely not being used  in hyper-widget 
-        setModalAttributes(elem, props, firstRender); 
+    if (type == 'modal') {
+        setModalAttributes(elem, props, firstRender);
         return;
     }
 
@@ -635,129 +563,103 @@ function setAttributes(type, elem, props, firstRender) {
     else
         elem.className = type
 
-    elem_style += "transition:" + props.transition + ";";
+    elem.style.transition = props.transition;
 
-    // elem.style.transition = props.transition;
     /* New Style */
     /* Render from global styles */
-
-    // elem.style.width = 'auto';
-    // elem.style.height = 'auto';
-
-    elem_style += "width : auto; ";
-    elem_style += "height: auto; "; 
-
+    elem.style.width = 'auto';
+    elem.style.height = 'auto';
 
     if (props.hasOwnProperty('width')) {
         if (props.width == 'match_parent') {
-            elem_style += "width : 100%; ";
-            //elem.style.width = '100%';
+            elem.style.width = '100%';
         } else if (props.width == 'wrap_content') {
             // You see below
         } else if (!isNaN(props.width)) {
             if (props.hasOwnProperty('percentWidth') && props.percentWidth)
-                elem_style += "width: " + props.width + "%;";  
-                // elem.style.width = props.width + '%';
+                elem.style.width = props.width + '%';
             else
-            elem_style += "width: " + props.width + "px;";     
-            //elem.style.width = props.width + 'px';
+                elem.style.width = props.width + 'px';
         }
     }
     if (props.hasOwnProperty('height')) {
         if (props.height == 'match_parent') {
-            elem_style += "height: 100%;";
-            // elem.style.height = '100%';
+            elem.style.height = '100%';
         } 
         else if (props.height == 'wrap_content') {
-            elem_style += "height: auto;"; 
-            //elem.style.height = "auto";
+            elem.style.height = "auto";
             // You see below
         } else if (!isNaN(props.height)) {
             if (props.hasOwnProperty('percentHeight') && props.percentHeight)
-                elem_style += "height: " + props.height + "%;";  
-//                elem.style.height = props.height + '%';
+                elem.style.height = props.height + '%';
             else
-                elem_style += "height: " + props.height + "px;";  
-//            elem.style.height = props.height + 'px';
+                elem.style.height = props.height + 'px';
         }
     }
 
     if (props.hasOwnProperty('minWidth') && !isNaN(props.minWidth)) {
         if (props.percentMinWidth)
-            elem_style += "min-width: " + props.minWidth + "%;";  
-//            elem.style.minWidth = props.minWidth + '%';
+            elem.style.minWidth = props.minWidth + '%';
         else
-            elem_style += "min-width: " + props.minWidth + "px;";  
-
-        //    elem.style.minWidth = props.minWidth + 'px';
+            elem.style.minWidth = props.minWidth + 'px';
     }
 
     if (props.hasOwnProperty('minHeight') && !isNaN(props.minHeight)) {
         if (props.percentMinHeight)
-            elem_style += "min-height: " + props.minHeight + "%;";  
-            // elem.style.minHeight = props.minHeight + '%';
+            elem.style.minHeight = props.minHeight + '%';
         else
-            elem_style += "min-height: " + props.minHeight + "px;";  
-            // elem.style.minHeight = props.minHeight + 'px';
+            elem.style.minHeight = props.minHeight + 'px';
     }
 
     if (props.hasOwnProperty('maxWidth') && !isNaN(props.maxWidth)) {
         if (props.percentMaxWidth)
-            elem_style += "max-width: " + props.maxWidth + "%;";  
-//            elem.style.maxWidth = props.maxWidth + '%';
+            elem.style.maxWidth = props.maxWidth + '%';
         else
-            elem_style += "max-width: " + props.maxWidth + "px;";  
-        //            elem.style.maxWidth = props.maxWidth + 'px';
+            elem.style.maxWidth = props.maxWidth + 'px';
     }
 
     if (props.hasOwnProperty('maxHeight') && !isNaN(props.maxHeight)) {
         if (props.percentMaxHeight)
-            elem_style += "max-height: " + props.maxHeight + "%;";  
-       // elem.style.maxHeight = props.maxHeight + '%';
+            elem.style.maxHeight = props.maxHeight + '%';
         else
-            elem_style += "max-height: " + props.maxHeight + "px;";  
-            //elem.style.maxHeight = props.maxHeight + 'px';
+            elem.style.maxHeight = props.maxHeight + 'px';
     }
 
     if (props.hasOwnProperty('padding')) {
         let padding = props.padding.split(',').map(a => a * 1);
-        elem_style += "padding: " + padding[1] + "px " + padding[2] + "px " + padding[3] + "px " + padding[0] + "px;";
-//        elem.style['padding'] = padding[1] + 'px ' + padding[2] + 'px ' + padding[3] + 'px ' + padding[0] + 'px';
+
+        elem.style['padding'] = padding[1] + 'px ' + padding[2] + 'px ' + padding[3] + 'px ' + padding[0] + 'px';
     }
 
     if (props.hasOwnProperty('margin')) {
         let margin = props.margin.split(',').map(a => a * 1);
-        elem_style += "margin: " + margin[1] + "px " + margin[2] + "px " + margin[3] + "px " + margin[0] + "px;";
-//        elem.style['margin'] = margin[1] + 'px ' + margin[2] + 'px ' + margin[3] + 'px ' + margin[0] + 'px';
+
+        elem.style['margin'] = margin[1] + 'px ' + margin[2] + 'px ' + margin[3] + 'px ' + margin[0] + 'px';
     }
 
     if (props.hasOwnProperty('visibility')) {
         let visibility = props.visibility;
         if (visibility == 'invisible')
-            elem_style += "visibility: hidden;";
-            //elem.style.visibility = "hidden";
+            elem.style.visibility = "hidden";
         else if (visibility == 'gone')
-            elem_style += "display: none;";
-            //elem.style.display = "none";
+            elem.style.display = "none";
         else {
-            elem_style += "visibility: '';";
-            //elem.style.visibility = '';
-            elem_style += initializeShow(elem, props, type); 
+            elem.style.visibility = '';
+
+            initializeShow(elem, props, type);
         }
     } else {
-        elem_style += initializeShow(elem, props, type);
+        initializeShow(elem, props, type);
     }
 
     if (props.hasOwnProperty('expand')) {
         let visibility = props.expand + '';
         if (visibility == 'true'){
-            elem_style += "visibility: '';";
-            // elem.style.visibility = '';
-            elem_style += initializeShow(elem, props, type);
+            elem.style.visibility = '';
+            initializeShow(elem, props, type);
         }
         else
-            elem_style += "display: none;";
-            //    elem.style.display = "none";
+            elem.style.display = "none";
     }
 
     /* Render global styles end */
@@ -772,111 +674,76 @@ function setAttributes(type, elem, props, firstRender) {
 
     if (props.hasOwnProperty('overFlowVisible')) {
         if (props.overFlowVisible) {
-            elem_style += "overflow: visible;";
-            // elem.style.overflow = "visible"
+            elem.style.overflow = "visible"
         }
     }
 
-    // TODO: this if/else block should be moved to a seprate function, this function is already too big. 
     /* Render type specific styles */
     if (type == 'linearLayout') {
-        elem_style += "box-sizing: border-box;";        
-        //elem.style["box-sizing"] = "border-box";
+        elem.style["box-sizing"] = "border-box";
 
         if (props.hasOwnProperty('fixedWrap') && !props.fixedWrap) {
-            elem_style += "flex-wrap: nowrap;";
-            //elem.style["flex-wrap"] = "nowrap";
+            elem.style["flex-wrap"] = "nowrap";
         } else {
-            elem_style += "flex-wrap: wrap;";            
-            //elem.style["flex-wrap"] = "wrap";
+            elem.style["flex-wrap"] = "wrap";
         }
 
-        
-        let orient = props.orientation == "horizontal" || props.orientation == null ? "row" : "column";
-        elem_style += "flex-direction: " + orient + ";";
-        // elem.style["flex-direction"] = 
+        elem.style["flex-direction"] = props.orientation == "horizontal" || props.orientation == null ? "row" : "column";
 
-        if (orient == 'row')
-            setGravityStylesForRow(elem, props); 
+        if (elem.style["flex-direction"] == 'row')
+            setGravityStylesForRow(elem, props);
         else
-            setGravityStylesForColumn(elem, props); // TODO : SET STRING STYLE
-
-        // if (elem.style["flex-direction"] == 'row')
-        //     setGravityStylesForRow(elem, props);
-        // else
-        //     setGravityStylesForColumn(elem, props);
+            setGravityStylesForColumn(elem, props);
 
         if (props.hasOwnProperty('scrollBarX')) {
             if (props.scrollBarX)
-                elem_style += "overflow-x: auto;";            
-//                elem.style.overflowX = 'auto'
+                elem.style.overflowX = 'auto'
             else
-            elem_style += "overflow-x: hidden;";            
-//            elem.style.overflowX = 'hidden'
+                elem.style.overflowX = 'hidden'
         }
 
         if (props.hasOwnProperty('scrollBarY')) {
             if (props.scrollBarY)
-                elem_style += "overflow-y: auto;";            
-                // elem.style.overflowY = 'auto'
+                elem.style.overflowY = 'auto'
             else
-                elem_style += "overflow-y: hidden;";            
-                // elem.style.overflowY = 'hidden'
+                elem.style.overflowY = 'hidden'
         }
 
     } else if (type == "horizontalScrollView") {
-        elem_style += "overflow-x: auto;"; 
-        elem_style += "overflow-y: hidden;";                       
-        // elem.style.overflowX = "auto";
-        // elem.style.overflowY = "hidden";
+        elem.style.overflowX = "auto";
+        elem.style.overflowY = "hidden";
 
         if (!scrollBarX)
-            elem_style += "overflow-x: hidden;"; 
-         //   elem.style.overflowX = 'hidden';
+            elem.style.overflowX = 'hidden';
     } else if (type == "listView") {
-        elem_style += "overflow-x: hidden;"; 
-        elem_style += "overflow-y: auto;";                       
-        
-        // elem.style.overflowY = "auto";
-        // elem.style.overflowX = "hidden";
+        elem.style.overflowY = "auto";
+        elem.style.overflowX = "hidden";
 
         if (!scrollBarY)
-            elem_style += "overflow-y: hidden;";                       
-            // elem.style.overflowY = 'hidden';
+            elem.style.overflowY = 'hidden';
     } else if (type == 'scrollView') {
-
-        elem_style += "overflow-x: auto;"; 
-        elem_style += "overflow-y: auto;";
-
-        // elem.style.overflowX = 'auto';
-        // elem.style.overflowY = 'auto';
+        elem.style.overflowX = 'auto';
+        elem.style.overflowY = 'auto';
 
         if (!scrollBarX)
-            elem_style += "overflow-x: hidden;"; 
-       // elem.style.overflowX = 'hidden';
+            elem.style.overflowX = 'hidden';
         if (!scrollBarY)
-            elem_style += "overflow-y: hidden;"; 
-    //        elem.style.overflowY = 'hidden';
+            elem.style.overflowY = 'hidden';
     } else if (type == 'relativeLayout') {
-        elem_style += "position: relative;"; 
-        // elem.style.position = 'relative';
+        elem.style.position = 'relative';
 
         if (props.hasOwnProperty('scrollBarX')) {
           if (props.scrollBarX)
-              elem_style += "overflow-x: auto;"; 
-              // elem.style.overflowX = 'auto'
+              elem.style.overflowX = 'auto'
           else
-              elem_style += "overflow-x: hidden;"; 
-              // elem.style.overflowX = 'hidden'
+              elem.style.overflowX = 'hidden'
         }
 
         if (props.hasOwnProperty('scrollBarY')) {
           if (props.scrollBarY)
-              elem_style += "overflow-y: auto;"; 
-            //  elem.style.overflowY = 'auto'
+              elem.style.overflowY = 'auto'
           else
-              elem_style += "overflow-y: hidden;"; 
-    //          elem.style.overflowY = 'hidden'
+              elem.style.overflowY = 'hidden'
         }
     } else if (type == 'imageView') {
         if (props.imageUrl) {
@@ -904,39 +771,32 @@ function setAttributes(type, elem, props, firstRender) {
     /* Render type specific styles end */
     /* New Style End */
 
-
-    // this loop needs to be evaluted again, why is this being used when we have already have all the code above? 
-    for (let key in props) {  // WHAT? Again interating over entire style? why??? props.style is same as props.key
-        if (key == "popupMenu") { // this is not being used afaik in hyper-widget, need to test it out and see what it does 
+    for (let key in props) {
+        if (key == "popupMenu") {
             popup(elem, props)
         } else if (key == "text") {
             if (type == "editText")
                 elem.value = props[key]
             else
-                elem_style += createTextElement(elem, props) // todo pass style and update that 
+                createTextElement(elem, props)
         }else if (key == "textFromHtml") {
             if (type == "editText")
                 elem.value = props[key]
             else
-                elem_style += createTextElement(elem, props)
+                createTextElement(elem, props)
         } 
-        else if (key == "style") {  
+        else if (key == "style") {
             for (let innerKey in props.style) {
                 if (innerKey == "className") {
                     elem.className += " " + props.style[innerKey];
                 } else if (props.buttonClickOverlay !== undefined && ["background", "background-image"].includes(innerKey)) {
-                    elem_style += innerKey + ": " + `linear-gradient(to right, rgba(0,0,0,${props.buttonClickOverlay}) 50%, transparent 50%), ` + props.style[innerKey] + ";";     // hidden;"; 
-                    elem_style += "background-position: right bottom;"; 
-                    elem_style += "background-size: 200% 100%, 100% 100%"; 
-                    // elem.style[innerKey] = `linear-gradient(to right, rgba(0,0,0,${props.buttonClickOverlay}) 50%, transparent 50%), ` + props.style[innerKey];
-                    //elem.style["background-position"] = "right bottom";
-                    //elem.style["background-size"] = "200% 100%, 100% 100%";
+                    elem.style[innerKey] = `linear-gradient(to right, rgba(0,0,0,${props.buttonClickOverlay}) 50%, transparent 50%), ` + props.style[innerKey];
+                    elem.style["background-position"] = "right bottom";
+                    elem.style["background-size"] = "200% 100%, 100% 100%";
                 } else
-                    elem_style += innerKey + ": " + props.style[innerKey] + ";";   
-          //           elem.style[innerKey] = props.style[innerKey];
+                    elem.style[innerKey] = props.style[innerKey];
             }
-        } 
-        else if (key == "attributes") {
+        } else if (key == "attributes") {
             for (let innerKey in props.attributes) {
                 elem.setAttribute(innerKey, props.attributes[innerKey]);
             }
@@ -960,8 +820,7 @@ function setAttributes(type, elem, props, firstRender) {
 
             var eventType = key.substring(2, key.length).toLowerCase();
             var elemCB = props[key];
-            elem_style += "user-select: none;";  
-            //elem.style.userSelect = 'none';
+            elem.style.userSelect = 'none';
             if (eventType == "change") {
                 eventType = "input";
             }
@@ -984,6 +843,25 @@ function setAttributes(type, elem, props, firstRender) {
                 }
             };
         }
+        //TODO: Repeated code to be removed later
+        //   if (props.label) {
+        //     elem.addEventListener('blur', function() {
+        //       var inputValue = elem.value;
+        //       if (inputValue == "") {
+        //         elem.classList.remove("filled");
+        //         elem.parentNode.classList.remove('focused');
+        //       } else {
+        //         elem.classList.add('filled');
+        //       }
+        //     });  
+
+        //     if (!(props.label && eventType == "focus") && firstRender) {
+        //         /*elem['on' + eventType] = function (e) {
+        //             e.stopPropagation()
+        //             eventType == "input" ? elemCB(e.target.value) : elemCB(e)
+        //         }*/
+        //     }
+        // }
     }
 
     if (!props.animation) {
@@ -992,26 +870,22 @@ function setAttributes(type, elem, props, firstRender) {
     if (props.animation.transition) {
         const afterTransition = () => {
             const animation = props.animation;
-            elem_style += "transition: "+animation.transition+";";
-            elem_style += "transform: "+animation.transform+";";   
-            //elem.style.transition = animation.transition;
-            //elem.style.transform = animation.transform;
+            elem.style.transition = animation.transition;
+            elem.style.transform = animation.transform;
             if (animation.opacity) {
-                elem_style += "opacity: "+animation.opacity+";"; 
-                // elem.style.opacity = animation.opacity;
+                elem.style.opacity = animation.opacity;
             }
         };
 
         if (props.style.transform || props.style.opacity) {
-            setTimeout(afterTransition, 100); // Why is a time out here? 
+            setTimeout(afterTransition, 100);
         } else {
             afterTransition();
         }
     }
 
-    // Events should be a different function 
     /* Events */
-    if (firstRender) { // what is firstRender? 
+    if (firstRender) {
         if (type == "editText" && elem.tagName.toLowerCase() == "input") {
             var isIPhone = (navigator.userAgent.indexOf("iPhone") !== -1)
             if (props.autofocus && !isIPhone) {
@@ -1072,12 +946,9 @@ function setAttributes(type, elem, props, firstRender) {
     }
 
     if (props.hasOwnProperty('componentType') && props.componentType)
-        renderComponent(elem, props, firstRender) // what are components?? 
-
-    return elem_style; 
+        renderComponent(elem, props, firstRender)
 }
 
-// modal not being used in hyper-widget web
 function setModalAttributes(elem, props, firstRender) {
     setGravityStylesForRow(elem, props);
 
@@ -1108,32 +979,23 @@ function setModalAttributes(elem, props, firstRender) {
 }
 
 let initializeShow = function (elem, props, type) {
-    var style = ""; 
     if (type == 'linearLayout') {
         if (props.hasOwnProperty('width') && props.width == 'wrap_content') {
-            style += "display: inline-flex;"; 
-            style += "width: max-content;"; 
-            // elem.style.display = 'inline-flex';
-            // elem.style.width = 'max-content';
+            elem.style.display = 'inline-flex';
+            elem.style.width = 'max-content';
         } else {
-            style += "display: flex;"; 
-            //elem.style.display = "flex";
+            elem.style.display = "flex";
         }
     } else {
         if (props.hasOwnProperty('width') && props.width == 'wrap_content') {
-            style += "display:inline-bloack;";
-            style += "width:max-content;";  
-            // elem.style.display = 'inline-block';
-            // elem.style.width = 'max-content';
+            elem.style.display = 'inline-block';
+            elem.style.width = 'max-content';
         } else {
-            style += "display:'';";
-        //    elem.style.display = '';
+            elem.style.display = '';
         }
     }
-    return style; 
 }
 
-// mutation observers are slow, what is this and why can't global events solve this problem? 
 /* Observer for afterRender */
 let observer = (elem) => {
     let id = elem.id;
@@ -1161,7 +1023,7 @@ let observer = (elem) => {
     });
 }
 
-/* Do some actions after rendered */ // just use global events no? 
+/* Do some actions after rendered */
 let cb = (elem, view) => {
     if (view.props.feedback && typeof view.props.feedback == "function") {
         view.props.feedback()
@@ -1169,7 +1031,6 @@ let cb = (elem, view) => {
 }
 
 // Creates the Modal element if it has not been already inflated
-// modal is not being used 
 let inflateModal = function (view, parentElement, stopChild) {
     let newInflated = false;
     let parentId = parentElement.id;
@@ -1272,7 +1133,7 @@ window.inflateTimings = {
 // parentElement: DOM Object
 let inflateView = function (view, parentElement, siblingView, stopChild, stopObserver, renderStyle) {
 
-    let element_style = ""; 
+
     // // ******* THIS IS THE DOM_ALL CODE *****************
     // var parseParams = require('../helpers/web').parseParams;
     // let prestoClone = require('../helper').clone
@@ -1309,19 +1170,12 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
             elem.style.border = 'none'
         } else if (view.type == "imageView") {
             elem = document.createElement("img");
-            element_style = ""; 
-            element_style += "margin:0;"; 
-            element_style += "padding:0;"; 
-            element_style += "display:block;";
-            element_style += "max-width:100%;";
-            element_style += "max-height:100%;";
-            element_style += "box-sizing:border-box;";
-            // elem["style"]["margin"] = "0";
-            // elem["style"]["padding"] = "0";
-            // elem["style"]["display"] = "block";
-            // elem["style"]["max-width"] = "100%";
-            // elem["style"]["max-height"] = "100%";
-            // elem["style"]["box-sizing"] = "border-box";
+            elem["style"]["margin"] = "0";
+            elem["style"]["padding"] = "0";
+            elem["style"]["display"] = "block";
+            elem["style"]["max-width"] = "100%";
+            elem["style"]["max-height"] = "100%";
+            elem["style"]["box-sizing"] = "border-box";
             elem.setAttribute("alt", "");
         } else if (view.type == "checkBox") {
             elem = document.createElement("input");
@@ -1337,16 +1191,11 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
                 delete view.props.label;
             }
         } else if (view.type == "editText") {
-            element_style = ""; 
             if (view.props.hasOwnProperty('inputType') && view.props.inputType == 'multiText') {
                 elem = document.createElement("textarea");
-                element_style += "border:none;";
-                element_style += "resize:none;";
-                element_style += "outline:none;";
-
-                // elem.style.border = 'none';
-                // elem.style.resize = 'none';
-                // elem.style.outline = 'none';
+                elem.style.border = 'none';
+                elem.style.resize = 'none';
+                elem.style.outline = 'none';
             } else {
                 elem = document.createElement("input");
             }
@@ -1354,67 +1203,43 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
             elem.value = view.props.text || "";
 
             if (view.props.letterSpacing) {
-                element_style += "letter-spacing : " + view.props.letterSpacing + ";";
-                // elem["style"]["letter-spacing"] = view.props.letterSpacing;
+                elem["style"]["letter-spacing"] = view.props.letterSpacing;
             }
 
             if (view.props.label) {
-
-                // var inputViewStyle = ""; 
                 var inputView = elem;
-                
-                element_style += "width:100%;"; 
-                // inputView.style.width = '100%';
-                element_style += setAttributes(view.type, inputView, view.props, true);
-                
+                inputView.style.width = '100%';
+                setAttributes(view.type, inputView, view.props, true);
                 inputView.setAttribute("id", view.props.id + "_input");
-                
-                
                 var l = document.createElement("label");
-                
-                var label_style = ""; 
                 l.setAttribute("for", view.props.id + "_input");
-                
                 l.innerHTML = view.props.label;
                 l.classList.add('input-label');
 
-                label_style += "position:absolute;"; 
-                label_style += "color:#999;"; 
-                label_style += "background-color:#fff;";
-                label_style += "padding: 0 5px;"; 
-                label_style += "z-index: 10;"; 
-                label_style += "transition: transform 150ms ease-out, font-size 150ms ease-out;"; 
-
-                // l["style"]["position"] = "absolute";
-                // l["style"]["color"] = "#999";
-                // l["style"]["background-color"] = "#fff";
-                // l["style"]["padding"] = "0 5px";
-                // l["style"]["z-index"] = 10;
-                // l["style"]["transition"] = "transform 150ms ease-out, font-size 150ms ease-out";
+                l["style"]["position"] = "absolute";
+                l["style"]["color"] = "#999";
+                l["style"]["background-color"] = "#fff";
+                l["style"]["padding"] = "0 5px";
+                l["style"]["z-index"] = 10;
+                l["style"]["transition"] = "transform 150ms ease-out, font-size 150ms ease-out";
 
                 if (view.props.letterSpacing) {
-                    label_style += "letter-spacing: " + view.props.letterSpacing + ";"; 
-                    // l["style"]["letter-spacing"] = view.props.letterSpacing;
+                    l["style"]["letter-spacing"] = view.props.letterSpacing;
                 }
 
-                l.setAttribute("style",label_style); 
-                inputView.setAttribute("style",element_style); 
-
                 elem = document.createElement("div");
-                element_style = ""; 
                 elem.classList.add('input-group');
                 elem.appendChild(l);
                 elem.appendChild(inputView);
 
                 view.props.style.position = "relative";
-                element_style += setAttributes(view.type, elem, view.props, true);
+                setAttributes(view.type, elem, view.props, true);
                 delete view.props.label;
             } else if (view.props.hint) {
                 elem.placeholder = view.props.hint || "";
             }
         } else {
             elem = document.createElement(view.elName || "div"); // create the element here 
-            element_style = ""; 
         }
 
         /* Tooltip */
@@ -1480,7 +1305,7 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
         }
 
         // appened attributes, nodes & style to the elemenent 
-        element_style += setAttributes(view.type, elem, view.props, true);
+        setAttributes(view.type, elem, view.props, true);
 
         /*if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
           if(!stopObserver){
@@ -1490,7 +1315,7 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
           }
         }*/
     } else if (renderStyle) {
-        element_style += setAttributes(view.type, elem, view.props, false);
+        setAttributes(view.type, elem, view.props, false);
     }
 
     if (view.type == 'horizontalScrollView') {
@@ -1521,10 +1346,8 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
 
     if(!stopChild) computeChildDimens(view); 
 
-    element_style += setAnimationStyles(elem, view.props); 
-    element_style += setComputedStyles(elem, view.props); 
-    elem.setAttribute("style",element_style); // finally attach all the styles to the element 
-
+    setComputedStyles(elem, view.props); 
+    setAnimationStyles(elem, view.props); 
 
     if (!stopChild) {
         if (view.hasOwnProperty('children') && view.children.length > 0) {
@@ -1553,7 +1376,6 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
     return elem;
 };
 
-// what?
 let handleWrapContent = (view, parentElement) => {
     let newDimen = 0;
     for (var i = 0; i < parentElement.childNodes.length; i++) {
@@ -1563,7 +1385,6 @@ let handleWrapContent = (view, parentElement) => {
     return view;
 }
 
-// update a view, layout with new props, cmd will contain new props 
 let runInUI = function (cmd) {
     if (!(cmd instanceof Array))
         cmd = [cmd];
@@ -1578,8 +1399,7 @@ let runInUI = function (cmd) {
         let view = window.__VIEWS[elem.id];
         view.props = helper.merge(view.props, each);
 
-        var styles = setAttributes(view.type, elem, view.props, false);
-        elem.setAttribute("style",styles); 
+        setAttributes(view.type, elem, view.props, false);
     });
 };
 
