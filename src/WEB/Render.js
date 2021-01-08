@@ -907,6 +907,41 @@ function setAttributes(type, elem, props, firstRender) {
     /* Render type specific styles end */
     /* New Style End */
 
+    if (props.hasOwnProperty("text")){
+        if (type == "editText")
+            elem.value = props[key]
+        else
+            elem_style += createTextElement(elem, props) 
+    }
+
+    if (props.hasOwnProperty("textFromHtml")) {
+        if (type == "editText")
+            elem.value = props.textFromHtml
+        else
+            elem_style += createTextElement(elem, props)
+    }
+
+    if (props.hasOwnProperty("className")) {
+        if ((props.className || "").trim() !== "") {
+            props.className.split(" ").map(className => {
+                elem.classList.add(className); 
+            })
+        }
+    } 
+    
+    if (props.hasOwnProperty("classList")) {
+        JSON.parse(props.classList).forEach(function (obj) {
+            elem.classList.add(obj);
+        });
+    }
+    
+    if (props.hasOwnProperty("removeClassList")){
+        JSON.parse(props.removeClassList).forEach(function (obj) {
+            elem.classList.remove(obj);
+        });
+    }
+
+
 
     // this loop needs to be evaluted again, why is this being used when we have already have all the code above? 
     for (let key in props) {  // WHAT? Again interating over entire style? why??? props.style is same as props.key
@@ -923,27 +958,27 @@ function setAttributes(type, elem, props, firstRender) {
             else
                 elem_style += createTextElement(elem, props)
         } 
-        else if (key == "style") {  
-            for (let innerKey in props.style) {
-                if (innerKey == "className") {
-                    elem.className += " " + props.style[innerKey];
-                } else if (props.buttonClickOverlay !== undefined && ["background", "background-image"].includes(innerKey)) {
-                    elem_style += innerKey + ": " + `linear-gradient(to right, rgba(0,0,0,${props.buttonClickOverlay}) 50%, transparent 50%), ` + props.style[innerKey] + ";";     // hidden;"; 
-                    elem_style += "background-position: right bottom;"; 
-                    elem_style += "background-size: 200% 100%, 100% 100%"; 
-                    // elem.style[innerKey] = `linear-gradient(to right, rgba(0,0,0,${props.buttonClickOverlay}) 50%, transparent 50%), ` + props.style[innerKey];
-                    //elem.style["background-position"] = "right bottom";
-                    //elem.style["background-size"] = "200% 100%, 100% 100%";
-                } else
-                    console.log("inner key is",innerKey); 
-                    elem_style += innerKey + ": " + props.style[innerKey] + ";";   
-          //           elem.style[innerKey] = props.style[innerKey];
-            }
-        } 
-        else if (key == "attributes") { // this is responsible for giving ID to the element :( 
-            for (let innerKey in props.attributes) {
-                elem.setAttribute(innerKey, props.attributes[innerKey]);
-            }
+        // else if (key == "style") {  
+        //     for (let innerKey in props.style) {
+        //         if (innerKey == "className") {
+        //             elem.className += " " + props.style[innerKey];
+        //         } else if (props.buttonClickOverlay !== undefined && ["background", "background-image"].includes(innerKey)) {
+        //             elem_style += innerKey + ": " + `linear-gradient(to right, rgba(0,0,0,${props.buttonClickOverlay}) 50%, transparent 50%), ` + props.style[innerKey] + ";";     // hidden;"; 
+        //             elem_style += "background-position: right bottom;"; 
+        //             elem_style += "background-size: 200% 100%, 100% 100%"; 
+        //             // elem.style[innerKey] = `linear-gradient(to right, rgba(0,0,0,${props.buttonClickOverlay}) 50%, transparent 50%), ` + props.style[innerKey];
+        //             //elem.style["background-position"] = "right bottom";
+        //             //elem.style["background-size"] = "200% 100%, 100% 100%";
+        //         } else
+        //             console.log("inner key is",innerKey); 
+        //             elem_style += innerKey + ": " + props.style[innerKey] + ";";   
+        //   //           elem.style[innerKey] = props.style[innerKey];
+        //     }
+        // } 
+        // else if (key == "attributes") { // this is responsible for giving ID to the element :( 
+        //     for (let innerKey in props.attributes) {
+        //         elem.setAttribute(innerKey, props.attributes[innerKey]);
+        //     }
         } else if (key == "className") {
             if ((props[key] || "").trim() !== "") {
                 props[key].split(" ").map(className => {

@@ -114,7 +114,7 @@ function parseLayoutProps(type, config, key) {
     config.animation.transform = "";
   }
 
-  if (!config.attributes)
+  if (!config.attributes) 
     config.attributes = {};
 
   if (!config.style.className)
