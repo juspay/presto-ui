@@ -258,7 +258,7 @@ function setAnimationStyles(elem, props) {
 
   var animation_style = ""; 
   if (!props.hasOwnProperty('hasAnimation') || !props.hasAnimation) {
-    return
+    return animation_style;
   }
 
   const keyframeName = "keyframe_" + props.id
@@ -266,7 +266,7 @@ function setAnimationStyles(elem, props) {
     let styleElem = document.getElementById(window.__STYLE_ID)
 
     if (!styleElem) {
-      return
+      return animation_style; 
     }
 
     let data = null
@@ -279,7 +279,7 @@ function setAnimationStyles(elem, props) {
     }
 
     if (!data) {
-      return
+      return animation_style; 
     }
 
     let css = ""
@@ -624,6 +624,8 @@ function separatorInputKeyDownHandler(ev){
 function setAttributes(type, elem, props, firstRender) {
 
     let elem_style = ""; 
+    elem.setAttribute("id",props.id); 
+    // elem_style += "id:"+props.id+";";
 
     if (type == 'modal') {  // this is likely not being used  in hyper-widget 
         setModalAttributes(elem, props, firstRender); 
@@ -635,7 +637,8 @@ function setAttributes(type, elem, props, firstRender) {
     else
         elem.className = type
 
-    elem_style += "transition:" + props.transition + ";";
+    //let elem_transition = props.transition == undefined ? "0ms all" : props.transition // It will always be undefined lol
+    elem_style += "transition:" + "0ms all" + ";";
 
     // elem.style.transition = props.transition;
     /* New Style */
@@ -646,7 +649,7 @@ function setAttributes(type, elem, props, firstRender) {
 
     elem_style += "width : auto; ";
     elem_style += "height: auto; "; 
-
+    
 
     if (props.hasOwnProperty('width')) {
         if (props.width == 'match_parent') {
@@ -932,11 +935,12 @@ function setAttributes(type, elem, props, firstRender) {
                     //elem.style["background-position"] = "right bottom";
                     //elem.style["background-size"] = "200% 100%, 100% 100%";
                 } else
+                    console.log("inner key is",innerKey); 
                     elem_style += innerKey + ": " + props.style[innerKey] + ";";   
           //           elem.style[innerKey] = props.style[innerKey];
             }
         } 
-        else if (key == "attributes") {
+        else if (key == "attributes") { // this is responsible for giving ID to the element :( 
             for (let innerKey in props.attributes) {
                 elem.setAttribute(innerKey, props.attributes[innerKey]);
             }
@@ -986,10 +990,10 @@ function setAttributes(type, elem, props, firstRender) {
         }
     }
 
-    if (!props.animation) {
-        console.error("animaiton not found", props)
-    }
-    if (props.animation.transition) {
+    // if (!props.animation) {
+    //     console.error("animaiton not found", props)
+    // }
+    if (props.animation && props.animation.transition) { // this will need to be renamed actually to VDOM output's 
         const afterTransition = () => {
             const animation = props.animation;
             elem_style += "transition: "+animation.transition+";";
@@ -1272,6 +1276,8 @@ window.inflateTimings = {
 // parentElement: DOM Object
 let inflateView = function (view, parentElement, siblingView, stopChild, stopObserver, renderStyle) {
 
+    // view = setDefaults(view); // this function will do what dom_all  basically does  
+
     let element_style = ""; 
     // // ******* THIS IS THE DOM_ALL CODE *****************
     // var parseParams = require('../helpers/web').parseParams;
@@ -1521,8 +1527,10 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
 
     if(!stopChild) computeChildDimens(view); 
 
-    element_style += setAnimationStyles(elem, view.props); 
     element_style += setComputedStyles(elem, view.props); 
+    element_style += setAnimationStyles(elem, view.props); 
+    // console.log("nice is",nice);
+    // console.log(element_style);
     elem.setAttribute("style",element_style); // finally attach all the styles to the element 
 
 

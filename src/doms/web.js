@@ -43,7 +43,7 @@ module.exports = function (type, props, children) {
     props = {};
   
   if (typeof type === "string") {
-    props = parseParams(type, props);
+    //props = parseParams(type, props);
     
     let obj = {
       props: props,
