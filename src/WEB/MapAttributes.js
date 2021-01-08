@@ -1,13 +1,15 @@
 let utils = require("./Utils"); 
 
 
-function mapPropToStyle(element,props){
+function mapPropToStyle(element,props,type){
 
     let ele_style = ""; // contains the css of the element
     ele_style += simpleMap(props); // normal one liner mapping
     ele_style += prestoSpecificTransform(props); // hardcoded font values etc. 
     ele_style += transformCSSProperty(props);  // specific transform css property 
+    ele_style += typeMap(type,props)
     attachAttributes(element,props);  // element is mututable, adding attributes to it like src, url etc. things which are not css basically 
+    console.log("custom ",ele_style);
     return ele_style; 
 }
 
@@ -25,7 +27,7 @@ function simpleMap(props){
 
     if (props.backgroundColor) { ele_style += "background-color: " + utils.parseColors(props.backgroundColor) + ";"};
 
-    if (props.background) { ele_style += "background: " + props.backgroundColor + ";"};
+    if (props.background) { ele_style += "background: " + props.background + ";"};
     
     if (props.backgroundDrawable) { ele_style += "background-image: " + "url('"+props.backgroundDrawable+"')" + ";"}; 
 
@@ -88,33 +90,33 @@ function prestoSpecificTransform(props){
         
         ele_style += "font-family:" + fontName + ";"; 
     
-        if (!match) continue;
-    
-        let type = props.fontStyle.slice(match.index + 1);
-        type = type.replace(/[-/]/g, '');
-        type  = type.toLowerCase();
-    
-        if (type.indexOf('italic') != -1)
-            ele_style += "font-style: italic;";
-    
-        let fontWeight = 0;
-    
-        if (type.indexOf('extralight') != -1)
-            fontWeight = 200;
-        else if (type.indexOf('light') != -1)
-            fontWeight = 300;
-        else if (type.indexOf('regular') != -1 || type.indexOf('book') != -1)
-            fontWeight = 400;
-        else if (type.indexOf('semibold') != -1 || type.indexOf('medium') != -1)
-            fontWeight = 500;
-        else if (type.indexOf('bold') != -1 || type.indexOf('heavy') != -1)
-            fontWeight = 700;
-        else if (type.indexOf('black') != -1)
-            fontWeight = 900;
-    
-        if(fontWeight > 0)
-            ele_style += "font-weight:"+ fontWeight +";";
+        if (match) {
+            let type = props.fontStyle.slice(match.index + 1);
+            type = type.replace(/[-/]/g, '');
+            type  = type.toLowerCase();
+        
+            if (type.indexOf('italic') != -1)
+                ele_style += "font-style: italic;";
+        
+            let fontWeight = 0;
+        
+            if (type.indexOf('extralight') != -1)
+                fontWeight = 200;
+            else if (type.indexOf('light') != -1)
+                fontWeight = 300;
+            else if (type.indexOf('regular') != -1 || type.indexOf('book') != -1)
+                fontWeight = 400;
+            else if (type.indexOf('semibold') != -1 || type.indexOf('medium') != -1)
+                fontWeight = 500;
+            else if (type.indexOf('bold') != -1 || type.indexOf('heavy') != -1)
+                fontWeight = 700;
+            else if (type.indexOf('black') != -1)
+                fontWeight = 900;
+        
+            if(fontWeight > 0)
+                ele_style += "font-weight:"+ fontWeight +";";
         }
+    }
 
 
     return ele_style; 
@@ -146,8 +148,7 @@ function transformCSSProperty(props){
     //     config.style["box-shadow"]=  "0 0 "+v.toString()+"px rgba(0,0,0, .1)";
         
     //   }
-
-    ele_style += "transform : " + transform; + ";" 
+    if (transform.length > 0) {ele_style += "transform : " + transform + ";"};
     return ele_style; 
 }
 
@@ -156,6 +157,40 @@ function attachAttributes(element,props){
     if (props.url) { element.setAttribute('src',url) } 
     if (props.autofocus && (navigator.userAgent.indexOf("iPhone") !== -1)) { element.setAttribute('autofocus',"autofocus") }; // device should not be an iphone
 
+}
+
+function typeMap(type,props){
+    let ele_style = ""; 
+    if (type == "textView" && props.hasOwnProperty("gravity")) {
+        ele_style += "text-align:"+props.gravity+";"; 
+        
+        if (props.gravity == "center_vertical") {
+            ele_style += "align-items:center;"; 
+            ele_style += "display:flex;";   
+        } 
+        else if (props.gravity == "center_horizontal") {
+            ele_style += "justify-content:center;"; 
+            ele_style += "display:flex;";   
+        } 
+        else if (props.gravity == "center") {
+            ele_style += "justify-content:center;"; 
+            ele_style += "align-items:center;"; 
+            ele_style += "display:flex;";   
+        }
+    }
+
+    if (type == "linearLayout" && props.hasOwnProperty("gravity")){
+        if (props.margin && props.gravity=="center_vertical"){
+            
+            var margin=props.margin.split(",");
+            if (props.width == "match_parent"){
+                let width = "calc(100% - "+(parseInt(margin[0])+parseInt(margin[2])).toString()+"px )";
+                ele_style += "width:" + width + ";"; 
+            }
+        }
+    }
+    
+    return ele_style; 
 }
 
 module.exports = {
