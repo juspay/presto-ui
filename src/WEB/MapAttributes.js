@@ -2,62 +2,70 @@ let utils = require("./Utils");
 
 
 function mapPropToStyle(element,props,type){
-
-    let ele_style = ""; // contains the css of the element
-    ele_style += simpleMap(props); // normal one liner mapping
-    ele_style += prestoSpecificTransform(props); // hardcoded font values etc. 
-    ele_style += transformCSSProperty(props);  // specific transform css property 
+    let ele_style = "";                                                             // contains the css of the element
+    ele_style += simpleMap(props);                                                  // normal one liner mapping
+    ele_style += prestoSpecificTransform(props);                                    // hardcoded font values etc. 
+    ele_style += transformCSSProperty(props);                                       // specific transform css property 
     ele_style += typeMap(type,props)
-    attachAttributes(element,props);  // element is mututable, adding attributes to it like src, url etc. things which are not css basically 
-    console.log("custom ",ele_style);
+    attachAttributes(element,props);                                                // element is mututable, adding attributes to it like src, url etc. things which are not css basically 
+    // console.log("custom ",ele_style);
     return ele_style; 
 }
 
-// Author's Note: Haskel's pattern matching would've made this code neat. 
+// Author's Note: Haskel's pattern matching would've made this code prettier. - Convert Presto to Purs?  
 // fontStyle take precedence over fontFamily 
-function simpleMap(props){
+function addProps(props){
     
     let ele_style = ""; 
 
-    if (props.cursorType) { ele_style += "cursor: " + props.cursorType + ";"; }
+    if (props.hasOwnProperty("cursorType")) { ele_style += "cursor: " + props.cursorType + ";"; }
 
-    if (props.textSize)   { ele_style += "font-size: " + props.textSize + "px;"; }
+    if (props.hasOwnProperty("textSize"))   { ele_style += "font-size: " + props.textSize + "px;"; }
 
-    if (props.fontSize)   { ele_style += "font-size: " + props.fontSize + "px;"; }
+    if (props.hasOwnProperty("fontSize"))   { ele_style += "font-size: " + props.fontSize + "px;"; }
 
-    if (props.backgroundColor) { ele_style += "background-color: " + utils.parseColors(props.backgroundColor) + ";"};
+    if (props.hasOwnProperty("backgroundColor")) { ele_style += "background-color: " + utils.parseColors(props.backgroundColor) + ";"};
 
-    if (props.background) { ele_style += "background: " + props.background + ";"};
+    if (props.hasOwnProperty("background")) { ele_style += "background: " + props.background + ";"};
     
-    if (props.backgroundDrawable) { ele_style += "background-image: " + "url('"+props.backgroundDrawable+"')" + ";"}; 
+    if (props.hasOwnProperty("backgroundDrawable")) { ele_style += "background-image: " + "url('"+props.backgroundDrawable+"')" + ";"}; 
 
-    if (props.color) { ele_style += "color: " + utils.parseColors(props.color) + ";"}; 
+    if (props.hasOwnProperty("color")) { ele_style += "color: " + utils.parseColors(props.color) + ";"}; 
 
-    if (props.position) {ele_style += "position: " + props.position + ";"}; 
+    if (props.hasOwnProperty("position")) {ele_style += "position: " + props.position + ";"}; 
 
-    if (props.bottomFixed) {ele_style += "bottom: " + props.bottomFixed + ";"}; 
+    if (props.hasOwnProperty("bottomFixed")) {ele_style += "bottom: " + props.bottomFixed + ";"}; 
 
-    if (props.topFixed) {ele_style += "top: " + props.topFixed + ";"}; 
+    if (props.hasOwnProperty("topFixed")) {ele_style += "top: " + props.topFixed + ";"}; 
 
-    if (props.leftFixed) {ele_style += "left: " + props.leftFixed + ";"}; 
+    if (props.hasOwnProperty("leftFixed")) {ele_style += "left: " + props.leftFixed + ";"}; 
 
-    if (props.rightFixed) {ele_style += "right: " + props.rightFixed + ";"}; 
+    if (props.hasOwnProperty("rightFixed")) {ele_style += "right: " + props.rightFixed + ";"}; 
 
-    if (props.zIndex) {ele_style += "z-index:" + props.zIndex + ";"}; 
+    if (props.hasOwnProperty("zIndex")) {ele_style += "z-index:" + props.zIndex + ";"}; 
 
-    if (props.cornerRadius) {ele_style += "border-radius:" + props.cornerRadius + "px;"}; 
+    if (props.hasOwnProperty("cornerRadius")) {ele_style += "border-radius:" + props.cornerRadius + "px;"}; 
 
-    if (props.alpha) {ele_style += "opacity:" + props.alpha + ";"};
+    if (props.hasOwnProperty("alpha")) {ele_style += "opacity:" + props.alpha + ";"};
     
-    if (props.fontFamily) {ele_style += "font-family:" + props.fontFamily + ";"}; 
+    if (props.hasOwnProperty("fontFamily")) {ele_style += "font-family:" + props.fontFamily + ";"}; 
 
-    
+    if (props.hasOwnProperty("blurBackground") && props.blurBackground) {ele_style += "backdrop-filter: blur(3px)";}
+
+    if (props.hasOwnProperty("lineHeight")) {ele_style += "line-height: " + props.lineHeight + ";";}
+
+    if (props.hasOwnProperty("objectFit")) {ele_style += "object-fit: " + props.objectFit + ";";}
+
+    if (props.hasOwnProperty("clickable")) {ele_style += "pointer-events: " + (props.clickable ? "auto" : "none") + ";";}
+
+    if (props.hasOwnProperty("display")) { ele_style += "display:" + props.display + ";"; }
+
     return ele_style; 
 
 }
 
-// These values are hardcoded likely since same property is being used for Android, iOS and Web
-function prestoSpecificTransform(props){
+// These values are hardcoded likely since same prestoDOM property is being used for Android, iOS and Web
+function addFontProp(props){
 
     let ele_style = "";
     
@@ -122,8 +130,8 @@ function prestoSpecificTransform(props){
     return ele_style; 
 }
 
-// transform css property mappings 
-function transformCSSProperty(props){
+
+function addTransformProp(props){
     let ele_style = "";
     let transform = ""; 
     
@@ -152,15 +160,108 @@ function transformCSSProperty(props){
     return ele_style; 
 }
 
-// add attributes to the mutable element 
-function attachAttributes(element,props){
-    if (props.url) { element.setAttribute('src',url) } 
-    if (props.autofocus && (navigator.userAgent.indexOf("iPhone") !== -1)) { element.setAttribute('autofocus',"autofocus") }; // device should not be an iphone
 
+function addStrokeProp(props){
+
+    var ele_style = ""; 
+
+    if (props.hasOwnProperty("stroke")) {
+    
+        let values = props.stroke.split(",");
+
+        if(values.length == 2) { ele_style += "border: " + values[0] + "px solid " + values[1] + ";";}
+        else if(values.length == 3){
+
+            if (values[2] == "rbl"){
+                ele_style += "border-bottom: " + values[0] + "px solid " + values[1] + ";";
+                ele_style += "border-left: " + values[0] + "px solid " + values[1] + ";";
+                ele_style += "border-right: " + values[0] + "px solid " + values[1] + ";";
+            }
+            else if (values[2] == "b"){
+                ele_style += "border-bottom: " + values[0] + "px solid " + values[1] + ";";
+            }
+            else if (values[2] == "r"){
+                ele_style += "border-right: " + values[0] + "px solid " + values[1] + ";";
+            }
+            else if (values[2] == "rb"){
+                ele_style += "border-bottom: " + values[0] + "px solid " + values[1] + ";";
+                ele_style += "border-right: " + values[0] + "px solid " + values[1] + ";";
+            }
+            else
+                ele_style += "border: " + values[0] + "px  " + values[1] + " " + values[2] + ";";
+            }
+    }
+
+    if (props.hasOwnProperty("strokeTop")) {
+        let values = props.strokeTop.split(",");
+        if(values.length == 2)
+            ele_style += "border-top: " + values[0] + "px solid " + values[1] + ";";            
+        else if(values.length == 3)
+            ele_style += "border-top: " + values[0] + "px  " + values[1] + " " + values[2] + ";";
+    }
+
+    if (props.hasOwnProperty("strokeRight")) {
+        let values = props.strokeRight.split(",");
+        if(values.length == 2)
+            ele_style += "border-right: " + values[0] + "px solid " + values[1] + ";";            
+        else if(values.length == 3)
+            ele_style += "border-right: " + values[0] + "px  " + values[1] + " " + values[2] + ";";
+    }
+
+    if (props.hasOwnProperty("strokeBottom")) {
+        let values = props.strokeBottom.split(",");
+        if(values.length == 2)
+            ele_style += "border-bottom: " + values[0] + "px solid " + values[1] + ";";            
+        else if(values.length == 3)
+            ele_style += "border-bottom: " + values[0] + "px  " + values[1] + " " + values[2] + ";";
+    }
+
+    if (props.hasOwnProperty("strokeRight")) {
+        let values = props.strokeRight.split(",");
+        if(values.length == 2)
+            ele_style += "border-right: " + values[0] + "px solid " + values[1] + ";";            
+        else if(values.length == 3)
+            ele_style += "border-right: " + values[0] + "px  " + values[1] + " " + values[2] + ";";
+    }
+
+    if (props.hasOwnProperty("strokeLeft")) {
+        let values = props.strokeLeft.split(",");
+        if(values.length == 2)
+            ele_style += "border-left: " + values[0] + "px solid " + values[1] + ";";            
+        else if(values.length == 3)
+            ele_style += "border-left: " + values[0] + "px  " + values[1] + " " + values[2] + ";";
+    }
+
+    return ele_style; 
 }
 
-function typeMap(type,props){
+function addGradientProp(props){
+
+    var ele_style = "";
+    
+    if (props.hasOwnProperty("gradient")) {
+        var gradientObj =JSON.parse(props.gradient);
+        if (gradientObj.type == "linear") {
+          var angle = gradientObj.angle;
+          var values = gradientObj.values;
+          var colors = values.join(", ");
+          ele_style += "background-image: " + "linear-gradient("+angle+"deg, "+colors+");"; 
+        }
+        else {
+          var values = gradientObj.values;
+          var colors = values.join(", ");
+          ele_style += "background-image: " + "radial-gradient("+colors+");"; 
+        }
+    }
+
+    return ele_style; 
+}
+
+
+function addTypeSpecificProp(type,props){
+
     let ele_style = ""; 
+
     if (type == "textView" && props.hasOwnProperty("gravity")) {
         ele_style += "text-align:"+props.gravity+";"; 
         
@@ -192,6 +293,131 @@ function typeMap(type,props){
     
     return ele_style; 
 }
+
+
+
+
+function addRotateProp(props){
+
+    var ele_style = ""; 
+    
+    if (props.contains("rotateImage")){
+        if(props.rotateImage){
+          ele_style += "-webkit-animation:load3 4s infinite linear;";
+          ele_style += "animation-duration:4s;";
+          ele_style += "animation-timing-function:linear;";
+          ele_style += "animation-delay:0s;";
+          ele_style += "animation-iteration-count:infinite;";
+          ele_style += "animation-direction:normal;";
+          ele_style += "animation-fill-mode:none;";
+          ele_style += "animation-play-state:running;";
+          ele_style += "animation-name:rotation;";
+        }
+    }
+
+    return ele_style; 
+}
+
+function addShadowProp(props){
+
+    var ele_style = ""; 
+
+    if (props.hasOwnProperty("shadow") {
+        var shadowValues = props.shadow.split(props.shadowSeparator || ',');
+        var shadowBlur = utils.rWS(utils.cS(shadowValues[2]));
+        var shadowSpread = utils.rWS(utils.cS(shadowValues[3]));
+        var shadowOpacity = utils.rWS(utils.cS(shadowValues[5]));
+        var shadowOffset = {
+            x: utils.rWS(utils.cS(shadowValues[0])),
+            y: utils.rWS(utils.cS(shadowValues[1]))
+          };
+
+        var shadowColor = utils.convertColorToRgba(shadowValues[4]);
+        var shadowType = props.shadowType ? `${props.shadowType} ` : ''
+
+        ele_style += "box-shadow:" + shadowType + parseInt(shadowOffset.x) + "px " + parseInt(shadowOffset.y) + "px " + parseInt(shadowBlur) + "px " + parseInt(shadowSpread) + "px rgba(" + shadowColor.r + ", " +  shadowColor.g + ", " +  shadowColor.b + ", " +  shadowColor.a + ");" ;
+    }
+
+    return ele_style; 
+}
+
+
+function addSetInputTypeProp(ele,props){
+    
+    var ele_style = ""; 
+
+    if (props.hasOwnProperty("inputType")) {
+    
+        var inputType = "text";
+
+        if (props.inputType == "numericPassword" || props.inputType == "password") {          
+          if(props.inputTypeI == 4 && isMobile){ // This feels like a very specific use-case? Investigate 
+            inputType = "tel";
+            ele_style += "-webkit-text-security:disc;";
+            ele_style += "-moz-text-security:disc;";
+            props.style["text-security"] = "disc";
+          } 
+          else {
+            ele.setAttribute("autocomplete","new-password"); 
+            inputType = "password"; 
+          }
+        } 
+
+        else if (props.inputType == "disabled") {
+            ele.setAttribute("disabled","disabled");
+        } 
+
+        else if (props.inputType == "numeric") {
+            inputType = "number"
+        }
+
+        if (props.hasOwnProperty("separator")) {
+          if(props.inputType == "numeric"){
+            inputType = "tel"  
+          } else {
+            inputType = "text"
+          }
+        }
+
+        ele.setAttribute("type",inputType); 
+    }
+
+    return ele_style; 
+}
+
+// add attributes to the mutable element 
+function setElemAttributes(element,props){
+    
+    if (props.hasOwnProperty("url")) { element.setAttribute('src',url) } 
+    
+    if (props.hasOwnProperty("autofocus") && (navigator.userAgent.indexOf("iPhone") !== -1)) { element.setAttribute('autofocus',"autofocus") }; // device should not be an iphone
+    
+    if (props.hasOwnProperty('contentEditable')) {element.setAttribute('contentEditable','true')}; 
+    
+    if (props.hasOwnProperty('hint')) {element.setAttribute('hint',props.hint)}; 
+
+    if (props.hasOwnProperty("pattern")) {
+        element.setAttribute("data-pattern",config.pattern); 
+        var data = config.pattern.split(',');
+        var length = parseInt(data.pop());
+        if(length>10) { length = 10;    }
+        element.setAttribute("size",length); 
+    }
+
+    if (props.hasOwnProperty("separator")) {
+        element.setAttribute("separator",config.separator);
+    }
+    
+    if (props.hasOwnProperty("separatorRepeat")) {
+        element.setAttribute("separatorRepeat",config.separatorRepeat);
+    }
+
+    // if (props.hasOwnProperty("myAttr")) {
+    //     element.setAttribute(config.myAttr,config.myAttr);
+    // }
+
+}
+
 
 module.exports = {
     mapPropToStyle

@@ -801,9 +801,9 @@ function setAttributes(type, elem, props, firstRender) {
         // elem.style["flex-direction"] = 
 
         if (orient == 'row')
-            setGravityStylesForRow(elem, props); 
+            elem_style += setGravityStylesForRow(elem, props); 
         else
-            setGravityStylesForColumn(elem, props); // TODO : SET STRING STYLE
+            elem_style += setGravityStylesForColumn(elem, props);
 
         // if (elem.style["flex-direction"] == 'row')
         //     setGravityStylesForRow(elem, props);
