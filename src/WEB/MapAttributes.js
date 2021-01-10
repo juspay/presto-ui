@@ -2,13 +2,20 @@ let utils = require("./Utils");
 
 
 function mapPropToStyle(element,props,type){
-    let ele_style = "";                                                             // contains the css of the element
-    ele_style += simpleMap(props);                                                  // normal one liner mapping
-    ele_style += prestoSpecificTransform(props);                                    // hardcoded font values etc. 
-    ele_style += transformCSSProperty(props);                                       // specific transform css property 
-    ele_style += typeMap(type,props)
-    attachAttributes(element,props);                                                // element is mututable, adding attributes to it like src, url etc. things which are not css basically 
-    // console.log("custom ",ele_style);
+    let ele_style = "";                                                            
+    ele_style += addProps(props);                                                 
+    ele_style += addFontProp(props);                                    
+    ele_style += addTransformProp(props);                                       
+    ele_style += addStrokeProp(props);
+    ele_style += addGradientProp(props);  
+    ele_style += addRotateProp(props); 
+    ele_style += addShadowProp(props); 
+    ele_style += addTypeSpecificProp(type,props);
+
+    // TODO: mapPropToStyle should not do these side effect, when merging Render.js and MapAttributes.js, seperate out these functions from here. 
+    ele_style += addSetInputTypeProp(element,props); // also sets an attribute on mutable element 
+    setElemAttributes(element,props);
+
     return ele_style; 
 }
 
@@ -301,7 +308,7 @@ function addRotateProp(props){
 
     var ele_style = ""; 
     
-    if (props.contains("rotateImage")){
+    if (props.hasOwnProperty("rotateImage")){
         if(props.rotateImage){
           ele_style += "-webkit-animation:load3 4s infinite linear;";
           ele_style += "animation-duration:4s;";
@@ -322,7 +329,7 @@ function addShadowProp(props){
 
     var ele_style = ""; 
 
-    if (props.hasOwnProperty("shadow") {
+    if (props.hasOwnProperty("shadow")) {
         var shadowValues = props.shadow.split(props.shadowSeparator || ',');
         var shadowBlur = utils.rWS(utils.cS(shadowValues[2]));
         var shadowSpread = utils.rWS(utils.cS(shadowValues[3]));
@@ -351,7 +358,7 @@ function addSetInputTypeProp(ele,props){
         var inputType = "text";
 
         if (props.inputType == "numericPassword" || props.inputType == "password") {          
-          if(props.inputTypeI == 4 && isMobile){ // This feels like a very specific use-case? Investigate 
+          if(props.inputTypeI == 4 && window.innerWidth < 550){ // This feels like a very specific use-case? Investigate 
             inputType = "tel";
             ele_style += "-webkit-text-security:disc;";
             ele_style += "-moz-text-security:disc;";
@@ -385,6 +392,67 @@ function addSetInputTypeProp(ele,props){
     return ele_style; 
 }
 
+
+function getAnimeTransform(props){
+
+    var elem_style_value = ""; 
+
+    if (props.hasOwnProperty("a_translationY")) {
+        elem_style_value += "translateY(" + props["a_translationY"] + "px) ";
+    }
+
+    if (props.hasOwnProperty("a_translationX")) {
+        elem_style_value += "translateX(" + props["a_translationX"] + "px) ";
+    }
+
+    if (props.hasOwnProperty("a_scaleX")) {
+        elem_style_value += "scaleX(" + props["a_scaleX"] + ") ";
+    }
+
+    if (props.hasOwnProperty("a_scaleY")) {
+        elem_style_value += "scaleY(" + props["a_scaleY"] + ") ";
+    }
+
+    if (props.hasOwnProperty("a_rotation")) {
+        elem_style_value += "rotate(" + props["a_rotation"] + "deg) ";
+    }
+
+    if (props.hasOwnProperty("a_rotationX")) {
+        elem_style_value += "rotateX(" + props["a_rotationX"] + "deg) ";
+    }
+
+    if (props.hasOwnProperty("a_rotationY")) {
+        elem_style_value += "rotateY(" + props["a_rotationY"] + "deg) ";
+    }
+
+
+
+    if (elem_style_value.length > 0) 
+        return " transform: "+ elem_style_value +";";
+    else 
+        return ""; 
+
+}
+
+
+function getAnimeOpacity(props){
+    if (props.hasOwnProperty("a_alpha")){
+        return "opacity: " + props["a_alpha"] + "; "; 
+    }
+    else 
+        return ""; 
+}
+
+function getAnimeTransition(props){
+
+    if (props.hasOwnProperty("a_duration") && !isNaN(props["a_duration"])) {
+        const suffix = props.transitionTimingFunction ? (" " + props.transitionTimingFunction) : "";
+        return "transition: " + props["a_duration"] + 'ms all' + suffix + ";"; 
+    }
+    else return ""; 
+
+}
+
 // add attributes to the mutable element 
 function setElemAttributes(element,props){
     
@@ -397,19 +465,19 @@ function setElemAttributes(element,props){
     if (props.hasOwnProperty('hint')) {element.setAttribute('hint',props.hint)}; 
 
     if (props.hasOwnProperty("pattern")) {
-        element.setAttribute("data-pattern",config.pattern); 
-        var data = config.pattern.split(',');
+        element.setAttribute("data-pattern",props.pattern); 
+        var data = props.pattern.split(',');
         var length = parseInt(data.pop());
         if(length>10) { length = 10;    }
         element.setAttribute("size",length); 
     }
 
     if (props.hasOwnProperty("separator")) {
-        element.setAttribute("separator",config.separator);
+        element.setAttribute("separator",props.separator);
     }
     
     if (props.hasOwnProperty("separatorRepeat")) {
-        element.setAttribute("separatorRepeat",config.separatorRepeat);
+        element.setAttribute("separatorRepeat",props.separatorRepeat);
     }
 
     // if (props.hasOwnProperty("myAttr")) {
@@ -419,8 +487,14 @@ function setElemAttributes(element,props){
 }
 
 
+
+
+
 module.exports = {
-    mapPropToStyle
+    mapPropToStyle,
+    getAnimeTransform,
+    getAnimeOpacity,
+    getAnimeTransition
 }
 
 

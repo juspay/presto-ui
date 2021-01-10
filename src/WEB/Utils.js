@@ -49,8 +49,37 @@ function convertColorToRgba(color) {
   };
 }
 
-
+// function modifyTranslation(config){
+//   var x = config.x || "0";
+//   var y = config.y || "0";
+//   var animationArray = JSON.parse(config.inlineAnimation);
+//   var animationArray = animationArray.map(function(a){
+//     if(a.hasOwnProperty("fromX")){
+//       a.fromX = parseInt(a.fromX) + parseInt(x) + '';
+//       if(!a.hasOwnProperty("toX")){
+//         a.toX = 0 + parseInt(x) + '';
+//       }
+//     }
+//     if(a.hasOwnProperty("toX")){
+//       a.toX = parseInt(a.toX) + parseInt(x) + '';
+//     }
+//     if(a.hasOwnProperty("fromY")){
+//       a.fromY = parseInt(a.fromY) + parseInt(y) + '';
+//       if(!a.hasOwnProperty("toY")){
+//         a.toY = 0 + parseInt(y) + '';
+//       }
+//     }
+//     if(a.hasOwnProperty("toY")){
+//       a.toY = parseInt(a.toY) + parseInt(y) + '';
+//     }
+//     return a;
+//   })
+//   return (animationArray);
+// }
 
 module.exports = {
-    parseColors
+    parseColors,
+    rWS, 
+    cS, 
+    convertColorToRgba
 }
