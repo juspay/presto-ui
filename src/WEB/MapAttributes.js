@@ -14,7 +14,7 @@ function mapPropToStyle(element,props,type){
 
     // TODO: mapPropToStyle should not do these side effect, when merging Render.js and MapAttributes.js, seperate out these functions from here. 
     ele_style += addSetInputTypeProp(element,props); // also sets an attribute on mutable element 
-    setElemAttributes(element,props);
+    // setElemAttributes(element,props);
 
     return ele_style; 
 }
@@ -24,6 +24,10 @@ function mapPropToStyle(element,props,type){
 function addProps(props){
     
     let ele_style = ""; 
+
+    if ((props.hasOwnProperty("onClick") || props.hasOwnProperty("onClickEvent"))) {
+        if(window.innerWidth > 550 && !props.cursorType) {ele_style += "cursor:pointer;";}
+    }
 
     if (props.hasOwnProperty("cursorType")) { ele_style += "cursor: " + props.cursorType + ";"; }
 
@@ -458,7 +462,7 @@ function setElemAttributes(element,props){
     
     if (props.hasOwnProperty("url")) { element.setAttribute('src',url) } 
     
-    if (props.hasOwnProperty("autofocus") && (navigator.userAgent.indexOf("iPhone") !== -1)) { element.setAttribute('autofocus',"autofocus") }; // device should not be an iphone
+    if (props.hasOwnProperty("autofocus") && (navigator.userAgent.indexOf("iPhone") == -1)) { element.setAttribute('autofocus',"autofocus") }; // device should not be an iphone
     
     if (props.hasOwnProperty('contentEditable')) {element.setAttribute('contentEditable','true')}; 
     
@@ -480,6 +484,8 @@ function setElemAttributes(element,props){
         element.setAttribute("separatorRepeat",props.separatorRepeat);
     }
 
+    return element; 
+
     // if (props.hasOwnProperty("myAttr")) {
     //     element.setAttribute(config.myAttr,config.myAttr);
     // }
@@ -494,7 +500,8 @@ module.exports = {
     mapPropToStyle,
     getAnimeTransform,
     getAnimeOpacity,
-    getAnimeTransition
+    getAnimeTransition,
+    setElemAttributes
 }
 
 

@@ -39,6 +39,8 @@ module.exports = function (type, props, children) {
   // children = children.flatten();
   // console.log("children after flatten is",children);
 
+  console.log("dom all location",document.location);
+
   if (!props)
     props = {};
   

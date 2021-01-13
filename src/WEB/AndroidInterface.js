@@ -146,8 +146,7 @@ function Render(view, cb) {
   computeChildDimens(parentView);
   const elem = inflateView(view, parentElement, null);
 
-  if (cb)
-    window.callUICallback(cb);
+  // if (cb) window.callUICallback(cb);
 
   if (parentElement.childElementCount > 1) {
     let iterableChildNodes = Array.prototype.slice.call(parentElement.children);
@@ -183,22 +182,7 @@ function moveView(id, index) {
 // Android.addViewToParent(rootId, dom_all, length (window.__ROOTSCREEN.idSet.child) - 1 , callback, null); -- call to this function 
 function addViewToParent(id, view, index, cb, replace) {
 
-  // let parseParams = require('../helpers/web').parseParams;
-  // let prestoClone = require('../helper').clone
-  // let t = prestoClone(dom.type); 
-  // let p = prestoClone(dom.props);
-
-  // let props = parseParams(t, p);
-    
-  // let view = {
-  //     props: props,
-  //     type: props.type,
-  //     children: props.children
-  // };
-
-  // window.__VIEWS[props.id] = view;
-  // window.__VIEW_DIMENSIONS[props.id] = null;
-
+  console.log("add addViewToParent location",document.location); // parent root document 
 
   let parentElement = document.getElementById(id)
   let parentView = window.__VIEWS[id]
@@ -235,8 +219,7 @@ function addViewToParent(id, view, index, cb, replace) {
     }
   }
   
-  if (cb)
-    window.callUICallback(cb) // callback defined by source i.e. hyper-widget, not required since globalEvents exist in prestoDOM 
+  if (cb) nice(cb) // callback defined by source i.e. hyper-widget, not required since globalEvents exist in prestoDOM  // in this documet is iframe 
 }
 
 function getChildModalViews(view) {
@@ -467,6 +450,47 @@ function getWindow() {
 function getDocument() {
   return window.document;
 }
+
+
+function nice () {
+    console.log("document location in callUICallback is",document.location); 
+    let args = (arguments.length === 1 ? [arguments[0]] : Array.apply(null,
+        arguments));
+    var fName = args[0]
+    var moreFruits = Object.assign({}, window.__PROXY_FN);
+
+    console.log("__PROXY_FN is",moreFruits); 
+    console.log("callUICallback fName is",fName); 
+    var functionArgs = args.slice(1)
+    console.log("args are",functionArgs);
+    var currTime;
+    var timeDiff;
+    
+    if (window.__ALL_ONCLICKS && window.__ALL_ONCLICKS.indexOf(fName) != -1 && args[2] == "feedback" && JBridge && JBridge.setClickFeedback) {
+        return JBridge.setClickFeedback(args[1]);
+    }
+
+    if (window.__THROTTELED_ACTIONS && window.__THROTTELED_ACTIONS.indexOf(fName) == -1) {
+        window.__PROXY_FN[fName].apply(null, functionArgs);
+    } else if (window.__LAST_FN_CALLED && (fName == window.__LAST_FN_CALLED.fName)) {
+        currTime = getCurrTime();
+        timeDiff = currTime - window.__LAST_FN_CALLED.timeStamp;
+
+        if (timeDiff >= 300) {
+            window.__PROXY_FN[fName].apply(null, functionArgs);
+            window.__LAST_FN_CALLED.timeStamp = currTime;
+        } else {
+            console.warn("function throtteled", fName);
+            console.warn("time diff", timeDiff);
+        }
+    } else {
+        window.__PROXY_FN[fName].apply(null, functionArgs);
+        window.__LAST_FN_CALLED = {
+            timeStamp: (new Date()).getTime(),
+            fName: fName
+        }
+    }
+};
 
 module.exports = {
   getScreenDimensions: getScreenDimensions,

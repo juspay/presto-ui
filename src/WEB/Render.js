@@ -412,9 +412,10 @@ function setComputedStyles(elem, props) {
             computed_styles += "flex:none;";
             //elem.style.flex = 'none';
         }
-    } else {
+    } 
+    else {
         computed_styles += "flex:none;";
-//        elem.style.flex = 'none';
+    //        elem.style.flex = 'none';
     }
 
     // RelativeLayout Styles
@@ -946,6 +947,7 @@ function setAttributes(type, elem, props, firstRender) {
     }
 
     elem_style += mapAttributes.mapPropToStyle(elem,props,type); 
+    elem = mapAttributes.setElemAttributes(elem,props); 
 
     for (let key in props) { 
         if (props[key] && typeof props[key] == "function") {
@@ -1002,8 +1004,10 @@ function setAttributes(type, elem, props, firstRender) {
     /* Events */
     if (firstRender) { // what is firstRender? 
         if (type == "editText" && elem.tagName.toLowerCase() == "input") {
+
             var isIPhone = (navigator.userAgent.indexOf("iPhone") !== -1)
-            if (props.autofocus && !isIPhone) {
+            if (elem.autofocus && !isIPhone) {
+                console.log("it's true");
                 elem.focus()
             }
             if(window.preponeSpace){
