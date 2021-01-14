@@ -27,8 +27,6 @@
  Used to initialize defaults for window funcions and variables.
 */
 
-console.log("document location is in init file",document.location);
-
 const { merge } = require('./helper');
 window.PrestoUI = require("./PrestoUIInterface");
 
@@ -57,11 +55,6 @@ if(window.__OS == "ANDROID"){
 
 if (window.__OS == "WEB") {
     /* In case of web JOS, we use Android and JBridge variable from parent window 
-     * to handle that case checking for Android and JBridge in parent window if available or not 
-     */ 
-    // window.Android = window.parent.Android ? window.parent.Android : require("./WEB/AndroidInterface")
-    // window.JBridge = window.parent.JBridge ? window.parent.JBridge : require("./WEB/JBridgeInterface")
-        /* In case of web JOS, we use Android and JBridge variable from parent window 
      * to handle that case checking for Android and JBridge in parent window if available or not 
      */ 
     try {
@@ -228,16 +221,10 @@ window.__OBSERVERS = {};
 window.ZIndex = 0;
 
 window.callUICallback = function () {
-    console.log("document location in callUICallback is",document.location); 
     let args = (arguments.length === 1 ? [arguments[0]] : Array.apply(null,
         arguments));
     var fName = args[0]
-    var moreFruits = Object.assign({}, window.__PROXY_FN);
-
-    console.log("__PROXY_FN is",moreFruits); 
-    console.log("callUICallback fName is",fName); 
     var functionArgs = args.slice(1)
-    console.log("args are",functionArgs);
     var currTime;
     var timeDiff;
     

@@ -24,8 +24,6 @@
  */
 
 module.exports.map = (fn) => {
-	console.log("callbackMapper called");
-	console.log("document location is",document.location); 
 	if(typeof window.__FN_INDEX !== 'undefined' && window.__FN_INDEX !== null) {
 		var proxyFnName = 'F' + window.__FN_INDEX;
 		if (window.__payload && window.__payload.service){
@@ -35,7 +33,6 @@ module.exports.map = (fn) => {
 	  	window.__FN_INDEX++;
 
 	  	var moreFruits = Object.assign({}, window.__PROXY_FN);
-    	console.log("callbackMapper is",moreFruits); 
 		return proxyFnName;
 	} else {
 		throw new Error("Please initialise window.__FN_INDEX = 0 in index.js of your project.");

@@ -181,9 +181,6 @@ function moveView(id, index) {
 
 // Android.addViewToParent(rootId, dom_all, length (window.__ROOTSCREEN.idSet.child) - 1 , callback, null); -- call to this function 
 function addViewToParent(id, view, index, cb, replace) {
-
-  console.log("add addViewToParent location",document.location); // parent root document 
-
   let parentElement = document.getElementById(id)
   let parentView = window.__VIEWS[id]
   let siblingView = null
@@ -219,7 +216,7 @@ function addViewToParent(id, view, index, cb, replace) {
     }
   }
   
-  if (cb) nice(cb) // callback defined by source i.e. hyper-widget, not required since globalEvents exist in prestoDOM  // in this documet is iframe 
+  if (cb) UICallBack(cb); 
 }
 
 function getChildModalViews(view) {
@@ -452,17 +449,11 @@ function getDocument() {
 }
 
 
-function nice () {
-    console.log("document location in callUICallback is",document.location); 
+function UICallBack () {
     let args = (arguments.length === 1 ? [arguments[0]] : Array.apply(null,
         arguments));
     var fName = args[0]
-    var moreFruits = Object.assign({}, window.__PROXY_FN);
-
-    console.log("__PROXY_FN is",moreFruits); 
-    console.log("callUICallback fName is",fName); 
     var functionArgs = args.slice(1)
-    console.log("args are",functionArgs);
     var currTime;
     var timeDiff;
     
