@@ -1007,7 +1007,6 @@ function setAttributes(type, elem, props, firstRender) {
 
             var isIPhone = (navigator.userAgent.indexOf("iPhone") !== -1)
             if (elem.autofocus && !isIPhone) {
-                console.log("it's true");
                 elem.focus()
             }
             if(window.preponeSpace){

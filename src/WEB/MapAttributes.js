@@ -366,7 +366,7 @@ function addSetInputTypeProp(ele,props){
             inputType = "tel";
             ele_style += "-webkit-text-security:disc;";
             ele_style += "-moz-text-security:disc;";
-            props.style["text-security"] = "disc";
+            ele_style += "text-security:disc"; 
           } 
           else {
             ele.setAttribute("autocomplete","new-password"); 
