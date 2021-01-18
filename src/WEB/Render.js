@@ -74,6 +74,7 @@ function createTextElement(elem, config) {
 
 // inefficient, no longer being used 
 function createTextElement2(elem, config) {
+    let text_style = ""; 
     let children = elem.childNodes;
     let article = null
     if (children.length) {
@@ -84,11 +85,11 @@ function createTextElement2(elem, config) {
             }
         }
     }
-
     if (!article)
         article = document.createElement('ARTICLE')
 
-    elem.style.whiteSpace = "initial"
+    // elem.style.whiteSpace = "initial"
+    text_style += "white-space:initial;";
 
     if (config.isHtmlContent)
         article.innerHTML = config.textFromHtml
@@ -102,9 +103,11 @@ function createTextElement2(elem, config) {
     article.style.display = "inline"
 
     if (config.letterSpacing)
-        elem["style"]["letter-spacing"] = config.letterSpacing
+        text_style += "letter-spacing:"+config.letterSpacing+";";
+    //    elem["style"]["letter-spacing"] = config.letterSpacing
 
     elem.appendChild(article)
+    return text_style; 
 }
 
 // not being used in hyper-widget web 
@@ -914,7 +917,7 @@ function setAttributes(type, elem, props, firstRender) {
     /* New Style End */
     if (props.hasOwnProperty("text")){
         if (type == "editText")
-            elem.value = props[key]
+            elem.value = props.text 
         else
             elem_style += createTextElement(elem, props) 
     }
@@ -923,7 +926,7 @@ function setAttributes(type, elem, props, firstRender) {
         if (type == "editText")
             elem.value = props.textFromHtml
         else
-            elem_style += createTextElement(elem, props)
+            elem_style += createTextElement2(elem, props)
     }
 
     if (props.hasOwnProperty("className")) {

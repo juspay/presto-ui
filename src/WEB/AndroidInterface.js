@@ -147,6 +147,7 @@ function Render(view, cb) {
   const elem = inflateView(view, parentElement, null);
 
   // if (cb) window.callUICallback(cb);
+  if (cb) UICallBack(cb); 
 
   if (parentElement.childElementCount > 1) {
     let iterableChildNodes = Array.prototype.slice.call(parentElement.children);
@@ -450,6 +451,7 @@ function getDocument() {
 
 
 function UICallBack () {
+    //console.log("ui-callback document location",document.location); 
     let args = (arguments.length === 1 ? [arguments[0]] : Array.apply(null,
         arguments));
     var fName = args[0]

@@ -273,6 +273,15 @@ function addTypeSpecificProp(type,props){
 
     let ele_style = ""; 
 
+    if (props.hasOwnProperty('visibility')){
+        if (props.visibility == "gone") return ele_style; 
+    }
+
+    if (props.hasOwnProperty('display')){
+        if (props.display == "none") return ele_style; 
+    }
+
+
     if (type == "textView" && props.hasOwnProperty("gravity")) {
         ele_style += "text-align:"+props.gravity+";"; 
         
