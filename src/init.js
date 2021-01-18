@@ -61,7 +61,7 @@ if (window.__OS == "WEB") {
         window.Android = window.parent.Android ? window.parent.Android : require("./WEB/AndroidInterface")
         window.JBridge = window.parent.JBridge ? window.parent.JBridge : require("./WEB/JBridgeInterface")
     } catch (err) {
-        console.log("Presto UI Iframe error: ", err);
+        // console.log("Presto UI Iframe error: ", err);
         window.Android = require("./WEB/AndroidInterface");
         window.JBridge = require("./WEB/JBridgeInterface");
     }
