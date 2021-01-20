@@ -23,15 +23,51 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-module.exports = {
-	init: require("./src/init"),
-	doms : require("./src/doms"),
-	handler : require("./src/handler"),
-	helpers : require("./src/helpers"),
-	baseView : require("./src/baseView"),
-	animations: require('./src/animations'),
-	callbackMapper: require('./src/helpers/common/callbackMapper'),
-	getOS: require('./src/helper').getOS,
-	prestoMerge: require('./src/helper').merge,
-	prestoClone: require('./src/helper').clone
+/*
+	In jOS, we use multiple code-bases as a nested iframe. 
+	Presto-UI needs to be on the parent iframe to be able to paint to the screen. 
+	The following if/else conditions makes it possible. 
+
+	There is no Lazy Loading in JS; 
+	The reqiure statement will get executed even if the object is not accessed. 
+	Since, most files in presto-ui mutates the global state, the requires has been wrapped in if/else. 
+*/
+if (window.__OS === "WEB") {
+    try {
+		// console.debug("presto-ui index document location",document.location); 
+		var prestoUI = window.parent.prestoUI; // The parent iframe must import presto-ui as `window.prestoUI = require("presto-ui")`
+		if (prestoUI) {
+			// console.debug("prestoUI found in the parent iframe whyyy",prestoUI); 
+			window.Android = window.parent.Android; 
+			window.JBridge = window.parent.JBridge; 
+			module.exports = prestoUI; 
+		} else {
+			// console.debug("prestoUI not found in the parent iframe"); 
+			exportPrestoUI(); 
+		}
+	} catch (err) {  // DOM Exception : Cross Orgin iframe access not allowed. When the parent iframe tries to require presto-ui, the catch block will be executed.  
+		console.debug("presto-ui can't acess top")
+		exportPrestoUI(); 
+
+		}
+}
+else { 
+	console.debug("presto-ui not web"); 
+	exportPrestoUI(); 
+
+}
+
+function exportPrestoUI(){
+	module.exports = {
+		init: require("./src/init"), 
+		doms : require("./src/doms"),
+		handler : require("./src/handler"),
+		helpers : require("./src/helpers"),
+		baseView : require("./src/baseView"),
+		animations: require('./src/animations'),
+		callbackMapper: require('./src/helpers/common/callbackMapper'),
+		getOS: require('./src/helper').getOS,
+		prestoMerge: require('./src/helper').merge,
+		prestoClone: require('./src/helper').clone
+	};
 }
