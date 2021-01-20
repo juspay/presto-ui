@@ -28,6 +28,7 @@ var {
   computeChildDimens
 } = require("./Render");
 var helper = require('../helper');
+var callbackInvoker = require("../helpers/common/callbackInvoker"); 
 
 
 function getScreenDimensions() {
@@ -40,7 +41,6 @@ function getScreenDimensions() {
 
 // Due to jos, PrestoDOM's document is different from the DOM Document which actaully contains the nodes. 
 // This utility function allows PrestoDOM to acquire an actual DOM object. 
-// This allows much more performant caching than iterating over the dom, which is done via `runInUI` function
 function getUIElement(id){
   var ele = document.getElementById(id); 
   return ele; 
@@ -115,6 +115,7 @@ function runInUI(cmd) {
 
 function Render(view, cb) {
   /* Global Style Tag */
+  // console.debug("presto render called in document location",document.location);
   let style_id = window.__STYLE_ID;
   
   let styleElem = document.getElementById(style_id);
@@ -134,6 +135,7 @@ function Render(view, cb) {
   /* Global Style Tag End */
 
   let parentElement = document.getElementById("content");
+  // console.debug("presto content element found?? ",parentElement);
   let parentView = {
     type: "linearLayout",
     props: {
@@ -146,8 +148,7 @@ function Render(view, cb) {
   computeChildDimens(parentView);
   const elem = inflateView(view, parentElement, null);
 
-  if (cb)
-    window.callUICallback(cb);
+  if (cb) callbackInvoker.invoke(cb); 
 
   if (parentElement.childElementCount > 1) {
     let iterableChildNodes = Array.prototype.slice.call(parentElement.children);
@@ -182,6 +183,7 @@ function moveView(id, index) {
 
 // Android.addViewToParent(rootId, dom_all, length (window.__ROOTSCREEN.idSet.child) - 1 , callback, null); -- call to this function 
 function addViewToParent(id, view, index, cb, replace) {
+  // console.log("addViewToParent document location is",document.location); 
   let parentElement = document.getElementById(id)
   let parentView = window.__VIEWS[id]
   let siblingView = null
@@ -217,8 +219,7 @@ function addViewToParent(id, view, index, cb, replace) {
     }
   }
   
-  if (cb)
-    window.callUICallback(cb) // callback defined by source i.e. hyper-widget, not required since globalEvents exist in prestoDOM 
+  if (cb) callbackInvoker.invoke(cb); 
 }
 
 function getChildModalViews(view) {

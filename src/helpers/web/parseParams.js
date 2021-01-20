@@ -95,7 +95,7 @@ function lookAndReplaceProp(str,match, val){
 
 
 function parseLayoutProps(type, config, key) {
-  const isMobile = window.innerWidth < 550
+  const isMobile = false // window.innerWidth < 550 // this line takes up 80ms out of 360ms 
   if (typeof config[key] == "undefined" || config[key] == null) {
     delete config[key];
     return;
@@ -114,7 +114,7 @@ function parseLayoutProps(type, config, key) {
     config.animation.transform = "";
   }
 
-  if (!config.attributes)
+  if (!config.attributes) 
     config.attributes = {};
 
   if (!config.style.className)
@@ -669,8 +669,13 @@ function modifyTranslation(config){
   return (animationArray);
 }
 module.exports = function (type, config, getSetType) {
-  config = flattenObject(config);
+  // var ok = flattenObject(c);
+  // console.log("object after flatten",ok); 
+  // var config = ok
   setDefaults(type, config);
+
+  // console.log("object after flatten",config); 
+
 
   var keys = Object.keys(config);
 

@@ -23,14 +23,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
  */
 
+ /*
+	This takes a function and puts it in a hashmap called __PROXY_FN and returns the key (a string). 
+	Key is contructed using a global variables. 
+	Hashmap is also a global variable. 
+	Point To Note : Since iframes, we have different DOM Documents. So, these global variables are global to Presto-UI's document. 
+ */ 
 module.exports.map = (fn) => {
+	console.debug("presto-ui callback-mapper document location",document.location); 
 	if(typeof window.__FN_INDEX !== 'undefined' && window.__FN_INDEX !== null) {
 		var proxyFnName = 'F' + window.__FN_INDEX;
 		if (window.__payload && window.__payload.service){
 			proxyFnName = window.__payload.service + "_" + proxyFnName;
 		}
 		window.__PROXY_FN[proxyFnName] = fn;
-	  	window.__FN_INDEX++;
+		window.__FN_INDEX++;
+		// console.log("Presto-UI Callback Mapper proxyFnName is",proxyFnName); 
 		return proxyFnName;
 	} else {
 		throw new Error("Please initialise window.__FN_INDEX = 0 in index.js of your project.");

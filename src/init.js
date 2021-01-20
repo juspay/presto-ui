@@ -26,8 +26,11 @@
 /*
  Used to initialize defaults for window funcions and variables.
 */
+
 const { merge } = require('./helper');
 window.PrestoUI = require("./PrestoUIInterface");
+
+// console.log("Presto-UI Initialised, document location is",document.location); 
 
 const getCurrTime = () => (new Date()).getTime()
 
@@ -53,11 +56,19 @@ if(window.__OS == "ANDROID"){
 }
 
 if (window.__OS == "WEB") {
-    /* In case of web JOS, we use Android and JBridge variable from parent window 
-     * to handle that case checking for Android and JBridge in parent window if available or not 
-     */ 
-    window.Android = window.parent.Android ? window.parent.Android : require("./WEB/AndroidInterface")
-    window.JBridge = window.parent.JBridge ? window.parent.JBridge : require("./WEB/JBridgeInterface")
+    window.Android = require("./WEB/AndroidInterface");
+    window.JBridge = require("./WEB/JBridgeInterface");
+    // /* In case of web JOS, we use Android and JBridge variable from parent window 
+    //  * to handle that case checking for Android and JBridge in parent window if available or not 
+    //  */ 
+    // try {
+    //     window.Android = window.parent.Android ? window.parent.Android : require("./WEB/AndroidInterface")
+    //     window.JBridge = window.parent.JBridge ? window.parent.JBridge : require("./WEB/JBridgeInterface")
+    // } catch (err) {
+    //     // console.log("Presto UI Iframe error: ", err);
+    //     window.Android = require("./WEB/AndroidInterface");
+    //     window.JBridge = require("./WEB/JBridgeInterface");
+    // }
 } else if (window.__OS == "IOS") {
     window.Android = require("./IOS/AndroidInterface")
     window.JBridge = merge(window.JBridge, {})
@@ -213,7 +224,15 @@ window.__VIEW_DIMENSIONS = {};
 window.__OBSERVERS = {};
 window.ZIndex = 0;
 
+/*
+This should never have been a window function. 
+Moved this function to module src/helpers/common/callbackInvoker.js 
+
+It doesn't work with jOS architecture. Likely this window object is being over-written by some iframe code. 
+Keeping it here as well until the system stablises. 
+*/ 
 window.callUICallback = function () {
+    // console.log("Presto callUICallBack location is",document.location); 
     let args = (arguments.length === 1 ? [arguments[0]] : Array.apply(null,
         arguments));
     var fName = args[0]

@@ -32,14 +32,18 @@ Array.prototype.flatten = function () {
   }, []);
 };
 
-module.exports = function (type, props, ...children) {
-  children = children.flatten();
-  
+module.exports = function (type, props, children) {
+  // console.log("type is",type); 
+  // console.log("props are",props); 
+  // console.log("children is",children); 
+  // children = children.flatten();
+  // console.log("children after flatten is",children);
+
   if (!props)
     props = {};
   
   if (typeof type === "string") {
-    props = parseParams(type, props);
+    //props = parseParams(type, props);
     
     let obj = {
       props: props,
@@ -47,7 +51,7 @@ module.exports = function (type, props, ...children) {
       children: children
     };
 
-    window.__VIEWS[props.id] = obj; // for all the props 
+    window.__VIEWS[props.id] = obj; 
     window.__VIEW_DIMENSIONS[props.id] = null;
     return obj;
   } else {
