@@ -30,7 +30,7 @@
 	Point To Note : Since iframes, we have different DOM Documents. So, these global variables are global to Presto-UI's document. 
  */ 
 module.exports.map = (fn) => {
-	console.debug("presto-ui callback-mapper document location",document.location); 
+	// console.debug("presto-ui callback-mapper document location",document.location); 
 	if(typeof window.__FN_INDEX !== 'undefined' && window.__FN_INDEX !== null) {
 		var proxyFnName = 'F' + window.__FN_INDEX;
 		if (window.__payload && window.__payload.service){

@@ -24,7 +24,6 @@ function invokeUICallback () {
     }
   
     if (window.__THROTTELED_ACTIONS && window.__THROTTELED_ACTIONS.indexOf(fName) == -1) {
-        console.log("presto going to apply fname where fname is",fName);
         window.__PROXY_FN[fName].apply(null, functionArgs);
     } else if (window.__LAST_FN_CALLED && (fName == window.__LAST_FN_CALLED.fName)) {
         currTime = getCurrTime();

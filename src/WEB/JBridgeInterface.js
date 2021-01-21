@@ -315,7 +315,7 @@ module.exports = {
     //
   },
   loadFileInDUI: function (fileName) {
-    console.log("coming here..");
+    // console.log("coming here..");
     return fileName;
   },
   setSessionAttribute: function() {

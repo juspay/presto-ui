@@ -952,35 +952,35 @@ function setAttributes(type, elem, props, firstRender) {
     elem_style += mapAttributes.mapPropToStyle(elem,props,type); 
     elem = mapAttributes.setElemAttributes(elem,props); 
 
-    for (let key in props) { 
-        if (props[key] && typeof props[key] == "function") {
-            var eventType = key.substring(2, key.length).toLowerCase();
-            var elemCB = props[key];
-            elem_style += "user-select: none;";  
-            //elem.style.userSelect = 'none';
-            if (eventType == "change") {
-                eventType = "input";
-            }
+    // for (let key in props) { 
+    //     if (props[key] && typeof props[key] == "function") {
+    //         var eventType = key.substring(2, key.length).toLowerCase();
+    //         var elemCB = props[key];
+    //         elem_style += "user-select: none;";  
+    //         //elem.style.userSelect = 'none';
+    //         if (eventType == "change") {
+    //             eventType = "input";
+    //         }
 
-            elem.addEventListener('blur', function () {
-                var inputValue = elem.value;
-                if (inputValue == "") {
-                    elem.classList.remove("filled");
-                    elem.parentNode.classList.remove('focused');
-                } else {
-                    elem.classList.add('filled');
-                }
-            });
+    //         elem.addEventListener('blur', function () {
+    //             var inputValue = elem.value;
+    //             if (inputValue == "") {
+    //                 elem.classList.remove("filled");
+    //                 elem.parentNode.classList.remove('focused');
+    //             } else {
+    //                 elem.classList.add('filled');
+    //             }
+    //         });
 
-            elem['onfocus'] = function (e) {
-                elem.parentNode.classList.add('focused');
-                if (eventType == "focus") {
-                    e.stopPropagation();
-                    elemCB(e);
-                }
-            };
-        }
-    }
+    //         elem['onfocus'] = function (e) {
+    //             elem.parentNode.classList.add('focused');
+    //             if (eventType == "focus") {
+    //                 e.stopPropagation();
+    //                 elemCB(e);
+    //             }
+    //         };
+    //     }
+    // }
 
 
     var animation_transition = mapAttributes.getAnimeTransition(props); 
@@ -1010,7 +1010,13 @@ function setAttributes(type, elem, props, firstRender) {
 
             var isIPhone = (navigator.userAgent.indexOf("iPhone") !== -1)
             if (elem.autofocus && !isIPhone) {
-                elem.focus()
+                if (window.focusedElement === undefined){
+                    window.focusedElement = ""; 
+                }
+                console.debug("element about to be focused is",elem.id);
+                if(window.focusedElement == "") window.focusedElement = elem.id;  
+                // elem.focus(); 
+                // window.is_element_focused = true;
             }
             if(window.preponeSpace){
                 elem.addEventListener('input', separatorInputKeyDownHandlerNew);

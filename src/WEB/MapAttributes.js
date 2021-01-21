@@ -471,8 +471,19 @@ function setElemAttributes(element,props){
     
     if (props.hasOwnProperty("url")) { element.setAttribute('src',url) } 
     
-    if (props.hasOwnProperty("autofocus") && (navigator.userAgent.indexOf("iPhone") == -1)) { element.setAttribute('autofocus',"autofocus") }; // device should not be an iphone
+    if (props.hasOwnProperty("autofocus") && (navigator.userAgent.indexOf("iPhone") == -1)) { element.setAttribute('autofocus','autofocus') }; // device should not be an iphone
     
+
+    if(props.hasOwnProperty("focus")) {
+            if (props.focus && props.id){
+                var doc = document.getElementById(props.id);
+                if (doc){
+                doc.focus();
+                }
+        }
+    }
+
+
     if (props.hasOwnProperty('contentEditable')) {element.setAttribute('contentEditable','true')}; 
     
     if (props.hasOwnProperty('hint')) {element.setAttribute('hint',props.hint)}; 

@@ -218,6 +218,14 @@ function addViewToParent(id, view, index, cb, replace) {
         parentElement.appendChild(elem);
     }
   }
+
+  if (window.focusedElement !== undefined){
+    var c = document.getElementById(window.focusedElement);
+    if (c) {
+      console.debug("now focusing");
+      c.focus();
+    }
+  }
   
   if (cb) callbackInvoker.invoke(cb); 
 }
