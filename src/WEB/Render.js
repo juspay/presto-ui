@@ -1013,7 +1013,6 @@ function setAttributes(type, elem, props, firstRender) {
                 if (window.focusedElement === undefined){
                     window.focusedElement = ""; 
                 }
-                console.debug("element about to be focused is",elem.id);
                 if(window.focusedElement == "") window.focusedElement = elem.id;  
                 // elem.focus(); 
                 // window.is_element_focused = true;
