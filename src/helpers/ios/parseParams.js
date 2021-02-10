@@ -1837,7 +1837,7 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (config.hasOwnProperty("pivotX")) {
-    if (JBridge.getSessionDetails().includes("mystique_version"))
+    if (JBridge.getSessionDetails().indexOf("mystique_version") != -1)
       config.methods.push(this_pivotX(config.pivotX+""));
   }
 
