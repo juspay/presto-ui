@@ -1207,7 +1207,7 @@ function this_setupList(listData, listItem) {
     "storeKey": "view" + window.__VIEW_INDEX,
     "invokeOn": getSetType ? "this" : "MJPRepeatTableView",
     "methodName": "setupList::",
-    "values": [{ "name": listData, type: "s" }, { "name": listItem, type: "s" }]
+    "values": [{ "name": encodeURI(listData), type: "s" }, { "name": listItem, type: "s" }]
     };
 }
 
