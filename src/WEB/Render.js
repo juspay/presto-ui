@@ -801,6 +801,9 @@ function setAttributes(type, elem, props, firstRender) {
             elem_style += "flex-wrap: wrap;";            
             //elem.style["flex-wrap"] = "wrap";
         }
+        if(props.hasOwnProperty('rowWrap')){
+            elem_style += "flex-wrap: row wrap;";
+        } // this is to fix the lower browser support issue
 
         
         let orient = props.orientation == "horizontal" || props.orientation == null ? "row" : "column";
