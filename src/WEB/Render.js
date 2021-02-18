@@ -956,32 +956,32 @@ function setAttributes(type, elem, props, firstRender) {
 
     if (props.hasOwnProperty("buttonClickOverlay")){
 
+        var bg_image2 = "";
         var bg_image = ",noone,";
-        var bg_image2 = props.style["background-image"];
         // if (props.hasOwnProperty("backgroundDrawable")) {
         //     bg_image = "url('"+config.backgroundDrawable+"')";
         // }
         
-        // if (props.hasOwnProperty("gradient")) {
-        //     var gradObj =JSON.parse(props.gradient);
-        //     if (gradObj.type == "linear") {
-        //         var angle = gradObj.angle;
-        //         var gvalues = gradObj.values;
-        //         var gcolors = gvalues.join(", ");
-        //         bg_image = "linear-gradient("+angle+"deg, "+gcolors+")"
-        //     }
-        //      else {
-        //         var gvalues = gradObj.values;
-        //         var gcolors = gvalues.join(", ");
-        //         bg_image = "radial-gradient("+gcolors+")"
-        //      }
-        // }
+         if (props.hasOwnProperty("gradient")) {
+             var gradObj =JSON.parse(props.gradient);
+             if (gradObj.type == "linear") {
+                 var angle = gradObj.angle;
+                 var gvalues = gradObj.values;
+                 var gcolors = gvalues.join(", ");
+                 bg_image2 = "linear-gradient("+angle+"deg, "+gcolors+")"
+             }
+              else {
+                 var gvalues = gradObj.values;
+                 var gcolors = gvalues.join(", ");
+                 bg_image2 = "radial-gradient("+gcolors+")"
+              }
+         }
 
         // if(!bg_image){
         //     continue; 
         // }
 
-        elem_style += `background-image:linear-gradient(to right, rgba(0,0,0,${props.buttonClickOverlay}) 50%, transparent 50%), ` + bg_image + props.style["background-image"]+ ';';
+        elem_style += `background-image:linear-gradient(to right, rgba(0,0,0,${props.buttonClickOverlay}) 50%, transparent 50%), ` + bg_image + bg_image2 + ';';
         elem_style += `background-position:right bottom;`;
         elem_style += `background-size:200% 100%, 100% 100%;`;
 
