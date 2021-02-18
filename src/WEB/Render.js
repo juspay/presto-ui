@@ -957,7 +957,7 @@ function setAttributes(type, elem, props, firstRender) {
     if (props.hasOwnProperty("buttonClickOverlay")){
 
         var bg_image2 = "";
-        var bg_image = ",noone,";
+        var bg_image = "none";
         // if (props.hasOwnProperty("backgroundDrawable")) {
         //     bg_image = "url('"+config.backgroundDrawable+"')";
         // }
