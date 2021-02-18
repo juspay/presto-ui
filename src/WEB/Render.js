@@ -949,8 +949,43 @@ function setAttributes(type, elem, props, firstRender) {
         });
     }
 
+
+
+
     elem_style += mapAttributes.mapPropToStyle(elem,props,type); 
     elem = mapAttributes.setElemAttributes(elem,props); 
+
+    if (props.hasOwnProperty("buttonClickOverlay")){
+
+        var bg_image = "none"
+        // if (props.hasOwnProperty("backgroundDrawable")) {
+        //     bg_image = "url('"+config.backgroundDrawable+"')";
+        // }
+        
+        // if (props.hasOwnProperty("gradient")) {
+        //     var gradObj =JSON.parse(props.gradient);
+        //     if (gradObj.type == "linear") {
+        //         var angle = gradObj.angle;
+        //         var gvalues = gradObj.values;
+        //         var gcolors = gvalues.join(", ");
+        //         bg_image = "linear-gradient("+angle+"deg, "+gcolors+")"
+        //     }
+        //      else {
+        //         var gvalues = gradObj.values;
+        //         var gcolors = gvalues.join(", ");
+        //         bg_image = "radial-gradient("+gcolors+")"
+        //      }
+        // }
+
+        // if(!bg_image){
+        //     continue; 
+        // }
+
+        elem_style += `background-image:linear-gradient(to right, rgba(0,0,0,${props.buttonClickOverlay}) 50%, transparent 50%), ` + bg_image;
+        elem_style += `background-position:right bottom`;
+        elem_style += `background-size:200% 100%, 100% 100%`;
+
+    } 
 
     // for (let key in props) { 
     //     if (props[key] && typeof props[key] == "function") {
