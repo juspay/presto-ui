@@ -967,12 +967,12 @@ function setAttributes(type, elem, props, firstRender) {
                  var angle = gradObj.angle;
                  var gvalues = gradObj.values;
                  var gcolors = gvalues.join(", ");
-                 bg_image2 = "linear-gradient("+angle+"deg, "+gcolors+")"
+                 bg_image = "linear-gradient("+angle+"deg, "+gcolors+")"
              }
               else {
                  var gvalues = gradObj.values;
                  var gcolors = gvalues.join(", ");
-                 bg_image2 = "radial-gradient("+gcolors+")"
+                 bg_image = "radial-gradient("+gcolors+")"
               }
          }
 
