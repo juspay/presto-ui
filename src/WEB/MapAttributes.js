@@ -146,9 +146,9 @@ function addTransformProp(props){
     let ele_style = "";
     let transform = ""; 
     
-    if (props.translationX) {transform += "translateX(" + props.translationX + ") "}; 
+    if (props.translationX) {transform += "translateX(" + props.translationX + "px) "}; 
 
-    if (props.translationY) {transform += "translateY(" + props.translationY + ") "}; 
+    if (props.translationY) {transform += "translateY(" + props.translationY + "px) "}; 
 
     if (props.scaleX) {transform += "scaleX(" + props.scaleX + ") "}; 
 
