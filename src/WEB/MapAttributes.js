@@ -145,7 +145,7 @@ function addFontProp(props){
 function addTransformProp(props){
     let ele_style = "";
     let transform = ""; 
-    
+    console.log("translationX value : "+props.translationX);
     if (props.translationX) {transform += "translateX(" + props.translationX + "px) "}; 
 
     if (props.translationY) {transform += "translateY(" + props.translationY + "px) "}; 
