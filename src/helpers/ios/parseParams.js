@@ -1207,7 +1207,7 @@ function this_setupList(listData, listItem) {
     "storeKey": "view" + window.__VIEW_INDEX,
     "invokeOn": getSetType ? "this" : "MJPRepeatTableView",
     "methodName": "setupList::",
-    "values": [{ "name": listData, type: "s" }, { "name": listItem, type: "s" }]
+    "values": [{ "name": encodeURI(listData), type: "s" }, { "name": listItem, type: "s" }]
     };
 }
 
@@ -1837,11 +1837,13 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (config.hasOwnProperty("pivotX")) {
-    config.methods.push(this_pivotX(config.pivotX+""));
+    if (JBridge.getSessionDetails().indexOf("mystique_version") != -1)
+      config.methods.push(this_pivotX(config.pivotX+""));
   }
 
-if (config.hasOwnProperty("pivotY")) {
-    config.methods.push(this_pivotY(config.pivotY+""));
+  if (config.hasOwnProperty("pivotY")) {
+    if (JBridge.getSessionDetails().indexOf("mystique_version") != -1)
+      config.methods.push(this_pivotY(config.pivotY+""));
   }
 
   if(config.hasOwnProperty("onItemClick")){
