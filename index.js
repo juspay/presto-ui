@@ -41,15 +41,14 @@ if (window.__OS === "WEB") {
 			window.Android = window.parent.Android; 
 			window.JBridge = window.parent.JBridge; 
 			module.exports = prestoUI; 
-		} else {
+		} else { // On first run this is always true, on subsequent reads (imports) of this file, this is never true
 			// console.debug("prestoUI not found in the parent iframe"); 
 			exportPrestoUI(); 
 		}
 	} catch (err) {  // DOM Exception : Cross Orgin iframe access not allowed. When the parent iframe tries to require presto-ui, the catch block will be executed.  
 		console.debug("presto-ui can't acess top")
-		exportPrestoUI(); 
-
-		}
+		exportPrestoUI(); // This will happen in iframe context, think of this as first import of this file. 
+	}
 }
 else { 
 	console.debug("presto-ui not web"); 

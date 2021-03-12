@@ -228,8 +228,10 @@ window.ZIndex = 0;
 This should never have been a window function. 
 Moved this function to module src/helpers/common/callbackInvoker.js 
 
-It doesn't work with jOS architecture. Likely this window object is being over-written by some iframe code. 
-Keeping it here as well until the system stablises. 
+It doesn't work with jOS architecture. This window object is being over-written by ec-dui. 
+Which makes the read and write to hashmap in 2 different contexts. 
+
+Native Code needs it to be a window function and hence it is being kept here. 
 */ 
 window.callUICallback = function () {
     // console.log("Presto callUICallBack location is",document.location); 

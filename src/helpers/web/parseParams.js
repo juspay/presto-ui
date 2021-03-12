@@ -23,6 +23,16 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
+
+/*
+
+
+THIS FILE IS REDUNDANT NOW, WEB NO LONGER CALLS ANY FUNCTION OF THIS FILE
+
+
+*/ 
+
+
 Array.prototype.rotate = (function () {
   // save references to array functions to make lookup faster
   var push = Array.prototype.push,
