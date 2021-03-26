@@ -26,6 +26,7 @@
 var ViewPageAdapter = require("./ViewPageAdapter");
 var Renderer = require("./Render");
 var axios = require('axios')
+var callbackInvoker = require("../helpers/common/callbackInvoker"); 
 const qsstringify = require("qs/lib/stringify");
 var logs_state = {
   session_id : '',
@@ -113,6 +114,8 @@ module.exports = {
   },
 
   callAPI: async function callAPI(method, url, data, headers, shouldEncodeToFormData, isSSLPinnedURL, callback) {
+    // console.log("Presto-UI Call API called in JBridge at location",document.location); 
+    // console.log("Presto-UI Call API called in JBridget with callback string as",callback);
     callback = callback || isSSLPinnedURL; // backward comaptibility
     headers = parseJson(headers);
     data = parseJson(data);
@@ -131,15 +134,10 @@ module.exports = {
     try {
       const resp = await axios({url, method, data, headers });
       const json = resp.data;//await resp.data.json();
-      window.callUICallback(
-        callback,
-        "success",
-        utoa(JSON.stringify(json)),
-        resp.status
-      );
+      callbackInvoker.invoke(callback,"success",utoa(JSON.stringify(json)),resp.status);
     } catch (err) {
-      console.log("ERR", err);
-      window.callUICallback(callback, "failure", btoa("{}"), 50);
+      console.error("ERR", err);
+      callbackInvoker.invoke(callback, "failure", btoa("{}"), 50);
     }
   },
 
@@ -317,7 +315,7 @@ module.exports = {
     //
   },
   loadFileInDUI: function (fileName) {
-    console.log("coming here..");
+    // console.log("coming here..");
     return fileName;
   },
   setSessionAttribute: function() {

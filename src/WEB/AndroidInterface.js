@@ -28,6 +28,7 @@ var {
   computeChildDimens
 } = require("./Render");
 var helper = require('../helper');
+var callbackInvoker = require("../helpers/common/callbackInvoker"); 
 
 
 function getScreenDimensions() {
@@ -38,6 +39,12 @@ function getScreenDimensions() {
   });
 }
 
+// Due to jos, PrestoDOM's document is different from the DOM Document which actaully contains the nodes. 
+// This utility function allows PrestoDOM to acquire an actual DOM object. 
+function getUIElement(id){
+  var ele = document.getElementById(id); 
+  return ele; 
+}
 
 function runInUI(cmd) {
   if (typeof cmd == "string")
@@ -108,6 +115,7 @@ function runInUI(cmd) {
 
 function Render(view, cb) {
   /* Global Style Tag */
+  // console.debug("presto render called in document location",document.location);
   let style_id = window.__STYLE_ID;
   
   let styleElem = document.getElementById(style_id);
@@ -127,6 +135,7 @@ function Render(view, cb) {
   /* Global Style Tag End */
 
   let parentElement = document.getElementById("content");
+  // console.debug("presto content element found?? ",parentElement);
   let parentView = {
     type: "linearLayout",
     props: {
@@ -139,8 +148,7 @@ function Render(view, cb) {
   computeChildDimens(parentView);
   const elem = inflateView(view, parentElement, null);
 
-  if (cb)
-    window.callUICallback(cb);
+  if (cb) callbackInvoker.invoke(cb); 
 
   if (parentElement.childElementCount > 1) {
     let iterableChildNodes = Array.prototype.slice.call(parentElement.children);
@@ -172,12 +180,15 @@ function moveView(id, index) {
   })
 }
 
+
+// Android.addViewToParent(rootId, dom_all, length (window.__ROOTSCREEN.idSet.child) - 1 , callback, null); -- call to this function 
 function addViewToParent(id, view, index, cb, replace) {
-  let parentElem = document.getElementById(id)
+  // console.log("addViewToParent document location is",document.location); 
+  let parentElement = document.getElementById(id)
   let parentView = window.__VIEWS[id]
   let siblingView = null
 
-  if(!parentElem || !parentView)
+  if(!parentElement || !parentView)
     return
 
   parentView.children.splice(index, 0, view)
@@ -186,11 +197,37 @@ function addViewToParent(id, view, index, cb, replace) {
     siblingView = parentView
   else
     siblingView = parentView.children[index-1]
+
   
-  inflateView(view, parentElem, siblingView)
+  var elem = inflateView(view, null, siblingView) // pass parent element as null, so that the element created doesn't immediately get attached to the DOM
+
+  // attach the elem to live dom once the elem has been constructed (parentElem is the liveDOM)
+  if (parentElement) {
+    let siblingElement = siblingView ? document.getElementById(siblingView.props.id) : null;
+
+    if (siblingElement && siblingElement != undefined) {
+        if (parentElement == siblingElement) { // Prepend
+            parentElement.insertBefore(elem, parentElement.childNodes[0]);
+          } 
+        else { // Insert in specified position
+            let nextSiblingElement = siblingElement.nextSibling;
+            parentElement.insertBefore(elem, nextSiblingElement);
+          }
+      } 
+    else {
+        parentElement.appendChild(elem);
+    }
+  }
+
+  if (window.focusedElement !== undefined){
+    var c = document.getElementById(window.focusedElement);
+    if (c) {
+      console.debug("now focusing");
+      c.focus();
+    }
+  }
   
-  if (cb)
-    window.callUICallback(cb)
+  if (cb) callbackInvoker.invoke(cb); 
 }
 
 function getChildModalViews(view) {
@@ -424,6 +461,8 @@ function getDocument() {
 
 module.exports = {
   getScreenDimensions: getScreenDimensions,
+
+  getUIElement : getUIElement, 
 
   runInUI: runInUI,
 
