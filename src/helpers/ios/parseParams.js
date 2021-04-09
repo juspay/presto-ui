@@ -1388,7 +1388,8 @@ function transformKeys(config) {
           keys[i] !== "methods"  &&
           keys[i] !== "swipeEnable" &&
           keys[i] !== "viewPager" &&
-          keys[i] !== "tableView") {
+          keys[i] !== "tableView" &&
+          keys[i] !== "onAnimationEnd") {
 
         delete config[keys[i]];
       }
@@ -1774,38 +1775,38 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setUserInteraction(rWS(cS(config.clickable))));
   }
 
-  if (config.translationX) {
+  if (config.hasOwnProperty("translationX")) {
     let props = [{
       'id': '' + Math.random().toString(36).substring(2),
       'type': 'translation',
-      'runOnRender' : 'true',
-      'easing' : 'linear',
+      'runOnRender': 'true',
+      'easing': 'linear',
       'delay': '0',
       'duration': '1',
-      'props' : JSON.stringify([{'to': '' + config.translationX, 'prop':'translationX', 'from':'0'}])
+      'props': JSON.stringify([{ 'to': '' + config.translationX, 'prop': 'translationX', 'from': '0' }])
     }];
 
     var inlineAnimation = this_mapToInlineAnimation(config.id, JSON.stringify(props));
     inlineAnimation.animations.forEach(function(method) {
       config.methods.push(method);
-    });
+    })
   }
 
-  if (config.translationY) {
+  if (config.hasOwnProperty("translationY")) {
     let props = [{
       'id': '' + Math.random().toString(36).substring(2),
       'type': 'translation',
-      'runOnRender' : 'true',
-      'easing' : 'linear',
+      'runOnRender': 'true',
+      'easing': 'linear',
       'delay': '0',
       'duration': '1',
-      'props' : JSON.stringify([{'to': '' + config.translationY,'prop':'translationY','from':'0'}])
+      'props': JSON.stringify([{ 'to': '' + config.translationY, 'prop': 'translationY', 'from': '0' }])
     }];
 
     var inlineAnimation = this_mapToInlineAnimation(config.id, JSON.stringify(props));
     inlineAnimation.animations.forEach(function(method) {
       config.methods.push(method);
-    });
+    })
   }
 
   if (config.a_rotate) {
