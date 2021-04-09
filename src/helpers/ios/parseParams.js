@@ -1388,8 +1388,7 @@ function transformKeys(config) {
           keys[i] !== "methods"  &&
           keys[i] !== "swipeEnable" &&
           keys[i] !== "viewPager" &&
-          keys[i] !== "tableView" &&
-          keys[i] !== "onAnimationEnd") {
+          keys[i] !== "tableView") {
 
         delete config[keys[i]];
       }
@@ -1977,12 +1976,12 @@ module.exports = function(type, config, _getSetType) {
       config.methods.push(method);
     })
     if (inlineAnimation.callbacks.length > 0) {
-      config.onAnimationEnd = callbackMapper.map(function(){
+      config.onAnimationEnd = function() {
         var firstCallback = inlineAnimation.callbacks.shift();
         if (firstCallback) {
           firstCallback();
         }
-      })
+      }
     }
   }
 
