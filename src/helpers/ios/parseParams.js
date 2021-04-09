@@ -2109,6 +2109,7 @@ function this_mapToInlineAnimation(id, config) {
         updatedConfig["fromScaleY"] = props.from;
         updatedConfig["toScaleY"] = props.to;
       }
+      updatedConfig["isMapperAnimation"] = true;
       configArray.push(updatedConfig);
     });
     
