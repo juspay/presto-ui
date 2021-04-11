@@ -47,6 +47,32 @@ function getSerializeableView(view, recurse) {
   return newView;
 }
 
+var renderFunction = function (view, cb, namespace) {
+  let obj = {
+    type: "linearLayout",
+    props: {
+      h: window.__HEIGHT,
+      w: window.__WIDTH
+    },
+    children: [view]
+  };
+  rootid = view.props.id;
+  render.computeChildDimens(obj);
+  view = render.inflate(view);
+  if (view) {
+    window.webkit.messageHandlers.IOS.postMessage(
+      JSON.stringify({
+        methodName: "render",
+        parameters: {
+          view: view,
+          namespace : namespace
+        }
+    }));
+  }
+  if (cb)
+    window.callUICallback(cb);
+}
+
 module.exports = {
   getScreenDimensions: function () {
     return JSON.stringify({
@@ -80,34 +106,12 @@ module.exports = {
     render.inflate(rootview);
   },
 
-  runInUI: function (cmd) {
-    render.runInUI(cmd);
+  runInUI: function (cmd, namespace) {
+    render.runInUI(cmd, undefined, namespace);
   },
 
-  Render: function (view, cb) {
-    let obj = {
-      type: "linearLayout",
-      props: {
-        h: window.__HEIGHT,
-        w: window.__WIDTH
-      },
-      children: [view]
-    };
-    rootid = view.props.id;
-    render.computeChildDimens(obj);
-    view = render.inflate(view);
-    if (view) {
-      window.webkit.messageHandlers.IOS.postMessage(
-        JSON.stringify({
-          methodName: "render",
-          parameters: {
-            view: view
-          }
-      }));
-    }
-    if (cb)
-      window.callUICallback(cb);
-  },
+  render: renderFunction,
+  Render: renderFunction,
 
   moveView: function moveView(id, index) {
     if (!window.__VIEWS[id]) {
@@ -121,7 +125,7 @@ module.exports = {
     this.recomputeView(parent);
   },
 
-  addViewToParent: function (id, view, index, cb) {
+  addViewToParent: function (id, view, index, cb, x, namespace) {
     if (!window.__VIEWS[id]) {
       return console.error(new Error("AddViewToParent: Invalid parent ID: " +
         id));
@@ -138,7 +142,8 @@ module.exports = {
           index: index,
           parentId: id,
           view: renderedView,
-          afterRender : cb+""
+          afterRender : cb+"",
+          namespace : namespace
         }
       }));
     }
@@ -160,7 +165,7 @@ module.exports = {
     return JSON.stringify(inflatedView);
   },
 
-  replaceView: function (view, id) {
+  replaceView: function (view, id, namespace) {
     if (!window.__VIEWS[id]) {
       return console.error(new Error("AddViewToParent: Invalid parent ID: " + id));
     }
@@ -171,7 +176,7 @@ module.exports = {
     var parent = window.__VIEWS[parentid];
     var index = parent.children.indexOf(oldview);
     this.recomputeView(parent);
-    var newView = getSerializeableView(oldview);
+    var newView = getSerializeableView(oldview, namespace);
     window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
         methodName: "replaceView",
         parameters: {
@@ -183,7 +188,7 @@ module.exports = {
     }));
   },
 
-  removeView: function (id) {
+  removeView: function (id, namespace) {
     const view = window.__VIEWS[id];
     const parent = window.__VIEWS[view.props.parentId];
     const index = parent ? parent.children.indexOf(view) : 0;
@@ -196,6 +201,7 @@ module.exports = {
       parameters: {
         id: id,
         index,
+        namespace : namespace
       }
     }));
     if(parent){

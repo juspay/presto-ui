@@ -28,7 +28,7 @@ const {computeChildDimens} = require('../computeIOS');
 const helper = require('../helper');
 
 
-function inflate(view) {
+function inflate(view, namespace) {
   const id = view.props.id;
 
   if (!window.__VIEWS.hasOwnProperty(id)) {
@@ -39,7 +39,7 @@ function inflate(view) {
     view.children.forEach((child, i) => {
       newView.children[i] = inflate(child);
     });
-    const obj = parseParams(newView.type, newView.props, "set");
+    const obj = parseParams(newView.type, newView.props, "set", namespace);
     newView.props = obj.config;
     newView.type = obj.type[0].toUpperCase() + obj.type.substr(1, obj.type.length);
     return newView;
@@ -50,22 +50,24 @@ function inflate(view) {
   let ranRunInUI = false;
   if (move) {
     move.id = id;
-    runInUIHelper(view.type, view.props);
+    runInUIHelper(view.type, view.props, undefined, namespace);
     ranRunInUI = true;
   }
 
   computeChildDimens(view)
-  view.children.forEach(inflate);
+  view.children.forEach(function(v) {
+    inflate(v, namespace)
+  });
   return ranRunInUI;
 }
 
-function runInUI(cmd, fromInflate) {
+function runInUI(cmd, fromInflate, namespace) {
   if (!(cmd instanceof Array)) cmd = [cmd];
 
   if (cmd.length==1 && cmd[0]=="removeAllUI"){
     window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
       methodName: "removeAllUI",
-      parameters: {"animated":"false"}
+      parameters: {"animated":"false", namespace : namespace}
     }));
   }else{
     cmd.forEach(function (each) {
@@ -101,23 +103,23 @@ function runInUI(cmd, fromInflate) {
           computeChildDimens(parent);
           var children = parent.children;
           if (!inflate(view)) {
-            runInUIHelper(view.type, each, true);
+            runInUIHelper(view.type, each, true, namespace);
           };
           for (var i = 0, len = children.length; i < len; i++) {
             if (view != children[i]) {
-              inflate(children[i]);
+              inflate(children[i], namespace);
             }
           }
         } else {
-          runInUIHelper(view.type, each);
+          runInUIHelper(view.type, each, undefined, namespace);
         }
       }
     });
   }
 };
 
-function runInUIHelper(type, obj, removeFrame) {
-  var cmd = parseParams(type, obj, "get").config.methods;
+function runInUIHelper(type, obj, removeFrame, namespace) {
+  var cmd = parseParams(type, obj, "get", namespace).config.methods;
   if(removeFrame){
       cmd = cmd.filter(function(itm){
         return itm.methodName != "setFrame:"
