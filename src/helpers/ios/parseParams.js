@@ -1774,32 +1774,38 @@ module.exports = function(type, config, _getSetType) {
     config.methods.push(this_setUserInteraction(rWS(cS(config.clickable))));
   }
 
-  if (config.translationX) {
+  if (config.hasOwnProperty("translationX")) {
     let props = [{
       'id': '' + Math.random().toString(36).substring(2),
       'type': 'translation',
-      'runOnRender' : 'true',
-      'easing' : 'linear',
+      'runOnRender': 'true',
+      'easing': 'linear',
       'delay': '0',
       'duration': '1',
-      'props' : JSON.stringify([{'to': '' + config.translationX, 'prop':'translationX', 'from':'0'}])
+      'props': JSON.stringify([{ 'to': '' + config.translationX, 'prop': 'translationX', 'from': '0' }])
     }];
 
-    config.methods.push(self_animate({'id':''+config.id,'json':JSON.stringify(props)}));
+    var inlineAnimation = this_mapToInlineAnimation(config.id, JSON.stringify(props));
+    inlineAnimation.animations.forEach(function(method) {
+      config.methods.push(method);
+    })
   }
 
-  if (config.translationY) {
+  if (config.hasOwnProperty("translationY")) {
     let props = [{
       'id': '' + Math.random().toString(36).substring(2),
       'type': 'translation',
-      'runOnRender' : 'true',
-      'easing' : 'linear',
+      'runOnRender': 'true',
+      'easing': 'linear',
       'delay': '0',
       'duration': '1',
-      'props' : JSON.stringify([{'to': '' + config.translationY,'prop':'translationY','from':'0'}])
+      'props': JSON.stringify([{ 'to': '' + config.translationY, 'prop': 'translationY', 'from': '0' }])
     }];
 
-    config.methods.push(self_animate({'id':''+config.id,'json':JSON.stringify(props)}));
+    var inlineAnimation = this_mapToInlineAnimation(config.id, JSON.stringify(props));
+    inlineAnimation.animations.forEach(function(method) {
+      config.methods.push(method);
+    })
   }
 
   if (config.a_rotate) {
@@ -1965,11 +1971,18 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (config.animation) {
-    let animProps = {
-      viewTag: '' + config.id,
-      json: config.animation
-    };
-    config.methods.push(self_animateNew(animProps));
+    var inlineAnimation = this_mapToInlineAnimation(config.id, config.animation);
+    inlineAnimation.animations.forEach(function(method) {
+      config.methods.push(method);
+    })
+    if (inlineAnimation.callbacks.length > 0) {
+      config.onAnimationEnd = function() {
+        var firstCallback = inlineAnimation.callbacks.shift();
+        if (firstCallback) {
+          firstCallback();
+        }
+      }
+    }
   }
 
   if (config.hasOwnProperty("text")) {
@@ -2026,4 +2039,99 @@ function self_animateNew(props) {
     "methodName":"animate:",
     "values": [props]
   };
+}
+
+window.cachedAnimations = {};
+window.startCachedAnimation = function(id) {
+  var animation = window.cachedAnimations[id];
+  if (animation) {
+    Android.runInUI({
+      id: animation.viewTag,
+      inlineAnimation: animation.config
+    })
+  }
+}
+
+function this_mapToInlineAnimation(id, config) {
+  
+  var animations = [];
+  var callbacks = [];
+  
+  var parsedConfigs = JSON.parse(config);
+  
+  parsedConfigs.forEach(parsedConfig => {
+
+    var innerProps = JSON.parse(parsedConfig.props);
+    var configArray = [];
+    innerProps.forEach(props => {
+      var updatedConfig = {};
+      updatedConfig.duration = parsedConfig.duration;
+      updatedConfig.name = id;
+      if (parsedConfig.repeatCount) {
+        updatedConfig.repeatCount = parsedConfig.repeatCount;
+      }
+      if (parsedConfig.delay) {
+        updatedConfig.delay = parsedConfig.delay;
+      }
+      if (parsedConfig.easing) {
+        if (parsedConfig.easing == "ease-in") {
+          updatedConfig["interpolator"] = "easein";
+        } else if (parsedConfig.easing == "ease-out") {
+          updatedConfig["interpolator"] = "easeout";
+        } else if (parsedConfig.easing == "ease-in-out") {
+          updatedConfig["interpolator"] = "easeinout";
+        } else if (parsedConfig.easing == "linear") {
+          updatedConfig["interpolator"] = "linear";
+        } else if (parsedConfig.easing == "bounce") {
+          updatedConfig["interpolator"] = "bounce";
+        } else if (parsedConfig.easing.includes("bazier")) {
+          var str = parsedConfig.easing;
+          updatedConfig["interpolator"] = str.substring(str.lastIndexOf("[") + 1, str.lastIndexOf("]"));
+        }
+      }
+      if (props.prop == "translationX") {
+        updatedConfig["fromX"] = props.from;
+        updatedConfig["toX"] = props.to;
+      } else if (props.prop == "translationY") {
+        updatedConfig["fromY"] = props.from;
+        updatedConfig["toY"] = props.to;
+      } else if (props.prop == "alpha") {
+        updatedConfig["fromAlpha"] = props.from;
+        updatedConfig["toAlpha"] = props.to;
+      } else if (props.prop == "rotation") {
+        updatedConfig["fromRotation"] = props.from;
+        updatedConfig["toRotation"] = props.to;
+      } else if (props.prop == "scaleX") {
+        updatedConfig["fromScaleX"] = props.from;
+        updatedConfig["toScaleX"] = props.to;
+      } else if (props.prop == "scaleY") {
+        updatedConfig["fromScaleY"] = props.from;
+        updatedConfig["toScaleY"] = props.to;
+      }
+      updatedConfig["isMapperAnimation"] = true;
+      configArray.push(updatedConfig);
+    });
+    
+    if (parsedConfig.onEnd) {
+      callbacks.push(function() {
+        window.startCachedAnimation(parsedConfig.onEnd);
+      })
+    }
+
+    if (parsedConfig.startImmediate || parsedConfig.runOnRender) {
+      var currentAnimation = {
+        "return": "false",
+        "fromStore": getSetType ? "false" : "true",
+        "storeKey": "view" + window.__VIEW_INDEX,
+        "invokeOn": "this",
+        "methodName": "setInlineAnimation:",
+        "values": [{ "name": JSON.stringify(configArray), type: "s" }]
+      }
+      animations.push(currentAnimation);
+    }
+
+    window.cachedAnimations[parsedConfig.id] = { viewTag: id, config: JSON.stringify(configArray) };
+  });
+
+  return {animations, callbacks};
 }
