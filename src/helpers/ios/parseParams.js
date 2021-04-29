@@ -102,7 +102,7 @@ function self_sizeFromDictionary(width, height) {
   };
 }
 
-function self_setCursorPosition(id, position) {
+function self_setCursorPosition(id, position, namespace) {
   return {
     "return": "false",
     "invokeOn": "self",
@@ -639,7 +639,7 @@ function getEncodedData(text) {
   return encodedString;
 }
 
-function this_setHTMLText(text) {
+function this_setHTMLText(text, namespace) {
   return {
     "return": "false",
     "fromStore": "true",
@@ -649,6 +649,7 @@ function this_setHTMLText(text) {
     "values": [
       { "name": getEncodedData(text)
       , "type": "s"
+      , "namespace" : namespace
       }
     ]
   }
@@ -892,7 +893,7 @@ function setBorderColor() {
   }
 }
 
-function this_setShadow(id, shadowOffset, shadowBlur, shadowSpread, shadowColor, shadowOpacity) {
+function this_setShadow(id, shadowOffset, shadowBlur, shadowSpread, shadowColor, shadowOpacity, namespace) {
   return {
     "return": "false",
     "fromStore": getSetType ? "false" : "true",
@@ -969,7 +970,7 @@ function this_setTag(tag) {
   }
 }
 
-function self_getViewFromTag(tag){
+function self_getViewFromTag(tag, namespace){
   window.__VIEW_INDEX++;
 
   return {
@@ -977,32 +978,32 @@ function self_getViewFromTag(tag){
     "invokeOn": "self",
     "methodName":"getViewFromTag:",
     "values":[
-      {"name": tag, "type": "s"}
+      {"name": tag, "type": "s", "namespace" : namespace}
     ]
   }
 }
 
-function this_setImageURL(id,url,placeholder) {
+function this_setImageURL(id,url,placeholder, namespace) {
   return {
     "return": "false",
     "invokeOn": "self",
     "storeKey": "view" + window.__VIEW_INDEX,
     "methodName":"setImageWithUrl::::",
     "values":[
-      {"name": "" + id, "type": "s"},
+      {"name": "" + id, "type": "s", namespace : namespace},
       {"name": url, "type": "s"},
       {"name": placeholder, "type": "s"}
     ]
   };
 }
 
-function this_setGif(id, imageName) {
+function this_setGif(id, imageName, namespace) {
   return {
     "return": "false",
     "invokeOn": "self",
     "storeKey": "view" + window.__VIEW_INDEX,
     "methodName": "loadGif:::",
-    "values": [{ "name": "" + id, "type": "s" }, { "name": imageName, "type": "s" }]
+    "values": [{ "name": "" + id, "type": "s", namespace : namespace }, { "name": imageName, "type": "s" }]
   };
 }
 
@@ -1273,7 +1274,7 @@ function this_setEnableSwype(value) {
     };
 }
 
-function this_bringSubViewToFront(params){
+function this_bringSubViewToFront(params, namespace){
   return {
     "return": "false",
     "invokeOn": "self",
@@ -1523,7 +1524,7 @@ function changeKeys(config, type) {
 // rWS - remove white spaces
 // fromStore methods dont  use invokeOn
 // the extract className out of the stored object in the store
-module.exports = function(type, config, _getSetType) {
+module.exports = function(type, config, _getSetType, namespace) {
   config = changeKeys(flattenObject(config), type);
   type = generateType(type, config);
   getSetType = (_getSetType == "set")?1:0;
@@ -1535,7 +1536,7 @@ module.exports = function(type, config, _getSetType) {
     let tag =  rWS(cS(config.id));
 
     if (!getSetType) {
-      config.methods.push(self_getViewFromTag(tag));
+      config.methods.push(self_getViewFromTag(tag, namespace));
     } else {
       config.methods.push(this_setTag(tag));
     }
@@ -1638,7 +1639,7 @@ module.exports = function(type, config, _getSetType) {
 
     var shadowColor = convertColorToRgba(shadowValues[4]);
 
-    config.methods.push(this_setShadow(config.id, shadowOffset, shadowBlur, shadowSpread, shadowColor, shadowOpacity));
+    config.methods.push(this_setShadow(config.id, shadowOffset, shadowBlur, shadowSpread, shadowColor, shadowOpacity, namespace));
   }
 
   // make child fullWidth and height of parent
@@ -1652,9 +1653,9 @@ module.exports = function(type, config, _getSetType) {
     let id = cS(config.id);
     let placeholder = config.placeHolder || "";
     if (config.imageNamed.endsWith(".gif")){
-      config.methods.push(this_setGif(id, config.imageNamed));
+      config.methods.push(this_setGif(id, config.imageNamed, namespace));
     } else {
-      config.methods.push(this_setImageURL(id, config.imageNamed, placeholder));
+      config.methods.push(this_setImageURL(id, config.imageNamed, placeholder, namespace));
     }
   }
 
@@ -1730,7 +1731,7 @@ module.exports = function(type, config, _getSetType) {
           modifiedHtmlString += "color:"+config.textColor+";"
       }
       modifiedHtmlString +="\">"+config.textFromHtml+"</span>";
-      config.methods.push(this_setHTMLText(modifiedHtmlString));
+      config.methods.push(this_setHTMLText(modifiedHtmlString, namespace));
   }
 
   if (config.textColor) {
@@ -1821,12 +1822,12 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if (config.hasOwnProperty("htmlText")) {
-     config.methods.push(this_setHTMLText(config.htmlText));
+     config.methods.push(this_setHTMLText(config.htmlText, namespace));
   }
 
   if (config.hasOwnProperty("bringSubViewToFront")) {
     let viewTag = cS(config.id);
-    config.methods.push(this_bringSubViewToFront(viewTag));
+    config.methods.push(this_bringSubViewToFront(viewTag, namespace));
   }
 
   if (config.hasOwnProperty("contentMode")) {
@@ -1993,7 +1994,7 @@ module.exports = function(type, config, _getSetType) {
   }
 
   if(config.cursorPosition) {
-    config.methods.push(self_setCursorPosition(cS(config.id), cS(config.cursorPosition)));
+    config.methods.push(self_setCursorPosition(cS(config.id), cS(config.cursorPosition), namespace));
   }
 
   if (config.onSwipe && typeof config.onSwipe === "function") {
