@@ -62,7 +62,8 @@ function addProps(props){
 
     if (props.hasOwnProperty("backgroundColor")) { ele_style += "background-color: " + utils.parseColors(props.backgroundColor) + ";"};
 
-    if (props.hasOwnProperty("background")) { ele_style += "background: " + props.background + ";"};
+    if (props.hasOwnProperty("background")) { ele_style += "background: " + utils.parseColors(props.background) + ";"};
+    
 
     if (props.hasOwnProperty("backgroundDrawable")) { ele_style += "background-image: " + "url('"+props.backgroundDrawable+"')" + ";"};
 
