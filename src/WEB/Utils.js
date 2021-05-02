@@ -1,3 +1,4 @@
+const { getUUID } = require("./JBridgeInterface");
 
 
 function parseColors(color) {
@@ -61,7 +62,13 @@ function convertHexToRgb(hex) {
 const state = {
   fragments : {},
   fragmentTypes : {},
-  mainRootView :{}
+  mainRootView : {
+    type: "relativeLayout",
+    props: {
+        "h": document.getElementById("content").clientHeight,
+        "w": document.getElementById("content").clientWidth
+    }
+  }
 } 
 
 function addToContainerList(id , namespace){
@@ -85,30 +92,23 @@ function getContainer( namespace ){
   return document.getElementById("content");
 }
 
-function getParentView (namespace, view) {
-    if(namespace) {
-      let containerType = state.fragmentTypes[namespace];
-      if(containerType){
-        containerType.children = containerType.children || []
-        containerType.children.push(view);
-        containerType.oldView = true;
-        return containerType;
+function getParentView(namespace, view) {
+  if (namespace) {
+    let containerType = state.fragmentTypes[namespace];
+    if (containerType) {
+      containerType.children = containerType.children || []
+      containerType.children.push(view);
+      containerType.oldView = true;
+      return containerType;
     }
   }
 
-  state.mainRootView = state.mainRootView || {
-      type: "relativeLayout",
-      props: {
-          "h": document.getElementById("content").clientHeight,
-          "w": document.getElementById("content").clientWidth,
-      }
-    }
-    if (state.mainRootView.children) {
-      state.mainRootView.oldView = true;
-    }
-    state.mainRootView.children = state.mainRootView.children || [];
-    state.mainRootView.children.push(view);
-    return mainRootView;
+  if (state.mainRootView.children) {
+    state.mainRootView.oldView = true;
+  }
+  state.mainRootView.children = state.mainRootView.children || [];
+  state.mainRootView.children.push(view);
+  return state.mainRootView;
 }
 
 // function modifyTranslation(config){

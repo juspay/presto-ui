@@ -138,12 +138,13 @@ function runInUI(cmd) {
 function Render(view, cb, namespace) {
   let parentElement = getContainer(namespace);
   // console.debug("presto content element found?? ",parentElement);
-  let parentView = getParentView(namespace);
+  let parentView = getParentView(namespace, view);
 
   if(parentView.oldView) {
     addViewToParent(parentElement.id, view, parentView.children.indexOf(view), cb, false)
   } else {
     computeChildDimens(parentView);
+    inflateView({view, parentElement})
     if (cb) callbackInvoker.invoke(cb);
   }
 }
@@ -178,6 +179,7 @@ function addViewToParent(id, view, index, cb, replace) {
   // console.log("addViewToParent document location is",document.location);
   let parentElement = document.getElementById(id)
   let parentView = window.__VIEWS[id]
+  view.parent = parentView;
   let siblingView = null
 
   if(!parentElement || !parentView)
