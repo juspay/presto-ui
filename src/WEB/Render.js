@@ -796,9 +796,9 @@ let inflateModal = function (view, parentElement, stopChild) {
                 if (view.children[i]) {
                     view.children[i].props.style.pointerEvents = 'auto';
                     if (i != 0)
-                        inflateView(view.children[i], elem, view.children[i - 1]);
+                        inflateView({view : view.children[i], parentElement : elem, siblingView: view.children[i - 1]});
                     else
-                        inflateView(view.children[i], elem, view);
+                        inflateView({view : view.children[i], parentElement :elem, siblingView:view});
                 }
             }
         }

@@ -99,7 +99,7 @@ function runInUI(cmd) {
         view.props = helper.merge(view.props, cmd)
 
         let parentId = null
-        let parentElem = null
+        let parentElement = null
         let parentView = null
 
         let stopChild = !isOrientatationChanged(cmd);
@@ -109,10 +109,10 @@ function runInUI(cmd) {
 
           if(parentId){
             parentView = window.__VIEWS[parentId]
-            parentElem = document.getElementById(parentId)
+            parentElement = document.getElementById(parentId)
 
-            if(parentElem && parentView){
-              inflateView(view, parentElem, null, true)
+            if(parentElement && parentView){
+              inflateView({view, parentElement, stopChild: true})
             }
           }
         }else{
@@ -120,7 +120,7 @@ function runInUI(cmd) {
 
           if(parentId){
             parentView = window.__VIEWS[parentId]
-            parentElem = document.getElementById(parentId)
+            parentElement = document.getElementById(parentId)
 
             if(parentElement && parentView){
               let siblingView = findSiblingView(parentView,id);
@@ -357,7 +357,7 @@ function replaceModalView(view, id) {
 
   oldView.props = view.props
   backdropElem.remove()
-  inflateView(oldView, parentElem, null, true)
+  inflateView({view : oldView, parentElement : parentElem, stopChild : true})
   window.__VIEWS[id] = oldView
 
   /* Append Children */
