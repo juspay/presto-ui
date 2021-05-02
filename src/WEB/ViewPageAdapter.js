@@ -58,7 +58,7 @@ function generateTabTitleEl (title) {
 };
 
 function generateTabContentEl (view)  {
-  var elem = Renderer.inflateView(view.view);
+  var elem = Renderer.inflateView({view:view.view});
   elem.className += " tab-content";
 
   return elem;

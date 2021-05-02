@@ -34,7 +34,7 @@ var getSetType;
 
 function isValidFontStyleFormat(font){
   try{
-    if(font == undefined) return false; 
+    if(font == undefined) return false;
     if(isNaN(parseInt(font)) ){
       return /^\w+[0-9a-zA-z\-\_]*[.](otf|ttf|xml)[,](assets|res)(\/|$)/.test(font) ;
     }
@@ -388,7 +388,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
           window.__PROXY_FN = {};
         }
         var font = attrs.value.substr(attrs.value.lastIndexOf('/') + 1)
-  
+
         var filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(font);
         if (!filePresent) {
           var callback = callbackMapper.map(function (isNew, url, fileName) {
@@ -419,7 +419,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
             prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + fontSuffix + "\.ttf;";
             currTransVal = "get_type";
             break ;
-          case "path" : 
+          case "path" :
             if(fontSuffix.indexOf("assets/") != -1){
               var fontPath = fontSuffix.replace("assets/", "");
               prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_"+  fontPath +";" ;
@@ -429,10 +429,10 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
               var fontTempArr = fontSuffix.split("/");
               var fontResName = fontTempArr[fontTempArr.length - 1].split(".")[0] ;
               prePend = "set_pkgname=ctx->getPackageName;set_resobj=ctx->getResources;set_resid=get_resobj->getIdentifier:s_"+fontResName+",s_font,get_pkgname;set_type=get_resobj->getFont:get_resid;" ;
-              currTransVal = "get_type";      
+              currTransVal = "get_type";
             }
             break;
-          case "resId" : 
+          case "resId" :
             prePend = "set_resobj=ctx->getResources;set_type=get_resobj->getFont:i_"+fontSuffix+";" ;
             currTransVal = "get_type" ;
             break;
@@ -870,6 +870,7 @@ function parseAttrs(attrs, belongsTo, transformFn, type) {
 }
 
 function parseGroups(type, groups, config) {
+  console.log("Inside parseGroups")
   var keys = Object.keys(groups);
   var ctr;
 

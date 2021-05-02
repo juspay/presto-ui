@@ -26,7 +26,7 @@
 var ViewPageAdapter = require("./ViewPageAdapter");
 var Renderer = require("./Render");
 var axios = require('axios')
-var callbackInvoker = require("../helpers/common/callbackInvoker"); 
+var callbackInvoker = require("../helpers/common/callbackInvoker");
 const qsstringify = require("qs/lib/stringify");
 var logs_state = {
   session_id : '',
@@ -54,7 +54,7 @@ function sendAnalytics(data) {
     // try {
     //   var xhr = new XMLHttpRequest();
     //   xhr.open("POST", url, false); // third parameter of `false` means synchronous
-    //   xhr.send(JSON.stringify({data}));   
+    //   xhr.send(JSON.stringify({data}));
     // } catch(err) {
     //   //
     // }
@@ -114,7 +114,7 @@ module.exports = {
   },
 
   callAPI: async function callAPI(method, url, data, headers, shouldEncodeToFormData, isSSLPinnedURL, callback) {
-    // console.log("Presto-UI Call API called in JBridge at location",document.location); 
+    // console.log("Presto-UI Call API called in JBridge at location",document.location);
     // console.log("Presto-UI Call API called in JBridget with callback string as",callback);
     callback = callback || isSSLPinnedURL; // backward comaptibility
     headers = parseJson(headers);
@@ -302,7 +302,7 @@ module.exports = {
               .substring(1);
     }
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-            s4() + '-' + s4() + s4() + s4();  
+            s4() + '-' + s4() + s4() + s4();
   },
 
   renewFile: function renewFile(file) {
@@ -331,10 +331,13 @@ module.exports = {
   getSessionDetails: function() {
     return JSON.stringify(window.session || {});
   },
+  requestKeyboardShow:()=>{},
+
+  requestKeyboardHide:()=>{},
   /**
    * @method setFCMToken
    * @description Sets token for GCM notifications
-   * 
+   *
    * Note: Only for Android/iOS. This is just an empty stub in web
    */
   setFCMToken: function setFCMToken () {
@@ -343,7 +346,7 @@ module.exports = {
   /**
    * @method requestLocation
    * @description Requests permission to access location
-   * 
+   *
    * Note: Only for Android/iOS. This is just an empty stub in web
    */
   requestLocation: function requestLocation() {

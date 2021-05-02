@@ -26,14 +26,11 @@
 /*
  Used to initialize defaults for window funcions and variables.
 */
-
 const { merge } = require('./helper');
 window.PrestoUI = require("./PrestoUIInterface");
 
-// console.log("Presto-UI Initialised, document location is",document.location); 
-
 const getCurrTime = () => (new Date()).getTime()
-
+console.log("Inside new changes for presto-ui")
 // window.__OS = getOS()
 if(window.__OS == "ANDROID"){
     var getScreenDetails = function() {
@@ -58,17 +55,6 @@ if(window.__OS == "ANDROID"){
 if (window.__OS == "WEB") {
     window.Android = require("./WEB/AndroidInterface");
     window.JBridge = require("./WEB/JBridgeInterface");
-    // /* In case of web JOS, we use Android and JBridge variable from parent window 
-    //  * to handle that case checking for Android and JBridge in parent window if available or not 
-    //  */ 
-    // try {
-    //     window.Android = window.parent.Android ? window.parent.Android : require("./WEB/AndroidInterface")
-    //     window.JBridge = window.parent.JBridge ? window.parent.JBridge : require("./WEB/JBridgeInterface")
-    // } catch (err) {
-    //     // console.log("Presto UI Iframe error: ", err);
-    //     window.Android = require("./WEB/AndroidInterface");
-    //     window.JBridge = require("./WEB/JBridgeInterface");
-    // }
 } else if (window.__OS == "IOS") {
     window.Android = require("./IOS/AndroidInterface")
     window.JBridge = merge(window.JBridge, {})
@@ -208,7 +194,7 @@ window.__ID = 1;
 window.__NODE_ID = 1;
 window.__SCREEN_INDEX = -1;
 
-window.__PROXY_FN = {};
+window.__PROXY_FN = window.__PROXY_FN?window.__PROXY_FN:{};
 window.__FN_INDEX = 0;
 window.__ROOTSCREEN = null;
 window.__CACHED_SCREENS = {};
@@ -219,29 +205,19 @@ window.__ANIMATE_DIR = null;
 window.__SCREEN_STACK = [];
 window.__LAST_FN_CALLED = null;
 window.__THROTTELED_ACTIONS = [];
-window.__VIEWS = {};
+window.__VIEWS = window.parent.__VIEWS?window.parent.__VIEWS:{};
 window.__VIEW_DIMENSIONS = {};
 window.__OBSERVERS = {};
 window.ZIndex = 0;
 
-/*
-This should never have been a window function. 
-Moved this function to module src/helpers/common/callbackInvoker.js 
-
-It doesn't work with jOS architecture. This window object is being over-written by ec-dui. 
-Which makes the read and write to hashmap in 2 different contexts. 
-
-Native Code needs it to be a window function and hence it is being kept here. 
-*/ 
 window.callUICallback = function () {
-    // console.log("Presto callUICallBack location is",document.location); 
     let args = (arguments.length === 1 ? [arguments[0]] : Array.apply(null,
         arguments));
     var fName = args[0]
     var functionArgs = args.slice(1)
     var currTime;
     var timeDiff;
-    
+
     if (window.__ALL_ONCLICKS && window.__ALL_ONCLICKS.indexOf(fName) != -1 && args[2] == "feedback" && JBridge && JBridge.setClickFeedback) {
         return JBridge.setClickFeedback(args[1]);
     }
