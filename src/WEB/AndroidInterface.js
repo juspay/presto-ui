@@ -34,8 +34,8 @@ const { diffArray } = require("./ListPresto");
 
 var {addToContainerList, getContainer, getParentView} = require('./Utils')
 
-function getScreenDimensions() {
-  let element = document.getElementById("content");
+function getScreenDimensions(namespace) {
+  let element = getContainer(namespace);
   return JSON.stringify({
     width: element.offsetWidth,
     height: element.offsetHeight
@@ -135,24 +135,15 @@ function runInUI(cmd) {
   //Render.runInUI(cmd)
 }
 
-function Render(view, cb) {
-  let parentElement = document.getElementById("content");
+function Render(view, cb, namespace) {
+  let parentElement = getContainer(namespace);
   // console.debug("presto content element found?? ",parentElement);
-  let parentView = {
-    type: "linearLayout",
-    props: {
-      "h": parentElement.clientHeight,
-      "w": parentElement.clientWidth,
-    },
-    children: [view]
-  };
+  let parentView = getParentView(namespace);
 
   if(parentView.oldView) {
     addViewToParent(parentElement.id, view, parentView.children.indexOf(view), cb, false)
   } else {
     computeChildDimens(parentView);
-    const elem = inflateView({view, parentElement});
-    const elements= document.getElementById('content');
     if (cb) callbackInvoker.invoke(cb);
   }
 }
@@ -488,5 +479,7 @@ module.exports = {
 
   getWindow: getWindow,
 
-  getDocument: getDocument
+  getDocument: getDocument,
+
+  addToContainerList : addToContainerList
 };
