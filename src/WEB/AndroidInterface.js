@@ -26,7 +26,9 @@
 var {
   inflateView,
   computeChildDimens,
-  List
+  List,
+  postComputeLayoutDimens,
+  preComputeLayoutDimens
 } = require("./Render");
 var helper = require('../helper');
 var callbackInvoker = require("../helpers/common/callbackInvoker");
@@ -192,9 +194,15 @@ function addViewToParent(id, view, index, cb, replace) {
   else
     siblingView = parentView.children[index-1]
 
-
+  preComputeLayoutDimens(parentView)
   var elem = inflateView({view,  siblingView}) // pass parent element as null, so that the element created doesn't immediately get attached to the DOM
-
+  var pv = parentView
+  var pe = parentElement
+  while(pv.state && pv.state.practicalHeight == "wrap_content") {
+    postComputeLayoutDimens(pv, pe);
+    pv = pv.parent
+    pe = pe.parentElement
+  }
   // attach the elem to live dom once the elem has been constructed (parentElem is the liveDOM)
   if (parentElement) {
     let siblingElement = siblingView ? document.getElementById(siblingView.props.id) : null;

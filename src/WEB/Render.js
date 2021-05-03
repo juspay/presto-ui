@@ -31,6 +31,7 @@ let {
 } = require("../component")
 let helper = require("../helper")
 let mapAttributes = require("./MapAttributes");
+const List = require("./ListPresto");
 
 function initiateElement(type, props, elem){
     if (type == "editText" && elem.tagName.toLowerCase() == "input") {
@@ -599,8 +600,9 @@ function separatorInputKeyDownHandler(ev){
     }
 }
 
-function setAttributes(type, elem, props, firstRender) {
-
+function setAttributes(view, elem, firstRender) {
+    var type = view.type
+    var props = view.props
     let elem_style = "";
     elem.setAttribute("id",props.id);
     // elem_style += "id:"+props.id+";";
@@ -624,7 +626,7 @@ function setAttributes(type, elem, props, firstRender) {
     /* New Style */
     /* Render from global styles */
 
-    elem_style+=mapAttributes.addSize(props);
+    elem_style+=mapAttributes.addSize(view);
 
     // The order here matters, as for elements with same precedence, the element on the right side of the array will be considered
     elem_style+=mapAttributes.addBorder(props);
@@ -940,7 +942,7 @@ let createNewElement = function(view, parentElement, siblingView){
 
                 element_style += "width:100%;";
                 // inputView.style.width = '100%';
-                element_style += setAttributes(view.type, inputView, view.props, true);
+                element_style += setAttributes(view, inputView, true);
 
                 inputView.setAttribute("id", view.props.id + "_input");
 
@@ -982,7 +984,7 @@ let createNewElement = function(view, parentElement, siblingView){
                 elem.appendChild(inputView);
 
                 view.props.style.position = "relative";
-                element_style += setAttributes(view.type, elem, view.props, true);
+                element_style += setAttributes(view, elem, true);
                 delete view.props.label;
             } else if (view.props.hint) {
                 elem.placeholder = view.props.hint || "";
@@ -999,7 +1001,7 @@ let createNewElement = function(view, parentElement, siblingView){
     addToParentElement(parentElement, siblingView, elem, subElem);
 
     // appened attributes, nodes & style to the elemenent
-    element_style += setAttributes(view.type, elem, view.props, true);
+    element_style += setAttributes(view, elem, true);
 
     /*if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
       if(!stopObserver){
@@ -1056,7 +1058,6 @@ let setLayout = function(view, elem) {
     }
 }
 let getElementByView = function(view, parentElement, siblingView, stopChild, renderStyle) {
-    debugger
     if(!view.props.id){
         view.props.id = window.JOS_PRESTO_ID++;
         //window.__VIEWS[view.props.id] =  view;
@@ -1078,7 +1079,7 @@ let getElementByView = function(view, parentElement, siblingView, stopChild, ren
         element_style+=element.element_style;
 
     } else if (renderStyle) {
-        element_style += setAttributes(view.type, elem, view.props, true);
+        element_style += setAttributes(view, elem, true);
     }
     setLayout(elem,view);
     if(!stopChild) computeChildDimens(view);
@@ -1154,6 +1155,7 @@ let renderList = (view,elem)=>{
         view.props.diffArray = undefined;
 }
 let inflateView = function ({view, parentElement, siblingView, stopChild, renderStyle} ={}) {
+    view.state = view.state || {};
     if ( view && view.type && view.type == 'modal') {
         return inflateModal(view, parentElement, stopChild);
     }
@@ -1172,16 +1174,16 @@ let inflateView = function ({view, parentElement, siblingView, stopChild, render
         renderList(view, elem);
     } else if (!stopChild ) {
         //firstRender List
-        if(view.props.itemDatas)
-        {
+        if (view.props.itemDatas) {
             List.createListView(view);
             computeChildDimens(view);
 
         }
-
        if (view.hasOwnProperty('children') && view.children.length > 0) {
+           preComputeLayoutDimens(view);
             for (let i = 0; i < view.children.length; i++) {
                 if (view.children[i]) {
+                    view.children[i].parent = view;
                     if (i != 0) {
                         inflateView({view:view.children[i], parentElement:elem, siblingView:view.children[i - 1], stopChild:renderStyle, renderStyle});
                     } else {
@@ -1189,12 +1191,55 @@ let inflateView = function ({view, parentElement, siblingView, stopChild, render
                     }
                 }
             }
+            postComputeLayoutDimens(view, elem)
         }
+        view.state = view.state || {}
+        view.state.computedHeight = isNaN(parseInt(view.props.height)) ? view.state.computedHeight || 0 : parseInt(view.props.height)
+        view.state.computedWidth = isNaN(parseInt(view.props.width)) ? view.state.computedWidth || 0 : parseInt(view.props.width)
     }
     setAfterRenderFunctions(newInflated, view, elem);
 
     return elem;
 };
+
+let preComputeLayoutDimens = (view) => {
+    view.state = view.state || {}
+    if (view.type == "relativeLayout") {
+        view.state.treatMatchParentAsWrapHeight = view.state.practicalHeight == "wrap_content";
+        view.state.treatMatchParentAsWrapWidth = view.state.practicalWidth == "wrap_content";
+        // if(view.state.treatMatchParentAsWrapHeight && view.state.treatMatchParentAsWrapWidth)
+        for (var i = 0; i < view.children.length; ++i) {
+            if (view.children[i].props.height != "match_parent")
+                view.state.treatMatchParentAsWrapHeight = false;
+            if (view.children[i].props.width != "match_parent")
+                view.state.treatMatchParentAsWrapWidth = false;
+            if (!view.state.treatMatchParentAsWrapWidth && !view.state.treatMatchParentAsWrapHeight)
+                break
+        }
+    }
+}
+let postComputeLayoutDimens = (view, elem) => {
+    if(view.type == "relativeLayout" && (view.state.practicalWidth == "wrap_content"  || view.state.practicalHeight == "wrap_content" ) && view.children.length > 0) {
+        var largestHeight = view.children[0].state.computedHeight;
+        var largestWidth = view.children[0].state.computedWidth;
+        for (var i = 1; i < view.children.length; ++i) {
+            if (view.state.practicalHeight == "wrap_content") {
+                largestHeight = largestHeight > view.children[i].state.computedHeight ? largestHeight : view.children[i].state.computedHeight;
+            }
+            if (view.state.practicalWidth == "wrap_content") {
+                largestWidth = largestWidth > view.children[i].state.computedWidth ? largestWidth : view.children[i].state.computedWidth
+            }
+        }
+        if(view.state.practicalHeight == "wrap_content" ) {
+            elem.style.height = largestHeight + "px"
+            view.state.computedHeight = largestHeight
+        }
+        if(view.state.practicalWidth == "wrap_content") {
+            elem.style.width = largestWidth + "px"
+            view.state.computedWidth = largestWidth
+        }
+    }
+}
 
 // what?
 let handleWrapContent = (view, parentElement) => {
@@ -1221,13 +1266,18 @@ let runInUI = function (cmd) {
         let view = window.__VIEWS[elem.id];
         view.props = helper.merge(view.props, each);
 
-        var styles = setAttributes(view.type, elem, view.props, false);
+        var styles = setAttributes(view, elem, false);
         elem.setAttribute("style",styles);
+        view.state = view.state || {}
+        view.state.computedHeight = isNaN(parseInt(view.props.height)) ? view.state.computedHeight || elem.offsetHeight : parseInt(view.props.height)
+        view.state.computedWidth = isNaN(parseInt(view.props.width)) ? view.state.computedWidth || elem.offsetWidth : parseInt(view.props.width)
     });
 };
 
 module.exports = {
     inflateView,
     runInUI,
-    computeChildDimens
+    computeChildDimens,
+    postComputeLayoutDimens,
+    preComputeLayoutDimens
 };

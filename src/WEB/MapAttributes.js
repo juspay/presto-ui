@@ -300,7 +300,13 @@ function addTransitionValue(props) {
 
 
 }
-function addSize(props){
+function addSize(view = {}){
+
+    var props = view.props
+    var parentView = view.parent || {}
+    parentView.state = parentView.state || {}
+    view.state = view.state || {}
+    var parentProps = parentView.props || {}
     // Add elem as an argument if you are gonna uncomment it
     // elem.style.width = 'auto';
     // elem.style.height = 'auto';
@@ -309,16 +315,18 @@ function addSize(props){
 
 
     if (props.hasOwnProperty('width')) {
-        if (props.width == 'match_parent') {
+        if (props.width == 'match_parent' && !parentView.state.treatMatchParentAsWrapWidth) {
+            // treat parent wrap content as wrap_content instead of match_parent
             if(props.hasOwnProperty('margin')){
                 var margin=props.margin.split(",");
                 elem_style += "width:" + "calc(100% - "+(parseInt(margin[0])+parseInt(margin[2])).toString()+"px );";
             }
             else elem_style += "width : 100%; ";
             //elem.style.width = '100%';
-
+        } else if (props.width == 'match_parent' && parentView.state.treatMatchParentAsWrapWidth) { 
+            view.state.practicalWidth = 'wrap_content'
         } else if (props.width == 'wrap_content') {
-            // You see below
+            view.state.practicalWidth = 'wrap_content';
         } else if (!isNaN(props.width)) {
             if (props.hasOwnProperty('percentWidth') && props.percentWidth)
                 elem_style += "width: " + props.width + "%;";
@@ -329,14 +337,16 @@ function addSize(props){
         }
     }
     if (props.hasOwnProperty('height')) {
-        if (props.height == 'match_parent') {
+        if (props.height == 'match_parent' && !parentView.state.treatMatchParentAsWrapHeight) {
             elem_style += "height: 100%;";
             // elem.style.height = '100%';
-        }
-        else if (props.height == 'wrap_content') {
+        } else if (props.height == 'match_parent' && parentView.state.treatMatchParentAsWrapHeight) { 
+            view.state.practicalHeight = 'wrap_content'
             elem_style += "height: auto;";
             //elem.style.height = "auto";
             // You see below
+        } else if (props.height == 'wrap_content') {
+            view.state.practicalHeight = 'wrap_content'
         } else if (!isNaN(props.height)) {
             if (props.hasOwnProperty('percentHeight') && props.percentHeight)
                 elem_style += "height: " + props.height + "%;";
