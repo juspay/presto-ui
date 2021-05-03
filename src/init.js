@@ -53,8 +53,9 @@ if(window.__OS == "ANDROID"){
 }
 
 if (window.__OS == "WEB") {
-    window.Android = require("./WEB/AndroidInterface");
-    window.JBridge = require("./WEB/JBridgeInterface");
+    // This works in screen unification and beta
+    window.Android = window.parent.Android?window.parent.Android:require('./WEB/AndroidInterface')
+    window.JBridge = window.parent.JBridge?window.parent.JBridge:require("./WEB/JBridgeInterface")
 } else if (window.__OS == "IOS") {
     window.Android = require("./IOS/AndroidInterface")
     window.JBridge = merge(window.JBridge, {})
@@ -194,6 +195,7 @@ window.__ID = 1;
 window.__NODE_ID = 1;
 window.__SCREEN_INDEX = -1;
 
+// Works with ScreenUnification, beta android, beta web
 window.__PROXY_FN = window.__PROXY_FN?window.__PROXY_FN:{};
 window.__FN_INDEX = 0;
 window.__ROOTSCREEN = null;
@@ -205,6 +207,7 @@ window.__ANIMATE_DIR = null;
 window.__SCREEN_STACK = [];
 window.__LAST_FN_CALLED = null;
 window.__THROTTELED_ACTIONS = [];
+// Works with ScreenUnification, beta android, beta web
 window.__VIEWS = window.parent.__VIEWS?window.parent.__VIEWS:{};
 window.__VIEW_DIMENSIONS = {};
 window.__OBSERVERS = {};

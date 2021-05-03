@@ -63,7 +63,7 @@ const state = {
   fragments : {},
   fragmentTypes : {},
   mainRootView : {
-    type: "relativeLayout",
+    type: "linearLayout",//relativeLayout - check for screenUnification
     props: {
         "h": document.getElementById("content").clientHeight,
         "w": document.getElementById("content").clientWidth

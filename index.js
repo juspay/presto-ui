@@ -32,31 +32,33 @@
 	The reqiure statement will get executed even if the object is not accessed. 
 	Since, most files in presto-ui mutates the global state, the requires has been wrapped in if/else. 
 */
-if (window.__OS === "WEB") {
-    try {
-		// console.debug("presto-ui index document location",document.location); 
-		var prestoUI = window.parent.prestoUI; // The parent iframe must import presto-ui as `window.prestoUI = require("presto-ui")`
-		if (prestoUI) {
-			// console.debug("prestoUI found in the parent iframe whyyy",prestoUI); 
-			window.Android = window.parent.Android; 
-			window.JBridge = window.parent.JBridge; 
-			module.exports = prestoUI; 
-		} else { // On first run this is always true, on subsequent reads (imports) of this file, this is never true
-			// console.debug("prestoUI not found in the parent iframe"); 
-			exportPrestoUI(); 
-		}
-	} catch (err) {  // DOM Exception : Cross Orgin iframe access not allowed. When the parent iframe tries to require presto-ui, the catch block will be executed.  
-		console.debug("presto-ui can't acess top")
-		exportPrestoUI(); // This will happen in iframe context, think of this as first import of this file. 
-	}
-}
-else { 
-	console.debug("presto-ui not web"); 
-	exportPrestoUI(); 
+// Required for web beta - After unification this will not be required
+console.log("PrestoUI running on "+window.__OS);
+// if (window.__OS === "WEB") {
+//     try {
+// 		// console.debug("presto-ui index document location",document.location); 
+// 		var prestoUI = window.parent.prestoUI; // The parent iframe must import presto-ui as `window.prestoUI = require("presto-ui")`
+// 		if (prestoUI) {
+// 			// console.debug("prestoUI found in the parent iframe whyyy",prestoUI); 
+// 			window.Android = window.parent.Android; 
+// 			window.JBridge = window.parent.JBridge; 
+// 			module.exports = prestoUI; 
+// 		} else { // On first run this is always true, on subsequent reads (imports) of this file, this is never true
+// 			// console.debug("prestoUI not found in the parent iframe"); 
+// 			exportPrestoUI(); 
+// 		}
+// 	} catch (err) {  // DOM Exception : Cross Orgin iframe access not allowed. When the parent iframe tries to require presto-ui, the catch block will be executed.  
+// 		console.debug("presto-ui can't acess top")
+// 		exportPrestoUI(); // This will happen in iframe context, think of this as first import of this file. 
+// 	}
+// }
+// else { 
+// 	exportPrestoUI(); 
 
-}
+// }
 
-function exportPrestoUI(){
+// function exportPrestoUI(){
+	// After unification direct exports should work
 	module.exports = {
 		init: require("./src/init"), 
 		doms : require("./src/doms"),
@@ -69,4 +71,4 @@ function exportPrestoUI(){
 		prestoMerge: require('./src/helper').merge,
 		prestoClone: require('./src/helper').clone
 	};
-}
+// }

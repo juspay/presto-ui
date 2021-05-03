@@ -315,8 +315,10 @@ module.exports = {
     //
   },
   loadFileInDUI: function (fileName) {
-    // console.log("coming here..");
-    return fileName;
+    // Code required for ScreenUnification
+    return `<html><body><div id='loaderBrand'></div><div id='content'></div><script src='${fileName}'></script></body></html>`
+    // Code required for web-beta
+    // return fileName;
   },
   setSessionAttribute: function() {
 
