@@ -192,7 +192,7 @@ window.__ID = 1;
 window.__NODE_ID = 1;
 window.__SCREEN_INDEX = -1;
 
-window.__PROXY_FN = window.__PROXY_FN?window.__PROXY_FN:{};
+window.__PROXY_FN = window.parent.__PROXY_FN?window.parent.__PROXY_FN:{};
 window.__FN_INDEX = 0;
 window.__ROOTSCREEN = null;
 window.__CACHED_SCREENS = {};
