@@ -30,8 +30,6 @@ const { merge } = require('./helper');
 window.PrestoUI = require("./PrestoUIInterface");
 
 const getCurrTime = () => (new Date()).getTime()
-console.log("Inside new changes for presto-ui")
-// window.__OS = getOS()
 if(window.__OS == "ANDROID"){
     var getScreenDetails = function() {
     try {
@@ -53,7 +51,6 @@ if(window.__OS == "ANDROID"){
 }
 
 if (window.__OS == "WEB") {
-    // This works in screen unification and beta
     window.Android = window.parent.Android?window.parent.Android:require('./WEB/AndroidInterface')
     window.JBridge = window.parent.JBridge?window.parent.JBridge:require("./WEB/JBridgeInterface")
 } else if (window.__OS == "IOS") {
@@ -195,7 +192,6 @@ window.__ID = 1;
 window.__NODE_ID = 1;
 window.__SCREEN_INDEX = -1;
 
-// Works with ScreenUnification, beta android, beta web
 window.__PROXY_FN = window.__PROXY_FN?window.__PROXY_FN:{};
 window.__FN_INDEX = 0;
 window.__ROOTSCREEN = null;
@@ -207,7 +203,6 @@ window.__ANIMATE_DIR = null;
 window.__SCREEN_STACK = [];
 window.__LAST_FN_CALLED = null;
 window.__THROTTELED_ACTIONS = [];
-// Works with ScreenUnification, beta android, beta web
 window.__VIEWS = window.parent.__VIEWS?window.parent.__VIEWS:{};
 window.__VIEW_DIMENSIONS = {};
 window.__OBSERVERS = {};

@@ -870,7 +870,6 @@ function parseAttrs(attrs, belongsTo, transformFn, type) {
 }
 
 function parseGroups(type, groups, config) {
-  console.log("Inside parseGroups")
   var keys = Object.keys(groups);
   var ctr;
 
