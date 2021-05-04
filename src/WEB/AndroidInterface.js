@@ -171,7 +171,7 @@ function moveView(id, index) {
   computeChildDimens(parent)
 
   children.forEach(child => {
-    inflateView({view:child, parentElement})
+    inflateView({view:child, parentElement : parent})
   })
 }
 
