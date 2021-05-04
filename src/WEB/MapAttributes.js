@@ -1039,7 +1039,7 @@ function getAnimeTransition(props){
 // add attributes to the mutable element
 function setElemAttributes(element,props){
 
-    if (props.hasOwnProperty("url")) { element.setAttribute('src',url) }
+    if (props.hasOwnProperty("url")) { element.setAttribute('src',props.url) }
 
     if (props.hasOwnProperty("autofocus") && (navigator.userAgent.indexOf("iPhone") == -1)) { element.setAttribute('autofocus','autofocus') }; // device should not be an iphone
 
