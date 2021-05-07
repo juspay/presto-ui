@@ -93,6 +93,9 @@ function getContainer( namespace ){
 }
 
 function getParentView(namespace, view) {
+  if (window.__VIEWS && !window.__VIEWS.content) {
+    window.__VIEWS.content = state.mainRootView;
+  }
   if (namespace) {
     let containerType = state.fragmentTypes[namespace];
     if (containerType) {

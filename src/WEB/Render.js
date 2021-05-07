@@ -612,6 +612,9 @@ function setAttributes(view, elem, firstRender) {
         return;
     }
 
+    if (type == "relativeLayout") {
+        elem_style+="overflow:hidden;"
+    }
     if (elem.classList && elem.classList.length > 0)
         elem.classList.add(type)
     else
@@ -984,6 +987,7 @@ let createNewElement = function(view, parentElement, siblingView){
                 elem.appendChild(inputView);
 
                 view.props.style.position = "relative";
+                view.props.style.overflow
                 element_style += setAttributes(view, elem, true);
                 delete view.props.label;
             } else if (view.props.hint) {
@@ -1196,6 +1200,9 @@ let inflateView = function ({view, parentElement, siblingView, stopChild, render
         view.state = view.state || {}
         view.state.computedHeight = isNaN(parseInt(view.props.height)) ? view.state.computedHeight || 0 : parseInt(view.props.height)
         view.state.computedWidth = isNaN(parseInt(view.props.width)) ? view.state.computedWidth || 0 : parseInt(view.props.width)
+    }
+    else {
+        postComputeLayoutDimens(view, elem);
     }
     setAfterRenderFunctions(newInflated, view, elem);
 
