@@ -46,7 +46,7 @@ function getScreenDimensions(namespace) {
 
 // Due to jos, PrestoDOM's document is different from the DOM Document which actaully contains the nodes.
 // This utility function allows PrestoDOM to acquire an actual DOM object.
-function getUIElement(id){
+function getUIElement(id, namespace){
   var ele = document.getElementById(id);
   return ele;
 }
@@ -69,7 +69,7 @@ function isOrientatationChanged(props){
   return true;
 }
 
-function runInUI(cmd) {
+function runInUI(cmd, namespace) {
   if (typeof cmd == "string")
     return
 
@@ -105,34 +105,21 @@ function runInUI(cmd) {
         let parentView = null
 
         let stopChild = !isOrientatationChanged(cmd);
+        parentId = elem.parentNode.id
 
-        if(view.type == 'modal'){
-          parentId = elem.getAttribute('virtual_parent')
+        if(parentId){
+          parentView = window.__VIEWS[parentId]
+          parentElement = document.getElementById(parentId)
 
-          if(parentId){
-            parentView = window.__VIEWS[parentId]
-            parentElement = document.getElementById(parentId)
-
-            if(parentElement && parentView){
-              inflateView({view, parentElement, stopChild: true})
-            }
-          }
-        }else{
-          parentId = elem.parentNode.id
-
-          if(parentId){
-            parentView = window.__VIEWS[parentId]
-            parentElement = document.getElementById(parentId)
-
-            if(parentElement && parentView){
-              let siblingView = findSiblingView(parentView,id);
-              computeChildDimens(parentView);
-              inflateView({view, parentElement, siblingView, renderStyle: true,stopChild,isListItem:true});
-            }
+          if(parentElement && parentView){
+            let siblingView = findSiblingView(parentView,id);
+            computeChildDimens(parentView);
+            inflateView({view, parentElement, siblingView, renderStyle: true,stopChild,isListItem:true});
           }
         }
       }
     }
+    
   //recompute()
   //Render.runInUI(cmd)
 }
@@ -146,7 +133,8 @@ function Render(view, cb, namespace) {
     addViewToParent(parentElement.id, view, parentView.children.indexOf(view), cb, false)
   } else {
     computeChildDimens(parentView);
-    inflateView({view, parentElement})
+    const elem = inflateView({view, parentElement});
+    const elements= document.getElementById('content');
     if (cb) callbackInvoker.invoke(cb);
   }
 }
@@ -177,7 +165,7 @@ function moveView(id, index) {
 
 
 // Android.addViewToParent(rootId, dom_all, length (window.__ROOTSCREEN.idSet.child) - 1 , callback, null); -- call to this function
-function addViewToParent(id, view, index, cb, replace) {
+function addViewToParent(id, view, index, cb, replace, namespace) {
   // console.log("addViewToParent document location is",document.location);
   let parentElement = document.getElementById(id)
   let parentView = window.__VIEWS[id]
@@ -195,7 +183,7 @@ function addViewToParent(id, view, index, cb, replace) {
     siblingView = parentView.children[index-1]
 
   preComputeLayoutDimens(parentView)
-  var elem = inflateView({view,  siblingView}) // pass parent element as null, so that the element created doesn't immediately get attached to the DOM
+  var elem = inflateView({view,  siblingView, namespace}) // pass parent element as null, so that the element created doesn't immediately get attached to the DOM
   var pv = parentView
   var pe = parentElement
   while(pv.state && pv.state.practicalHeight == "wrap_content") {
@@ -232,32 +220,7 @@ function addViewToParent(id, view, index, cb, replace) {
   if (cb) callbackInvoker.invoke(cb);
 }
 
-function getChildModalViews(view) {
-  let modalViews = []
-
-  if(view.children) {
-    for(let i = 0; i < view.children.length; i++){
-      let childView = view.children[i]
-
-      if(childView.type == 'modal'){
-        modalViews.push(childView)
-      }else{
-        let items = getChildModalViews(childView)
-        if(items && items.length > 0){
-          if(modalViews.length > 0){
-            modalViews = items
-          }else{
-            modalViews = modalViews.concat(items)
-          }
-        }
-      }
-    }
-  }
-
-  return modalViews
-}
-
-function removeView(id) {
+function removeView(id, namespace) {
   let viewElem = document.getElementById(id);
   if(!viewElem){
     helper.clearViewExternals(view)
@@ -286,105 +249,16 @@ function removeView(id) {
   let parent = null
   let idx
 
-  if(view.type == 'modal'){
-    let virtualParentId = viewElem.getAttribute('virtual_parent')
-    parent = window.__VIEWS[virtualParentId]
-
+  parent = window.__VIEWS[parentId]
+  if (parent) {
     idx = parent.children.indexOf(view)
     parent.children.splice(idx, 1)
-
     helper.clearViewExternals(view)
-    parentElem.remove()
-  }else{
-    /* Modal view among children */
-    let childModalViews = getChildModalViews(view)
-    if(childModalViews && childModalViews.length > 0){
-      for(let i = 0; i < childModalViews.length; i++){
-        let modalView = childModalViews[i]
-        let modalElem = document.getElementById(modalView.props.id)
-
-        if(modalElem){
-          let backdropId = modalElem.parentNode.id
-          let backdropElem = document.getElementById(backdropId)
-
-          backdropElem.remove()
-        }
-      }
-    }
-    /* Modal view among children end */
-
-    parent = window.__VIEWS[parentId]
-    if (parent) {
-      idx = parent.children.indexOf(view)
-      parent.children.splice(idx, 1)
-      helper.clearViewExternals(view)
-    }
-
-    viewElem.remove()
   }
+  viewElem.remove()
 }
 
-function replaceModalView(view, id) {
-  let elem = document.getElementById(id)
-  if(!elem)
-    return
-
-  let backdropId = elem.parentNode.id
-  let backdropElem = document.getElementById(backdropId)
-
-  let parentId = elem.getAttribute('virtual_parent')
-  let parentView = window.__VIEWS[parentId]
-  let parentElem = document.getElementById(parentId)
-
-  let oldView = null
-
-  for (let i = 0; i < parentView.children.length; i++) {
-    if(parentView.children[i].props.id == id){
-      oldView = parentView.children[i]
-      break;
-    }
-  }
-
-  if(!oldView)
-    return
-
-  /* Get Children */
-  let childrenElem = []
-  let children = oldView.children
-
-  if(elem && children){
-    for(let i = 0; i < children.length; i++){
-      let childId = children[i].props.id
-      let childElem = document.getElementById(childId)
-
-      if(childElem)
-        childrenElem.push(childElem)
-    }
-  }
-  /* Get Children End */
-
-  oldView.props = view.props
-  backdropElem.remove()
-  inflateView({view : oldView, parentElement : parentElem, stopChild : true})
-  window.__VIEWS[id] = oldView
-
-  /* Append Children */
-  elem = document.getElementById(id)
-
-  if(elem && childrenElem.length > 0){
-    for(let i = 0; i < childrenElem.length; i++){
-      elem.appendChild(childrenElem[i])
-    }
-  }
-  /* Append Children End */
-}
-
-function replaceView(view, id) {
-  if(view.type == 'modal'){
-    replaceModalView(view, id)
-    return
-  }
-
+function replaceView(view, id, namespace) {
   let elem = document.getElementById(id)
   if(!elem)
     return
@@ -442,12 +316,12 @@ function replaceView(view, id) {
   /* Append Children End */
 }
 
-function recompute() {
-  const rootnode = document.getElementById('content');
-  const child = rootnode.firstElementChild;
-  const rootview = window.__VIEWS[child.id];
-  Render(rootview, null);
-}
+// function recompute() {
+//   const rootnode = document.getElementById('content');
+//   const child = rootnode.firstElementChild;
+//   const rootview = window.__VIEWS[child.id];
+//   Render(rootview, null);
+// }
 
 function getNewID() {
   window.JOS_PRESTO_ID = window.JOS_PRESTO_ID || 1;
@@ -459,10 +333,12 @@ function getWindow() {
 }
 
 function getDocument() {
-  return window.document;
+  return document;
 }
 
 module.exports = {
+  addToContainerList : addToContainerList,
+  
   getScreenDimensions: getScreenDimensions,
 
   getUIElement : getUIElement,
@@ -471,25 +347,17 @@ module.exports = {
 
   Render: Render,
 
-  moveView: moveView,
-
   addViewToParent: addViewToParent,
-
-  getChildModalViews: getChildModalViews,
+  
+  moveView: moveView,
 
   removeView: removeView,
 
-  replaceModalView: replaceModalView,
-
   replaceView: replaceView,
-
-  recompute: recompute,
 
   getNewID: getNewID,
 
   getWindow: getWindow,
 
-  getDocument: getDocument,
-
-  addToContainerList : addToContainerList
+  getDocument: getDocument
 };

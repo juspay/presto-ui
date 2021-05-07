@@ -61,10 +61,6 @@ function sendAnalytics(data) {
   }
 }
 
-function utoa(data) {
-  return btoa(unescape(encodeURIComponent(data)));
-}
-
 module.exports = {
   getSymbol: function(type) {
     switch (type) {
@@ -114,15 +110,10 @@ module.exports = {
   },
 
   callAPI: async function callAPI(method, url, data, headers, shouldEncodeToFormData, isSSLPinnedURL, callback) {
-    // console.log("Presto-UI Call API called in JBridge at location",document.location);
-    // console.log("Presto-UI Call API called in JBridget with callback string as",callback);
-    callback = callback || isSSLPinnedURL; // backward comaptibility
     headers = parseJson(headers);
     data = parseJson(data);
-    let something = false;
     if (headers["Content-Type"] === "application/x-www-form-urlencoded") {
       if (typeof data == "object") {
-        something = true;
         data = qsstringify(data);
       }
     } else {
@@ -134,10 +125,10 @@ module.exports = {
     try {
       const resp = await axios({url, method, data, headers });
       const json = resp.data;//await resp.data.json();
-      callbackInvoker.invoke(callback,"success",utoa(JSON.stringify(json)),resp.status);
+      window.callUICallback(callback,"success",btoa(JSON.stringify(json)),resp.status);
     } catch (err) {
       console.error("ERR", err);
-      callbackInvoker.invoke(callback, "failure", btoa("{}"), 50);
+      window.callUICallback(callback, "failure", btoa("{}"), 50);
     }
   },
 

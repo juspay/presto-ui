@@ -26,10 +26,6 @@
 let {
     computeChildDimens
 } = require("../compute")
-let {
-    renderComponent
-} = require("../component")
-let helper = require("../helper")
 let mapAttributes = require("./MapAttributes");
 const List = require("./ListPresto");
 
@@ -113,123 +109,6 @@ function popup(elem, props) {
         else
             menuBar.style.display = "none";
     });
-}
-
-function setGravityStylesForRow(elem, props) {
-
-    var gravity_row_style = "";
-
-    if (!props.hasOwnProperty('gravity') || !props.gravity) {
-        props.gravity = '';
-        //return;
-    }
-
-    switch (props.gravity) {
-        case 'center_vertical':
-            gravity_row_style += "align-items: center;";
-            gravity_row_style += "justify-content: flex-start;";
-
-            // elem.gravity_row_style['align-items'] = 'center';
-            // elem.gravity_row_style['justify-content'] = 'flex-start';
-            break;
-        case 'center_horizontal':
-            gravity_row_style += "align-items: flex-start;";
-            gravity_row_style += "justify-content: center;";
-            // elem.gravity_row_style['align-items'] = 'flex-start';
-            // elem.gravity_row_style['justify-content'] = 'center';
-            break;
-        case 'center':
-            gravity_row_style += "align-items: center;";
-            gravity_row_style += "justify-content: center;";
-            // elem.gravity_row_style['align-items'] = "center";
-            // elem.gravity_row_style['justify-content'] = "center";
-            break;
-        case 'left':
-        case 'start':
-            gravity_row_style += "align-items: flex-start;";
-            gravity_row_style += "justify-content: flex-start;";
-            // elem.gravity_row_style['align-items'] = 'flex-start';
-            // elem.gravity_row_style['justify-content'] = 'flex-start';
-            break;
-        case 'right':
-        case 'end':
-            gravity_row_style += "align-items: flex-start;";
-            gravity_row_style += "justify-content: flex-end;";
-            // elem.gravity_row_style['align-items'] = 'flex-start';
-            // elem.gravity_row_style['justify-content'] = 'flex-end';
-            break;
-        case 'stretch':
-            gravity_row_style += "align-items: stretch;";
-            gravity_row_style += "justify-content: flex-start;";
-            // elem.gravity_row_style['align-items'] = 'stretch';
-            // elem.gravity_row_style['justify-content'] = 'flex-start';
-            break;
-        default:
-            gravity_row_style += "align-items: flex-start;";
-            gravity_row_style += "justify-content: flex-start;";
-            // elem.gravity_row_style['align-items'] = 'flex-start';
-            // elem.gravity_row_style['justify-content'] = 'flex-start';
-            break;
-    }
-
-    return gravity_row_style;
-}
-
-function setGravityStylesForColumn(elem, props) {
-
-    var gravity_col_style = "";
-    if (!props.hasOwnProperty('gravity') || !props.gravity) {
-        props.gravity = '';
-        //return;
-    }
-
-    switch (props.gravity) {
-        case 'center_vertical':
-            gravity_col_style += "align-items: flex-start;";
-            gravity_col_style += "justify-content: center;";
-            // elem.style['align-items'] = 'flex-start';
-            // elem.style['justify-content'] = 'center';
-            break;
-        case 'center_horizontal':
-            gravity_col_style += "align-items: center;";
-            gravity_col_style += "justify-content: flex-start;";
-            // elem.style['align-items'] = 'center';
-            // elem.style['justify-content'] = 'flex-start';
-            break;
-        case 'center':
-            gravity_col_style += "align-items: center;";
-            gravity_col_style += "justify-content: center;";
-            // elem.style["align-items"] = "center";
-            // elem.style["justify-content"] = "center";
-            break;
-        case 'left':
-        case 'start':
-            gravity_col_style += "align-items: flex-start;";
-            gravity_col_style += "justify-content: flex-start;";
-            // elem.style['justify-content'] = 'flex-start';
-            // elem.style['align-items'] = 'flex-start';
-            break;
-        case 'right':
-        case 'end':
-            gravity_col_style += "align-items: flex-end;";
-            gravity_col_style += "justify-content: flex-start;";
-            // elem.style['align-items'] = 'flex-end';
-            // elem.style['justify-content'] = 'flex-start';
-            break;
-        case 'stretch':
-            gravity_col_style += "align-items: stretch;";
-            gravity_col_style += "justify-content: flex-start;";
-            // elem.style['align-items'] = 'stretch';
-            // elem.style['justify-content'] = 'flex-start';
-            break;
-        default:
-            gravity_col_style += "align-items: flex-start;";
-            gravity_col_style += "justify-content: flex-start;";
-            // elem.style['align-items'] = 'flex-start';
-            // elem.style['justify-content'] = 'flex-start';
-            break;
-    }
-    return gravity_col_style;
 }
 
 function setAnimationStyles(elem, props) {
@@ -607,11 +486,6 @@ function setAttributes(view, elem, firstRender) {
     elem.setAttribute("id",props.id);
     // elem_style += "id:"+props.id+";";
 
-    if (type == 'modal') {  // this is likely not being used  in hyper-widget
-        setModalAttributes(elem, props, firstRender);
-        return;
-    }
-
     if (type == "relativeLayout") {
         elem_style+="overflow:hidden;"
     }
@@ -619,8 +493,6 @@ function setAttributes(view, elem, firstRender) {
         elem.classList.add(type)
     else
         elem.className = type
-
-    //let elem_transition = props.transition == undefined ? "0ms all" : props.transition // It will always be undefined lol
 
     elem_style += mapAttributes.addTransitionValue(props);
 
@@ -654,49 +526,9 @@ function setAttributes(view, elem, firstRender) {
         initiateElement(type, props, elem)
     }
 
-    /* Component Part */
-    if (props.hasOwnProperty('elementType') && props.elementType == 'component') {
-        elem.classList.add(window.__COM_CLASS_GROUP.WRAPPER)
-
-        if (firstRender)
-            elem.setAttribute('guid', props.guid)
-    }
-
-    if (props.hasOwnProperty('componentType') && props.componentType)
-        renderComponent(elem, props, firstRender) // what are components??
-
     return elem_style;
 }
 
-// modal not being used in hyper-widget web
-function setModalAttributes(elem, props, firstRender) {
-    setGravityStylesForRow(elem, props);
-
-    let backdropElem = document.getElementById(window.__BACKDROPMODAL_CLASS + '_' + props.id)
-
-    if (props.hasOwnProperty('modalVisibility') && props.modalVisibility) {
-        backdropElem.classList.add(window.__SHOWNMODAL_CLASS);
-        document.body.classList.add(window.__OPENMODAL_CLASS);
-
-        let modalProps = null;
-        if (window.__MODAL_PROPS[props.id]) {
-            modalProps = JSON.parse(window.__MODAL_PROPS[props.id]);
-        }
-
-        if (props.onShow && typeof props.onShow ==
-            "function") {
-            if (firstRender || (modalProps && modalProps.modalVisibility != props.modalVisibility)) {
-                props.onShow();
-            }
-        }
-    } else {
-        props.modalVisibility = false;
-        backdropElem.classList.remove(window.__SHOWNMODAL_CLASS);
-        document.body.classList.remove(window.__OPENMODAL_CLASS);
-    }
-
-    window.__MODAL_PROPS[props.id] = JSON.stringify(props);
-}
 
 // mutation observers are slow, what is this and why can't global events solve this problem?
 /* Observer for afterRender */
@@ -731,101 +563,6 @@ let cb = (elem, view) => {
     if (view.props.feedback && typeof view.props.feedback == "function") {
         view.props.feedback()
     }
-}
-
-// Creates the Modal element if it has not been already inflated
-// modal is not being used
-let inflateModal = function (view, parentElement, stopChild) {
-    let newInflated = false;
-    let parentId = parentElement.id;
-
-    /* Modal Wrapper */
-    let elem = document.getElementById(view.props.id);
-    if (!elem || elem == undefined) {
-        newInflated = true;
-
-        elem = document.createElement('div');
-        elem.setAttribute('id', view.props.id);
-        elem.setAttribute('virtual_parent', parentId);
-        elem.classList.add(window.__CONTENTMODAL_CLASS);
-    }
-    /* Modal Wrapper End */
-
-    /* BackDrop */
-    let backdropElem = document.getElementById(window.__BACKDROPMODAL_CLASS + '_' + view.props.id);
-    if (!backdropElem || backdropElem == undefined) {
-        backdropElem = document.createElement('div');
-        backdropElem.setAttribute('id', window.__BACKDROPMODAL_CLASS + '_' + view.props.id);
-        backdropElem.classList.add(window.__BACKDROPMODAL_CLASS);
-
-        if (view.props.hasOwnProperty('animationType') && view.props.animationType != 'none') {
-            let animationType = view.props.animationType;
-
-            if (animationType == 'fade') {
-                backdropElem.classList.add(window.__FADEMODAL_CLASS);
-            } else if (animationType == 'slide') {
-                backdropElem.classList.add(window.__SLIDEMODAL_CLASS);
-            }
-        }
-
-        if (view.props.hasOwnProperty('closeOnBackdrop') && !view.props.closeOnBackdrop) {
-            backdropElem.classList.add(window.__DISABLEDBACKDROP_CLASS);
-        } else {
-            backdropElem.classList.remove(window.__DISABLEDBACKDROP_CLASS);
-        }
-
-        if (view.props.hasOwnProperty('transparent') && view.props.transparent) {
-            backdropElem.style.background = 'transparent';
-        } else {
-            backdropElem.style.background = 'rgba(0, 0, 0, 0.5)';
-        }
-
-        backdropElem.appendChild(elem);
-        document.body.appendChild(backdropElem);
-
-        if (newInflated) {
-            if (view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function") {
-                // We should run observer for the element
-                observer(elem);
-                elem.setAttribute('has_render', true);
-            }
-        }
-    }
-    /* BackDrop End */
-
-    setModalAttributes(elem, view.props, newInflated);
-
-    if (!stopChild) {
-        if (view.hasOwnProperty('children') && view.children.length > 0) {
-            for (let i = 0; i < view.children.length; i++) {
-                if (view.children[i]) {
-                    view.children[i].props.style.pointerEvents = 'auto';
-                    if (i != 0)
-                        inflateView({view : view.children[i], parentElement : elem, siblingView: view.children[i - 1]});
-                    else
-                        inflateView({view : view.children[i], parentElement :elem, siblingView:view});
-                }
-            }
-        }
-    } else {
-        if (elem.hasChildNodes()) {
-            let childNodes = elem.childNodes
-
-            if (childNodes) {
-                for (let i = 0; i < childNodes.length; i++) {
-                    let childNode = childNodes[i]
-
-                    childNode.style.pointerEvents = 'auto'
-                }
-            }
-        }
-    }
-
-    if (newInflated) {
-        cb(elem, view);
-    }
-
-    return backdropElem;
 }
 
 window.inflateTimings = {
@@ -1160,9 +897,6 @@ let renderList = (view,elem)=>{
 }
 let inflateView = function ({view, parentElement, siblingView, stopChild, renderStyle} ={}) {
     view.state = view.state || {};
-    if ( view && view.type && view.type == 'modal') {
-        return inflateModal(view, parentElement, stopChild);
-    }
 
     if(view.props.listData){
         view.props.itemDatas = JSON.parse(view.props.listData);
@@ -1258,33 +992,10 @@ let handleWrapContent = (view, parentElement) => {
     return view;
 }
 
-// update a view, layout with new props, cmd will contain new props
-let runInUI = function (cmd) {
-    if (!(cmd instanceof Array))
-        cmd = [cmd];
-
-    cmd.forEach(function (each) {
-        let elem = document.getElementById(each.id);
-
-        if (!elem) {
-            return console.error("runInUI (Id NULL) CMD:", each);
-        }
-
-        let view = window.__VIEWS[elem.id];
-        view.props = helper.merge(view.props, each);
-
-        var styles = setAttributes(view, elem, false);
-        elem.setAttribute("style",styles);
-        view.state = view.state || {}
-        view.state.computedHeight = isNaN(parseInt(view.props.height)) ? view.state.computedHeight || elem.offsetHeight : parseInt(view.props.height)
-        view.state.computedWidth = isNaN(parseInt(view.props.width)) ? view.state.computedWidth || elem.offsetWidth : parseInt(view.props.width)
-    });
-};
-
 module.exports = {
     inflateView,
-    runInUI,
     computeChildDimens,
+    List,
     postComputeLayoutDimens,
     preComputeLayoutDimens
 };
