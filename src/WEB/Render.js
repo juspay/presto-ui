@@ -113,47 +113,43 @@ function popup(elem, props) {
 
 function setAnimationStyles(elem, props) {
 
-  var animation_style = "";
-  if (!props.hasOwnProperty('hasAnimation') || !props.hasAnimation) {
-    return animation_style;
-  }
-
-  const keyframeName = "keyframe_" + props.id
-  if (!window.__RENDERED_KEYFRAMES.includes(keyframeName)) {
-    let styleElem = document.getElementById(window.__STYLE_ID)
-
-    if (!styleElem) {
+    var animation_style = "";
+    if (!props.hasOwnProperty('hasAnimation') || !props.hasAnimation) {
       return animation_style;
     }
-
+    const keyframeName = "keyframe_" + props.id;
+    let styleElem = document.getElementById(window.__STYLE_ID)
+  
+  
     let data = null
-
+  
     if (props.inlineAnimation) {
+        console.log("INLINE")
       data = JSON.parse(props.inlineAnimation)
       if (data && data.length > 0) {
         data = data[0]
       }
     }
-
+  
     if (!data) {
       return animation_style;
     }
-
+  
     let css = ""
     css += "@keyframes " + keyframeName + "{"
       css += "from {"
         if (data.hasOwnProperty('fromX')) {
-          css += "margin-left: " + data.fromX + "px;"
+          css += "margin-left: " + data.fromX + "%;"
         }
-
+  
         if (data.hasOwnProperty('fromY')) {
-          css += "margin-top: " + data.fromY + "px;"
+          css += "margin-top: " + data.fromY + "%;"
         }
-
+  
         if (data.hasOwnProperty('fromAlpha')) {
           css += "opacity: " + data.fromAlpha + ";"
         }
-
+  
         if (data.hasOwnProperty('fromScale')) {
           css += "transform: scale(" + data.fromScale + ");"
         } else if (data.hasOwnProperty('fromScaleX') && data.hasOwnProperty('fromScaleY')) {
@@ -163,7 +159,7 @@ function setAnimationStyles(elem, props) {
         } else if(data.hasOwnProperty('fromScaleY')) {
           css += "transform: scaleY(" + data.fromScaleY + ");"
         }
-
+  
         if (data.hasOwnProperty('fromRotation')) {
           css += "transform: rotate(" + data.fromRotation + ");"
         } else {
@@ -176,17 +172,17 @@ function setAnimationStyles(elem, props) {
       css += "} "
       css += "to {"
         if (data.hasOwnProperty('toX')) {
-          css += "margin-left: " + data.toX + "px;"
+          css += "margin-left: " + data.toX + "%;"
         }
-
+  
         if (data.hasOwnProperty('toY')) {
-          css += "margin-top: " + data.toY + "px;"
+          css += "margin-top: " + data.toY + "%;"
         }
-
+  
         if (data.hasOwnProperty('toAlpha')) {
           css += "opacity: " + data.toAlpha + ";"
         }
-
+  
         if (data.hasOwnProperty('toScale')) {
           css += "transform: scale(" + data.toScale + ");"
         } else if (data.hasOwnProperty('toScaleX') && data.hasOwnProperty('toScaleY')) {
@@ -196,7 +192,7 @@ function setAnimationStyles(elem, props) {
         } else if(data.hasOwnProperty('toScaleY')) {
           css += "transform: scaleY(" + data.toScaleY + ");"
         }
-
+  
         if (data.hasOwnProperty('toRotation')) {
           css += "transform: rotate(" + data.toRotation + ");"
         } else {
@@ -208,43 +204,46 @@ function setAnimationStyles(elem, props) {
         }
       css += "} "
     css += "}"
-
-    if(styleElem.styleSheet){
+    // console.log("css ", css);
+    if(styleElem && styleElem.styleSheet){
       styleElem.styleSheet.cssText += css;
     }else{
+      styleElem = document.createElement('style');
       styleElem.appendChild(document.createTextNode(css));
+      document.getElementsByTagName("head")[0].appendChild(styleElem);
     }
-
+  
     animation_style += "animation-name:"+keyframeName+";";
-    animation_style += "animation-duration: 1s;";
-
+  
     // elem.style.animationName = keyframeName
     //elem.style.animationDuration = "1s"
     if (data.hasOwnProperty('duration') && !isNaN(data.duration)) {
       const duration = parseFloat(parseFloat(data.duration) / 1000).toFixed(2)
       animation_style += "animation-duration:"+duration+"s;";
       //elem.style.animationDuration = duration + "s"
+    } else {
+      animation_style += "animation-duration: 1s;";
     }
-
+  
     if (data.hasOwnProperty('repeatCount')) {
       if (data.repeatCount == "-1" || data.repeatCount == -1) {
         animation_style += "animation-iteration-count:infinite;";
         // elem.style.animationIterationCount = "infinite"
       } else {
-        animation_style += "animation-iteration-count:"+data.repeatCount+";";
+        animation_style += "animation-iteration-count:"+(data.repeatCount + 1)+";";
         // elem.style.animationIterationCount = data.repeatCount
       }
     }
-
+  
     if (data.hasOwnProperty("interpolator")) {
       animation_style += "animation-timing-function:"+"cubic-bezier(" + data.interpolator + ")"+";";
     //   elem.style.animationTimingFunction = "cubic-bezier(" + data.interpolator + ")";
     }
-
+  
     window.__RENDERED_KEYFRAMES.push(keyframeName)
+    console.log("animation style ", animation_style)
+    return animation_style;
   }
-  return animation_style;
-}
 
 function setComputedStyles(elem, props) {
     let computed_styles = "";
