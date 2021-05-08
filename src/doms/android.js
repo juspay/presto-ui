@@ -25,6 +25,7 @@
 
 var excluded = {
   "CoordinatorLayout": "androidx.coordinatorlayout.widget.",
+  "SwipeRefreshLayout": "androidx.swiperefreshlayout.widget.",
   "FloatingActionButton": "android.support.design.widget.",
   "Toolbar": "android.support.v7.widget.",
   "AppBarLayout": "android.support.design.widget.",
@@ -52,6 +53,7 @@ function getCtr(viewGroup) {
   var viewGroupMap = {
     'linearLayout': 'android.widget.LinearLayout$LayoutParams->new',
     'coordinatorLayout': 'androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams->new',
+    'swipeRefreshLayout': 'androidx.swiperefreshlayout.widget.SwipeRefreshLayout$LayoutParams->new',
     'scrollView': 'android.widget.LinearLayout$LayoutParams->new',
     'horizontalScrollView': 'android.widget.LinearLayout$LayoutParams->new',
     'relativeLayout': 'android.widget.RelativeLayout$LayoutParams->new',
