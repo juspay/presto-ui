@@ -191,8 +191,12 @@ if (window.__OS == "WEB") {
 window.__ID = 1;
 window.__NODE_ID = 1;
 window.__SCREEN_INDEX = -1;
-
-window.__PROXY_FN = window.parent.__PROXY_FN?window.parent.__PROXY_FN:{};
+// Adding temp fix - Will be moved to mystique-web
+try {
+    window.__PROXY_FN = window.parent.__PROXY_FN?window.parent.__PROXY_FN:{};
+} catch (error) {
+    window.__PROXY_FN = {};   
+}
 window.__FN_INDEX = 0;
 window.__ROOTSCREEN = null;
 window.__CACHED_SCREENS = {};
@@ -203,7 +207,12 @@ window.__ANIMATE_DIR = null;
 window.__SCREEN_STACK = [];
 window.__LAST_FN_CALLED = null;
 window.__THROTTELED_ACTIONS = [];
-window.__VIEWS = window.parent.__VIEWS?window.parent.__VIEWS:{};
+// Adding temp fix - Will be moved to mystique-web
+try {
+    window.__VIEWS = window.parent.__VIEWS?window.parent.__VIEWS:{};
+} catch (error) {
+    window.__VIEWS = window.parent.__VIEWS?window.parent.__VIEWS:{};   
+}
 window.__VIEW_DIMENSIONS = {};
 window.__OBSERVERS = {};
 window.ZIndex = 0;
