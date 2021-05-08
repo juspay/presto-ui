@@ -2024,7 +2024,16 @@ module.exports = function(type, config, _getSetType, namespace) {
   }
 
   if(config.hasOwnProperty("cornerRadii")){
-    config.methods.push(this_setCornerCurves(config.cornerRadii));
+    try {
+      var radiiLen = config.cornerRadii.length;
+      var newCornerRadii = config.cornerRadii.substr(0, radiiLen-3);
+      newCornerRadii += 
+        config.cornerRadii[radiiLen-1] + "," + config.cornerRadii[radiiLen-3];
+      config.methods.push(this_setCornerCurves(newCornerRadii));
+    } catch(e){
+      console.log(e);
+      config.methods.push(this_setCornerCurves(config.cornerRadii));
+    }
   }
 
   config.currChildOffset = 0;
