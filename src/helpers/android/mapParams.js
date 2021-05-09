@@ -40,6 +40,22 @@ var map = {
     inVokedIn: 'VIEW',
     fnName: "setBaselineAligned",
   },
+  enableRefresh: {
+    values: [{
+      type: 'b'
+    }],
+    dontMap: true,
+    inVokedIn: 'VIEW',
+    fnName: "setRefreshing",
+  },
+  setEnable: {
+    values: [{
+      type: 'b'
+    }],
+    dontMap: true,
+    inVokedIn: 'VIEW',
+    fnName: "setEnabled",
+  },
   showDividers: {
     values: [{
       type: 'i',

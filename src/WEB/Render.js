@@ -26,91 +26,61 @@
 let {
     computeChildDimens
 } = require("../compute")
-let {
-    renderComponent
-} = require("../component")
-let helper = require("../helper")
-let mapAttributes = require("./MapAttributes"); 
+let mapAttributes = require("./MapAttributes");
+const List = require("./ListPresto");
 
-function createTextElement(elem, config) {
+function initiateElement(type, props, elem){
+    if (type == "editText" && elem.tagName.toLowerCase() == "input") {
 
-    let text_style = ""; 
-    let children = elem.childNodes;
-    let article = null
-    if (children.length) {
-        for (let i = 0; i < children.length; i++) {
-            if (children[i].nodeName.toLowerCase() == 'article') {
-                article = children[i]
-                break
-            }
+        var isIPhone = (navigator.userAgent.indexOf("iPhone") !== -1)
+        if (elem.autofocus && !isIPhone) {
+            elem.focus()
+        }
+        if(window.preponeSpace){
+            elem.addEventListener('input', separatorInputKeyDownHandlerNew);
+        } else {
+            elem.addEventListener('input', separatorInputKeyDownHandler);
         }
     }
 
-    if (!article)
-        article = document.createElement('ARTICLE')
+    let events = ['onClick', 'onEnterPressedEvent', 'onChange', 'onMouseDown', 'onMouseUp', 'onMouseEnter', 'onMouseOver', 'onMouseMove', 'onMouseOut', 'onMouseLeave', 'onFocus', 'onPaste']
 
-    text_style += "white-space:initial;";
-    // elem.style.whiteSpace = "initial"
+    for (let i = 0; i < events.length; i++) {
+        let key = events[i]
+        let eventType = key.substring(2, key.length).toLowerCase()
+        if (props.hasOwnProperty(key) && typeof props[key] == "function") {
+            const callback = props[key]
+            if (key == "onEnterPressedEvent") {
+                elem.addEventListener('keyup', (e) => {
+                    e.stopPropagation()
 
-    if (config.isHtmlContent)
-        article.innerHTML = config.text
-    else
-        article.innerText = config.text
-
-    if (!config.text && config.hint)
-        article.innerText = config.hint
-
-    article.style.wordBreak = "break-word"
-    article.style.display = "inline"
-
-    if (config.letterSpacing)
-        text_style += "letter-spacing:"+config.letterSpacing+";";
-
-    // elem["style"]["letter-spacing"] = config.letterSpacing
-
-    elem.appendChild(article)
-    return text_style; 
-}
-
-// inefficient, no longer being used 
-function createTextElement2(elem, config) {
-    let text_style = ""; 
-    let children = elem.childNodes;
-    let article = null
-    if (children.length) {
-        for (let i = 0; i < children.length; i++) {
-            if (children[i].nodeName.toLowerCase() == 'article') {
-                article = children[i]
-                break
+                    if (e.keyCode == 13) {
+                        callback(e)
+                    }
+                })
+            }
+            if (eventType == "change") {
+                elem.addEventListener('input', (e) => {
+                    callback(e.target.value)
+                })
+            } else if (eventType == "focus"){
+                elem.addEventListener('focus', (e) => {
+                    callback(true)
+                })
+                elem.addEventListener('blur', (e) => {
+                    callback(false)
+                })
+            } else {
+                elem.addEventListener(eventType, (e) => {
+                    e.stopPropagation();
+                    callback(e)
+                })
             }
         }
     }
-    if (!article)
-        article = document.createElement('ARTICLE')
-
-    // elem.style.whiteSpace = "initial"
-    text_style += "white-space:initial;";
-
-    if (config.isHtmlContent)
-        article.innerHTML = config.textFromHtml
-    else
-        article.innerHTML = config.textFromHtml
-
-    if (!config.text && config.hint)
-        article.innerText = config.hint
-
-    article.style.wordBreak = "break-word"
-    article.style.display = "inline"
-
-    if (config.letterSpacing)
-        text_style += "letter-spacing:"+config.letterSpacing+";";
-    //    elem["style"]["letter-spacing"] = config.letterSpacing
-
-    elem.appendChild(article)
-    return text_style; 
 }
 
-// not being used in hyper-widget web 
+// not being used in hyper-widget web
 function popup(elem, props) {
     let menuItems = props["popupMenu"].split(',');
     let menuBar = document.createElement("div");
@@ -141,166 +111,45 @@ function popup(elem, props) {
     });
 }
 
-function setGravityStylesForRow(elem, props) {
-
-    var gravity_row_style = ""; 
-
-    if (!props.hasOwnProperty('gravity') || !props.gravity) {
-        props.gravity = '';
-        //return;
-    }
-
-    switch (props.gravity) {
-        case 'center_vertical':
-            gravity_row_style += "align-items: center;"; 
-            gravity_row_style += "justify-content: flex-start;"; 
-
-            // elem.gravity_row_style['align-items'] = 'center';
-            // elem.gravity_row_style['justify-content'] = 'flex-start';
-            break;
-        case 'center_horizontal':
-            gravity_row_style += "align-items: flex-start;"; 
-            gravity_row_style += "justify-content: center;"; 
-            // elem.gravity_row_style['align-items'] = 'flex-start';
-            // elem.gravity_row_style['justify-content'] = 'center';
-            break;
-        case 'center':
-            gravity_row_style += "align-items: center;"; 
-            gravity_row_style += "justify-content: center;"; 
-            // elem.gravity_row_style['align-items'] = "center";
-            // elem.gravity_row_style['justify-content'] = "center";
-            break;
-        case 'left':
-        case 'start':
-            gravity_row_style += "align-items: flex-start;"; 
-            gravity_row_style += "justify-content: flex-start;"; 
-            // elem.gravity_row_style['align-items'] = 'flex-start';
-            // elem.gravity_row_style['justify-content'] = 'flex-start';
-            break;
-        case 'right':
-        case 'end':
-            gravity_row_style += "align-items: flex-start;"; 
-            gravity_row_style += "justify-content: flex-end;"; 
-            // elem.gravity_row_style['align-items'] = 'flex-start';
-            // elem.gravity_row_style['justify-content'] = 'flex-end';
-            break;
-        case 'stretch':
-            gravity_row_style += "align-items: stretch;"; 
-            gravity_row_style += "justify-content: flex-start;"; 
-            // elem.gravity_row_style['align-items'] = 'stretch';
-            // elem.gravity_row_style['justify-content'] = 'flex-start';
-            break; 
-        default:
-            gravity_row_style += "align-items: flex-start;"; 
-            gravity_row_style += "justify-content: flex-start;"; 
-            // elem.gravity_row_style['align-items'] = 'flex-start';
-            // elem.gravity_row_style['justify-content'] = 'flex-start';
-            break;
-    }
-
-    return gravity_row_style; 
-}
-
-function setGravityStylesForColumn(elem, props) {
-
-    var gravity_col_style = ""; 
-    if (!props.hasOwnProperty('gravity') || !props.gravity) {
-        props.gravity = '';
-        //return;
-    }
-
-    switch (props.gravity) {
-        case 'center_vertical':
-            gravity_col_style += "align-items: flex-start;";
-            gravity_col_style += "justify-content: center;";  
-            // elem.style['align-items'] = 'flex-start';
-            // elem.style['justify-content'] = 'center';
-            break;
-        case 'center_horizontal':
-            gravity_col_style += "align-items: center;"; 
-            gravity_col_style += "justify-content: flex-start;";  
-            // elem.style['align-items'] = 'center';
-            // elem.style['justify-content'] = 'flex-start';
-            break;
-        case 'center':
-            gravity_col_style += "align-items: center;"; 
-            gravity_col_style += "justify-content: center;";
-            // elem.style["align-items"] = "center";
-            // elem.style["justify-content"] = "center";
-            break;
-        case 'left':
-        case 'start':
-            gravity_col_style += "align-items: flex-start;"; 
-            gravity_col_style += "justify-content: flex-start;";
-            // elem.style['justify-content'] = 'flex-start';
-            // elem.style['align-items'] = 'flex-start';
-            break;
-        case 'right':
-        case 'end':
-            gravity_col_style += "align-items: flex-end;"; 
-            gravity_col_style += "justify-content: flex-start;";
-            // elem.style['align-items'] = 'flex-end';
-            // elem.style['justify-content'] = 'flex-start';
-            break;
-        case 'stretch':
-            gravity_col_style += "align-items: stretch;"; 
-            gravity_col_style += "justify-content: flex-start;";
-            // elem.style['align-items'] = 'stretch';
-            // elem.style['justify-content'] = 'flex-start';
-            break; 
-        default:
-            gravity_col_style += "align-items: flex-start;"; 
-            gravity_col_style += "justify-content: flex-start;";
-            // elem.style['align-items'] = 'flex-start';
-            // elem.style['justify-content'] = 'flex-start';
-            break;
-    }
-    return gravity_col_style; 
-}
-
 function setAnimationStyles(elem, props) {
 
-  var animation_style = ""; 
-  if (!props.hasOwnProperty('hasAnimation') || !props.hasAnimation) {
-    return animation_style;
-  }
-
-  const keyframeName = "keyframe_" + props.id
-  if (!window.__RENDERED_KEYFRAMES.includes(keyframeName)) {
-    let styleElem = document.getElementById(window.__STYLE_ID)
-
-    if (!styleElem) {
-      return animation_style; 
+    var animation_style = "";
+    if (!props.hasOwnProperty('hasAnimation') || !props.hasAnimation) {
+      return animation_style;
     }
-
+    const keyframeName = "keyframe_" + props.id;
+    let styleElem = document.getElementById(window.__STYLE_ID)
+  
+  
     let data = null
-
+  
     if (props.inlineAnimation) {
+        console.log("INLINE")
       data = JSON.parse(props.inlineAnimation)
       if (data && data.length > 0) {
         data = data[0]
       }
     }
-
+  
     if (!data) {
-      return animation_style; 
+      return animation_style;
     }
-
+  
     let css = ""
     css += "@keyframes " + keyframeName + "{"
       css += "from {"
         if (data.hasOwnProperty('fromX')) {
-          css += "margin-left: " + data.fromX + "px;"
+          css += "margin-left: " + data.fromX + "%;"
         }
-
+  
         if (data.hasOwnProperty('fromY')) {
-          css += "margin-top: " + data.fromY + "px;"
+          css += "margin-top: " + data.fromY + "%;"
         }
-        
+  
         if (data.hasOwnProperty('fromAlpha')) {
           css += "opacity: " + data.fromAlpha + ";"
         }
-        
+  
         if (data.hasOwnProperty('fromScale')) {
           css += "transform: scale(" + data.fromScale + ");"
         } else if (data.hasOwnProperty('fromScaleX') && data.hasOwnProperty('fromScaleY')) {
@@ -310,7 +159,7 @@ function setAnimationStyles(elem, props) {
         } else if(data.hasOwnProperty('fromScaleY')) {
           css += "transform: scaleY(" + data.fromScaleY + ");"
         }
-
+  
         if (data.hasOwnProperty('fromRotation')) {
           css += "transform: rotate(" + data.fromRotation + ");"
         } else {
@@ -319,21 +168,21 @@ function setAnimationStyles(elem, props) {
           } else if(data.hasOwnProperty('fromRotationY')) {
             css += "transform: rotateY(" + data.fromRotationY + ");"
           }
-        } 
+        }
       css += "} "
       css += "to {"
         if (data.hasOwnProperty('toX')) {
-          css += "margin-left: " + data.toX + "px;"
+          css += "margin-left: " + data.toX + "%;"
         }
-
+  
         if (data.hasOwnProperty('toY')) {
-          css += "margin-top: " + data.toY + "px;"
+          css += "margin-top: " + data.toY + "%;"
         }
-        
+  
         if (data.hasOwnProperty('toAlpha')) {
           css += "opacity: " + data.toAlpha + ";"
         }
-        
+  
         if (data.hasOwnProperty('toScale')) {
           css += "transform: scale(" + data.toScale + ");"
         } else if (data.hasOwnProperty('toScaleX') && data.hasOwnProperty('toScaleY')) {
@@ -343,7 +192,7 @@ function setAnimationStyles(elem, props) {
         } else if(data.hasOwnProperty('toScaleY')) {
           css += "transform: scaleY(" + data.toScaleY + ");"
         }
-
+  
         if (data.hasOwnProperty('toRotation')) {
           css += "transform: rotate(" + data.toRotation + ");"
         } else {
@@ -352,49 +201,52 @@ function setAnimationStyles(elem, props) {
           } else if(data.hasOwnProperty('toRotationY')) {
             css += "transform: rotateY(" + data.toRotationY + ");"
           }
-        } 
+        }
       css += "} "
     css += "}"
-
-    if(styleElem.styleSheet){
+    // console.log("css ", css);
+    if(styleElem && styleElem.styleSheet){
       styleElem.styleSheet.cssText += css;
     }else{
+      styleElem = document.createElement('style');
       styleElem.appendChild(document.createTextNode(css));
+      document.getElementsByTagName("head")[0].appendChild(styleElem);
     }
-
+  
     animation_style += "animation-name:"+keyframeName+";";
-    animation_style += "animation-duration: 1s;";
-    
+  
     // elem.style.animationName = keyframeName
     //elem.style.animationDuration = "1s"
     if (data.hasOwnProperty('duration') && !isNaN(data.duration)) {
       const duration = parseFloat(parseFloat(data.duration) / 1000).toFixed(2)
       animation_style += "animation-duration:"+duration+"s;";
       //elem.style.animationDuration = duration + "s"
+    } else {
+      animation_style += "animation-duration: 1s;";
     }
-
+  
     if (data.hasOwnProperty('repeatCount')) {
       if (data.repeatCount == "-1" || data.repeatCount == -1) {
         animation_style += "animation-iteration-count:infinite;";
         // elem.style.animationIterationCount = "infinite"
       } else {
-        animation_style += "animation-iteration-count:"+data.repeatCount+";";
+        animation_style += "animation-iteration-count:"+(data.repeatCount + 1)+";";
         // elem.style.animationIterationCount = data.repeatCount
       }
     }
-
+  
     if (data.hasOwnProperty("interpolator")) {
-      animation_style += "animation-timing-function:"+"cubic-bezier(" + data.interpolator + ")"+";";        
+      animation_style += "animation-timing-function:"+"cubic-bezier(" + data.interpolator + ")"+";";
     //   elem.style.animationTimingFunction = "cubic-bezier(" + data.interpolator + ")";
     }
-
+  
     window.__RENDERED_KEYFRAMES.push(keyframeName)
+    console.log("animation style ", animation_style)
+    return animation_style;
   }
-  return animation_style; 
-}
 
 function setComputedStyles(elem, props) {
-    let computed_styles = ""; 
+    let computed_styles = "";
     /* Computed Styles */
     // LinearLayout Styles
     if (props.hasOwnProperty('activeDimen') && props.hasOwnProperty('activeWeight')) {
@@ -402,7 +254,7 @@ function setComputedStyles(elem, props) {
         let weight = props.activeWeight;
 
         if (weight > 0) {
-            computed_styles += "flex:" + weight + ";"; 
+            computed_styles += "flex:" + weight + ";";
             //elem.style.flex = weight;
 
             if (activeDimen == 'w') {
@@ -415,7 +267,7 @@ function setComputedStyles(elem, props) {
             computed_styles += "flex:none;";
             //elem.style.flex = 'none';
         }
-    } 
+    }
     else {
         computed_styles += "flex:none;";
     //        elem.style.flex = 'none';
@@ -428,45 +280,45 @@ function setComputedStyles(elem, props) {
 
         if (props.hasOwnProperty("fromTop")) {
             if (isNaN(props.fromTop))
-                computed_styles += "top: " + props.fromTop + ";";    
+                computed_styles += "top: " + props.fromTop + ";";
                 // elem.style.top = props.fromTop;
             else
-                computed_styles += "top: " + props.fromTop + "px;";    
+                computed_styles += "top: " + props.fromTop + "px;";
                 // elem.style.top = props.fromTop + 'px';
         }
 
         if (props.hasOwnProperty("fromBottom")) {
             if (isNaN(props.fromBottom))
-                computed_styles += "bottom: " + props.fromBottom + ";";    
+                computed_styles += "bottom: " + props.fromBottom + ";";
                 //elem.style.bottom = props.fromBottom;
             else
-                computed_styles += "bottom: " + props.fromBottom + "px;";    
+                computed_styles += "bottom: " + props.fromBottom + "px;";
                 //elem.style.bottom = props.fromBottom + 'px';
         }
 
         if (props.hasOwnProperty("fromLeft")) {
             if (isNaN(props.fromLeft))
-                computed_styles += "left: " + props.fromLeft + ";";    
+                computed_styles += "left: " + props.fromLeft + ";";
                 // elem.style.left = props.fromLeft;
             else
-                computed_styles += "left: " + props.fromLeft + "px;";    
+                computed_styles += "left: " + props.fromLeft + "px;";
                 // elem.style.left = props.fromLeft + 'px';
         }
 
         if (props.hasOwnProperty("fromRight")) {
             if (isNaN(props.fromRight))
-                computed_styles += "right: " + props.fromRight + ";";    
+                computed_styles += "right: " + props.fromRight + ";";
                 // elem.style.right = props.fromRight;
             else
-                computed_styles += "right: " + props.fromRight + "px;";    
+                computed_styles += "right: " + props.fromRight + "px;";
             // elem.style.right = props.fromRight + 'px';
         }
     }
     /* Computed Styles End */
-    return computed_styles; 
+    return computed_styles;
 }
 
-// what does this do? 
+// what does this do?
 function separatorInputKeyDownHandlerNew(ev){
     ev.stopPropagation();
     try {
@@ -502,7 +354,7 @@ function separatorInputKeyDownHandlerNew(ev){
             input.selectionEnd = selectionEnd- (selectionEnd - selectionStart)-1;
             return;
           }
-          //Insert separator 
+          //Insert separator
           if(separator && separatorRepeat){
             ev.preventDefault();
             var formattedString = "";
@@ -626,548 +478,58 @@ function separatorInputKeyDownHandler(ev){
     }
 }
 
-function setAttributes(type, elem, props, firstRender) {
-
-    let elem_style = ""; 
-    elem.setAttribute("id",props.id); 
+function setAttributes(view, elem, firstRender) {
+    var type = view.type
+    var props = view.props
+    let elem_style = "";
+    elem.setAttribute("id",props.id);
     // elem_style += "id:"+props.id+";";
 
-    if (type == 'modal') {  // this is likely not being used  in hyper-widget 
-        setModalAttributes(elem, props, firstRender); 
-        return;
+    if (type == "relativeLayout") {
+        elem_style+="overflow:hidden;"
     }
-
     if (elem.classList && elem.classList.length > 0)
         elem.classList.add(type)
     else
         elem.className = type
 
-    //let elem_transition = props.transition == undefined ? "0ms all" : props.transition // It will always be undefined lol
-
-    var transition_val = [String(props.a_duration || 0) +"ms","all",props.transitionTimingFunction].filter(Boolean).join(" ");
-    elem_style += "transition:" + transition_val + ";";
+    elem_style += mapAttributes.addTransitionValue(props);
 
 
     // elem.style.transition = props.transition;
     /* New Style */
     /* Render from global styles */
 
-    // elem.style.width = 'auto';
-    // elem.style.height = 'auto';
+    elem_style+=mapAttributes.addSize(view);
 
-    elem_style += "width : auto; ";
-    elem_style += "height: auto; "; 
-    
-
-    if (props.hasOwnProperty('width')) {
-        if (props.width == 'match_parent') {
-            elem_style += "width : 100%; ";
-            //elem.style.width = '100%';
-        } else if (props.width == 'wrap_content') {
-            // You see below
-        } else if (!isNaN(props.width)) {
-            if (props.hasOwnProperty('percentWidth') && props.percentWidth)
-                elem_style += "width: " + props.width + "%;";  
-                // elem.style.width = props.width + '%';
-            else
-            elem_style += "width: " + props.width + "px;";     
-            //elem.style.width = props.width + 'px';
-        }
-    }
-    if (props.hasOwnProperty('height')) {
-        if (props.height == 'match_parent') {
-            elem_style += "height: 100%;";
-            // elem.style.height = '100%';
-        } 
-        else if (props.height == 'wrap_content') {
-            elem_style += "height: auto;"; 
-            //elem.style.height = "auto";
-            // You see below
-        } else if (!isNaN(props.height)) {
-            if (props.hasOwnProperty('percentHeight') && props.percentHeight)
-                elem_style += "height: " + props.height + "%;";  
-//                elem.style.height = props.height + '%';
-            else
-                elem_style += "height: " + props.height + "px;";  
-//            elem.style.height = props.height + 'px';
-        }
-    }
-
-    if (props.hasOwnProperty('minWidth') && !isNaN(props.minWidth)) {
-        if (props.percentMinWidth)
-            elem_style += "min-width: " + props.minWidth + "%;";  
-//            elem.style.minWidth = props.minWidth + '%';
-        else
-            elem_style += "min-width: " + props.minWidth + "px;";  
-
-        //    elem.style.minWidth = props.minWidth + 'px';
-    }
-
-    if (props.hasOwnProperty('minHeight') && !isNaN(props.minHeight)) {
-        if (props.percentMinHeight)
-            elem_style += "min-height: " + props.minHeight + "%;";  
-            // elem.style.minHeight = props.minHeight + '%';
-        else
-            elem_style += "min-height: " + props.minHeight + "px;";  
-            // elem.style.minHeight = props.minHeight + 'px';
-    }
-
-    if (props.hasOwnProperty('maxWidth') && !isNaN(props.maxWidth)) {
-        if (props.percentMaxWidth)
-            elem_style += "max-width: " + props.maxWidth + "%;";  
-//            elem.style.maxWidth = props.maxWidth + '%';
-        else
-            elem_style += "max-width: " + props.maxWidth + "px;";  
-        //            elem.style.maxWidth = props.maxWidth + 'px';
-    }
-
-    if (props.hasOwnProperty('maxHeight') && !isNaN(props.maxHeight)) {
-        if (props.percentMaxHeight)
-            elem_style += "max-height: " + props.maxHeight + "%;";  
-       // elem.style.maxHeight = props.maxHeight + '%';
-        else
-            elem_style += "max-height: " + props.maxHeight + "px;";  
-            //elem.style.maxHeight = props.maxHeight + 'px';
-    }
-
-    if (props.hasOwnProperty('padding')) {
-        let padding = props.padding.split(',').map(a => a * 1);
-        elem_style += "padding: " + padding[1] + "px " + padding[2] + "px " + padding[3] + "px " + padding[0] + "px;";
-//        elem.style['padding'] = padding[1] + 'px ' + padding[2] + 'px ' + padding[3] + 'px ' + padding[0] + 'px';
-    }
-
-    if (props.hasOwnProperty('margin')) {
-        let margin = props.margin.split(',').map(a => a * 1);
-        elem_style += "margin: " + margin[1] + "px " + margin[2] + "px " + margin[3] + "px " + margin[0] + "px;";
-//        elem.style['margin'] = margin[1] + 'px ' + margin[2] + 'px ' + margin[3] + 'px ' + margin[0] + 'px';
-    }
-
-    if (props.hasOwnProperty('visibility')) {
-        let visibility = props.visibility;
-        if (visibility == 'invisible')
-            elem_style += "visibility: hidden;";
-            //elem.style.visibility = "hidden";
-        else if (visibility == 'gone')
-            elem_style += "display: none;";
-            //elem.style.display = "none";
-        else {
-            // elem_style += "visibility: '';";
-            //elem.style.visibility = '';
-            elem_style += initializeShow(elem, props, type); 
-        }
-    } else {
-        elem_style += initializeShow(elem, props, type);
-    }
-
-    if (props.hasOwnProperty('expand')) {
-        let visibility = props.expand + '';
-        if (visibility == 'true'){
-            // elem_style += "visibility: '';";
-            // elem.style.visibility = '';
-            elem_style += initializeShow(elem, props, type);
-        }
-        else
-            elem_style += "display: none;";
-            //    elem.style.display = "none";
-    }
+    // The order here matters, as for elements with same precedence, the element on the right side of the array will be considered
+    elem_style+=mapAttributes.addBorder(props);
+    elem_style+=mapAttributes.addVisibility(elem, props, type);
+    elem_style += mapAttributes.addExpandability(elem, props, type);
 
     /* Render global styles end */
 
-    let scrollBarX = true;
-    let scrollBarY = true;
+    elem_style+=mapAttributes.addOverFlow(props);
+    elem_style+=mapAttributes.addLayout(elem, type, props);
 
-    if (props.hasOwnProperty('scrollBarX'))
-        scrollBarX = props.scrollBarX;
-    if (props.hasOwnProperty('scrollBarY'))
-        scrollBarY = props.scrollBarY;
+    mapAttributes.addImage(type,props,elem);
+    mapAttributes.addTextProperties(props, elem, type);
+    mapAttributes.addClassNameProperties(props,elem);
 
-    if (props.hasOwnProperty('overFlowVisible')) {
-        if (props.overFlowVisible) {
-            elem_style += "overflow: visible;";
-            // elem.style.overflow = "visible"
-        }
+    elem_style += mapAttributes.mapPropToStyle(elem,props,type);
+    elem = mapAttributes.setElemAttributes(elem,props);
+    elem_style+=mapAttributes.addFunctions(props, elem);
+    elem_style+=mapAttributes.addAnimationAttributes(props);
+
+    if (firstRender) { // Events are added when the element is created for the first time
+        initiateElement(type, props, elem)
     }
 
-    // TODO: this if/else block should be moved to a seprate function, this function is already too big. 
-    /* Render type specific styles */
-    if (type == 'linearLayout') {
-        elem_style += "box-sizing: border-box;";        
-        //elem.style["box-sizing"] = "border-box";
-
-        if (props.hasOwnProperty('fixedWrap') && !props.fixedWrap) {
-            elem_style += "flex-wrap: nowrap;";
-            //elem.style["flex-wrap"] = "nowrap";
-        } else {
-            elem_style += "flex-wrap: wrap;";            
-            //elem.style["flex-wrap"] = "wrap";
-        }
-        
-        let orient = props.orientation == "horizontal" || props.orientation == null ? "row" : "column";
-        elem_style += "flex-direction: " + orient + ";";
-        // elem.style["flex-direction"] = 
-
-        if (orient == 'row')
-            elem_style += setGravityStylesForRow(elem, props); 
-        else
-            elem_style += setGravityStylesForColumn(elem, props);
-
-        // if (elem.style["flex-direction"] == 'row')
-        //     setGravityStylesForRow(elem, props);
-        // else
-        //     setGravityStylesForColumn(elem, props);
-
-        if (props.hasOwnProperty('scrollBarX')) {
-            if (props.scrollBarX)
-                elem_style += "overflow-x: auto;";            
-//                elem.style.overflowX = 'auto'
-            else
-            elem_style += "overflow-x: hidden;";            
-//            elem.style.overflowX = 'hidden'
-        }
-
-        if (props.hasOwnProperty('scrollBarY')) {
-            if (props.scrollBarY)
-                elem_style += "overflow-y: auto;";            
-                // elem.style.overflowY = 'auto'
-            else
-                elem_style += "overflow-y: hidden;";            
-                // elem.style.overflowY = 'hidden'
-        }
-
-    } else if (type == "horizontalScrollView") {
-        elem_style += "overflow-x: auto;"; 
-        elem_style += "overflow-y: hidden;";                       
-        // elem.style.overflowX = "auto";
-        // elem.style.overflowY = "hidden";
-
-        if (!scrollBarX)
-            elem_style += "overflow-x: hidden;"; 
-         //   elem.style.overflowX = 'hidden';
-    } else if (type == "listView") {
-        elem_style += "overflow-x: hidden;"; 
-        elem_style += "overflow-y: auto;";                       
-        
-        // elem.style.overflowY = "auto";
-        // elem.style.overflowX = "hidden";
-
-        if (!scrollBarY)
-            elem_style += "overflow-y: hidden;";                       
-            // elem.style.overflowY = 'hidden';
-    } else if (type == 'scrollView') {
-
-        elem_style += "overflow-x: auto;"; 
-        elem_style += "overflow-y: auto;";
-
-        // elem.style.overflowX = 'auto';
-        // elem.style.overflowY = 'auto';
-
-        if (!scrollBarX)
-            elem_style += "overflow-x: hidden;"; 
-       // elem.style.overflowX = 'hidden';
-        if (!scrollBarY)
-            elem_style += "overflow-y: hidden;"; 
-    //        elem.style.overflowY = 'hidden';
-    } else if (type == 'relativeLayout') {
-        elem_style += "position: relative;"; 
-        // elem.style.position = 'relative';
-
-        if (props.hasOwnProperty('scrollBarX')) {
-          if (props.scrollBarX)
-              elem_style += "overflow-x: auto;"; 
-              // elem.style.overflowX = 'auto'
-          else
-              elem_style += "overflow-x: hidden;"; 
-              // elem.style.overflowX = 'hidden'
-        }
-
-        if (props.hasOwnProperty('scrollBarY')) {
-          if (props.scrollBarY)
-              elem_style += "overflow-y: auto;"; 
-            //  elem.style.overflowY = 'auto'
-          else
-              elem_style += "overflow-y: hidden;"; 
-    //          elem.style.overflowY = 'hidden'
-        }
-    } else if (type == 'imageView') {
-        if (props.imageUrl) {
-            let imageUrl = props.imageUrl
-
-            if (props.rawData) {
-                // Do Nothing
-            } else {
-                let temp = imageUrl.split('.')
-                let ext = ''
-                if (temp && temp.length > 0)
-                    ext = temp[temp.length - 1]
-
-                let exts = ["jpeg", "jpg", "png", "bmp", "svg", "gif"]
-                ext = ext.toLowerCase()
-
-                if(!imageUrl.includes("data:image/") && !exts.includes(ext)) {
-                    imageUrl += '.png'
-                }
-            }
-
-            elem.setAttribute('src', imageUrl)
-        }
-    }
-
-    /* Render type specific styles end */
-    /* New Style End */
-    if (props.hasOwnProperty("text")){
-        if (type == "editText")
-            elem.value = props.text 
-        else
-            elem_style += createTextElement(elem, props) 
-    }
-
-    if (props.hasOwnProperty("textFromHtml")) {
-        if (type == "editText")
-            elem.value = props.textFromHtml
-        else
-            elem_style += createTextElement2(elem, props)
-    }
-
-    if (props.hasOwnProperty("className")) {
-        if ((props.className || "").trim() !== "") {
-            props.className.split(" ").map(className => {
-                elem.classList.add(className); 
-            })
-        }
-    } 
-    
-    if (props.hasOwnProperty("classList")) {
-        JSON.parse(props.classList).forEach(function (obj) {
-            elem.classList.add(obj);
-        });
-    }
-    
-    if (props.hasOwnProperty("removeClassList")){
-        JSON.parse(props.removeClassList).forEach(function (obj) {
-            elem.classList.remove(obj);
-        });
-    }
-
-
-
-
-    elem_style += mapAttributes.mapPropToStyle(elem,props,type); 
-    elem = mapAttributes.setElemAttributes(elem,props); 
-
-    if (props.hasOwnProperty("buttonClickOverlay")){
-
-        var bg_image = "none";
-        // if (props.hasOwnProperty("backgroundDrawable")) {
-        //     bg_image = "url('"+config.backgroundDrawable+"')";
-        // }
-        
-         if (props.hasOwnProperty("gradient")) {
-             var gradObj =JSON.parse(props.gradient);
-             if (gradObj.type == "linear") {
-                 var angle = gradObj.angle;
-                 var gvalues = gradObj.values;
-                 var gcolors = gvalues.join(", ");
-                 bg_image = "linear-gradient("+angle+"deg, "+gcolors+")"
-             }
-              else {
-                 var gvalues = gradObj.values;
-                 var gcolors = gvalues.join(", ");
-                 bg_image = "radial-gradient("+gcolors+")"
-              }
-         }
-
-        // if(!bg_image){
-        //     continue; 
-        // }
-
-        elem_style += `background-image:linear-gradient(to right, rgba(0,0,0,${props.buttonClickOverlay}) 50%, transparent 50%), ` + bg_image + ';';
-        elem_style += `background-position:right bottom;`;
-        elem_style += `background-size:200% 100%, 100% 100%;`;
-
-    } 
-
-    // for (let key in props) { 
-    //     if (props[key] && typeof props[key] == "function") {
-    //         var eventType = key.substring(2, key.length).toLowerCase();
-    //         var elemCB = props[key];
-    //         elem_style += "user-select: none;";  
-    //         //elem.style.userSelect = 'none';
-    //         if (eventType == "change") {
-    //             eventType = "input";
-    //         }
-
-    //         elem.addEventListener('blur', function () {
-    //             var inputValue = elem.value;
-    //             if (inputValue == "") {
-    //                 elem.classList.remove("filled");
-    //                 elem.parentNode.classList.remove('focused');
-    //             } else {
-    //                 elem.classList.add('filled');
-    //             }
-    //         });
-
-    //         elem['onfocus'] = function (e) {
-    //             elem.parentNode.classList.add('focused');
-    //             if (eventType == "focus") {
-    //                 e.stopPropagation();
-    //                 elemCB(e);
-    //             }
-    //         };
-    //     }
-    // }
-
-
-    var animation_transition = mapAttributes.getAnimeTransition(props); 
-
-    var animation_transform = mapAttributes.getAnimeTransform(props); 
-
-    var animation_opacity = mapAttributes.getAnimeOpacity(props); 
-
-    if (animation_transition.length > 0 && (animation_transform.length + animation_opacity.length > 0)) { // this will need to be renamed actually to VDOM output's 
-        const afterTransition = () => {
-            elem_style += animation_transition; 
-            if (animation_transform.length > 0) elem_style += animation_transform; 
-            if (animation_opacity.length > 0) { elem_style += animation_opacity;}
-        };
-
-        if (props.style.transform || props.style.opacity) {
-            setTimeout(afterTransition, 100); // Why is a time out here? 
-        } else {
-            afterTransition();
-        }
-    }
-
-    // Events should be a different function 
-    /* Events */
-    if (firstRender) { // what is firstRender? 
-        if (type == "editText" && elem.tagName.toLowerCase() == "input") {
-
-            var isIPhone = (navigator.userAgent.indexOf("iPhone") !== -1)
-            if (elem.autofocus && !isIPhone) {
-                if (window.focusedElement === undefined){
-                    window.focusedElement = ""; 
-                }
-                if(window.focusedElement == "") window.focusedElement = elem.id;  
-                // elem.focus(); 
-                // window.is_element_focused = true;
-            }
-            if(window.preponeSpace){
-                elem.addEventListener('input', separatorInputKeyDownHandlerNew);
-            } else {
-                elem.addEventListener('input', separatorInputKeyDownHandler);
-            }
-        }
-    
-
-        let events = ['onClick', 'onEnterPressedEvent', 'onChange', 'onMouseDown', 'onMouseUp', 'onMouseEnter', 'onMouseOver', 'onMouseMove', 'onMouseOut', 'onMouseLeave', 'onFocus', 'onPaste']
-
-        for (let i = 0; i < events.length; i++) {
-            let key = events[i]
-            let eventType = key.substring(2, key.length).toLowerCase()
-            if (props.hasOwnProperty(key) && typeof props[key] == "function") {
-                const callback = props[key]
-                if (key == "onEnterPressedEvent") {
-                    elem.addEventListener('keyup', (e) => {
-                        e.stopPropagation()
-
-                        if (e.keyCode == 13) {
-                            callback(e)
-                        }
-                    })
-                }
-                if (eventType == "change") {
-                    elem.addEventListener('input', (e) => {
-                        callback(e.target.value)
-                    })
-                } else if (eventType == "focus"){
-                    elem.addEventListener('focus', (e) => {
-                        callback(true)
-                    })
-                    elem.addEventListener('blur', (e) => {
-                        callback(false)
-                    })
-                } else {
-                    elem.addEventListener(eventType, (e) => {
-                        e.stopPropagation();
-                        callback(e)
-                    })
-                }
-            }
-        }
-    }
-    /* Events End */
-
-    /* Component Part */
-    if (props.hasOwnProperty('elementType') && props.elementType == 'component') {
-        elem.classList.add(window.__COM_CLASS_GROUP.WRAPPER)
-
-        if (firstRender)
-            elem.setAttribute('guid', props.guid)
-    }
-
-    if (props.hasOwnProperty('componentType') && props.componentType)
-        renderComponent(elem, props, firstRender) // what are components?? 
-
-    return elem_style; 
+    return elem_style;
 }
 
-// modal not being used in hyper-widget web
-function setModalAttributes(elem, props, firstRender) {
-    setGravityStylesForRow(elem, props);
 
-    let backdropElem = document.getElementById(window.__BACKDROPMODAL_CLASS + '_' + props.id)
-
-    if (props.hasOwnProperty('modalVisibility') && props.modalVisibility) {
-        backdropElem.classList.add(window.__SHOWNMODAL_CLASS);
-        document.body.classList.add(window.__OPENMODAL_CLASS);
-
-        let modalProps = null;
-        if (window.__MODAL_PROPS[props.id]) {
-            modalProps = JSON.parse(window.__MODAL_PROPS[props.id]);
-        }
-
-        if (props.onShow && typeof props.onShow ==
-            "function") {
-            if (firstRender || (modalProps && modalProps.modalVisibility != props.modalVisibility)) {
-                props.onShow();
-            }
-        }
-    } else {
-        props.modalVisibility = false;
-        backdropElem.classList.remove(window.__SHOWNMODAL_CLASS);
-        document.body.classList.remove(window.__OPENMODAL_CLASS);
-    }
-
-    window.__MODAL_PROPS[props.id] = JSON.stringify(props);
-}
-
-let initializeShow = function (elem, props, type) {
-    var style = ""; 
-    if (type == 'linearLayout') {
-        if (props.hasOwnProperty('width') && props.width == 'wrap_content') {
-            style += "display: inline-flex;"; 
-            style += "width: max-content;"; 
-            // elem.style.display = 'inline-flex';
-            // elem.style.width = 'max-content';
-        } else {
-            style += "display: flex;"; 
-            //elem.style.display = "flex";
-        }
-    } else {
-        if (props.hasOwnProperty('width') && props.width == 'wrap_content') {
-            style += "display:inline-bloack;";
-            style += "width:max-content;";  
-            // elem.style.display = 'inline-block';
-            // elem.style.width = 'max-content';
-        } else {
-            // style += "display:'';";
-        //    elem.style.display = '';
-        }
-    }
-    return style; 
-}
-
-// mutation observers are slow, what is this and why can't global events solve this problem? 
+// mutation observers are slow, what is this and why can't global events solve this problem?
 /* Observer for afterRender */
 let observer = (elem) => {
     let id = elem.id;
@@ -1195,106 +557,11 @@ let observer = (elem) => {
     });
 }
 
-/* Do some actions after rendered */ // just use global events no? 
+/* Do some actions after rendered */ // just use global events no?
 let cb = (elem, view) => {
     if (view.props.feedback && typeof view.props.feedback == "function") {
         view.props.feedback()
     }
-}
-
-// Creates the Modal element if it has not been already inflated
-// modal is not being used 
-let inflateModal = function (view, parentElement, stopChild) {
-    let newInflated = false;
-    let parentId = parentElement.id;
-
-    /* Modal Wrapper */
-    let elem = document.getElementById(view.props.id);
-    if (!elem || elem == undefined) {
-        newInflated = true;
-
-        elem = document.createElement('div');
-        elem.setAttribute('id', view.props.id);
-        elem.setAttribute('virtual_parent', parentId);
-        elem.classList.add(window.__CONTENTMODAL_CLASS);
-    }
-    /* Modal Wrapper End */
-
-    /* BackDrop */
-    let backdropElem = document.getElementById(window.__BACKDROPMODAL_CLASS + '_' + view.props.id);
-    if (!backdropElem || backdropElem == undefined) {
-        backdropElem = document.createElement('div');
-        backdropElem.setAttribute('id', window.__BACKDROPMODAL_CLASS + '_' + view.props.id);
-        backdropElem.classList.add(window.__BACKDROPMODAL_CLASS);
-
-        if (view.props.hasOwnProperty('animationType') && view.props.animationType != 'none') {
-            let animationType = view.props.animationType;
-
-            if (animationType == 'fade') {
-                backdropElem.classList.add(window.__FADEMODAL_CLASS);
-            } else if (animationType == 'slide') {
-                backdropElem.classList.add(window.__SLIDEMODAL_CLASS);
-            }
-        }
-
-        if (view.props.hasOwnProperty('closeOnBackdrop') && !view.props.closeOnBackdrop) {
-            backdropElem.classList.add(window.__DISABLEDBACKDROP_CLASS);
-        } else {
-            backdropElem.classList.remove(window.__DISABLEDBACKDROP_CLASS);
-        }
-
-        if (view.props.hasOwnProperty('transparent') && view.props.transparent) {
-            backdropElem.style.background = 'transparent';
-        } else {
-            backdropElem.style.background = 'rgba(0, 0, 0, 0.5)';
-        }
-
-        backdropElem.appendChild(elem);
-        document.body.appendChild(backdropElem);
-
-        if (newInflated) {
-            if (view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function") {
-                // We should run observer for the element
-                observer(elem);
-                elem.setAttribute('has_render', true);
-            }
-        }
-    }
-    /* BackDrop End */
-
-    setModalAttributes(elem, view.props, newInflated);
-
-    if (!stopChild) {
-        if (view.hasOwnProperty('children') && view.children.length > 0) {
-            for (let i = 0; i < view.children.length; i++) {
-                if (view.children[i]) {
-                    view.children[i].props.style.pointerEvents = 'auto';
-                    if (i != 0)
-                        inflateView(view.children[i], elem, view.children[i - 1]);
-                    else
-                        inflateView(view.children[i], elem, view);
-                }
-            }
-        }
-    } else {
-        if (elem.hasChildNodes()) {
-            let childNodes = elem.childNodes
-
-            if (childNodes) {
-                for (let i = 0; i < childNodes.length; i++) {
-                    let childNode = childNodes[i]
-
-                    childNode.style.pointerEvents = 'auto'
-                }
-            }
-        }
-    }
-
-    if (newInflated) {
-        cb(elem, view);
-    }
-
-    return backdropElem;
 }
 
 window.inflateTimings = {
@@ -1304,33 +571,55 @@ window.inflateTimings = {
 // Creates the DOM element if it has not been already inflated
 // View: Object similar to ReactDOM struct, {type, props, children}
 // parentElement: DOM Object
-let inflateView = function (view, parentElement, siblingView, stopChild, stopObserver, renderStyle) {
+let setToolTip = function(view, elem) {
+    if (
+        view.type != 'linearLayout' &&
+        view.type != 'relativeLayout' &&
+        view.type != 'horizontalScrollView' &&
+        view.type != 'scrollView' &&
+        view.type != 'listView'
+    ) {
+        if (view.props.hasOwnProperty('tooltipText')) {
+            let tooltipText = view.props.tooltipText.trim()
 
+            if (tooltipText) {
+                let tooltipGravity = view.props.tooltipGravity ? view.props.tooltipGravity : 'top'
 
-    let element_style = ""; 
+                elem.classList.add('hasTooltip')
 
-    if (view.type == 'modal') { 
-        return inflateModal(view, parentElement, stopChild);
+                let tooltipElem = document.createElement('div')
+                tooltipElem.innerHTML = '<pre>' + tooltipText + '</pre>'
+                tooltipElem.classList.add('tooltipText')
+                tooltipElem.classList.add('tooltipGravity_' + tooltipGravity)
+
+                let size = 15
+                if (view.props.hasOwnProperty('tooltipTextSize') && !isNaN(view.props.tooltipTextSize)) {
+                    size = view.props.tooltipTextSize
+                }
+
+                tooltipElem.style.fontSize = size + 'px'
+
+                elem.appendChild(tooltipElem)
+            }
+        }
     }
-
-    let elem = document.getElementById(view.props.id); 
-    let subElem = null; //  this is being used only for lablel property 
-    let newInflated = false; 
-
-    if (view.props.x == "NaN" || view.props.y == "NaN") {
-        view = handleWrapContent(view, parentElement)
-    }
-
-    if (!elem) {
-        if (view.type == "webView") {
+}
+let createNewElement = function(view, parentElement, siblingView){
+    let elem = null;
+    let subElem = null;
+    let element_style ="";
+    //console.log(view.type);
+    switch(view.type) {
+        case "webView":
             elem = document.createElement('iframe')
 
-            elem.style.border = 'none'
-        } else if (view.type == "imageView") {
+            elem.style.border = 'none';
+            break;
+        case "imageView":
             elem = document.createElement("img");
-            element_style = ""; 
-            element_style += "margin:0;"; 
-            element_style += "padding:0;"; 
+            element_style = "";
+            element_style += "margin:0;";
+            element_style += "padding:0;";
             element_style += "display:block;";
             element_style += "max-width:100%;";
             element_style += "max-height:100%;";
@@ -1342,9 +631,15 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
             // elem["style"]["max-height"] = "100%";
             // elem["style"]["box-sizing"] = "border-box";
             elem.setAttribute("alt", "");
-        } else if (view.type == "checkBox") {
+            break;
+        case "checkBox":
             elem = document.createElement("input");
             elem.setAttribute('type', 'checkbox');
+            if (view.props.hasOwnProperty('checked') && view.props.checked == true) {
+                elem.checked = true
+            } else {
+                elem.checked = false
+            }
 
             if (view.props.hasOwnProperty('label') && view.props.label != '' && parentElement) {
                 subElem = document.createElement('label');
@@ -1355,13 +650,15 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
 
                 delete view.props.label;
             }
-        } else if (view.type == "editText") {
-            element_style = ""; 
+            break;
+        case "editText":
+            element_style = "";
             if (view.props.hasOwnProperty('inputType') && view.props.inputType == 'multiText') {
                 elem = document.createElement("textarea");
                 element_style += "border:none;";
                 element_style += "resize:none;";
                 element_style += "outline:none;";
+                //console.log('creating a component')
 
                 // elem.style.border = 'none';
                 // elem.style.resize = 'none';
@@ -1379,30 +676,30 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
 
             if (view.props.label) {
 
-                // var inputViewStyle = ""; 
+                // var inputViewStyle = "";
                 var inputView = elem;
-                
-                element_style += "width:100%;"; 
+
+                element_style += "width:100%;";
                 // inputView.style.width = '100%';
-                element_style += setAttributes(view.type, inputView, view.props, true);
-                
+                element_style += setAttributes(view, inputView, true);
+
                 inputView.setAttribute("id", view.props.id + "_input");
-                
-                
+
+
                 var l = document.createElement("label");
-                
-                var label_style = ""; 
+
+                var label_style = "";
                 l.setAttribute("for", view.props.id + "_input");
-                
+
                 l.innerHTML = view.props.label;
                 l.classList.add('input-label');
 
-                label_style += "position:absolute;"; 
-                label_style += "color:#999;"; 
+                label_style += "position:absolute;";
+                label_style += "color:#999;";
                 label_style += "background-color:#fff;";
-                label_style += "padding: 0 5px;"; 
-                label_style += "z-index: 10;"; 
-                label_style += "transition: transform 150ms ease-out, font-size 150ms ease-out;"; 
+                label_style += "padding: 0 5px;";
+                label_style += "z-index: 10;";
+                label_style += "transition: transform 150ms ease-out, font-size 150ms ease-out;";
 
                 // l["style"]["position"] = "absolute";
                 // l["style"]["color"] = "#999";
@@ -1412,165 +709,277 @@ let inflateView = function (view, parentElement, siblingView, stopChild, stopObs
                 // l["style"]["transition"] = "transform 150ms ease-out, font-size 150ms ease-out";
 
                 if (view.props.letterSpacing) {
-                    label_style += "letter-spacing: " + view.props.letterSpacing + ";"; 
+                    label_style += "letter-spacing: " + view.props.letterSpacing + ";";
                     // l["style"]["letter-spacing"] = view.props.letterSpacing;
                 }
 
-                l.setAttribute("style",label_style); 
-                inputView.setAttribute("style",element_style); 
+                l.setAttribute("style",label_style);
+                inputView.setAttribute("style",element_style);
 
                 elem = document.createElement("div");
-                element_style = ""; 
+                element_style = "";
                 elem.classList.add('input-group');
                 elem.appendChild(l);
                 elem.appendChild(inputView);
 
                 view.props.style.position = "relative";
-                element_style += setAttributes(view.type, elem, view.props, true);
+                view.props.style.overflow
+                element_style += setAttributes(view, elem, true);
                 delete view.props.label;
             } else if (view.props.hint) {
                 elem.placeholder = view.props.hint || "";
             }
-        } else {
-            elem = document.createElement(view.elName || "div"); // create the element here 
-            element_style = ""; 
-        }
+            break;
+        default:
+            elem = document.createElement(view.elName || "div"); // create the element here
+            element_style = "";
 
-        /* Tooltip */
-        if (
-            view.type != 'linearLayout' &&
-            view.type != 'relativeLayout' &&
-            view.type != 'horizontalScrollView' &&
-            view.type != 'scrollView' &&
-            view.type != 'listView'
-        ) {
-            if (view.props.hasOwnProperty('tooltipText')) {
-                let tooltipText = view.props.tooltipText.trim()
-
-                if (tooltipText) {
-                    let tooltipGravity = view.props.tooltipGravity ? view.props.tooltipGravity : 'top'
-
-                    elem.classList.add('hasTooltip')
-
-                    let tooltipElem = document.createElement('div')
-                    tooltipElem.innerHTML = '<pre>' + tooltipText + '</pre>'
-                    tooltipElem.classList.add('tooltipText')
-                    tooltipElem.classList.add('tooltipGravity_' + tooltipGravity)
-
-                    let size = 15
-                    if (view.props.hasOwnProperty('tooltipTextSize') && !isNaN(view.props.tooltipTextSize)) {
-                        size = view.props.tooltipTextSize
-                    }
-
-                    tooltipElem.style.fontSize = size + 'px'
-
-                    elem.appendChild(tooltipElem)
-                }
-            }
-        }
-        /* Tooltip End */
+    }
+    setToolTip(view,elem);
 
 
-        newInflated = true;
+    addToParentElement(parentElement, siblingView, elem, subElem);
 
-        if (parentElement) {
-            let siblingElement = siblingView ? document.getElementById(siblingView.props.id) : null;
+    // appened attributes, nodes & style to the elemenent
+    element_style += setAttributes(view, elem, true);
 
-            if (siblingElement && siblingElement != undefined) {
-                if (parentElement == siblingElement) { // Prepend
-                    if (subElem) {
-                        parentElement.insertBefore(subElem, parentElement.childNodes[0]);
-                    }
-                    parentElement.insertBefore(elem, parentElement.childNodes[0]);
-                } else { // Insert in specified position
-                    let nextSiblingElement = siblingElement.nextSibling;
+    /*if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
+      if(!stopObserver){
+        // We should run observer for the element
+        observer(elem);
+        elem.setAttribute('has_render', true);
+      }
+    }*/
+    return {elem,subElem,element_style};
+}
+let addToParentElement = function(parentElement, siblingView, elem, subElem) {
 
-                    parentElement.insertBefore(elem, nextSiblingElement);
-                    if (subElem) {
-                        parentElement.insertBefore(subElem, nextSiblingElement);
-                    }
-                }
-            } else {
-                parentElement.appendChild(elem);
+    if (parentElement) {
+        let siblingElement = siblingView ? document.getElementById(siblingView.props.id) : null;
+
+        if (siblingElement && siblingElement != undefined) {
+            if (parentElement == siblingElement) { // Prepend
                 if (subElem) {
-                    parentElement.appendChild(subElem);
+                    parentElement.insertBefore(subElem, parentElement.childNodes[0]);
+                }
+                parentElement.insertBefore(elem, parentElement.childNodes[0]);
+            } else { // Insert in specified position
+                let nextSiblingElement = siblingElement.nextSibling;
+
+                parentElement.insertBefore(elem, nextSiblingElement);
+                if (subElem) {
+                    parentElement.insertBefore(subElem, nextSiblingElement);
                 }
             }
-        }
-
-        // appened attributes, nodes & style to the elemenent 
-        element_style += setAttributes(view.type, elem, view.props, true);
-
-        /*if(view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function"){
-          if(!stopObserver){
-            // We should run observer for the element
-            observer(elem);
-            elem.setAttribute('has_render', true);
-          }
-        }*/
-    } else if (renderStyle) {
-        element_style += setAttributes(view.type, elem, view.props, false);
-    }
-
-    if (view.type == 'horizontalScrollView') {
-        if (view.props.hasOwnProperty('scrollLeft') && !isNaN(view.props.scrollLeft))
-            elem.scrollLeft = view.props.scrollLeft;
-    }
-
-    if (view.type == 'listView') {
-        if (view.props.hasOwnProperty('scrollTop') && !isNaN(view.props.scrollTop))
-            elem.scrollTop = view.props.scrollTop;
-    }
-
-    if (view.type == 'scrollView') {
-        if (view.props.hasOwnProperty('scrollLeft') && !isNaN(view.props.scrollLeft))
-            elem.scrollLeft = view.props.scrollLeft;
-
-        if (view.props.hasOwnProperty('scrollTop') && !isNaN(view.props.scrollTop))
-            elem.scrollTop = view.props.scrollTop;
-    }
-
-    if (view.type == 'checkBox') {
-        if (view.props.hasOwnProperty('checked') && view.props.checked == true) {
-            elem.checked = true
         } else {
-            elem.checked = false
-        }
-    }
-
-    if(!stopChild) computeChildDimens(view); 
-
-    element_style += setComputedStyles(elem, view.props); 
-    element_style += setAnimationStyles(elem, view.props); 
-    elem.setAttribute("style",element_style); // finally attach all the styles to the element 
-
-
-    if (!stopChild) {
-        if (view.hasOwnProperty('children') && view.children.length > 0) {
-            for (let i = 0; i < view.children.length; i++) {
-                if (view.children[i]) {
-                    if (i != 0)
-                        inflateView(view.children[i], elem, view.children[i - 1], stopChild, stopObserver, renderStyle);
-                    else
-                        inflateView(view.children[i], elem, view, stopChild, stopObserver, renderStyle); // (view, parentElement, siblingView, stopChild, stopObserver, renderStyle)
-                }
+            parentElement.appendChild(elem);
+            if (subElem) {
+                parentElement.appendChild(subElem);
             }
         }
     }
+}
+let setLayout = function(view, elem) {
+    switch(view.type) {
+    case 'horizontalScrollView':
+        if (view.props.hasOwnProperty('scrollLeft') && !isNaN(view.props.scrollLeft))
+            elem.scrollLeft = view.props.scrollLeft;
+        break;
+    case 'listView':
+        if (view.props.hasOwnProperty('scrollTop') && !isNaN(view.props.scrollTop))
+            elem.scrollTop = view.props.scrollTop;
+        break;
+    case 'scrollView':
+        if (view.props.hasOwnProperty('scrollLeft') && !isNaN(view.props.scrollLeft))
+            elem.scrollLeft = view.props.scrollLeft;
+
+        if (view.props.hasOwnProperty('scrollTop') && !isNaN(view.props.scrollTop))
+            elem.scrollTop = view.props.scrollTop;
+    }
+}
+let getElementByView = function(view, parentElement, siblingView, stopChild, renderStyle) {
+    if(!view.props.id){
+        view.props.id = window.JOS_PRESTO_ID++;
+        //window.__VIEWS[view.props.id] =  view;
+    }
+    let elem = document.getElementById(view.props.id);
+    let subElem = null; //  this is being used only for lablel property
+    let newInflated = false;
+    let element_style ="";
+
+    if (view.props.x == "NaN" || view.props.y == "NaN") {
+        view = handleWrapContent(view, parentElement)
+    }
+
+    if (!elem) {
+        let element = createNewElement(view, parentElement, siblingView);
+        newInflated = true;
+        elem = element.elem;
+        subElem = element.subElem;
+        element_style+=element.element_style;
+
+    } else if (renderStyle) {
+        element_style += setAttributes(view, elem, true);
+    }
+    setLayout(elem,view);
+    if(!stopChild) computeChildDimens(view);
+    element_style += setComputedStyles(elem, view.props);
+    element_style += setAnimationStyles(elem, view.props);
+    elem.setAttribute("style",element_style); // finally attach all the styles to the element
+    return {elem,newInflated};
+}
+let setAfterRenderFunctions = function (newInflated, view, elem, stopObserver) {
 
     if (newInflated) {
-        if (view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function") { // mutation observers are expensive 
+        if(view.hasOwnProperty)
+        if (view.props.hasOwnProperty('afterRender') && typeof view.props.afterRender == "function") { // mutation observers are expensive
             if (!stopObserver) {
                 // We should run observer for the element
                 observer(elem);
                 elem.setAttribute('has_render', true);
             }
         }
-        cb(elem, view); 
+        // if(view.data){
+
+        //     for(let i=0;i<view.children.length;i++){
+        //         let child = document.getElementById(view.children[i].props.id);
+        //         child.addEventListener('onClick',()=>view.onItemClick(i));}
+        // }
+        cb(elem, view);
     }
+}
+
+let renderList = (view,elem)=>{
+    //console.dir(view.props.diffArray)
+        if(view.props.diffArray== "filter"){
+            // console.log("filtering")
+            // console.time('filtering')
+            view.children=[];
+            elem.innerHTML = '';
+            for(let i=0;i<view.props.itemDatas.length;i++)
+            {
+                view.children.push(List.getChildItemViewByIndex(view,i));
+
+            }
+            computeChildDimens(view);
+            for(let i=0;i<view.props.itemDatas.length;i++){
+                elem.appendChild(inflateView({view:view.children[i]}))}
+            //console.timeEnd('filtering')
+        }
+        //replacing only the diff elements
+        else if(view.props.diffArray){
+            //console.time('patch')
+            for(let i of view.props.diffArray)
+            {
+                //console.log("CHANGING VIEW OF "+i)
+                console.time("patchingElement")
+                let oldView = view.children[i];
+                let oldChild = document.getElementById(oldView.props.id);
+                if(oldChild){
+
+                    let newChildView = List.getChildItemViewByIndex(view,i);
+                    newChildView.onClick = oldView.onClick;
+                    view.children[i] = newChildView
+                    computeChildDimens(view)
+
+                    let newChild = inflateView({view:newChildView});
+                    // newChild.addEventListener('click',newChildView.props.onClick)
+                    // newChild.style.cursor='pointer'
+                    // console.dir(newChild)
+                    elem.replaceChild(newChild,oldChild);
+
+                }
+                //console.timeEnd('patchingElement')
+        }
+        }
+        view.props.diffArray = undefined;
+}
+let inflateView = function ({view, parentElement, siblingView, stopChild, renderStyle} ={}) {
+    view.state = view.state || {};
+
+    if(view.props.listData){
+        view.props.itemDatas = JSON.parse(view.props.listData);
+        if(!view.props.data){
+            view.props.data = JSON.parse(view.props.listItem)
+        }
+    }
+
+    let {elem,newInflated} = getElementByView(view, parentElement, siblingView, stopChild, renderStyle);
+
+    //patching list
+    if(view.props.listData && renderStyle ){
+        renderList(view, elem);
+    } else if (!stopChild ) {
+        //firstRender List
+        if (view.props.itemDatas) {
+            List.createListView(view);
+            computeChildDimens(view);
+
+        }
+       if (view.hasOwnProperty('children') && view.children.length > 0) {
+           preComputeLayoutDimens(view);
+            for (let i = 0; i < view.children.length; i++) {
+                if (view.children[i]) {
+                    view.children[i].parent = view;
+                    if (i != 0) {
+                        inflateView({view:view.children[i], parentElement:elem, siblingView:view.children[i - 1], stopChild:renderStyle, renderStyle});
+                    } else {
+                        inflateView({view:view.children[i], parentElement:elem, siblingView:view, stopChild:renderStyle, renderStyle});
+                    }
+                }
+            }
+            postComputeLayoutDimens(view, elem)
+        }
+        view.state = view.state || {}
+        view.state.computedHeight = isNaN(parseInt(view.props.height)) ? view.state.computedHeight || 0 : parseInt(view.props.height)
+        view.state.computedWidth = isNaN(parseInt(view.props.width)) ? view.state.computedWidth || 0 : parseInt(view.props.width)
+    }
+    else {
+        postComputeLayoutDimens(view, elem);
+    }
+    setAfterRenderFunctions(newInflated, view, elem);
 
     return elem;
 };
+
+let preComputeLayoutDimens = (view) => {
+    view.state = view.state || {}
+    if (view.type == "relativeLayout") {
+        view.state.treatMatchParentAsWrapHeight = view.state.practicalHeight == "wrap_content";
+        view.state.treatMatchParentAsWrapWidth = view.state.practicalWidth == "wrap_content";
+        // if(view.state.treatMatchParentAsWrapHeight && view.state.treatMatchParentAsWrapWidth)
+        for (var i = 0; i < view.children.length; ++i) {
+            if (view.children[i].props.height != "match_parent")
+                view.state.treatMatchParentAsWrapHeight = false;
+            if (view.children[i].props.width != "match_parent")
+                view.state.treatMatchParentAsWrapWidth = false;
+            if (!view.state.treatMatchParentAsWrapWidth && !view.state.treatMatchParentAsWrapHeight)
+                break
+        }
+    }
+}
+let postComputeLayoutDimens = (view, elem) => {
+    if(view.type == "relativeLayout" && (view.state.practicalWidth == "wrap_content"  || view.state.practicalHeight == "wrap_content" ) && view.children.length > 0) {
+        var largestHeight = view.children[0].state.computedHeight;
+        var largestWidth = view.children[0].state.computedWidth;
+        for (var i = 1; i < view.children.length; ++i) {
+            if (view.state.practicalHeight == "wrap_content") {
+                largestHeight = largestHeight > view.children[i].state.computedHeight ? largestHeight : view.children[i].state.computedHeight;
+            }
+            if (view.state.practicalWidth == "wrap_content") {
+                largestWidth = largestWidth > view.children[i].state.computedWidth ? largestWidth : view.children[i].state.computedWidth
+            }
+        }
+        if(view.state.practicalHeight == "wrap_content" ) {
+            elem.style.height = largestHeight + "px"
+            view.state.computedHeight = largestHeight
+        }
+        if(view.state.practicalWidth == "wrap_content") {
+            elem.style.width = largestWidth + "px"
+            view.state.computedWidth = largestWidth
+        }
+    }
+}
 
 // what?
 let handleWrapContent = (view, parentElement) => {
@@ -1582,28 +991,10 @@ let handleWrapContent = (view, parentElement) => {
     return view;
 }
 
-// update a view, layout with new props, cmd will contain new props 
-let runInUI = function (cmd) {
-    if (!(cmd instanceof Array))
-        cmd = [cmd];
-
-    cmd.forEach(function (each) {
-        let elem = document.getElementById(each.id);
-
-        if (!elem) {
-            return console.error("runInUI (Id NULL) CMD:", each);
-        }
-
-        let view = window.__VIEWS[elem.id];
-        view.props = helper.merge(view.props, each);
-
-        var styles = setAttributes(view.type, elem, view.props, false);
-        elem.setAttribute("style",styles); 
-    });
-};
-
 module.exports = {
     inflateView,
-    runInUI,
-    computeChildDimens
+    computeChildDimens,
+    List,
+    postComputeLayoutDimens,
+    preComputeLayoutDimens
 };

@@ -51,7 +51,7 @@ function viewCtxObj(view) {
 function hasMatchParentChild(childs, dimen) {
   for (let i = 0; i < childs.length; i++) {
     let childProp = childs[i].props;
-    
+
     if (childProp[dimen] && (childProp[dimen] == "match_parent")) {
       return true;
     }
@@ -69,8 +69,8 @@ function hasWeightChild(type, childs) {
 
   for (let i = 0; i < childs.length; i++) {
     let child = childs[i].props;
-    
-    if (child.weight && parseInt(child.weight) > 0) {
+
+    if (child.weight && parseFloat(child.weight) > 0) {
       return true;
     }
   }
@@ -111,13 +111,13 @@ function computeLinearlayout(view) {
   let parentProps = view.props;
   let children = view.children;
   let isHorizontal = (parentProps.orientation === "vertical") ? false : true;
-  
+
   let activeDimen = (isHorizontal) ? "w" : "h";
   let passiveDimen = (isHorizontal) ? "h" : "w";
 
   let hasWeight = hasWeightChild(view.type, children);
   let hasMatchParent = hasMatchParentChild(children, activeDimen);
-  
+
   if (hasWeight && hasMatchParent) {
     // We can't use both at the same time
     return;
@@ -133,7 +133,7 @@ function computeLinearlayout(view) {
       delete props["activeWeight"];
   });
   /* Initialize End */
-  
+
   if(hasMatchParent || hasWeight){
     let first = true;
     /* Iterate Child */
@@ -142,7 +142,7 @@ function computeLinearlayout(view) {
 
       if(props.hasOwnProperty(activeDimen) && props[activeDimen] == 'match_parent'){
         props['activeDimen'] = activeDimen;
-        
+
         if(first){
           props['activeWeight'] = 1;
           first = false;
