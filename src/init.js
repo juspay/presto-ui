@@ -211,7 +211,7 @@ window.__THROTTELED_ACTIONS = [];
 try {
     window.__VIEWS = window.parent.__VIEWS?window.parent.__VIEWS:{};
 } catch (error) {
-    window.__VIEWS = window.parent.__VIEWS?window.parent.__VIEWS:{};   
+    window.__VIEWS = {};   
 }
 window.__VIEW_DIMENSIONS = {};
 window.__OBSERVERS = {};
