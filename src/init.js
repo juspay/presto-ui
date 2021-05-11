@@ -51,14 +51,15 @@ if(window.__OS == "ANDROID"){
 }
 
 if (window.__OS == "WEB") {
-  try{
-    window.Android = window.parent.Android?window.parent.Android:require('./WEB/AndroidInterface')
-    window.JBridge = window.parent.JBridge?window.parent.JBridge:require("./WEB/JBridgeInterface")
-  }
-  catch(err){
-    window.Android = require("./WEB/AndroidInterface")
-    window.JBridge = require("./WEB/JBridgeInterface")
-  }
+    // In case of iFrame based integration, this will cause CORS exception.
+    try {
+        window.Android = window.parent.Android?window.parent.Android:require('./WEB/AndroidInterface')
+    } catch (e){
+        window.Android = require('./WEB/AndroidInterface')
+        console.log("Failed to load window.parent.Android");
+    }
+
+    window.JBridge = window.JBridge ? window.JBridge:window.parent.JBridge;
 } else if (window.__OS == "IOS") {
     window.Android = require("./IOS/AndroidInterface")
     window.JBridge = merge(window.JBridge, {})

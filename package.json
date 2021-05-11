@@ -4,7 +4,6 @@
   "description": "Javascript framework for building platform independent apps.",
   "main": "lib/index.js",
   "dependencies": {
-    "axios": "^0.19.0",
     "daterangepicker": "^3.0.5",
     "es6-promise": "latest",
     "immu": "^2.0.1",
