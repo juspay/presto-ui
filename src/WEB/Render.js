@@ -224,7 +224,7 @@ function setAnimationStyles(elem, props) {
     } else {
       animation_style += "animation-duration: 1s;";
     }
-  
+    animation_style += 'transform-origin:0%;';
     if (data.hasOwnProperty('repeatCount')) {
       if (data.repeatCount == "-1" || data.repeatCount == -1) {
         animation_style += "animation-iteration-count:infinite;";
