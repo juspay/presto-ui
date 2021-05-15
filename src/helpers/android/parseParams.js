@@ -577,6 +577,11 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     prePend = parseHtml(handleSpecialChars(attrs.value));
     currTransVal = 'get_html';
   }
+  if (attrs.key == "ellipsize") {
+    prePend = "set_elipse=android.text.TextUtils$TruncateAt->valueOf:s_END;"
+    currTransVal = 'get_elipse';
+
+  }
 
   if(attrs.key == "backgroundTint"){
     color = attrs.value;
