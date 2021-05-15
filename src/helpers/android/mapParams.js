@@ -32,6 +32,14 @@ var map = {
     fnName: 'setText',
     inVokedIn: 'VIEW',
   },
+  ellipsize: {
+    values: [{
+      type: 'b',
+    }],
+    dontMap: 'true',
+    fnName: 'setEllipsize',
+    inVokedIn: 'VIEW',
+  },
   baseAlign: {
     values: [{
       type: 'b'

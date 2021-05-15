@@ -97,6 +97,8 @@ function addProps(props){
 
     if (props.hasOwnProperty("display")) { ele_style += "display:" + props.display + ";"; }
 
+    if (props.hasOwnProperty("ellipsize")) { ele_style += "white-space: nowrap; overflow: hidden; text-overflow: ellipsis;";}
+
     return ele_style;
 
 }
