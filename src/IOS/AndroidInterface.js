@@ -47,6 +47,20 @@ function getSerializeableView(view, recurse) {
   return newView;
 }
 
+var renderWrapper = function(view, cb, namespace){
+  // Query JOS if ns is available.
+  // if null call render
+  // if not null find namespace and call AddViewToParent
+  top.fragments = top.fragments || {}
+  top.fragmentObjects = top.fragmentObjects || {};
+  if(namespace == null || namespace == undefined || typeof top.fragments[namespace] != "number") {
+    return renderFunction(view, cb)
+  }
+  var rootId = top.fragments[namespace];
+  window.__VIEWS[rootId] = top.fragmentObjects[namespace]
+  return addViewToParentImpl(rootId, view, 0, null, null);
+}
+
 var renderFunction = function (view, cb, namespace) {
   let obj = {
     type: "linearLayout",
@@ -73,7 +87,71 @@ var renderFunction = function (view, cb, namespace) {
     window.callUICallback(cb);
 }
 
+var addViewToParentImpl = function (id, view, index, cb, x, namespace) {
+  if (!window.__VIEWS[id]) {
+    return console.error(new Error("AddViewToParent: Invalid parent ID: " +
+      id));
+  }
+  const parent = window.__VIEWS[id];
+  parent.children.splice(index, 0, view);
+  view.props.parentId = id;
+  render.computeChildDimens(parent);
+  const renderedView = render.inflate(view);
+  if (renderedView) {
+    window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
+      methodName: "addViewToParent",
+      parameters: {
+        index: index,
+        parentId: id,
+        view: renderedView,
+        afterRender : cb+"",
+        namespace : namespace
+      }
+    }));
+  }
+  recomputeView(parent);
+}
+
+var recomputeView =  function (view) {
+  if (view.type.indexOf("scroll") != -1) {
+    render.inflate(view);
+  }
+  render.computeChildDimens(view);
+  const children = view.children;
+  for (let i = 0, len = children.length; i < len; i++) {
+      render.inflate(children[i]);
+  }
+}
+
 module.exports = {
+
+  addToContainerList : function(id, namespace) {
+    // Check if JOS has an id store from another m-app
+    // Add id, and get a return string identifier
+    // Use the same to decide between render and and addview to parent
+    if(typeof top.addToContianerList != "function" ){
+      top.fragments = top.fragments || {};
+      top.fragmentObjects = top.fragmentObjects || {};
+      var generateUUID = function() {
+        function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                        .toString(16)
+                        .substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                s4() + '-' + s4() + s4() + s4();
+      }
+      top.addToContainerList = function(id, namespace) {
+        // Namespace not needed, for cases where we do not have merchant fragment
+        var uuid = generateUUID()
+        top.fragments[uuid] = id;
+        top.fragmentObjects[uuid] = window.__VIEWS[id];
+        return uuid;
+      }
+    }
+    return top.addToContainerList(id, namespace);
+  },
+   
   getScreenDimensions: function () {
     return JSON.stringify({
       width: window.__DEVICE_DETAILS.screen_width,
@@ -81,16 +159,7 @@ module.exports = {
     });
   },
 
-  recomputeView: function (view) {
-    if (view.type.indexOf("scroll") != -1) {
-      render.inflate(view);
-    }
-    render.computeChildDimens(view);
-    const children = view.children;
-    for (let i = 0, len = children.length; i < len; i++) {
-        render.inflate(children[i]);
-    }
-  },
+  recomputeView: recomputeView,
 
   recompute: function () {
     const rootview = window.__VIEWS[rootid];
@@ -110,8 +179,8 @@ module.exports = {
     render.runInUI(cmd, undefined, namespace);
   },
 
-  render: renderFunction,
-  Render: renderFunction,
+  render: renderWrapper,
+  Render: renderWrapper,
 
   moveView: function moveView(id, index) {
     if (!window.__VIEWS[id]) {
@@ -125,30 +194,7 @@ module.exports = {
     this.recomputeView(parent);
   },
 
-  addViewToParent: function (id, view, index, cb, x, namespace) {
-    if (!window.__VIEWS[id]) {
-      return console.error(new Error("AddViewToParent: Invalid parent ID: " +
-        id));
-    }
-    const parent = window.__VIEWS[id];
-    parent.children.splice(index, 0, view);
-    view.props.parentId = id;
-    render.computeChildDimens(parent);
-    const renderedView = render.inflate(view);
-    if (renderedView) {
-      window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
-        methodName: "addViewToParent",
-        parameters: {
-          index: index,
-          parentId: id,
-          view: renderedView,
-          afterRender : cb+"",
-          namespace : namespace
-        }
-      }));
-    }
-    this.recomputeView(parent);
-  },
+  addViewToParent: addViewToParentImpl,
 
   createListData: function (id, view) {
     const parent = window.__VIEWS[id];
