@@ -275,7 +275,11 @@ function setComputedStyles(elem, props) {
 
     // RelativeLayout Styles
     if (props.hasOwnProperty('absolute') && props.absolute) {
-        computed_styles += "position: absolute;";
+        if(props.hasOwnProperty("position")){
+            computed_styles += "position:"+ props.hasOwnProperty("position") +";";
+        } else {
+            computed_styles += "position:absolute;";
+        }
         //elem.style.position = 'absolute';
 
         if (props.hasOwnProperty("fromTop")) {
