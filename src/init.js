@@ -51,8 +51,14 @@ if(window.__OS == "ANDROID"){
 }
 
 if (window.__OS == "WEB") {
+  try{
     window.Android = window.parent.Android?window.parent.Android:require('./WEB/AndroidInterface')
     window.JBridge = window.parent.JBridge?window.parent.JBridge:require("./WEB/JBridgeInterface")
+  }
+  catch(err){
+    window.Android = require("./WEB/AndroidInterface")
+    window.JBridge = require("./WEB/JBridgeInterface")
+  }
 } else if (window.__OS == "IOS") {
     window.Android = require("./IOS/AndroidInterface")
     window.JBridge = merge(window.JBridge, {})
@@ -195,7 +201,7 @@ window.__SCREEN_INDEX = -1;
 try {
     window.__PROXY_FN = window.parent.__PROXY_FN?window.parent.__PROXY_FN:{};
 } catch (error) {
-    window.__PROXY_FN = {};   
+    window.__PROXY_FN = {};
 }
 window.__FN_INDEX = 0;
 window.__ROOTSCREEN = null;
@@ -211,7 +217,7 @@ window.__THROTTELED_ACTIONS = [];
 try {
     window.__VIEWS = window.parent.__VIEWS?window.parent.__VIEWS:{};
 } catch (error) {
-    window.__VIEWS = {};   
+    window.__VIEWS = {};
 }
 window.__VIEW_DIMENSIONS = {};
 window.__OBSERVERS = {};
