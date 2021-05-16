@@ -125,7 +125,7 @@ module.exports = {
     try {
       const resp = await axios({url, method, data, headers });
       const json = resp.data;//await resp.data.json();
-      let response = btoa(unescape(encodeURIComponent(json)));
+      const response = btoa(unescape(encodeURIComponent(JSON.stringify(json))));
       window.callUICallback(callback,"success",response,resp.status);
     } catch (err) {
       console.error("ERR", err);
