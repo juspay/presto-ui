@@ -1671,15 +1671,17 @@ module.exports = function(type, config, _getSetType, namespace) {
   }
 
   if (config.hint) {
-    if (config.letterSpacing) {
-      var data = JSON.stringify({
-        'hint': cS(config.hint),
-        'letterSpacing': config.letterSpacing
-      });
-      config.methods.push(this_setPlaceholderProperties(data));
-    } else {
-      config.methods.push(this_setPlaceholder(cS(config.hint)));
+    var hintProps = {
+      'hint': cS(config.hint)
     }
+    if (config.letterSpacing) {
+      hintProps['letterSpacing'] = config.letterSpacing;
+    }
+    if (config.hintColor) {
+      hintProps['hintColor'] = convertColorToRgba(config.hintColor);
+    }
+    var data = JSON.stringify(hintProps);
+    config.methods.push(this_setPlaceholderProperties(data));
   }
 
   if (config.hasOwnProperty("separator")) {
