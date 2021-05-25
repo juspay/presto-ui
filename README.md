@@ -53,7 +53,7 @@ The files will be written to `dist`
 ## License
 
 This project is licensed under the AGPL License - see the [LICENSE](LICENSE) file for details.
-> Copyright (c) 2012-2017 [juspay.in](https://www.juspay.in)
+> Copyright (c) 2012-2021 [juspay.in](https://www.juspay.in)
 
 
 ## Contributing

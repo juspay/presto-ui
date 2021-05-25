@@ -3,39 +3,30 @@
   "version": "v1.0.1",
   "description": "Javascript framework for building platform independent apps.",
   "main": "lib/index.js",
-  "dependencies": {
-    "daterangepicker": "^3.0.5",
-    "es6-promise": "latest",
-    "immu": "^2.0.1",
-    "jquery": "^3.4.1",
-    "moment": "^2.24.0",
-    "object-assign": "^4.1.0",
-    "promise": "^7.1.1",
-    "qs": "^6.6.0"
-  },
-  "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.5",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
-    "es6-promise": "latest",
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10",
-    "webpack-merge": "^4.2.2"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "webpack --mode production --config webpack.prod.js --progress --colors",
-    "watch": "webpack --mode development --config webpack.dev.js --watch --progress --colors"
+    "compile": "webpack --mode=production --config webpack.prod.js",
+    "watch": "webpack --mode=development --config webpack.dev.js --watch --progress"
+  },
+  "dependencies": {},
+  "devDependencies": {    
+    "@babel/core": "^7.14.3",
+    "@babel/preset-env": "^7.3.1",
+    "babel-loader": "^8.0.5",
+    "webpack": "^5.37.1",
+    "webpack-bundle-analyzer": "^4.4.2",
+    "webpack-build-notifier": "^2.2.1",
+    "webpack-cli": "^4.7.0",
+    "webpack-dashboard": "^3.3.3",
+    "webpack-dev-server": "https://github.com/webpack/webpack-dev-server.git#257e2ebb514d911415e8084dbf29f508c364d1e3",
+    "webpack-merge": "^5.7.3",
+    "webpackbar": "^5.0.0-3"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:juspay/presto-ui.git"
+    "url": "git@bitbucket.org:juspay/presto-ui.git"
   },
   "author": "JUSPAY Technologies <info@juspay.in>",
   "license": "AGPL-3.0",
-  "homepage": "https://github.com/juspay/presto-ui"
+  "homepage": "https://bitbucket.org/juspay/presto-ui"
 }
