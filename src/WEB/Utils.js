@@ -1,6 +1,3 @@
-const { getUUID } = require("./JBridgeInterface");
-
-
 function parseColors(color) {
     if (color.length < 8)
       return color;
@@ -75,7 +72,15 @@ function addToContainerList(id , namespace){
     let container = getContainer(namespace, true);
     if(container)
     {
-      let key = getUUID();
+      let key = function () {
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+            }
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                s4() + '-' + s4() + s4() + s4();
+        }();
       state.fragments[key] = document.getElementById(id);
       state.fragmentTypes[key] = window.__VIEWS[id];
       return key;
