@@ -1,37 +1,42 @@
-/*
-* Copyright (c) 2012-2017 "JUSPAY Technologies"
-* JUSPAY Technologies Pvt. Ltd. [https://www.juspay.in]
-*
-* This file is part of JUSPAY Platform.
-*
-* JUSPAY Platform is free software: you can redistribute it and/or modify
-* it for only educational purposes under the terms of the GNU Affero General
-* Public License (GNU AGPL) as published by the Free Software Foundation,
-* either version 3 of the License, or (at your option) any later version.
-* For Enterprise/Commerical licenses, contact <info@juspay.in>.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  The end user will
-* be liable for all damages without limitation, which is caused by the
-* ABUSE of the LICENSED SOFTWARE and shall INDEMNIFY JUSPAY for such
-* damages, claims, cost, including reasonable attorney fee claimed on Juspay.
-* The end user has NO right to claim any indemnification based on its use
-* of Licensed Software. See the GNU Affero General Public License for more details.
-*
-* You should have received a copy of the GNU Affero General Public License
-* along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
-*/
 const path = require('path')
 const webpack = require('webpack');
+const WebpackBar = require('webpackbar');
+const DashboardPlugin = require("webpack-dashboard/plugin");
+const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+const isWebpackDevServer = process.argv.some(a => path.basename(a) === 'serve');
+const isWatch = process.argv.includes('--watch');
+const isAnalyse = process.argv.includes('--analyse');
+
+var plugins = [
+  new WebpackBar(),  
+  new webpack.DefinePlugin({
+    // Set this to false to create a build that contains DateRangePicker for web
+    '__ignoreDateRangePickerWeb': JSON.stringify(true)
+  }),
+];
+
+if (isWatch || isWebpackDevServer) {
+  plugins.push(
+    new DashboardPlugin(),
+    new WebpackBuildNotifierPlugin({
+      title: "PrestoUI",
+    })
+  )
+}
+
+if (isAnalyse) {
+  plugins.push(
+    new BundleAnalyzerPlugin()
+  )
+}
 
 let config = { 
-  devtool: "inline-cheap-module-source-map",
-  //devtool: "inline-source-map",
+  devtool: "source-map",
   output: {
     path: path.join(__dirname,"/lib"),
     filename: "index.js",
-    libraryTarget: 'commonjs2'
   },
   module: {
     rules: [
@@ -40,18 +45,13 @@ let config = {
         use: {
           loader: "babel-loader",
           options: {
-            presets: ["env"]
+            presets: ["@babel/preset-env"],
           }
         }
       },
     ]
   },
-  plugins: [
-    new webpack.DefinePlugin({
-      // Set this to false to create a build that contains DateRangePicker for web
-      '__ignoreDateRangePickerWeb': JSON.stringify(true)
-    }),
-  ]
+  plugins: plugins
 }
 
 module.exports = config

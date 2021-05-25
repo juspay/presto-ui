@@ -6,3 +6,4 @@ dist/index_bundle.js.map
 npm-debug.log
 .yarn-error.log
 .idea
+package-lock.json
