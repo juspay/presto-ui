@@ -37,6 +37,7 @@ let config = {
   output: {
     path: path.join(__dirname,"/lib"),
     filename: "index.js",
+    libraryTarget: 'commonjs2'
   },
   module: {
     rules: [
