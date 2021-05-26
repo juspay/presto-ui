@@ -37,7 +37,17 @@ let config = {
   output: {
     path: path.join(__dirname,"/lib"),
     filename: "index.js",
-    libraryTarget: 'commonjs2'
+    libraryTarget: 'commonjs2',
+    clean: false,
+    environment: {
+      arrowFunction: false,
+      bigIntLiteral: false,
+      const: true,
+      destructuring: false,
+      dynamicImport: false,
+      forOf: true,
+      module: true
+    },
   },
   module: {
     rules: [
