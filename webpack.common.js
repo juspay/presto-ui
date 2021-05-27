@@ -38,15 +38,14 @@ let config = {
     path: path.join(__dirname,"/lib"),
     filename: "index.js",
     libraryTarget: 'commonjs2',
-    clean: false,
     environment: {
       arrowFunction: false,
       bigIntLiteral: false,
-      const: true,
+      const: false,
       destructuring: false,
       dynamicImport: false,
-      forOf: true,
-      module: true
+      forOf: false,
+      module: false
     },
   },
   module: {
