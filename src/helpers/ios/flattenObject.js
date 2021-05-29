@@ -23,7 +23,7 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
-module.exports = function flattenObject(ob) {
+module.exports['flattenObject'] = function(ob) {
   var toReturn = {};
   for (var i in ob) {
     if (!ob.hasOwnProperty(i)) continue;
