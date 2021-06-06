@@ -214,6 +214,8 @@ window.__ANIMATE_DIR = null;
 window.__SCREEN_STACK = [];
 window.__LAST_FN_CALLED = null;
 window.__THROTTELED_ACTIONS = [];
+window.__isMOBILE = window.innerWidth < 550 // this line takes up 80ms out of 360ms
+window.__isFIREFOX = navigator.userAgent.toLowerCase().indexOf('firefox') > -1 || typeof InstallTrigger !== 'undefined';
 // Adding temp fix - Will be moved to mystique-web
 try {
     window.__VIEWS = window.parent.__VIEWS?window.parent.__VIEWS:{};
