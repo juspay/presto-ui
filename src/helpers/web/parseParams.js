@@ -105,7 +105,6 @@ function lookAndReplaceProp(str,match, val){
 
 
 function parseLayoutProps(type, config, key) {
-  const isMobile = false // window.innerWidth < 550 // this line takes up 80ms out of 360ms 
   if (typeof config[key] == "undefined" || config[key] == null) {
     delete config[key];
     return;
@@ -500,7 +499,7 @@ function parseLayoutProps(type, config, key) {
   }
 
 
-  if (key == "inputType") {
+  if (key == "inputType" && window.__isMOBILE && !window.__isFIREFOX) {
     var inputType = "text";
     if (config.inputType == "numericPassword" || config.inputType == "password") {
       if(config.inputTypeI == 4 && isMobile){

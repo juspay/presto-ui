@@ -206,6 +206,32 @@ function this_setTranslationZ(params) {
   };
 }
 
+function this_setDisableCopy(value){
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setDisableCopy:",
+    "values":[
+      {"name": (value ? "1" : "0"), type: "i"}
+    ]
+  }
+}
+
+function this_setDisablePaste(value){
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setDisablePaste:",
+    "values":[
+      {"name": (value ? "1" : "0"), type: "i"}
+    ]
+  }
+}
+
 function self_animate(props) {
   return {
     "return": "false",
@@ -1508,6 +1534,11 @@ function changeKeys(config, type) {
       config.orientation = "vertical"
     }
     break;
+    case "listview":
+      if(config.hasOwnProperty("height") && config.height == "wrap_content"){
+        config.height = "match_parent"
+      }
+    break;
     case "horizontalscrollview":{
       config.orientation = "horizontal"
     }
@@ -1613,6 +1644,14 @@ module.exports = function(type, config, _getSetType, namespace) {
   if (config.hasOwnProperty("borderWidth")) {
     let arg = rWS(cS(config.borderWidth));
     config.methods.push(setBorderWidth(arg));
+  }
+  
+  if (config.hasOwnProperty("disableCopy")) {
+    config.methods.push(this_setDisableCopy(config.disableCopy));
+  }
+
+  if (config.hasOwnProperty("disablePaste")) {
+    config.methods.push(this_setDisablePaste(config.disablePaste));
   }
 
   if (config.hasOwnProperty("borderColor")) {
