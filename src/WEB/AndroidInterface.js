@@ -211,6 +211,7 @@ function addViewToParent(id, view, index, cb, replace, namespace) {
 
   if (window.focusedElement !== undefined){
     var c = document.getElementById(window.focusedElement);
+    window.focusedElement = undefined;
     if (c) {
       console.debug("now focusing");
       c.focus();

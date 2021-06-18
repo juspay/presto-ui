@@ -821,6 +821,8 @@ let getElementByView = function(view, parentElement, siblingView, stopChild, ren
         elem = element.elem;
         subElem = element.subElem;
         element_style+=element.element_style;
+        if(view.props.hasOwnProperty("focus") && view.props.focus)
+            window.focusedElement = view.props.id;
 
     } else if (renderStyle) {
         element_style += setAttributes(view, elem, true);
