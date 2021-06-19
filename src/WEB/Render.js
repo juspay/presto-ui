@@ -900,9 +900,8 @@ let renderList = (view,elem)=>{
         }
         view.props.diffArray = undefined;
 }
-let inflateView = function ({view, parentElement, siblingView, stopChild, renderStyle} ={}) {
+let inflateView = function ({view, parentElement, siblingView, stopChild, renderStyle, computeList} ={}) {
     view.state = view.state || {};
-
     if(view.props.listData){
         view.props.itemDatas = JSON.parse(view.props.listData);
         if(!view.props.data){
@@ -928,20 +927,20 @@ let inflateView = function ({view, parentElement, siblingView, stopChild, render
                 if (view.children[i]) {
                     view.children[i].parent = view;
                     if (i != 0) {
-                        inflateView({view:view.children[i], parentElement:elem, siblingView:view.children[i - 1], stopChild:renderStyle, renderStyle});
+                        inflateView({view:view.children[i], parentElement:elem, siblingView:view.children[i - 1], stopChild:renderStyle, renderStyle, computeList});
                     } else {
-                        inflateView({view:view.children[i], parentElement:elem, siblingView:view, stopChild:renderStyle, renderStyle});
+                        inflateView({view:view.children[i], parentElement:elem, siblingView:view, stopChild:renderStyle, renderStyle, computeList});
                     }
                 }
             }
-            postComputeLayoutDimens(view, elem)
+            postComputeLayoutDimens2(view, computeList)
         }
-        view.state = view.state || {}
+        view.state = view.state || {};
         view.state.computedHeight = isNaN(parseInt(view.props.height)) ? view.state.computedHeight || 0 : parseInt(view.props.height)
         view.state.computedWidth = isNaN(parseInt(view.props.width)) ? view.state.computedWidth || 0 : parseInt(view.props.width)
     }
     else {
-        postComputeLayoutDimens(view, elem);
+        postComputeLayoutDimens2(view, computeList);
     }
     setAfterRenderFunctions(newInflated, view, elem);
 
@@ -962,6 +961,40 @@ let preComputeLayoutDimens = (view) => {
             if (!view.state.treatMatchParentAsWrapWidth && !view.state.treatMatchParentAsWrapHeight)
                 break
         }
+    }
+}
+
+let postComputeLayoutDimens2 = (view,postComputeList) =>{
+    if(view.type == "relativeLayout" && (view.state.practicalWidth == "wrap_content"  || view.state.practicalHeight == "wrap_content" ) && view.children.length > 0) {
+        postComputeList.push(view.props.id);
+    }
+
+}
+
+let getValueFromPixel = (pixel) =>{
+    return parseInt(pixel.substring(0,pixel.length-1));
+}
+let postCompute = (list) =>{
+    while(list.length>0){
+        let id = list.pop();
+ 
+        let elem = document.getElementById(id);
+        let childNodes = elem.childNodes;
+        let maxHeight = 0;
+        let maxWidth = 0;
+        for (var i = 0; i < childNodes.length; ++i) {
+                let style = childNodes[i].currentStyle || window.getComputedStyle(childNodes[i]);
+                maxHeight = maxHeight > childNodes[i].offsetHeight ? maxHeight : (childNodes[i].offsetHeight + getValueFromPixel(style.marginTop) + getValueFromPixel(style.marginBottom));
+                maxWidth = maxWidth > childNodes[i].offsetWidth ? maxWidth : childNodes[i].offsetWidth;
+        }
+        let view = window.__VIEWS[id];
+        if(view.state.practicalHeight == "wrap_content" ) {
+            elem.style.height = maxHeight + "px"
+        }
+        if(view.state.practicalWidth == "wrap_content") {
+            elem.style.width = maxWidth + "px"
+        }
+        
     }
 }
 let postComputeLayoutDimens = (view, elem) => {
@@ -1002,5 +1035,6 @@ module.exports = {
     computeChildDimens,
     List,
     postComputeLayoutDimens,
-    preComputeLayoutDimens
+    preComputeLayoutDimens,
+    postCompute
 };

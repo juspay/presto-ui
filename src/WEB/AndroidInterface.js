@@ -28,7 +28,8 @@ var {
   computeChildDimens,
   List,
   postComputeLayoutDimens,
-  preComputeLayoutDimens
+  preComputeLayoutDimens,
+  postCompute
 } = require("./Render");
 var helper = require('../helper');
 var callbackInvoker = require("../helpers/common/callbackInvoker");
@@ -70,6 +71,7 @@ function isOrientatationChanged(props){
 }
 
 function runInUI(cmd, namespace) {
+  debugger;
   if (typeof cmd == "string")
     return
 
@@ -114,7 +116,12 @@ function runInUI(cmd, namespace) {
           if(parentElement && parentView){
             let siblingView = findSiblingView(parentView,id);
             computeChildDimens(parentView);
-            inflateView({view, parentElement, siblingView, renderStyle: true,stopChild,isListItem:true});
+            let computeList = [];
+            inflateView({view, parentElement, siblingView, renderStyle: true,stopChild,isListItem:true, computeList});
+            if(view.parent.type=="relativeLayout"){
+              debugger
+              computeList.unshift(view.parent.props.id)}
+            postCompute(computeList);
           }
         }
       }
@@ -133,7 +140,9 @@ function Render(view, cb, namespace) {
     addViewToParent(parentElement.id, view, parentView.children.indexOf(view), cb, false)
   } else {
     computeChildDimens(parentView);
-    const elem = inflateView({view, parentElement});
+    let computeList = [];
+    const elem = inflateView({view, parentElement,computeList});
+    postCompute(computeList);
     const elements= document.getElementById('content');
     if (cb) callbackInvoker.invoke(cb);
   }
@@ -157,9 +166,11 @@ function moveView(id, index) {
   var children = getUpdatedChildren(parent,view,index);
 
   computeChildDimens(parent)
-
   children.forEach(child => {
-    inflateView({view:child, parentElement : parent})
+    let computeList = [];
+    console.log("moving")
+    inflateView({view:child, parentElement : parent, computeList})
+    postCompute(computeList);
   })
 }
 
@@ -183,7 +194,8 @@ function addViewToParent(id, view, index, cb, replace, namespace) {
     siblingView = parentView.children[index-1]
 
   preComputeLayoutDimens(parentView)
-  var elem = inflateView({view,  siblingView, namespace}) // pass parent element as null, so that the element created doesn't immediately get attached to the DOM
+  let computeList = []
+  var elem = inflateView({view,  siblingView, namespace, computeList}) // pass parent element as null, so that the element created doesn't immediately get attached to the DOM
   var pv = parentView
   var pe = parentElement
   while(pv.state && pv.state.practicalHeight == "wrap_content") {
@@ -217,7 +229,7 @@ function addViewToParent(id, view, index, cb, replace, namespace) {
       c.focus();
     }
   }
-
+  postCompute(computeList);
   if (cb) callbackInvoker.invoke(cb);
 }
 
@@ -303,7 +315,9 @@ function replaceView(view, id, namespace) {
 
   oldView.props = view.props
   parentElem.removeChild(elem)
-  inflateView({view:oldView, parentElement: parentElem, siblingView, stopChild : true});
+  let computeList = []
+  inflateView({view:oldView, parentElement: parentElem, siblingView, stopChild : true, computeList});
+  postCompute(computeList);
   window.__VIEWS[id] = oldView
 
   /* Append Children */
