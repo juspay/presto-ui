@@ -4,64 +4,55 @@
 //itemView=template
 //holderViews= array of props that will be changed from the template
 
-const { computeChildDimens } = require("../compute");
+const {invoke} = require("../helpers/common/callbackInvoker")
 
-
-let availableHolders = ['text','imageUrl', 'packageIcon', 'background', 'color', 'visibility', 'textSize', 'fontStyle', 'alpha'];
+let availableHolders = ['text','imageUrl', 'packageIcon', 'background', 'color', 'visibility', 'textSize', 'fontStyle', 'alpha','onClick'];
 
 
 //sets the holder attributes
-let setChildAttributes = function(view,holder,itemData){
-    for(let prop of availableHolders){
+let setChildAttributes = function(view,holder,itemData,index){
+    
 
-        if(holder[prop])
+    for(let i=0;i<availableHolders.length;i++){
+        
+        let prop = availableHolders[i];
+
+        if(holder[prop] )
         {
-            // console.log('HELLO WORLD')
-            // console.log(holder[prop])
-            // console.log(prop +" to "+ holder[prop] + " to "+itemData[holder[prop]]);
-            if(itemData[holder[prop]])
+            if(prop =='onClick'){
+                let onClickFunction =()=> invoke(holder[prop],index); 
+                view.props.onClick = onClickFunction;
+            }
+            else if(itemData[holder[prop]])
                 view.props[prop] = itemData[holder[prop]]
             
         }
     }
 }
-let setList = function(view,holderViews,itemData){
-    let currentHolderObject = null;
-    if(listIndex==holderViews.length)
-        return view;
-    currentHolderObject = holderViews[listIndex];
-    if(view.props.holderId == currentHolderObject.id){
-        setChildAttributes(view,currentHolderObject, itemData);
-        listIndex++;
+let setList = function(view,holderViews,itemData,index){
+    if(holderViews[view.props.holderId]){
+        setChildAttributes(view,holderViews[view.props.holderId], itemData,index);
     }
     for(let i=0;i<view.children.length;i++){
-        setList(view.children[i], holderViews, itemData);
+        setList(view.children[i], holderViews, itemData,index);
     }
     return view;
     
 }
 
 //gets the mapped view
-let getItemView = function(view,holderViews,itemData){
-    let currentHolderObject = null;
-    // if(!holderViews)
-    //     console.log("doajdfadf");
-    if(listIndex==holderViews.length)
-        return view;
-    currentHolderObject = holderViews[listIndex];
-    if(view.props.holderId == currentHolderObject.id){
-        // console.log("FOUND ONE EQUAL")
-        setChildAttributes(view,currentHolderObject, itemData);
-        listIndex++;
+let getItemView = function(view,holderViews,itemData,index){
+
+    if(holderViews[view.props.holderId]  ){
+        setChildAttributes(view,holderViews[view.props.holderId], itemData,index);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
     }
     if(view.children)
     for(let i=0;i<view.children.length;i++){
-        setList(view.children[i], holderViews, itemData);
+        setList(view.children[i], holderViews, itemData, index);
     }
     return view;
     
 }
-let listIndex;
 
 
 
@@ -90,33 +81,36 @@ function diffArray(oldItems,newItems){
 
 
 
-
-
   
-
+function mergeHolderViews(holderViews){
+    let finalHolder = {};
+    for(let i=0;i<holderViews.length;i++){
+        if(finalHolder[holderViews[i].id] == undefined){
+            finalHolder[holderViews[i].id] = {};
+        }
+        for(let key in holderViews[i]){
+            finalHolder[holderViews[i].id][key] = holderViews[i][key];
+        }
+    }
+    return finalHolder;
+}
 
 
 
 //generates the list items views
 function createListView(view){
-
-    //console.log("lendth of the list is "+view.props.itemDatas.length)
+    view.props.data.holderViews = mergeHolderViews(view.props.data.holderViews);
     view.children=[]
     changeItemView(view.props.data.itemView);
     for(let i=0;i<view.props.itemDatas.length;i++){
-        listIndex=0;
         let cloneTemplate = JSON.parse(JSON.stringify(view.props.data.itemView));
-        if(view.props.hasOwnProperty('onItemClick')){
-            let onItemClick = view.props.onItemClick;
-            cloneTemplate.props.onClick = itemClick(onItemClick)(i);
-        }
-        let childView = getItemView(cloneTemplate,view.props.data.holderViews,view.props.itemDatas[i])
+        let childView = getItemView(cloneTemplate,view.props.data.holderViews,view.props.itemDatas[i],i)
         view.children.push(childView);
     }
 }
 
 let itemClick = function(onItemClick){
-    return function(i){
+    return function(){
         return function(){
             onItemClick(i);
         }
@@ -125,13 +119,12 @@ let itemClick = function(onItemClick){
 
 //Get the child element for a particular index
 let getChildItemViewByIndex = function(view,i){
-    listIndex=0;
     let cloneTemplate = JSON.parse(JSON.stringify(view.props.data.itemView));
-    if(view.props.hasOwnProperty('onItemClick')){
-        let onItemClick = view.props.onItemClick;
-        cloneTemplate.props.onClick =itemClick(onItemClick)(i);
-    }
-    let res= getItemView(cloneTemplate,view.props.data.holderViews,view.props.itemDatas[i])
+    // if(view.props.hasOwnProperty('onItemClick')){
+    //     let onItemClick = view.props.onItemClick;
+    //     cloneTemplate.props.onClick =itemClick(onItemClick)(i);
+    // }
+    let res= getItemView(cloneTemplate,view.props.data.holderViews,view.props.itemDatas[i],i)
     return res;
 }
 

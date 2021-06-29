@@ -71,7 +71,6 @@ function isOrientatationChanged(props){
 }
 
 function runInUI(cmd, namespace) {
-  debugger;
   if (typeof cmd == "string")
     return
 
@@ -119,7 +118,6 @@ function runInUI(cmd, namespace) {
             let computeList = [];
             inflateView({view, parentElement, siblingView, renderStyle: true,stopChild,isListItem:true, computeList});
             if(view.parent.type=="relativeLayout"){
-              debugger
               computeList.unshift(view.parent.props.id)}
             postCompute(computeList);
           }
