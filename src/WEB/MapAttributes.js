@@ -761,6 +761,7 @@ function addTextProperties(props, elem, type) {
         else
             elem_style += createTextElement(elem, props)
     }
+    delete props.text;
     return elem_style;
 }
 function addClassNameProperties(props, elem) {
