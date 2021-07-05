@@ -161,7 +161,9 @@ function getConfigGroups(config) {
   if (getSetType == "set") {
     if (!groups.PARAMS)
     groups.PARAMS = [];
-
+    if (!config.hasOwnProperty("padding")) {
+      config.padding = "0,0,0,0"
+    }
     if (!widthFound)
     groups.PARAMS.push({key: "width", value: 'wrap_content'});
     if (!heightFound)
