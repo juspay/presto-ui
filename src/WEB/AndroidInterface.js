@@ -116,6 +116,8 @@ function runInUI(cmd, namespace) {
             let siblingView = findSiblingView(parentView,id);
             computeChildDimens(parentView);
             let computeList = [];
+            if(view.type == "relativeLayout")
+              computeList.push(view.props.id);
             inflateView({view, parentElement, siblingView, renderStyle: true,stopChild,isListItem:true, computeList});
             if(view.parent.type=="relativeLayout"){
               computeList.unshift(view.parent.props.id)}
