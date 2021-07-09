@@ -964,6 +964,10 @@ function addSetInputTypeProp(ele,props){
             inputType = "number"
         }
 
+        else if(props.inputType === "telephone") {
+            inputType = "tel";
+        }
+
         if (props.hasOwnProperty("separator")) {
           if(props.inputType == "numeric"){
             inputType = "tel"
