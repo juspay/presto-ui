@@ -590,12 +590,12 @@ function addLayout(elem, type, props) {
                 elem_style += "flex-wrap: nowrap;";
                 //elem.style["flex-wrap"] = "nowrap";
             } else {
-                elem_style += "flex-wrap: wrap;";
+                // elem_style += "flex-wrap: wrap;";
                 //elem.style["flex-wrap"] = "wrap";
             }
 
 
-            let orient = props.orientation == "horizontal" || props.orientation == null ? "row" : "column";
+            let orient = props.orientation == "vertical" ? "column" : "row";
             elem_style += "flex-direction: " + orient + ";";
             // elem.style["flex-direction"] =
 
