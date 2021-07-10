@@ -65,10 +65,10 @@ function initiateElement(type, props, elem){
                 })
             } else if (eventType == "focus"){
                 elem.addEventListener('focus', (e) => {
-                    callback(true)
+                    callback("true")
                 })
                 elem.addEventListener('blur', (e) => {
-                    callback(false)
+                    callback("false")
                 })
             } else {
                 elem.addEventListener(eventType, (e) => {
@@ -260,7 +260,7 @@ function setComputedStyles(elem, props) {
             if (activeDimen == 'w') {
                 //elem.style.width = 'auto';
             } else {
-                computed_styles += "height:auto;";
+                // computed_styles += "height:auto;";
                // elem.style.height = 'auto';
             }
         } else {
@@ -923,6 +923,7 @@ let inflateView = function ({view, parentElement, siblingView, stopChild, render
         }
        if (view.hasOwnProperty('children') && view.children.length > 0) {
            preComputeLayoutDimens(view);
+           postComputeLayoutDimens2(view, computeList)
             for (let i = 0; i < view.children.length; i++) {
                 if (view.children[i]) {
                     view.children[i].parent = view;
@@ -933,7 +934,7 @@ let inflateView = function ({view, parentElement, siblingView, stopChild, render
                     }
                 }
             }
-            postComputeLayoutDimens2(view, computeList)
+           
         }
         view.state = view.state || {};
         view.state.computedHeight = isNaN(parseInt(view.props.height)) ? view.state.computedHeight || 0 : parseInt(view.props.height)

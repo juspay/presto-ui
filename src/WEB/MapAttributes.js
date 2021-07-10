@@ -97,7 +97,7 @@ function addProps(props){
 
     if (props.hasOwnProperty("display")) { ele_style += "display:" + props.display + ";"; }
 
-    if (props.hasOwnProperty("ellipsize")) { ele_style += "white-space: nowrap; overflow: hidden; text-overflow: ellipsis;";}
+    if (props.ellipsize) { ele_style += "white-space: nowrap; overflow: hidden; text-overflow: ellipsis;";}
 
     return ele_style;
 
@@ -720,7 +720,7 @@ function findArticle(children){
             }
         }
     }
-    return article? article:document.createElement('Article');
+    return article? article:document.createElement('article');
 }
 function getArticle(children, config) {
     let article = findArticle(children);

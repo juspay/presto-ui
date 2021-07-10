@@ -73,7 +73,6 @@ function isOrientatationChanged(props){
 function runInUI(cmd, namespace) {
   if (typeof cmd == "string")
     return
-
     let id = cmd.id
     if(id){
       let elem = document.getElementById(id)
@@ -116,11 +115,14 @@ function runInUI(cmd, namespace) {
             let siblingView = findSiblingView(parentView,id);
             computeChildDimens(parentView);
             let computeList = [];
-            if(view.type == "relativeLayout")
-              computeList.push(view.props.id);
+            // if(view.type == "relativeLayout")
+            //   computeList.push(view.props.id);
             inflateView({view, parentElement, siblingView, renderStyle: true,stopChild,isListItem:true, computeList});
-            if(view.parent.type=="relativeLayout"){
-              computeList.unshift(view.parent.props.id)}
+            let parent = view.parent;
+            while(parent && parent.type=="relativeLayout"){
+              computeList.unshift(view.parent.props.id)
+              parent=parent.parent;
+            }
             postCompute(computeList);
           }
         }
@@ -135,7 +137,7 @@ function Render(view, cb, namespace) {
   let parentElement = getContainer(namespace);
   // console.debug("presto content element found?? ",parentElement);
   let parentView = getParentView(namespace, view);
-
+  
   if(parentView.oldView) {
     addViewToParent(parentElement.id, view, parentView.children.indexOf(view), cb, false)
   } else {
@@ -198,8 +200,9 @@ function addViewToParent(id, view, index, cb, replace, namespace) {
   var elem = inflateView({view,  siblingView, namespace, computeList}) // pass parent element as null, so that the element created doesn't immediately get attached to the DOM
   var pv = parentView
   var pe = parentElement
-  while(pv.state && pv.state.practicalHeight == "wrap_content") {
-    postComputeLayoutDimens(pv, pe);
+  while(pv && pv.type == "relativeLayout") {
+    // postComputeLayoutDimens(pv, pe);
+    computeList.unshift(pv.props.id);
     pv = pv.parent
     pe = pe.parentElement
   }
