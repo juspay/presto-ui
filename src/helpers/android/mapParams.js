@@ -600,6 +600,7 @@ var map = {
       type: 'i',
       password: '129',
       numeric: '2',
+      telephone: '3',
       numericPassword: '18',
       numericWithoutSuggestion: '524291',
       disabled: '0',
