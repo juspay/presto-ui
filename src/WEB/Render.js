@@ -855,7 +855,7 @@ let setAfterRenderFunctions = function (newInflated, view, elem, stopObserver) {
     }
 }
 
-let renderList = (view,elem)=>{
+let renderList = (view,elem, computeList)=>{
     //console.dir(view.props.diffArray)
         if(view.props.diffArray== "filter"){
             // console.log("filtering")
@@ -869,7 +869,7 @@ let renderList = (view,elem)=>{
             }
             computeChildDimens(view);
             for(let i=0;i<view.props.itemDatas.length;i++){
-                elem.appendChild(inflateView({view:view.children[i]}))}
+                elem.appendChild(inflateView({view:view.children[i], computeList :computeList }))}
             //console.timeEnd('filtering')
         }
         //replacing only the diff elements
@@ -887,15 +887,14 @@ let renderList = (view,elem)=>{
                     newChildView.onClick = oldView.onClick;
                     view.children[i] = newChildView
                     computeChildDimens(view)
-
-                    let newChild = inflateView({view:newChildView});
+                    let newChild = inflateView({view:newChildView, computeList : computeList});
                     // newChild.addEventListener('click',newChildView.props.onClick)
                     // newChild.style.cursor='pointer'
                     // console.dir(newChild)
                     elem.replaceChild(newChild,oldChild);
 
                 }
-                //console.timeEnd('patchingElement')
+                console.timeEnd('patchingElement')
         }
         }
         view.props.diffArray = undefined;
@@ -913,13 +912,12 @@ let inflateView = function ({view, parentElement, siblingView, stopChild, render
 
     //patching list
     if(view.props.listData && renderStyle ){
-        renderList(view, elem);
+        renderList(view, elem, computeList);
     } else if (!stopChild ) {
         //firstRender List
         if (view.props.itemDatas) {
             List.createListView(view);
             computeChildDimens(view);
-
         }
        if (view.hasOwnProperty('children') && view.children.length > 0) {
            preComputeLayoutDimens(view);
@@ -966,10 +964,10 @@ let preComputeLayoutDimens = (view) => {
 }
 
 let postComputeLayoutDimens2 = (view,postComputeList) =>{
-    if(view.type == "relativeLayout" && (view.state.practicalWidth == "wrap_content"  || view.state.practicalHeight == "wrap_content" ) && view.children.length > 0) {
+    if(postComputeList && view.type == "relativeLayout" && (view.state.practicalWidth == "wrap_content"  || view.state.practicalHeight == "wrap_content" ) && view.children.length > 0) {
         postComputeList.push(view.props.id);
+        window.__VIEWS[view.props.id] = window.__VIEWS[view.props.id] || view
     }
-
 }
 
 let getValueFromPixel = (pixel) =>{
@@ -980,6 +978,8 @@ let postCompute = (list) =>{
         let id = list.pop();
  
         let elem = document.getElementById(id);
+        if(!elem)
+            continue;
         let childNodes = elem.childNodes;
         let maxHeight = 0;
         let maxWidth = 0;
@@ -989,32 +989,32 @@ let postCompute = (list) =>{
                 maxWidth = maxWidth > childNodes[i].offsetWidth ? maxWidth : childNodes[i].offsetWidth;
         }
         let view = window.__VIEWS[id];
-        if(view.state.practicalHeight == "wrap_content" ) {
+        if(view && view.state && view.state.practicalHeight == "wrap_content" ) {
             elem.style.height = maxHeight + "px"
         }
-        if(view.state.practicalWidth == "wrap_content") {
+        if(view && view.state && view.state.practicalWidth == "wrap_content") {
             elem.style.width = maxWidth + "px"
         }
         
     }
 }
 let postComputeLayoutDimens = (view, elem) => {
-    if(view.type == "relativeLayout" && (view.state.practicalWidth == "wrap_content"  || view.state.practicalHeight == "wrap_content" ) && view.children.length > 0) {
+    if(view && view.type == "relativeLayout" && (view.state && (view.state.practicalWidth == "wrap_content"  || view.state.practicalHeight == "wrap_content" )) && view.children.length > 0) {
         var largestHeight = view.children[0].state.computedHeight;
         var largestWidth = view.children[0].state.computedWidth;
         for (var i = 1; i < view.children.length; ++i) {
-            if (view.state.practicalHeight == "wrap_content") {
+            if (view.state && view.state.practicalHeight == "wrap_content") {
                 largestHeight = largestHeight > view.children[i].state.computedHeight ? largestHeight : view.children[i].state.computedHeight;
             }
-            if (view.state.practicalWidth == "wrap_content") {
+            if (view.state && view.state.practicalWidth == "wrap_content") {
                 largestWidth = largestWidth > view.children[i].state.computedWidth ? largestWidth : view.children[i].state.computedWidth
             }
         }
-        if(view.state.practicalHeight == "wrap_content" ) {
+        if(view.state && view.state.practicalHeight == "wrap_content" ) {
             elem.style.height = largestHeight + "px"
             view.state.computedHeight = largestHeight
         }
-        if(view.state.practicalWidth == "wrap_content") {
+        if(view.state && view.state.practicalWidth == "wrap_content") {
             elem.style.width = largestWidth + "px"
             view.state.computedWidth = largestWidth
         }

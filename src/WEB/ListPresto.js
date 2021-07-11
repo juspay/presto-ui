@@ -5,30 +5,21 @@
 //holderViews= array of props that will be changed from the template
 
 const {invoke} = require("../helpers/common/callbackInvoker")
-
-let availableHolders = ['text','imageUrl', 'packageIcon', 'background', 'color', 'visibility', 'textSize', 'fontStyle', 'alpha','onClick'];
-
+const {clone} = require("../helper")
 
 //sets the holder attributes
 let setChildAttributes = function(view,holder,itemData,index){
     
-
-    for(let i=0;i<availableHolders.length;i++){
-        
-        let prop = availableHolders[i];
-
-        if(holder[prop] )
-        {
-            if(prop =='onClick'){
-                let onClickFunction =()=> invoke(holder[prop],index); 
-                view.props.onClick = onClickFunction;
-            }
-            else if(itemData[holder[prop]])
-                view.props[prop] = itemData[holder[prop]]
-            
+    for(var key in holder) {
+        if(key == 'onClick') {
+            let onClickFunction =()=> invoke(holder.onClick,index);
+            view.props.onClick = onClickFunction;
+        } else if (itemData.hasOwnProperty(holder[key])) {
+            view.props[key] = itemData[holder[key]]
         }
     }
 }
+
 let setList = function(view,holderViews,itemData,index){
     if(holderViews[view.props.holderId]){
         setChildAttributes(view,holderViews[view.props.holderId], itemData,index);
@@ -103,7 +94,7 @@ function createListView(view){
     view.children=[]
     changeItemView(view.props.data.itemView);
     for(let i=0;i<view.props.itemDatas.length;i++){
-        let cloneTemplate = JSON.parse(JSON.stringify(view.props.data.itemView));
+        let cloneTemplate = clone(view.props.data.itemView);
         let childView = getItemView(cloneTemplate,view.props.data.holderViews,view.props.itemDatas[i],i)
         view.children.push(childView);
     }
@@ -119,7 +110,7 @@ let itemClick = function(onItemClick){
 
 //Get the child element for a particular index
 let getChildItemViewByIndex = function(view,i){
-    let cloneTemplate = JSON.parse(JSON.stringify(view.props.data.itemView));
+    let cloneTemplate = clone(view.props.data.itemView);
     // if(view.props.hasOwnProperty('onItemClick')){
     //     let onItemClick = view.props.onItemClick;
     //     cloneTemplate.props.onClick =itemClick(onItemClick)(i);

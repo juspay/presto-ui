@@ -89,7 +89,7 @@ function runInUI(cmd, namespace) {
           //diffing arrrays to find the difference between old data and new data
           //console.time('diffArray')
           console.log("diff")
-          view.props.diffArray=List.diffArray(view.props.itemDatas,JSON.parse(cmd.listData));
+          view.props.diffArray = List.diffArray(view.props.itemDatas,JSON.parse(cmd.listData));
           //console.dir(view.props.diffArray)
           //console.timeEnd('diffArray')
 

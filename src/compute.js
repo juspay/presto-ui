@@ -83,11 +83,18 @@ function computeRelativeLayout(view) {
 
   children.forEach(child => {
     let props = child.props;
-
+    var pl = 0, pr = 0, pt = 0, pb =0;
+    if(view.props && view.props.hasOwnProperty('padding')) {
+      var padding = view.props.padding.split(',')
+      pl = padding[0]
+      pt = padding[1]
+      pr = padding[2]
+      pb = padding[3]
+    }
     props.absolute = true;
-    props.fromTop = 0;
+    props.fromTop = pt;
     props.fromBottom = 'auto';
-    props.fromLeft = 0;
+    props.fromLeft = pl;
     props.fromRight = 'auto';
 
     if(props.hasOwnProperty('alignParentLeft') && props.alignParentLeft){
@@ -96,12 +103,12 @@ function computeRelativeLayout(view) {
     }
     if(props.hasOwnProperty('alignParentRight') && props.alignParentRight){
       props.fromLeft = 'auto';
-      props.fromRight = 0;
+      props.fromRight = pr;
     }
 
     if(props.hasOwnProperty('alignParentBottom') && props.alignParentBottom){
       props.fromTop = 'auto';
-      props.fromBottom = 0;
+      props.fromBottom = pb;
     }
   });
 }
