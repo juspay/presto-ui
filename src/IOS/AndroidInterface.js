@@ -222,7 +222,7 @@ module.exports = {
     var parent = window.__VIEWS[parentid];
     var index = parent.children.indexOf(oldview);
     this.recomputeView(parent);
-    var newView = getSerializeableView(oldview, namespace);
+    var newView = getSerializeableView(oldview);
     window.webkit.messageHandlers.IOS.postMessage(JSON.stringify({
         methodName: "replaceView",
         parameters: {
