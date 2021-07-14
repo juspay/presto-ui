@@ -71,10 +71,15 @@ function initiateElement(type, props, elem){
                     callback("false")
                 })
             } else {
-                elem.addEventListener(eventType, (e) => {
+                props.oldEventListener = props.oldEventListener || {};
+                if (typeof props.oldEventListener[eventType] == "function") {
+                    elem.removeEventListener(eventType, props.oldEventListener[eventType]);
+                }
+                props.oldEventListener[eventType] = (e) => {
                     e.stopPropagation();
                     callback(e)
-                })
+                };
+                elem.addEventListener(eventType, props.oldEventListener[eventType]);
             }
         }
     }
