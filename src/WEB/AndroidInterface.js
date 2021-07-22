@@ -29,7 +29,9 @@ var {
   List,
   postComputeLayoutDimens,
   preComputeLayoutDimens,
-  postCompute
+  postCompute,
+  isChrome50,
+  handleMatchParentChrome50
 } = require("./Render");
 var helper = require('../helper');
 var callbackInvoker = require("../helpers/common/callbackInvoker");
@@ -117,13 +119,18 @@ function runInUI(cmd, namespace) {
             let computeList = [];
             // if(view.type == "relativeLayout")
             //   computeList.push(view.props.id);
-            inflateView({view, parentElement, siblingView, renderStyle: true,stopChild,isListItem:true, computeList});
+            var chrome50matchList;
+            if(isChrome50()) {
+              chrome50matchList = {h : [], w: []}
+            }
+            inflateView({view, parentElement, siblingView, renderStyle: true,stopChild,isListItem:true, computeList, chrome50matchList});
             let parent = view.parent;
             while(parent && parent.type=="relativeLayout"){
               computeList.unshift(view.parent.props.id)
               parent=parent.parent;
             }
             postCompute(computeList);
+            handleMatchParentChrome50(chrome50matchList)
           }
         }
       }
@@ -171,7 +178,12 @@ function moveView(id, index) {
   children.forEach(child => {
     let computeList = [];
     console.log("moving")
-    inflateView({view:child, parentElement : parent, computeList})
+    var chrome50matchList;
+    if(isChrome50()) {
+      chrome50matchList = {h : [], w: []}
+    }
+    inflateView({view:child, parentElement : parent, computeList, chrome50matchList})
+    handleMatchParentChrome50(chrome50matchList)
     postCompute(computeList);
   })
 }
@@ -197,7 +209,11 @@ function addViewToParent(id, view, index, cb, replace, namespace) {
 
   preComputeLayoutDimens(parentView)
   let computeList = []
-  var elem = inflateView({view,  siblingView, namespace, computeList}) // pass parent element as null, so that the element created doesn't immediately get attached to the DOM
+  var chrome50matchList;
+  if(isChrome50()) {
+    chrome50matchList = {h : [], w: []}
+  }
+  var elem = inflateView({view,  siblingView, namespace, computeList, chrome50matchList}) // pass parent element as null, so that the element created doesn't immediately get attached to the DOM
   var pv = parentView
   var pe = parentElement
   while(pv && pv.type == "relativeLayout") {
@@ -223,7 +239,6 @@ function addViewToParent(id, view, index, cb, replace, namespace) {
         parentElement.appendChild(elem);
     }
   }
-
   if (window.focusedElement !== undefined){
     var c = document.getElementById(window.focusedElement);
     window.focusedElement = undefined;
@@ -233,6 +248,7 @@ function addViewToParent(id, view, index, cb, replace, namespace) {
     }
   }
   postCompute(computeList);
+  handleMatchParentChrome50(chrome50matchList)
   if (cb) callbackInvoker.invoke(cb);
 }
 
@@ -319,18 +335,23 @@ function replaceView(view, id, namespace) {
   oldView.props = view.props
   parentElem.removeChild(elem)
   let computeList = []
-  inflateView({view:oldView, parentElement: parentElem, siblingView, stopChild : true, computeList});
-  postCompute(computeList);
+  var chrome50matchList;
+  if(isChrome50()) {
+    chrome50matchList = {h : [], w: []}
+  }
+  inflateView({view:oldView, parentElement: parentElem, siblingView, stopChild : true, computeList, chrome50matchList});
   window.__VIEWS[id] = oldView
-
+  
   /* Append Children */
   elem = document.getElementById(id)
-
+  
   if(elem && childrenElem.length > 0){
     for(let i = 0; i < childrenElem.length; i++){
       elem.appendChild(childrenElem[i])
     }
   }
+  postCompute(computeList);
+  handleMatchParentChrome50(chrome50matchList)
   /* Append Children End */
 }
 

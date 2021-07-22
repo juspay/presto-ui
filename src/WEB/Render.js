@@ -860,6 +860,11 @@ let setAfterRenderFunctions = function (newInflated, view, elem, stopObserver) {
     }
 }
 
+function isChrome50 () {
+    var a = navigator.userAgent.substring(navigator.userAgent.indexOf('Chrome/') + 7)
+    return parseInt(a.substring(0, a.indexOf("."))) <= 50
+}
+
 let renderList = (view,elem, computeList)=>{
     //console.dir(view.props.diffArray)
         if(view.props.diffArray== "filter"){
@@ -874,7 +879,13 @@ let renderList = (view,elem, computeList)=>{
             }
             computeChildDimens(view);
             for(let i=0;i<view.props.itemDatas.length;i++){
+                var chrome50matchList;
+                if(isChrome50()) {
+                    chrome50matchList = {h : [], w: []}
+                }
                 elem.appendChild(inflateView({view:view.children[i], computeList :computeList }))}
+                handleMatchParentChrome50(chrome50matchList)
+                // TODO :: run height enforcer
             //console.timeEnd('filtering')
         }
         //replacing only the diff elements
@@ -892,7 +903,12 @@ let renderList = (view,elem, computeList)=>{
                     newChildView.onClick = oldView.onClick;
                     view.children[i] = newChildView
                     computeChildDimens(view)
-                    let newChild = inflateView({view:newChildView, computeList : computeList});
+                    var chrome50matchList;
+                    if(isChrome50()) {
+                        chrome50matchList = {h : [], w: []}
+                    }
+                    let newChild = inflateView({view:newChildView, computeList : computeList, chrome50matchList});
+                    handleMatchParentChrome50(chrome50matchList);
                     // newChild.addEventListener('click',newChildView.props.onClick)
                     // newChild.style.cursor='pointer'
                     // console.dir(newChild)
@@ -904,12 +920,22 @@ let renderList = (view,elem, computeList)=>{
         }
         view.props.diffArray = undefined;
 }
-let inflateView = function ({view, parentElement, siblingView, stopChild, renderStyle, computeList} ={}) {
+let inflateView = function ({view, parentElement, siblingView, stopChild, renderStyle, computeList, chrome50matchList} ={}) {
     view.state = view.state || {};
     if(view.props.listData){
         view.props.itemDatas = JSON.parse(view.props.listData);
         if(!view.props.data){
             view.props.data = JSON.parse(view.props.listItem)
+        }
+    }
+    if(typeof chrome50matchList == "object") {
+        chrome50matchList.h = chrome50matchList.h || []
+        chrome50matchList.w = chrome50matchList.w || []
+        if(view.props.height == "match_parent") {
+            chrome50matchList.h.push(view)
+        }
+        if(view.props.width == "match_parent") {
+            chrome50matchList.w.push(view)
         }
     }
 
@@ -931,9 +957,9 @@ let inflateView = function ({view, parentElement, siblingView, stopChild, render
                 if (view.children[i]) {
                     view.children[i].parent = view;
                     if (i != 0) {
-                        inflateView({view:view.children[i], parentElement:elem, siblingView:view.children[i - 1], stopChild:renderStyle, renderStyle, computeList});
+                        inflateView({view:view.children[i], parentElement:elem, siblingView:view.children[i - 1], stopChild:renderStyle, renderStyle, computeList, chrome50matchList});
                     } else {
-                        inflateView({view:view.children[i], parentElement:elem, siblingView:view, stopChild:renderStyle, renderStyle, computeList});
+                        inflateView({view:view.children[i], parentElement:elem, siblingView:view, stopChild:renderStyle, renderStyle, computeList, chrome50matchList});
                     }
                 }
             }
@@ -1036,11 +1062,65 @@ let handleWrapContent = (view, parentElement) => {
     return view;
 }
 
+function handleMatchParentChrome50 (chrome50matchList) {
+    // Chrome 50 is not supporting height/ width 100% inside flex : 1 layouts.
+    // Below code derives height from parent in cases where it failed to compute
+    if(!chrome50matchList) {
+        return;
+    }
+    // Commented code is used for debugging purposes, to find misfires
+    // window.modifiedIds = window.modifiedIds || []
+    for(var x = chrome50matchList.h, i =0 ; x && i < x.length ; ++i) {
+        if(x[i] && x[i].props && x[i].props.id){
+            var elm = document.getElementById(x[i].props.id)
+            if ( elm && elm.parentElement 
+                && (elm.parentElement.parentElement 
+                    // Code to handle cases where parent is height 0 weight 1
+                    // and parent of parent is orientation vertical
+                    && elm.parentElement.parentElement.style
+                    && elm.parentElement.parentElement.style.flexDirection == "column" 
+                    && elm.parentElement.style.flex == "1 1 0%"
+                    // Do not apply if offset height is 0; 
+                    // this will happen for relative layouts; 
+                    // 100% which is already present will give correct result
+                    && elm.parentElement.offsetHeight
+                    ) 
+                ) {
+                elm.style.height = elm.parentElement.offsetHeight + "px"
+                // window.modifiedIds.push(x[i].props.id)
+            }
+        }
+    }
+    for(var x = chrome50matchList.w, i =0 ; x && i < x.length ; ++i) {
+        if(x[i] && x[i].props && x[i].props.id){
+            var elm = document.getElementById(x[i].props.id)
+            if ( elm && elm.parentElement 
+                && (elm.parentElement.parentElement
+                    && elm.parentElement.parentElement.style
+                    // Code to handle cases where parent is width 0 weight 1
+                    // and parent of parent is orientation horizontal
+                    && elm.parentElement.parentElement.style.flexDirection == "row" 
+                    && elm.parentElement.style.flex == "1 1 0%"
+                    // Do not apply if offset width is 0; 
+                    // this will happen for relative layouts; 
+                    // 100% which is already present will give correct result
+                    && elm.parentElement.offsetWidth
+                    )
+                ) {
+                elm.style.width = elm.parentElement.offsetWidth + "px"
+                // window.modifiedIds.push(x[i].props.id)
+            }
+        }
+    }
+}
+
 module.exports = {
     inflateView,
     computeChildDimens,
     List,
     postComputeLayoutDimens,
     preComputeLayoutDimens,
-    postCompute
+    postCompute,
+    isChrome50,
+    handleMatchParentChrome50
 };
