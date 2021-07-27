@@ -1079,7 +1079,7 @@ function handleMatchParentChrome50 (chrome50matchList) {
                     // and parent of parent is orientation vertical
                     && elm.parentElement.parentElement.style
                     && elm.parentElement.parentElement.style.flexDirection == "column" 
-                    && elm.parentElement.style.flex == "1 1 0%"
+                    && (elm.parentElement.style.flex == "1 1 0%" || elm.parentElement.style.flex == "1 1 0px")
                     // Do not apply if offset height is 0; 
                     // this will happen for relative layouts; 
                     // 100% which is already present will give correct result
@@ -1100,7 +1100,7 @@ function handleMatchParentChrome50 (chrome50matchList) {
                     // Code to handle cases where parent is width 0 weight 1
                     // and parent of parent is orientation horizontal
                     && elm.parentElement.parentElement.style.flexDirection == "row" 
-                    && elm.parentElement.style.flex == "1 1 0%"
+                    && (elm.parentElement.style.flex == "1 1 0%" || elm.parentElement.style.flex == "1 1 0px")
                     // Do not apply if offset width is 0; 
                     // this will happen for relative layouts; 
                     // 100% which is already present will give correct result
