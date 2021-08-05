@@ -1093,8 +1093,30 @@ function setElemAttributes(element,props){
 
 }
 
+function addPseudoClasses(elem, props){
 
 
+    let styleElem = document.getElementById(window.__STYLE_ID) || document.getElementsByTagName("body")[0].getElementsByTagName("style")[0]
+    let css = "";
+
+    if (props.hasOwnProperty("hoverBg")) {
+        css += "div#\\3" + elem.id[0] + " " + elem.id.substring(1) + ":hover{background:" + props["hoverBg"] + "!important;}";
+    }
+
+    if (props.hasOwnProperty("hoverColor")) {
+        css += "div#\\3" + elem.id[0] + " " + elem.id.substring(1) + ":hover{color:" + props["hoverColor"] + "!important;}";
+    }
+
+    if (!css) return
+    if(styleElem) {
+      styleElem.innerText += css;
+    } else {
+      styleElem = document.createElement('style');
+      styleElem.appendChild(document.createTextNode(css));
+      document.getElementsByTagName("body")[0].appendChild(styleElem);
+    }
+
+}
 
 
 module.exports = {
@@ -1114,7 +1136,8 @@ module.exports = {
     addImage,
     addTextProperties,
     addClassNameProperties,
-    addFunctions
+    addFunctions,
+    addPseudoClasses
 }
 
 
