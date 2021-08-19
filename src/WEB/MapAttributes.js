@@ -207,7 +207,9 @@ function addStrokeProp(props){
 
         let values = props.stroke.split(",");
 
-        if(values.length == 2) { ele_style += "border: " + values[0] + "px solid " + values[1] + ";";}
+        if(values.length == 2) { 
+            ele_style += "border: " + values[0] + "px solid " + values[1] + ";";
+        }
         else if(values.length == 3){
 
             if (values[2] == "rbl"){
@@ -224,6 +226,8 @@ function addStrokeProp(props){
             else if (values[2] == "rb"){
                 ele_style += "border-bottom: " + values[0] + "px solid " + values[1] + ";";
                 ele_style += "border-right: " + values[0] + "px solid " + values[1] + ";";
+            } else if (values[2] == "l"){
+                ele_style += "border-left: " + values[0] + "px solid " + values[1] + ";";
             }
             else
                 ele_style += "border: " + values[0] + "px  " + values[1] + " " + values[2] + ";";
