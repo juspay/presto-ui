@@ -156,22 +156,26 @@ function setAnimationStyles(elem, props) {
         }
   
         if (data.hasOwnProperty('fromScale')) {
+          animation_style += 'transform-origin:top left;';
           css += "transform: scale(" + data.fromScale + ");"
         } else if (data.hasOwnProperty('fromScaleX') && data.hasOwnProperty('fromScaleY')) {
+          animation_style += 'transform-origin:top left;';
           css += "transform: scale(" + data.fromScaleX + ", " + data.fromScaleY + ");"
         } else if(data.hasOwnProperty('fromScaleX')) {
+          animation_style += 'transform-origin:top left;';
           css += "transform: scaleX(" + data.fromScaleX + ");"
         } else if(data.hasOwnProperty('fromScaleY')) {
+          animation_style += 'transform-origin:top left;';
           css += "transform: scaleY(" + data.fromScaleY + ");"
         }
   
         if (data.hasOwnProperty('fromRotation')) {
-          css += "transform: rotate(" + data.fromRotation + ");"
+          css += "transform: rotate(" + data.fromRotation + "deg);"
         } else {
           if(data.hasOwnProperty('fromRotationX')) {
-            css += "transform: rotateX(" + data.fromRotationX + ");"
+            css += "transform: rotateX(" + data.fromRotationX + "deg);"
           } else if(data.hasOwnProperty('fromRotationY')) {
-            css += "transform: rotateY(" + data.fromRotationY + ");"
+            css += "transform: rotateY(" + data.fromRotationY + "deg);"
           }
         }
       css += "} "
@@ -199,12 +203,12 @@ function setAnimationStyles(elem, props) {
         }
   
         if (data.hasOwnProperty('toRotation')) {
-          css += "transform: rotate(" + data.toRotation + ");"
+          css += "transform: rotate(" + data.toRotation + "deg);"
         } else {
           if(data.hasOwnProperty('toRotationX')) {
-            css += "transform: rotateX(" + data.toRotationX + ");"
+            css += "transform: rotateX(" + data.toRotationX + "deg);"
           } else if(data.hasOwnProperty('toRotationY')) {
-            css += "transform: rotateY(" + data.toRotationY + ");"
+            css += "transform: rotateY(" + data.toRotationY + "deg);"
           }
         }
       css += "} "
@@ -229,8 +233,9 @@ function setAnimationStyles(elem, props) {
     } else {
       animation_style += "animation-duration: 1s;";
     }
-    animation_style += 'transform-origin:0%;';
     if (data.hasOwnProperty('repeatCount')) {
+      // TODO: this needs to be check the curve from the params sent to the api
+      animation_style += "animation-timing-function: linear;";
       if (data.repeatCount == "-1" || data.repeatCount == -1) {
         animation_style += "animation-iteration-count:infinite;";
         // elem.style.animationIterationCount = "infinite"
