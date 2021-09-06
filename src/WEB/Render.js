@@ -265,6 +265,7 @@ function setComputedStyles(elem, props) {
 
         if (weight > 0) {
             computed_styles += "flex:" + weight + ";";
+            computed_styles += "flex-basis:auto;";
             //elem.style.flex = weight;
 
             if (activeDimen == 'w') {
@@ -1085,7 +1086,8 @@ function handleMatchParentChrome50 (chrome50matchList) {
                     // and parent of parent is orientation vertical
                     && elm.parentElement.parentElement.style
                     && elm.parentElement.parentElement.style.flexDirection == "column" 
-                    && (elm.parentElement.style.flex == "1 1 0%" || elm.parentElement.style.flex == "1 1 0px")
+                    && elm.parentElement.style['flex-grow'] == "1"
+                    && elm.parentElement.style['flex-shrink'] == "1"
                     // Do not apply if offset height is 0; 
                     // this will happen for relative layouts; 
                     // 100% which is already present will give correct result
@@ -1106,7 +1108,8 @@ function handleMatchParentChrome50 (chrome50matchList) {
                     // Code to handle cases where parent is width 0 weight 1
                     // and parent of parent is orientation horizontal
                     && elm.parentElement.parentElement.style.flexDirection == "row" 
-                    && (elm.parentElement.style.flex == "1 1 0%" || elm.parentElement.style.flex == "1 1 0px")
+                    && elm.parentElement.style['flex-grow'] == "1"
+                    && elm.parentElement.style['flex-shrink'] == "1"
                     // Do not apply if offset width is 0; 
                     // this will happen for relative layouts; 
                     // 100% which is already present will give correct result
