@@ -32,11 +32,16 @@ let initializeShow = function (elem, props, type) {
         }
     } else {
         if (props.hasOwnProperty('width') && props.width == 'wrap_content') {
-            style += "display:inline-bloack;";
+            style += "display:inline-block;";
             style += "width:max-content;";
             // elem.style.display = 'inline-block';
             // elem.style.width = 'max-content';
         } else {
+            // iFrame/webView display is set to none by default in hyper-sdk-web.
+            // enabling explicitly for visible case.
+            if(type == 'webView') {
+                style += "display: block;";
+            }
             // style += "display:'';";
         //    elem.style.display = '';
         }
