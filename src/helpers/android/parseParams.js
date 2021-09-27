@@ -647,7 +647,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
           const id = allProps.find(a => a.key === "id");
           if (!id) return;
           var urlSetCommands = "set_directory=ctx->getDir:s_juspay,i_0;" +
-                                "set_resolvedFile=java.io.File->new:get_directory,s_" + fileName + ";" +
+                                "set_resolvedFile=java.io.File->new:get_directory,s_" + JBridge.getFilePath(fileName) + ";" +
                                 "set_resolvedPath=get_resolvedFile->toString;" +
                                 "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;" +
                                 "set_imgV=ctx->findViewById:i_" + id.value + ";" +
