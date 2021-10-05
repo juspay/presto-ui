@@ -213,7 +213,7 @@ function addViewToParent(id, view, index, cb, replace, namespace) {
   if(isChrome50()) {
     chrome50matchList = {h : [], w: []}
   }
-
+  computeChildDimens(parentView);
   var elem = inflateView({view,  siblingView, namespace, computeList, chrome50matchList}) // pass parent element as null, so that the element created doesn't immediately get attached to the DOM
   var pv = parentView
   var pe = parentElement
