@@ -32,6 +32,27 @@ var command = "";
 var elementType;
 var getSetType;
 
+function getGradientOrientation(angle){
+
+  function roundOff(num){
+    return Math.floor(num%360/45)*45;
+  }
+
+  if (typeof angle == "number"){
+    switch(roundOff(angle)){
+      case 0  : return "BOTTOM_TOP" ;
+      case 45 : return "BL_TR";
+      case 90 : return "LEFT_RIGHT";
+      case 135: return "TL_BR" ;
+      case 180: return "TOP_BOTTOM";
+      case 225: return "TR_BL";
+      case 270: return "RIGHT_LEFT";
+      case 315: return "BR_TL";
+      default : return "BOTTOM_TOP";
+    }
+  } else { return "BOTTOM_TOP" }
+}
+
 function isValidFontStyleFormat(font){
   try{
     if(font == undefined) return false;
@@ -458,6 +479,8 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     var orientation = "";
     if (gradientObj.type == "linear") {
     } else {}
+
+    prePend += "set_o=android.graphics.drawable.GradientDrawable$Orientation->valueOf:s_"+ getGradientOrientation(Number(gradientObj.angle)) +";get_DRAWABLE->setOrientation:get_o;"
 
     var intClass = "set_cc=java.lang.Class->forName:s_java.lang.Integer;";
     var arrList = "set_arr=java.util.ArrayList->new;";
