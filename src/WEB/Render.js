@@ -746,6 +746,17 @@ let createNewElement = function(view, parentElement, siblingView){
                 elem.placeholder = view.props.hint || "";
             }
             break;
+        case 'shimmerFrameLayout':
+            // for shimmerFrameLayout tag leaf nodes in the DOM tree so that CSS properties
+            // for animations and styles can be added
+            // every leaf node is tagged with a boolean shouldShimmer property in props
+            if (view.props.isSeen == undefined) {
+                tagShimmerElementsForRender(view, view.children);
+                styleElem = document.createElement('style');
+                styleElem.appendChild(document.createTextNode("@keyframes shimmer{0% {background-position: -500px 0;}100% {background-position: 500px 0;}}"));
+                document.getElementsByTagName("body")[0].appendChild(styleElem);
+            }
+        // do not add a break here
         default:
             elem = document.createElement(view.elName || "div"); // create the element here
             element_style = "";
@@ -1121,6 +1132,20 @@ function handleMatchParentChrome50 (chrome50matchList) {
             }
         }
     }
+}
+
+let tagShimmerElementsForRender = function(node, children) {
+    // console.log("shimmer children", node, children);
+    if (children.length == 0) {
+        node.props.shouldShimmer = true;
+        return;
+    }
+    for(let i = 0; i < children.length; i++) {
+        // console.log("tagging children", children[i], children[i].children);
+        tagShimmerElementsForRender(children[i], children[i].children);
+    }
+    node.props.isSeen = true;
+
 }
 
 module.exports = {

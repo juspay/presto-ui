@@ -67,8 +67,16 @@ function addProps(props){
 
     if (props.hasOwnProperty("backgroundColor")) { ele_style += "background-color: " + utils.parseColors(props.backgroundColor) + ";"};
 
-    if (props.hasOwnProperty("background")) { ele_style += "background: " + utils.parseColors(props.background) + ";"};
+    if (props.hasOwnProperty("background") && !props.hasOwnProperty("shouldShimmer")) { ele_style += "background: " + utils.parseColors(props.background) + ";"};
     
+    if (props.hasOwnProperty("background") && props.hasOwnProperty("shouldShimmer") && props.shouldShimmer) { 
+        shimmerColor = utils.parseColors(props.background);
+        ele_style += "animation : shimmer 4s infinite;"
+        ele_style += "background-color: " + shimmerColor + ";";
+        ele_style += "background-repeat: no-repeat;"
+        ele_style += "background-image: linear-gradient(to right," + shimmerColor + " 0%, #edeef1 20%, " + shimmerColor + " 40%, " + shimmerColor + " 100%);"
+        ele_style += "background-size: 500px 100%;"
+    }
 
     if (props.hasOwnProperty("backgroundDrawable")) { ele_style += "background-image: " + "url('"+props.backgroundDrawable+"')" + ";"};
 
@@ -586,7 +594,6 @@ function setGravityStylesForColumn(elem, props) {
 }
 
 function addLayout(elem, type, props) {
-
     let scrollBarX = props.hasOwnProperty('scrollBarX')?props.scrollBarX:true;
     let scrollBarY = props.hasOwnProperty('scrollBarY')?props.scrollBarX:true;
     let elem_style = "";

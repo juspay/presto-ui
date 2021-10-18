@@ -24,7 +24,10 @@ function invokeUICallback () {
     }
   
     if (window.__THROTTELED_ACTIONS && window.__THROTTELED_ACTIONS.indexOf(fName) == -1) {
-        window.__PROXY_FN[fName].apply(null, functionArgs);
+        let proxyFnKey = fName;
+        if (proxyFnKey.charAt(0) == '"')
+            proxyFnKey = fName.substring(1, fName.length - 1);
+        window.__PROXY_FN[proxyFnKey].apply(null, functionArgs);
     } else if (window.__LAST_FN_CALLED && (fName == window.__LAST_FN_CALLED.fName)) {
         currTime = getCurrTime();
         timeDiff = currTime - window.__LAST_FN_CALLED.timeStamp;
