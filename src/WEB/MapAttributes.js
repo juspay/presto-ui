@@ -71,11 +71,11 @@ function addProps(props){
     
     if (props.hasOwnProperty("background") && props.hasOwnProperty("shouldShimmer") && props.shouldShimmer) { 
         shimmerColor = utils.parseColors(props.background);
-        ele_style += "animation : shimmer 4s infinite;"
+        ele_style += "animation : shimmer 2s infinite;";
         ele_style += "background-color: " + shimmerColor + ";";
-        ele_style += "background-repeat: no-repeat;"
-        ele_style += "background-image: linear-gradient(to right," + shimmerColor + " 0%, #edeef1 20%, " + shimmerColor + " 40%, " + shimmerColor + " 100%);"
-        ele_style += "background-size: 500px 100%;"
+        ele_style += "background-repeat: no-repeat;";
+        ele_style += "background-image: linear-gradient(to right," + shimmerColor + " 0%, #edeef1 20%, " + shimmerColor + " 40%, " + shimmerColor + " 100%);";
+        ele_style += "background-size: " + props.width + " 100%;";
     }
 
     if (props.hasOwnProperty("backgroundDrawable")) { ele_style += "background-image: " + "url('"+props.backgroundDrawable+"')" + ";"};

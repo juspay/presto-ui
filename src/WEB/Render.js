@@ -751,9 +751,9 @@ let createNewElement = function(view, parentElement, siblingView){
             // for animations and styles can be added
             // every leaf node is tagged with a boolean shouldShimmer property in props
             if (view.props.isSeen == undefined) {
-                tagShimmerElementsForRender(view, view.children);
+                let maxShimmerWidth = tagShimmerElementsForRender(view, view.children, 0) + 10;
                 styleElem = document.createElement('style');
-                styleElem.appendChild(document.createTextNode("@keyframes shimmer{0% {background-position: -500px 0;}100% {background-position: 500px 0;}}"));
+                styleElem.appendChild(document.createTextNode("@keyframes shimmer{0% {background-position: -" + maxShimmerWidth + "px 0;} 100% {background-position: " + maxShimmerWidth + "px 0;}}"));
                 document.getElementsByTagName("body")[0].appendChild(styleElem);
             }
         // do not add a break here
@@ -1134,18 +1134,18 @@ function handleMatchParentChrome50 (chrome50matchList) {
     }
 }
 
-let tagShimmerElementsForRender = function(node, children) {
+let tagShimmerElementsForRender = function(node, children, width) {
     // console.log("shimmer children", node, children);
     if (children.length == 0) {
         node.props.shouldShimmer = true;
-        return;
+        return node.props.width;
     }
     for(let i = 0; i < children.length; i++) {
         // console.log("tagging children", children[i], children[i].children);
-        tagShimmerElementsForRender(children[i], children[i].children);
+        width = Math.max(tagShimmerElementsForRender(children[i], children[i].children, width), width);
     }
     node.props.isSeen = true;
-
+    return width;
 }
 
 module.exports = {
