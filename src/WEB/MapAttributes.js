@@ -960,6 +960,9 @@ function addSetInputTypeProp(ele,props){
         var inputType = "text";
 
         if (props.inputType == "numericPassword" || props.inputType == "password") {
+          if(props.inputType == "numericPassword"){
+            ele.setAttribute("inputmode","numeric");
+          }
           if(props.inputTypeI == 4 && window.innerWidth < 550){ // This feels like a very specific use-case? Investigate
             inputType = "tel";
             ele_style += "-webkit-text-security:disc;";
