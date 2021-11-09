@@ -454,16 +454,20 @@ function addVisibility(elem, props, type) {
 
 function addExpandability(elem, props, type) {
     let elem_style = "";
-    if (props.hasOwnProperty('expand')) {
-        let visibility = props.expand + '';
-        if (visibility == 'true'){
-            // elem_style += "visibility: '';";
-            // elem.style.visibility = '';
-            elem_style += initializeShow(elem, props, type);
+    if (type == "accordionLayout" && props.hasOwnProperty('expand')) {
+        elem_style += "overflow: hidden;";
+        var anim_duration = 0; // default anim duration in seconds
+        var maxHeight = utils.calculateHeight(elem);
+        if (props.hasOwnProperty('expandDuration')) {
+            anim_duration = +props.expandDuration / 1000;
         }
-        else
-            elem_style += "display: none;";
-            //    elem.style.display = "none";
+        elem_style += "transition: max-height " + anim_duration + "s ease-in-out;";
+        if (props.expand){
+            elem_style +=  "max-height: " + maxHeight + "px;";
+        }
+        else {
+            elem_style += "max-height: 0px;";
+        }
     }
     return elem_style;
 }

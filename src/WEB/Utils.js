@@ -47,6 +47,18 @@ function convertColorToRgba(color) {
   };
 }
 
+function getValueFromPixel (pixel) { return parseInt(pixel.substring(0,pixel.length-1)) };
+
+function calculateHeight (elem) {
+  if(!elem) return 0;
+  let childNodes = elem.childNodes;
+  let maxHeight = 0;
+  for (var i = 0; i < childNodes.length; ++i) {
+          let style = childNodes[i].currentStyle || window.getComputedStyle(childNodes[i]);
+          maxHeight = maxHeight > childNodes[i].offsetHeight ? maxHeight : (childNodes[i].offsetHeight + getValueFromPixel(style.marginTop) + getValueFromPixel(style.marginBottom));
+  }
+  return maxHeight;
+}
 
 function convertHexToRgb(hex) {
   var r = parseInt(hex.substring(0, 2), 16);
@@ -154,5 +166,6 @@ module.exports = {
     convertColorToRgba,
     addToContainerList,
     getParentView,
-    getContainer
+    getContainer,
+    calculateHeight
 }
