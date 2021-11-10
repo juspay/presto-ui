@@ -463,7 +463,7 @@ function addExpandability(elem, props, type) {
         }
         elem_style += "transition: max-height " + anim_duration + "s ease-in-out;";
         if (props.expand){
-            elem_style +=  "max-height: " + maxHeight + "px;";
+            elem_style +=  "max-height: " + (maxHeight <= 0 ? 1080 : maxHeight) + "px;";
         }
         else {
             elem_style += "max-height: 0px;";
