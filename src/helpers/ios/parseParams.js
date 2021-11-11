@@ -1500,6 +1500,10 @@ function generateType(type, config) {
       modifiedType = "mJPRelativeLayout";
     }
     break;
+    case "shimmerFrameLayout": {
+      modifiedType = "mJPShimmerFrameLayout";
+    }
+    break;
     default: {
       modifiedType = "mJPView";
     }
