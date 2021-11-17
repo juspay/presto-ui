@@ -116,144 +116,161 @@ function popup(elem, props) {
     });
 }
 
-function setAnimationStyles(elem, props) {
+const InlineAnimationMapper = {
+    map: function (type) {
+        var self = this;
+        return function (key, value) {
+            if (self.MAPPINGS[type] && self.MAPPINGS[type][key]) {
+                return self.MAPPINGS[type][key](value);
+            } else return "";
+        }
+    },
+    MAPPINGS: {
+        "from": {
+            "fromX": val => `transform: translateX(${val}px);`,
+            "fromY": val => `transform: translateY(${val}px);`,
+            "fromScaleX": val => `transform-origin:top left;\ntransform: scaleX(${val});`, 
+            "fromScaleY": val => `transform-origin:top left;\ntransform: scaleY(${val});`, 
+            "fromRotation": val => `transform: rotate(${val}deg);`, 
+            "fromRotationX": val => `transform: rotateX(${val}deg);`, 
+            "fromRotationY": val => `transform: rotateY(${val}deg);`, 
+            "fromAlpha": val => `opacity: ${val};`, 
+        },
+        "to": {
+            "toX": val => `transform: translateX(${val}px);`, 
+            "toY": val => `transform: translateY(${val}px);`, 
+            "toScaleX": val => `transform-origin:top left;\ntransform: scaleX(${val});`, 
+            "toScaleY": val => `transform-origin:top left;\ntransform: scaleY(${val});`, 
+            "toRotation": val => `transform: rotate(${val}deg);`, 
+            "toRotationX": val => `transform: rotateX(${val}deg);`, 
+            "toRotationY": val => `transform: rotateY(${val}deg);`, 
+            "toAlpha": val => `opacity: ${val};`, 
+        },
+        // ref: https://developer.mozilla.org/en-US/docs/Web/CSS/animation
+        "animation-shorthand-seq": ["duration", "interpolator", "delay", "repeatCount", "repeatMode"],
+        "animation-props": {
+            "interpolator": val => {
+                if (!val) {
+                    return `ease`;
+                } else if (typeof val == "string" && val.split(',').length == 4) {
+                    return `cubic-bezier(${val})`
+                } else {
+                    switch (val) {
+                        case "easein":
+                            return "ease-in";
+                        case "easeout":
+                            return "ease-out";
+                        case "bounce":
+                        case "easeinout":
+                            return "ease-in-out";
+                        default:
+                            return `${val}`;
+                    }
+                }
+            }, 
+            "delay": val => {
+                if (!val) {
+                    return `0s`;
+                } else if (!isNaN(val)) {
+                    val = parseFloat(parseFloat(val) / 1000).toFixed(2);
+                    return `${val}s `;
+                } else {
+                    return `0s`;
+                }
+            }, 
+            "duration": val => {
+                if (!val) {
+                    return `0s`;
+                } if (!isNaN(val)) {
+                    val = parseFloat(parseFloat(val) / 1000).toFixed(2);
+                    return `${val}s`;
+                } else {
+                    return `0s`;
+                }
+            },  
+            "repeatMode": val => {
+                switch (val) {
+                    case "restart":
+                        return `normal`;
+                    case "reverse":
+                        return `reverse`;
+                    default:
+                        return `normal`;
+                }
+            }, 
+            "repeatCount": val => {
+                if (!val) return `1`;
+                val = parseInt(val);
+                if (isNaN(val)) { return `1`; }
+                else if (val < 0) { return `infinite`}
+                else { return `${val+1}`}
+            }, 
+        }
+    }
+}
 
-    var animation_style = "";
-    if (!props.hasOwnProperty('hasAnimation') || !props.hasAnimation) {
-      return animation_style;
+const CSSMarkupWriter = {
+    "animations": {
+        "keyframe": (name, code) => `@keyframes ${name} {${code}}`,
+        "keyframe-from": (code) => `from {${code}}`,
+        "keyframe-to": (code) => `to {${code}}`,
+        "animation-shorthand": (keyframes) => {
+            var val = "";
+            keyframes.forEach((keyframe, i) => {
+                val += keyframe;
+                if (i == (keyframes.length-1)) { val += ';'; }
+                else { val += ', '; }
+            });
+            return `animation: ${val}`;
+        }
     }
-    const keyframeName = "keyframe_" + props.id;
-    let styleElem = document.getElementById(window.__STYLE_ID)
-  
-  
-    let data = null
-  
-    if (props.inlineAnimation) {
-        console.log("INLINE")
-      data = JSON.parse(props.inlineAnimation)
-      if (data && data.length > 0) {
-        data = data[0]
-      }
+
+}
+
+function setAnimationStyles (elem, props) {
+    if (!props.hasOwnProperty('hasAnimation') || !props.hasAnimation || !props.inlineAnimation) {
+        return "";
     }
-  
-    if (!data) {
-      return animation_style;
+    try {
+        const animationObjects = JSON.parse(props.inlineAnimation);
+        var keyFrameShorthands = [];
+        var AnimationCSSMarkupWriter = CSSMarkupWriter["animations"];
+
+        animationObjects.forEach(function (animationObject, index) {
+            /* Add keyframe in css */
+            const keyframeName = "keyframe_" + props.id + "_" + index;
+            var keyFrameFromMarkup = keyFrameToMarkup = "";
+            for (var [key, value] of Object.entries(animationObject)) {
+                keyFrameFromMarkup += InlineAnimationMapper.map("from")(key, value);
+                keyFrameToMarkup += InlineAnimationMapper.map("to")(key, value);
+            }
+            var keyFrameCSS = AnimationCSSMarkupWriter["keyframe"](keyframeName, 
+                                AnimationCSSMarkupWriter["keyframe-from"](keyFrameFromMarkup) + 
+                                AnimationCSSMarkupWriter["keyframe-to"](keyFrameToMarkup)
+                            );
+            
+            var styleElem = document.getElementById(window.__STYLE_ID)
+            if(styleElem && styleElem.styleSheet){
+                styleElem.styleSheet.cssText += keyFrameCSS;
+            }else{
+                styleElem = document.createElement('style');
+                styleElem.appendChild(document.createTextNode(keyFrameCSS));
+                document.getElementsByTagName("head")[0].appendChild(styleElem);
+            }
+            window.__RENDERED_KEYFRAMES.push(keyframeName);
+        
+            /* Add animation shorthand prop of keyframe in element*/
+            var keyFrameAnimShorthand = `${keyframeName} `;
+            InlineAnimationMapper.MAPPINGS["animation-shorthand-seq"].forEach(function (key) {
+                keyFrameAnimShorthand += (InlineAnimationMapper.map("animation-props")(key, animationObject[key]) + " ");
+            });
+            keyFrameShorthands.push(keyFrameAnimShorthand);
+        });
+        return AnimationCSSMarkupWriter["animation-shorthand"](keyFrameShorthands);
+    } catch {
+        return "";
     }
-  
-    let css = ""
-    css += "@keyframes " + keyframeName + "{"
-      css += "from {"
-        if (data.hasOwnProperty('fromX')) {
-          css += "margin-left: " + data.fromX + "%;"
-        }
-  
-        if (data.hasOwnProperty('fromY')) {
-          css += "margin-top: " + data.fromY + "%;"
-        }
-  
-        if (data.hasOwnProperty('fromAlpha')) {
-          css += "opacity: " + data.fromAlpha + ";"
-        }
-  
-        if (data.hasOwnProperty('fromScale')) {
-          animation_style += 'transform-origin:top left;';
-          css += "transform: scale(" + data.fromScale + ");"
-        } else if (data.hasOwnProperty('fromScaleX') && data.hasOwnProperty('fromScaleY')) {
-          animation_style += 'transform-origin:top left;';
-          css += "transform: scale(" + data.fromScaleX + ", " + data.fromScaleY + ");"
-        } else if(data.hasOwnProperty('fromScaleX')) {
-          animation_style += 'transform-origin:top left;';
-          css += "transform: scaleX(" + data.fromScaleX + ");"
-        } else if(data.hasOwnProperty('fromScaleY')) {
-          animation_style += 'transform-origin:top left;';
-          css += "transform: scaleY(" + data.fromScaleY + ");"
-        }
-  
-        if (data.hasOwnProperty('fromRotation')) {
-          css += "transform: rotate(" + data.fromRotation + "deg);"
-        } else {
-          if(data.hasOwnProperty('fromRotationX')) {
-            css += "transform: rotateX(" + data.fromRotationX + "deg);"
-          } else if(data.hasOwnProperty('fromRotationY')) {
-            css += "transform: rotateY(" + data.fromRotationY + "deg);"
-          }
-        }
-      css += "} "
-      css += "to {"
-        if (data.hasOwnProperty('toX')) {
-          css += "margin-left: " + data.toX + "%;"
-        }
-  
-        if (data.hasOwnProperty('toY')) {
-          css += "margin-top: " + data.toY + "%;"
-        }
-  
-        if (data.hasOwnProperty('toAlpha')) {
-          css += "opacity: " + data.toAlpha + ";"
-        }
-  
-        if (data.hasOwnProperty('toScale')) {
-          css += "transform: scale(" + data.toScale + ");"
-        } else if (data.hasOwnProperty('toScaleX') && data.hasOwnProperty('toScaleY')) {
-          css += "transform: scale(" + data.toScaleX + ", " + data.toScaleY + ");"
-        } else if(data.hasOwnProperty('toScaleX')) {
-          css += "transform: scaleX(" + data.toScaleX + ");"
-        } else if(data.hasOwnProperty('toScaleY')) {
-          css += "transform: scaleY(" + data.toScaleY + ");"
-        }
-  
-        if (data.hasOwnProperty('toRotation')) {
-          css += "transform: rotate(" + data.toRotation + "deg);"
-        } else {
-          if(data.hasOwnProperty('toRotationX')) {
-            css += "transform: rotateX(" + data.toRotationX + "deg);"
-          } else if(data.hasOwnProperty('toRotationY')) {
-            css += "transform: rotateY(" + data.toRotationY + "deg);"
-          }
-        }
-      css += "} "
-    css += "}"
-    // console.log("css ", css);
-    if(styleElem && styleElem.styleSheet){
-      styleElem.styleSheet.cssText += css;
-    }else{
-      styleElem = document.createElement('style');
-      styleElem.appendChild(document.createTextNode(css));
-      document.getElementsByTagName("head")[0].appendChild(styleElem);
-    }
-  
-    animation_style += "animation-name:"+keyframeName+";";
-  
-    // elem.style.animationName = keyframeName
-    //elem.style.animationDuration = "1s"
-    if (data.hasOwnProperty('duration') && !isNaN(data.duration)) {
-      const duration = parseFloat(parseFloat(data.duration) / 1000).toFixed(2)
-      animation_style += "animation-duration:"+duration+"s;";
-      //elem.style.animationDuration = duration + "s"
-    } else {
-      animation_style += "animation-duration: 1s;";
-    }
-    if (data.hasOwnProperty('repeatCount')) {
-      // TODO: this needs to be check the curve from the params sent to the api
-      animation_style += "animation-timing-function: linear;";
-      if (data.repeatCount == "-1" || data.repeatCount == -1) {
-        animation_style += "animation-iteration-count:infinite;";
-        // elem.style.animationIterationCount = "infinite"
-      } else {
-        animation_style += "animation-iteration-count:"+(data.repeatCount + 1)+";";
-        // elem.style.animationIterationCount = data.repeatCount
-      }
-    }
-  
-    if (data.hasOwnProperty("interpolator")) {
-      animation_style += "animation-timing-function:"+"cubic-bezier(" + data.interpolator + ")"+";";
-    //   elem.style.animationTimingFunction = "cubic-bezier(" + data.interpolator + ")";
-    }
-  
-    window.__RENDERED_KEYFRAMES.push(keyframeName)
-    console.log("animation style ", animation_style)
-    return animation_style;
-  }
+}
 
 function setComputedStyles(elem, props) {
     let computed_styles = "";
