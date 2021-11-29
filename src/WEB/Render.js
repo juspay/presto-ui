@@ -147,7 +147,7 @@ const InlineAnimationMapper = {
             "toAlpha": val => `opacity: ${val};`, 
         },
         // ref: https://developer.mozilla.org/en-US/docs/Web/CSS/animation
-        "animation-shorthand-seq": ["duration", "interpolator", "delay", "repeatCount", "repeatMode"],
+        "animation-shorthand-seq": ["duration", "interpolator", "delay", "repeatCount", "repeatMode", "fillMode"],
         "animation-props": {
             "interpolator": val => {
                 if (!val) {
@@ -205,6 +205,10 @@ const InlineAnimationMapper = {
                 else if (val < 0) { return `infinite`}
                 else { return `${val+1}`}
             }, 
+            "fillMode": val => {
+                if (!val) return `forwards`;
+                else return `${val}`;
+            }
         }
     }
 }
@@ -227,7 +231,8 @@ const CSSMarkupWriter = {
 
 }
 
-function setAnimationStyles (elem, props) {
+var KEYFRAME_INDEX = 0;
+function setAnimationStyles (elem, props, onAnimationEnd) {
     if (!props.hasOwnProperty('hasAnimation') || !props.hasAnimation || !props.inlineAnimation) {
         return "";
     }
@@ -236,9 +241,20 @@ function setAnimationStyles (elem, props) {
         var keyFrameShorthands = [];
         var AnimationCSSMarkupWriter = CSSMarkupWriter["animations"];
 
-        animationObjects.forEach(function (animationObject, index) {
+        if (elem) {
+           elem.addEventListener("animationend", function () {
+            if (typeof onAnimationEnd ==  "function") onAnimationEnd();
+            if (props.onAnimationEnd) {
+                elem.style.animation = null;
+                props.onAnimationEnd();
+            }
+           });
+        }
+
+        animationObjects.forEach(function (animationObject) {
             /* Add keyframe in css */
-            const keyframeName = "keyframe_" + props.id + "_" + index;
+            const keyframeName = "keyframe_" + props.id + "_" + KEYFRAME_INDEX;
+            KEYFRAME_INDEX += 1;
             var keyFrameFromMarkup = keyFrameToMarkup = "";
             for (var [key, value] of Object.entries(animationObject)) {
                 keyFrameFromMarkup += InlineAnimationMapper.map("from")(key, value);
@@ -841,7 +857,7 @@ let setLayout = function(view, elem) {
             elem.scrollTop = view.props.scrollTop;
     }
 }
-let getElementByView = function(view, parentElement, siblingView, stopChild, renderStyle) {
+let getElementByView = function(view, parentElement, siblingView, stopChild, renderStyle, onAnimationEnd) {
     if(!view.props.id){
         view.props.id = window.JOS_PRESTO_ID++;
         //window.__VIEWS[view.props.id] =  view;
@@ -870,7 +886,7 @@ let getElementByView = function(view, parentElement, siblingView, stopChild, ren
     setLayout(elem,view);
     if(!stopChild) computeChildDimens(view);
     element_style += setComputedStyles(elem, view.props);
-    element_style += setAnimationStyles(elem, view.props);
+    element_style += setAnimationStyles(elem, view.props, onAnimationEnd);
     elem.setAttribute("style",element_style); // finally attach all the styles to the element
     return {elem,newInflated};
 }
@@ -955,7 +971,7 @@ let renderList = (view,elem, computeList)=>{
         }
         view.props.diffArray = undefined;
 }
-let inflateView = function ({view, parentElement, siblingView, stopChild, renderStyle, computeList, chrome50matchList} ={}) {
+let inflateView = function ({view, parentElement, siblingView, stopChild, renderStyle, computeList, chrome50matchList, onAnimationEnd} ={}) {
     view.state = view.state || {};
     if(view.props.listData){
         view.props.itemDatas = JSON.parse(view.props.listData);
@@ -974,7 +990,7 @@ let inflateView = function ({view, parentElement, siblingView, stopChild, render
         }
     }
 
-    let {elem,newInflated} = getElementByView(view, parentElement, siblingView, stopChild, renderStyle);
+    let {elem,newInflated} = getElementByView(view, parentElement, siblingView, stopChild, renderStyle, onAnimationEnd);
 
     //patching list
     if(view.props.listData && renderStyle ){
@@ -992,9 +1008,9 @@ let inflateView = function ({view, parentElement, siblingView, stopChild, render
                 if (view.children[i]) {
                     view.children[i].parent = view;
                     if (i != 0) {
-                        inflateView({view:view.children[i], parentElement:elem, siblingView:view.children[i - 1], stopChild:renderStyle, renderStyle, computeList, chrome50matchList});
+                        inflateView({view:view.children[i], parentElement:elem, siblingView:view.children[i - 1], stopChild:renderStyle, renderStyle, computeList, chrome50matchList, onAnimationEnd});
                     } else {
-                        inflateView({view:view.children[i], parentElement:elem, siblingView:view, stopChild:renderStyle, renderStyle, computeList, chrome50matchList});
+                        inflateView({view:view.children[i], parentElement:elem, siblingView:view, stopChild:renderStyle, renderStyle, computeList, chrome50matchList, onAnimationEnd});
                     }
                 }
             }
