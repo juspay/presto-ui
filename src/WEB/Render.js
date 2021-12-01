@@ -231,6 +231,17 @@ const CSSMarkupWriter = {
 
 }
 
+function addCSSStyle (style) {
+    var styleElem = document.getElementById(window.__STYLE_ID)
+    if(styleElem && styleElem.styleSheet){
+        styleElem.styleSheet.cssText += style;
+    }else{
+        styleElem = document.createElement('style');
+        styleElem.appendChild(document.createTextNode(style));
+        document.getElementsByTagName("head")[0].appendChild(styleElem);
+    }
+}
+
 var KEYFRAME_INDEX = 0;
 function setAnimationStyles (elem, props, onAnimationEnd) {
     if (!props.hasOwnProperty('hasAnimation') || !props.hasAnimation || !props.inlineAnimation) {
@@ -265,14 +276,7 @@ function setAnimationStyles (elem, props, onAnimationEnd) {
                                 AnimationCSSMarkupWriter["keyframe-to"](keyFrameToMarkup)
                             );
             
-            var styleElem = document.getElementById(window.__STYLE_ID)
-            if(styleElem && styleElem.styleSheet){
-                styleElem.styleSheet.cssText += keyFrameCSS;
-            }else{
-                styleElem = document.createElement('style');
-                styleElem.appendChild(document.createTextNode(keyFrameCSS));
-                document.getElementsByTagName("head")[0].appendChild(styleElem);
-            }
+            addCSSStyle(keyFrameCSS);
             window.__RENDERED_KEYFRAMES.push(keyframeName);
         
             /* Add animation shorthand prop of keyframe in element*/
@@ -288,6 +292,29 @@ function setAnimationStyles (elem, props, onAnimationEnd) {
     }
 }
 
+function addHoverProps (elem, view) {
+    if (!view.props.hasOwnProperty("onHover")) return "";
+    try {
+        var id = ""+view.props.id;
+        var hoverProps = JSON.parse(view.props.onHover);
+        var elem_style = mapAttributes.mapPropToStyle(elem, hoverProps, view.type);
+        if (hoverProps.hasOwnProperty('width') && !isNaN(hoverProps.width)) {
+            elem_style += "width: " + hoverProps.width + "px;"; 
+        }
+        if (hoverProps.hasOwnProperty('height') && !isNaN(hoverProps.height)) {
+            elem_style += "height: " + hoverProps.height + "px;"; 
+        }
+        elem_style = elem_style.replaceAll(";", " !important;"); // add important to make hover props precendence over inline styles
+        if (hoverProps.hoverPath) {
+            addCSSStyle(hoverProps.hoverPath + ":hover #\\3" + id[0] + " " + id.substring(1) + " { " + elem_style + " }");    
+        } else {
+            addCSSStyle("#\\3" + id[0] + " " + id.substring(1) + ":hover { " + elem_style + " }");    
+        }
+    } catch {
+        return;
+    }
+}
+// debugger
 function setComputedStyles(elem, props) {
     let computed_styles = "";
     /* Computed Styles */
@@ -887,6 +914,7 @@ let getElementByView = function(view, parentElement, siblingView, stopChild, ren
     if(!stopChild) computeChildDimens(view);
     element_style += setComputedStyles(elem, view.props);
     element_style += setAnimationStyles(elem, view.props, onAnimationEnd);
+    addHoverProps(elem, view);
     elem.setAttribute("style",element_style); // finally attach all the styles to the element
     return {elem,newInflated};
 }
