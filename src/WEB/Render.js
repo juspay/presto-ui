@@ -1033,7 +1033,9 @@ let inflateView = function ({view, parentElement, siblingView, stopChild, render
     }
 
     let {elem,newInflated} = getElementByView(view, parentElement, siblingView, stopChild, renderStyle);
-
+    if (view && view.hasOwnProperty("props") && view.props.hasOwnProperty("testID")){
+        elem.setAttribute("testID", view.props.testID);
+    }
     //patching list
     if(view.props.listData && renderStyle ){
         renderList(view, elem, computeList);

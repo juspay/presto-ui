@@ -539,6 +539,14 @@ var map = {
     fnName: 'setMaxWidth',
     inVokedIn: 'VIEW',
   },
+  "testID": {
+    values: [{
+      type: 'cs',
+    }],
+    'dontMap': true,
+    fnName: 'setContentDescription',
+    inVokedIn: 'VIEW',
+  },
   "shadowTag": {
       values: [{
             type: 'cs',
