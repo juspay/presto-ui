@@ -316,23 +316,14 @@ function parseLayoutProps(type, config, key) {
     if(values.length == 2)
       config.style.border = values[0] + "px solid " + values[1];
     else if(values.length == 3){
-      if (values[2] == "rbl"){
-        config.style.borderBottom = values[0] + "px solid " + values[1];
-        config.style.borderLeft = values[0] + "px solid " + values[1];
-        config.style.borderRight = values[0] + "px solid " + values[1];
+
+      strokeMap = {"b": "borderBottom", "t" : "borderTop", "r" : "borderRight", "l" : "borderLeft"};
+      
+      for (var i of values[2]){
+          if (strokeMap[i] !== undefined)
+            config.style[strokeMap[i]] = values[0] + "px solid " + values[1];
       }
-      else if (values[2] == "b"){
-        config.style.borderBottom = values[0] + "px solid " + values[1];
-      }
-      else if (values[2] == "r"){
-        config.style.borderRight = values[0] + "px solid " + values[1];
-      }
-      else if (values[2] == "rb"){
-        config.style.borderBottom = values[0] + "px solid " + values[1];
-        config.style.borderRight = values[0] + "px solid " + values[1];
-      }
-      else
-        config.style.border = values[0] + "px " + values[1] + " " + values[2];
+
     }
     
   }
@@ -502,7 +493,7 @@ function parseLayoutProps(type, config, key) {
   if (key == "inputType" && window.__isMOBILE && !window.__isFIREFOX) {
     var inputType = "text";
     if (config.inputType == "numericPassword" || config.inputType == "password") {
-      if(config.inputTypeI == 4 && isMobile){
+      if(config.inputTypeI == 4 && isMobile || navigator.userAgent.search("Firefox") === -1 ){
         inputType = "tel";
         config.style["-webkit-text-security"] = "disc";
         config.style["-moz-text-security"] = "disc";

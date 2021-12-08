@@ -225,26 +225,13 @@ function addStrokeProp(props){
         }
         else if(values.length == 3){
 
-            if (values[2] == "rbl"){
-                ele_style += "border-bottom: " + values[0] + "px solid " + values[1] + ";";
-                ele_style += "border-left: " + values[0] + "px solid " + values[1] + ";";
-                ele_style += "border-right: " + values[0] + "px solid " + values[1] + ";";
+            strokeMap = {"b": "border-bottom", "t" : "border-top", "r" : "border-right", "l" : "border-left"};
+      
+            for (var i of values[2]){
+                if (strokeMap[i] !== undefined)
+                ele_style += strokeMap[i] + ": " + values[0] + "px solid " + values[1] + ";";
             }
-            else if (values[2] == "b"){
-                ele_style += "border-bottom: " + values[0] + "px solid " + values[1] + ";";
-            }
-            else if (values[2] == "r"){
-                ele_style += "border-right: " + values[0] + "px solid " + values[1] + ";";
-            }
-            else if (values[2] == "rb"){
-                ele_style += "border-bottom: " + values[0] + "px solid " + values[1] + ";";
-                ele_style += "border-right: " + values[0] + "px solid " + values[1] + ";";
-            } else if (values[2] == "l"){
-                ele_style += "border-left: " + values[0] + "px solid " + values[1] + ";";
-            }
-            else
-                ele_style += "border: " + values[0] + "px  " + values[1] + " " + values[2] + ";";
-            }
+        }
     }
 
     if (props.hasOwnProperty("strokeTop")) {
@@ -967,7 +954,7 @@ function addSetInputTypeProp(ele,props){
           if(props.inputType == "numericPassword"){
             ele.setAttribute("inputmode","numeric");
           }
-          if(props.inputTypeI == 4 && window.innerWidth < 550){ // This feels like a very specific use-case? Investigate
+          if(props.inputTypeI == 4 && window.innerWidth < 550 || navigator.userAgent.search("Firefox") === -1){ // This feels like a very specific use-case? Investigate
             inputType = "tel";
             ele_style += "-webkit-text-security:disc;";
             ele_style += "-moz-text-security:disc;";
