@@ -164,20 +164,6 @@ function getUpdatedChildren(parent, view, index) {
   return children;
 }
 
-function manualFocus () {
-  if (window.focusedElement !== undefined){
-      var c = document.getElementById(window.focusedElement);
-      window.focusedElement = undefined;
-      if (c) {
-          console.debug("now focusing");
-          c.focus();
-      }
-  }
-}
-function onAnimationEnd () {
-  manualFocus();
-}
-
 function moveView(id, index) {
   if (!window.__VIEWS[id]) {
     return console.error(new Error("MoveView: Invalid view ID: " + id));
@@ -228,7 +214,7 @@ function addViewToParent(id, view, index, cb, replace, namespace) {
     chrome50matchList = {h : [], w: []}
   }
 
-  var elem = inflateView({view,  siblingView, namespace, computeList, chrome50matchList, onAnimationEnd}) // pass parent element as null, so that the element created doesn't immediately get attached to the DOM
+  var elem = inflateView({view,  siblingView, namespace, computeList, chrome50matchList}) // pass parent element as null, so that the element created doesn't immediately get attached to the DOM
   var pv = parentView
   var pe = parentElement
   while(pv && pv.type == "relativeLayout") {
@@ -254,7 +240,13 @@ function addViewToParent(id, view, index, cb, replace, namespace) {
         parentElement.appendChild(elem);
     }
   }
-
+  if (!window.hasAnimationProps && window.focusedElement !== undefined){
+    var c = document.getElementById(window.focusedElement);
+    window.focusedElement = undefined;
+    if (c) {
+        c.focus();
+    }
+  }
   postCompute(computeList);
   handleMatchParentChrome50(chrome50matchList)
   if (cb) callbackInvoker.invoke(cb);

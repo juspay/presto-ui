@@ -243,10 +243,23 @@ function addCSSStyle (style) {
 }
 
 var KEYFRAME_INDEX = 0;
-function setAnimationStyles (elem, props, onAnimationEnd) {
+
+function manualFocus () {
+    if (window.focusedElement !== undefined){
+        var c = document.getElementById(window.focusedElement);
+        window.focusedElement = undefined;
+        if (c) {
+            console.debug("now focusing");
+            c.focus();
+        }
+    }
+}
+
+function setAnimationStyles (elem, props) {
     if (!props.hasOwnProperty('hasAnimation') || !props.hasAnimation || !props.inlineAnimation) {
         return "";
     }
+    window.hasAnimationProps = true;
     try {
         const animationObjects = JSON.parse(props.inlineAnimation);
         var keyFrameShorthands = [];
@@ -254,11 +267,12 @@ function setAnimationStyles (elem, props, onAnimationEnd) {
 
         if (elem) {
            elem.addEventListener("animationend", function () {
-            if (typeof onAnimationEnd ==  "function") onAnimationEnd();
             if (props.onAnimationEnd) {
                 elem.style.animation = null;
                 props.onAnimationEnd();
             }
+            manualFocus();
+            window.hasAnimationProps = false;
            });
         }
 
@@ -884,7 +898,7 @@ let setLayout = function(view, elem) {
             elem.scrollTop = view.props.scrollTop;
     }
 }
-let getElementByView = function(view, parentElement, siblingView, stopChild, renderStyle, onAnimationEnd) {
+let getElementByView = function(view, parentElement, siblingView, stopChild, renderStyle) {
     if(!view.props.id){
         view.props.id = window.JOS_PRESTO_ID++;
         //window.__VIEWS[view.props.id] =  view;
@@ -913,7 +927,7 @@ let getElementByView = function(view, parentElement, siblingView, stopChild, ren
     setLayout(elem,view);
     if(!stopChild) computeChildDimens(view);
     element_style += setComputedStyles(elem, view.props);
-    element_style += setAnimationStyles(elem, view.props, onAnimationEnd);
+    element_style += setAnimationStyles(elem, view.props);
     addHoverProps(elem, view);
     elem.setAttribute("style",element_style); // finally attach all the styles to the element
     return {elem,newInflated};
@@ -999,7 +1013,7 @@ let renderList = (view,elem, computeList)=>{
         }
         view.props.diffArray = undefined;
 }
-let inflateView = function ({view, parentElement, siblingView, stopChild, renderStyle, computeList, chrome50matchList, onAnimationEnd} ={}) {
+let inflateView = function ({view, parentElement, siblingView, stopChild, renderStyle, computeList, chrome50matchList} ={}) {
     view.state = view.state || {};
     if(view.props.listData){
         view.props.itemDatas = JSON.parse(view.props.listData);
@@ -1018,7 +1032,7 @@ let inflateView = function ({view, parentElement, siblingView, stopChild, render
         }
     }
 
-    let {elem,newInflated} = getElementByView(view, parentElement, siblingView, stopChild, renderStyle, onAnimationEnd);
+    let {elem,newInflated} = getElementByView(view, parentElement, siblingView, stopChild, renderStyle);
 
     //patching list
     if(view.props.listData && renderStyle ){
@@ -1036,9 +1050,9 @@ let inflateView = function ({view, parentElement, siblingView, stopChild, render
                 if (view.children[i]) {
                     view.children[i].parent = view;
                     if (i != 0) {
-                        inflateView({view:view.children[i], parentElement:elem, siblingView:view.children[i - 1], stopChild:renderStyle, renderStyle, computeList, chrome50matchList, onAnimationEnd});
+                        inflateView({view:view.children[i], parentElement:elem, siblingView:view.children[i - 1], stopChild:renderStyle, renderStyle, computeList, chrome50matchList});
                     } else {
-                        inflateView({view:view.children[i], parentElement:elem, siblingView:view, stopChild:renderStyle, renderStyle, computeList, chrome50matchList, onAnimationEnd});
+                        inflateView({view:view.children[i], parentElement:elem, siblingView:view, stopChild:renderStyle, renderStyle, computeList, chrome50matchList});
                     }
                 }
             }

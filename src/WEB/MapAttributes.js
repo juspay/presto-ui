@@ -1064,8 +1064,12 @@ function setElemAttributes(element,props){
     if(props.hasOwnProperty("focus")) {
             if (props.focus && props.id){
                 var doc = document.getElementById(props.id);
-                if (doc && window.focusedElement == undefined){
-                 window.focusedElement = props.id;
+                if (doc) {
+                    if (window.hasAnimationProps) {
+                        if (window.focusedElement == undefined) {
+                            window.focusedElement = props.id;
+                        };
+                    } else { doc.focus(); }
                 }
         }
     }
