@@ -444,7 +444,12 @@ function addExpandability(elem, props, type) {
     if (type == "accordionLayout" && props.hasOwnProperty('expand')) {
         elem_style += "overflow: hidden;";
         var anim_duration = 0; // default anim duration in seconds
-        var maxHeight = utils.calculateHeight(elem);
+        var maxHeight;
+        if (props.hasOwnProperty('maxHeight')) {
+            maxHeight = props.maxHeight;
+        } else {
+            maxHeight = utils.calculateHeight(elem);
+        }
         if (props.hasOwnProperty('expandDuration')) {
             anim_duration = +props.expandDuration / 1000;
         }
