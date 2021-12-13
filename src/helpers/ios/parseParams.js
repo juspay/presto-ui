@@ -994,6 +994,19 @@ function this_setTag(tag) {
   }
 }
 
+function this_setAccessibilityId(tag) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setAccessibilityIdentifier:",
+    "values":[
+      {"name": tag, type: "s"}
+    ]
+  }
+}
+
 function self_getViewFromTag(tag, namespace){
   window.__VIEW_INDEX++;
 
@@ -1573,6 +1586,10 @@ module.exports = function(type, config, _getSetType, namespace) {
     } else {
       config.methods.push(this_setTag(tag));
     }
+  }
+  console.log(config.testID)
+  if (config.testID) {
+    config.methods.push(this_setAccessibilityId(config.testID));
   }
 
   // frame
