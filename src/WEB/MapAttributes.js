@@ -107,7 +107,7 @@ function addProps(props){
 
     if (props.hasOwnProperty("blurBackground") && props.blurBackground) {ele_style += "backdrop-filter: blur(3px)";}
 
-    if (props.hasOwnProperty("lineHeight")) {ele_style += "line-height: " + props.lineHeight + ";";}
+    if (props.hasOwnProperty("lineHeight")) {ele_style += "line-height: " + props.lineHeight + "px;";}
 
     if (props.hasOwnProperty("objectFit")) {ele_style += "object-fit: " + props.objectFit + ";";}
 
