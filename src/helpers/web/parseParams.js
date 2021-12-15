@@ -223,6 +223,11 @@ function parseLayoutProps(type, config, key) {
     config.style.borderRadius = config.cornerRadius + "px";
   }
 
+  if (key == "cornerRadii") {
+    const [radius, ...corners] = props.cornerRadii.split(',');
+    config.style.borderRadius = corners.map(bool => `${bool * radius}px`).join(' ') + ";";
+  }
+
   if (key == "alpha") {
     config.style.opacity = config[key];
   }

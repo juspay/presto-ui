@@ -96,6 +96,11 @@ function addProps(props){
 
     if (props.hasOwnProperty("cornerRadius")) {ele_style += "border-radius:" + props.cornerRadius + "px;"};
 
+    if (props.hasOwnProperty("cornerRadii")) {
+        const [radius, ...corners] = props.cornerRadii.split(',');
+        ele_style += "border-radius: " + corners.map(bool => `${bool * radius}px`).join(' ') + ";";
+    }
+
     if (props.hasOwnProperty("alpha")) {ele_style += "opacity:" + props.alpha + ";"};
 
     if (props.hasOwnProperty("fontFamily")) {ele_style += "font-family:" + props.fontFamily + ";"};
