@@ -454,6 +454,9 @@ function addExpandability(elem, props, type) {
             maxHeight = props.maxHeight;
         } else {
             maxHeight = utils.calculateHeight(elem);
+            if (elem.querySelector(".accordionLayout")) {
+                maxHeight += 200; // Magic number if nested accordionlayout
+            };
         }
         if (props.hasOwnProperty('expandDuration')) {
             anim_duration = +props.expandDuration / 1000;
