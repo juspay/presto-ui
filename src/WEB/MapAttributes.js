@@ -644,7 +644,7 @@ function addLayout(elem, type, props) {
                     // elem.style.overflowY = 'hidden'
             }
             break;
-        case "horizontaScrollView":
+        case "horizontalScrollView":
             elem_style += "overflow-x: auto;";
             elem_style += "overflow-y: hidden;";
             // elem.style.overflowX = "auto";
