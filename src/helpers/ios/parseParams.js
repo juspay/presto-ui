@@ -1486,7 +1486,11 @@ function generateType(type, config) {
     }
     break;
     case "progressBar": {
-      modifiedType = "mJPActivityIndicator";
+      if (config.hasOwnProperty("circularLoader") && config.circularLoader && isMystiqueVersionGreaterThan("1.3")) {
+        modifiedType = "mJPCircularProgressView";
+      } else {
+        modifiedType = "mJPActivityIndicator";
+      }
     }
     break;
     case "switch": {
