@@ -597,11 +597,17 @@ function setGravityStylesForColumn(elem, props) {
 function addLayout(elem, type, props) {
     let scrollBarX = props.hasOwnProperty('scrollBarX')?props.scrollBarX:true;
     let scrollBarY = props.hasOwnProperty('scrollBarY')?props.scrollBarX:true;
+    let scrollBarVisible = props.hasOwnProperty('scrollBarVisible')?props.scrollBarVisible:true;
     let elem_style = "";
     switch(type){
         case 'linearLayout':
             elem_style += "box-sizing: border-box;";
             //elem.style["box-sizing"] = "border-box";
+
+            if(!scrollBarVisible){
+                elem_style += "scrollbar-width: none;"
+                elem_style += "-ms-overflow-style: none;"
+            }
 
             if (props.hasOwnProperty('fixedWrap') && !props.fixedWrap) {
                 elem_style += "flex-wrap: nowrap;";
@@ -675,6 +681,14 @@ function addLayout(elem, type, props) {
             //     elem_style += "overflow-x: hidden;";
             // if (!scrollBarY)
             //     elem_style += "overflow-y: hidden;";
+            if(!scrollBarVisible){
+                elem_style += "scrollbar-width: none;" //Hide Scrollbar for Firefox
+                elem_style += "-ms-overflow-style: none;" //Hide Scrollbar for IE and Edge
+            }
+            else{
+                elem_style += "scrollbar-width: none;"
+                elem_style += "-ms-overflow-style: none;"
+            }
             break;
         case 'relativeLayout':
             elem_style += "position: relative;";
@@ -1114,17 +1128,18 @@ function setElemAttributes(element,props){
 }
 
 function addPseudoClasses(elem, props){
-
-
-    let styleElem = document.getElementById(window.__STYLE_ID) || document.getElementsByTagName("body")[0].getElementsByTagName("style")[0]
+    let styleElem = document.getElementById(window.__STYLE_ID) || document.getElementsByTagName("body")[0].getElementsByTagName("style")[0];
     let css = "";
-
     if (props.hasOwnProperty("hoverBg")) {
         css += "div#\\3" + elem.id[0] + " " + elem.id.substring(1) + ":hover{background:" + props["hoverBg"] + "!important;}";
     }
 
     if (props.hasOwnProperty("hoverColor")) {
         css += "div#\\3" + elem.id[0] + " " + elem.id.substring(1) + ":hover{color:" + props["hoverColor"] + "!important;}";
+    }
+
+    if(props.hasOwnProperty("scrollBarVisible") && !props.scrollBarVisible && !css.includes("::-webkit-scrollbar{display:none !important;}")) {
+        css += "::-webkit-scrollbar{display:none !important;}"; //Hide Scrollbar For Chrome
     }
 
     if (!css) return
