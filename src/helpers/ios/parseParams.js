@@ -1828,6 +1828,8 @@ module.exports = function(type, config, _getSetType, namespace) {
     if(!config.singleLine){
       config.methods.push(this_setLineBreakMode("0"));
       config.methods.push(this_setNumberOfLines("0"));
+    } else {
+      config.methods.push(this_setNumberOfLines("1"));
     }
   }
 
