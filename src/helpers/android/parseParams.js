@@ -982,8 +982,14 @@ function parseGroups(type, groups, config) {
              + 'this->' + "setLayoutTransition" + ':get_'  + globalObjMap.LAYOUT_TRANSITION.val + ';';
     } else if (keys[i] == "VIEW") {
       if (!globalObjMap.VIEW) {
-        if (getSetType == "set")
-        globalObjMap.VIEW = {ctr: "this", val: "this"};
+        if (getSetType == "set") {
+          if (type != "linearLayout"){
+            groups.VIEW = groups.VIEW.filter(views => {
+              if(views.key != "orientation") return views
+            })           
+          }
+          globalObjMap.VIEW = {ctr: "this", val: "this"};
+        }
         else
         globalObjMap.VIEW = {ctr: "get_view", val: "get_view"};
       }
