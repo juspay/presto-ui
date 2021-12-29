@@ -90,13 +90,25 @@ function attachFeedback(config, keys, i) {
   }
 }
 
-function getConfigGroups(config) {
+function getConfigGroups(config, type) {
   var groups = {};
   var objType;
   var isAnimation;
   var widthFound = 0;
   var heightFound = 0;
   let paddingVal = config["padding"];
+  let strokeVal = config["stroke"]
+  if(type == "editText" && typeof config["cursorColor"] != undefined){
+    if(JSON.parse(JBridge.getSessionInfo())["android_api_level"] < 28){
+      config["cursorColorV2"] = config.cursorColor
+      delete config.cursorColor
+    }
+  }
+  if(type == "progressBar"){
+    console.log("progressBar", strokeVal)
+    config["progressBarColor"] = strokeVal
+    delete config.stroke
+  }
   if (config.stroke)
     delete config.padding;
   if (config.margin) {
@@ -693,6 +705,50 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     }
   }
 
+  if (attrs.key == "cursorColorV2") {
+    const id = allProps.find(a => a.key === "id");
+    if(id != undefined){
+      prePend = parseColor(attrs.value, "set_cursorColor");
+      prePend += ";set_kl=java.lang.Class->forName:s_android.widget.TextView"
+      prePend += ";set_draw=android.graphics.drawable.ShapeDrawable->new;get_draw->setIntrinsicHeight:i_25;get_draw->setIntrinsicWidth:i_4;set_p=get_draw->getPaint;get_p->setColor:get_cursorColor"
+      prePend += ";set_currentView=this->findViewById:i_" + id.value  
+      prePend += ";set_c=java.lang.Class->forName:s_android.graphics.drawable.Drawable";
+      prePend += ";set_f=get_kl->getDeclaredField:s_mEditor"
+      prePend += ";get_f->setAccessible:b_true"
+      prePend += ";set_editor=get_f->get:get_currentView"
+      prePend += ";set_drawablesArr=java.util.ArrayList->new"
+      prePend += ";get_drawablesArr->add:get_draw"
+      prePend += ";get_drawablesArr->add:get_draw"
+      prePend += ";infl->convertAndStoreArray:get_drawablesArr,get_c,s_drawables,b_false" 
+      prePend += ";set_fieldDash=get_editor->getClass;set_f=get_fieldDash->getDeclaredField:s_mCursorDrawable"
+      prePend += ";get_f->setAccessible:b_true"
+      prePend += ";get_f->set:get_editor,get_drawables;"
+    }
+  }
+
+  if (attrs.key == "cursorColor") {
+    console.log("cursor reached", attrs.value)
+    prePend = parseColor(attrs.value, "set_cursorColor");
+    prePend += ";set_draw=android.graphics.drawable.ShapeDrawable->new;get_draw->setIntrinsicHeight:i_25;get_draw->setIntrinsicWidth:i_4;set_p=get_draw->getPaint;get_p->setColor:get_cursorColor;"
+    currTransVal = "get_draw"
+  }
+
+  if(attrs.key == "progressBarColor") {
+    prePend = parseColor(attrs.value, "set_progressBarColor"); // Thickness value is ignored for android for now.
+    prePend += ";set_progressBarColorTint=android.content.res.ColorStateList->valueOf:get_progressBarColor;"
+    currTransVal = "get_progressBarColorTint"
+  }
+
+  // Implementation with thickness support, but the animation is not that good for the below one.
+  // if(attrs.key == "progressBarColor") {
+  //     let values = attrs.value.split(",")
+  //   prePend = parseColor(values[1], "set_progressBarColor");
+  //   prePend += ";set_gradientDraw=android.graphics.drawable.GradientDrawable->new;get_gradientDraw->setShape:i_3" //setShape:i_3, because in android these shapes are mapped to integers and circle is at mapped to 3.
+  //   prePend += `;get_gradientDraw->setColor:get_progressBarColor;get_gradientDraw->setThickness:i_${values[0]};get_gradientDraw->setUseLevel:b_false`
+  //   prePend += ";set_rotateDraw=android.graphics.drawable.RotateDrawable->new;get_rotateDraw->setDrawable:get_gradientDraw;get_rotateDraw->setToDegrees:f_1080;"
+  //   currTransVal = "get_rotateDraw"
+  // }
+
   if (attrs.key == "defaultImage") {
     prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_"+  attrs.value +",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;"
     currTransVal = "get_482380";
@@ -1007,7 +1063,7 @@ module.exports = function(type, config, _getSetType) {
   getSetType = _getSetType;
   elementType = type;
 
-  var groups =  getConfigGroups(config);
+  var groups =  getConfigGroups(config, elementType);
 
   command = '';
   globalObjMap = {};

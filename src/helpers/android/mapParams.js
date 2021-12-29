@@ -1322,6 +1322,28 @@ var map = {
     'dontMap': true,
     fnName: 'setHideable',
     inVokedIn: 'VIEW',
+  },
+  "cursorColor": {
+    values : [{
+      type: 'b'
+    }],
+    'dontMap': true,
+    fnName: 'setTextCursorDrawable',
+    inVokedIn: 'VIEW',
+  },
+  "cursorColorV2": {
+    values : [{
+      type: 'b'
+    }],
+    inVokedIn: 'VIEW',
+  },
+  "progressBarColor": {
+    values: [{
+      type: 'b'
+    }],
+    'dontMap': true,
+    fnName: "setIndeterminateTintList",
+    inVokedIn: 'VIEW',
   }
 }
 
