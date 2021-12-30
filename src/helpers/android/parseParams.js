@@ -329,6 +329,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
   var afterCmd = "";
   var prePend = '';
   var currTransVal;
+  var dontLoad = false;
   var color;
   var arr = [];
   var res;
@@ -678,6 +679,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
                                 Android.runInUI(urlSetCommands ,null)
                               });
         JBridge.renewFile(attrs.value, image, callback);
+        dontLoad = true
       } else if(JBridge.getFilePath) {
         prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
                     "set_resolvedFile=java.io.File->new:get_directory,s_" + JBridge.getFilePath(image) + ";" +
@@ -865,7 +867,9 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
   if (obj.values && obj.values.length)
   _cmd += ':';
 
-  if (!prePend && !currTransVal)
+  if (!currTransVal && dontLoad)
+  _cmd = ""
+  else if (!prePend && !currTransVal)
   _cmd +=  appendArgs(attrs, obj) + ';'
   else
   _cmd += currTransVal + ';';
