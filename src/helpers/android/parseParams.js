@@ -917,11 +917,11 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
 
   if (transformFn || attrs.key == "duration" || attrs.key == "delay" || attrs.key == "curve")
   _cmd = keyWord +  '->' + ((typeof obj.fnName == "undefined")?obj.varName:obj.fnName);
-  else if (attrs.key == "cursorColorV2") {
+  else if (attrs.key == "cursorColorV2")
     _cmd = ""
-  } else {
-  _cmd = keyWord + '->' +   attrs.key;
-
+  else 
+    _cmd = keyWord + '->' +   attrs.key;
+    
   if (obj.values && obj.values.length)
   _cmd += ':';
 
@@ -931,7 +931,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
   _cmd +=  appendArgs(attrs, obj) + ';'
   else
   _cmd += currTransVal + ';';
-}
+
 
   // for testing
   if (typeof finalCmd !== "undefined") {
