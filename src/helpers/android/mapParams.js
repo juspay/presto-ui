@@ -1332,9 +1332,6 @@ var map = {
     inVokedIn: 'VIEW',
   },
   "cursorColorV2": {
-    values : [{
-      type: 'b'
-    }],
     inVokedIn: 'VIEW',
   },
   "progressBarColor": {

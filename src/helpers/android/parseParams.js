@@ -104,6 +104,9 @@ function getConfigGroups(config, type) {
       delete config.cursorColor
     }
   }
+  if(type != "textView") {
+    delete config.maxWidth
+  }
   if(type == "progressBar"){
     console.log("progressBar", strokeVal)
     config["progressBarColor"] = strokeVal
@@ -707,6 +710,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
 
   if (attrs.key == "cursorColorV2") {
     const id = allProps.find(a => a.key === "id");
+    dontLoad = true;
     if(id != undefined){
       prePend = parseColor(attrs.value, "set_cursorColor");
       prePend += ";set_kl=java.lang.Class->forName:s_android.widget.TextView"
@@ -917,8 +921,6 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
 
   if (transformFn || attrs.key == "duration" || attrs.key == "delay" || attrs.key == "curve")
   _cmd = keyWord +  '->' + ((typeof obj.fnName == "undefined")?obj.varName:obj.fnName);
-  else if (attrs.key == "cursorColorV2")
-    _cmd = ""
   else 
     _cmd = keyWord + '->' +   attrs.key;
     
