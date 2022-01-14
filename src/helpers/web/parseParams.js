@@ -224,7 +224,7 @@ function parseLayoutProps(type, config, key) {
   }
 
   if (key == "cornerRadii") {
-    const [radius, ...corners] = props.cornerRadii.split(',');
+    const [radius, ...corners] = config.cornerRadii.split(',');
     config.style.borderRadius = corners.map(bool => `${bool * radius}px`).join(' ') + ";";
   }
 
