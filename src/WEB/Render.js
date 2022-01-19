@@ -573,7 +573,19 @@ function setAttributes(view, elem, firstRender) {
     let elem_style = "";
     elem.setAttribute("id",props.id);
     // elem_style += "id:"+props.id+";";
-
+    if(view.props.autoUpdateHeight){
+        try {
+            const myObserver = new ResizeObserver(entries => {
+                entries.forEach(entry => {
+                    try{
+                        JBridge.updateHeight(entry.target.scrollHeight);
+                    } catch(err){}
+                    return false;
+                });
+            });
+            myObserver.observe(elem);
+        } catch(err){}
+    }
     if (type == "relativeLayout") {
         elem_style+="overflow:hidden;"
     }
