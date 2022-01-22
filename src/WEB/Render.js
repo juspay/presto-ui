@@ -578,7 +578,13 @@ function setAttributes(view, elem, firstRender) {
             const myObserver = new ResizeObserver(entries => {
                 entries.forEach(entry => {
                     try{
-                        JBridge.updateHeight(entry.target.scrollHeight);
+                        var payload = {
+                            event: "heightUpdate",
+                            height: entry.target.scrollHeight
+                        }
+                        if(payload.height){
+                            JBridge.runInJuspayBrowser("heightUpdate", JSON.stringify(payload));
+                        }
                     } catch(err){}
                     return false;
                 });
