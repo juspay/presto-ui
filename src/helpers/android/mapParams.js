@@ -636,6 +636,16 @@ var map = {
     fnName: 'setTextSize',
     inVokedIn: 'VIEW',
   },
+  "textSizeSp": {
+    values: [{
+      type: 'i'
+    }, {
+      type: 'f',
+    }],
+    'dontMap': true,
+    fnName: 'setTextSize',
+    inVokedIn: 'VIEW',
+  },
   "fontSize": {
     values: [{
       type: 'i',

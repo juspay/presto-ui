@@ -360,6 +360,10 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     attrs.value = "1," + (attrs.value - 1);
   }
 
+  if (attrs.key == "textSizeSp") {
+    attrs.value = "2," + attrs.value;
+  }
+
 //todo:tabTextColors
   if (attrs.key == "foreground" ||
     attrs.key == "tabTextColors" ||
