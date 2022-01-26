@@ -259,9 +259,10 @@ function setAnimationStyles (elem, props) {
     if (!props.hasOwnProperty('hasAnimation') || !props.hasAnimation || !props.inlineAnimation) {
         return "";
     }
-    window.hasAnimationProps = true;
     try {
         const animationObjects = JSON.parse(props.inlineAnimation);
+        if(!Array.isArray(animationObjects) || (Array.isArray(animationObjects) && animationObjects.length == 0)) return "";
+        window.hasAnimationProps = true;
         var keyFrameShorthands = [];
         var AnimationCSSMarkupWriter = CSSMarkupWriter["animations"];
 

@@ -1096,7 +1096,10 @@ function setElemAttributes(element,props){
                         if (window.focusedElement == undefined) {
                             window.focusedElement = props.id;
                         };
-                    } else { doc.focus(); }
+                    } else {
+                        setTimeout(function() { doc.focus() }, 0);
+                        
+                    }
                 }
         }
     }
