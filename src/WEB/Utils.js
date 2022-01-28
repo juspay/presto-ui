@@ -105,6 +105,7 @@ function getContainer( namespace ){
       let container = state.fragments[namespace];
       if(container)
         return container;
+      else return undefined;
   }
   return document.getElementById("content");
 }

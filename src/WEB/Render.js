@@ -129,7 +129,7 @@ const InlineAnimationMapper = {
         "from": {
             "fromX": val => `transform: translateX(${val}px);`,
             "fromY": val => `transform: translateY(${val}px);`,
-            "fromScaleX": val => `transform-origin:top left;\ntransform: scaleX(${val});`, 
+            "fromScaleX": val => `transform: scaleX(${val});\ntransform-origin:top left;`, 
             "fromScaleY": val => `transform-origin:top left;\ntransform: scaleY(${val});`, 
             "fromRotation": val => `transform: rotate(${val}deg);`, 
             "fromRotationX": val => `transform: rotateX(${val}deg);`, 
@@ -139,7 +139,7 @@ const InlineAnimationMapper = {
         "to": {
             "toX": val => `transform: translateX(${val}px);`, 
             "toY": val => `transform: translateY(${val}px);`, 
-            "toScaleX": val => `transform-origin:top left;\ntransform: scaleX(${val});`, 
+            "toScaleX": val => `transform: scaleX(${val});\ntransform-origin:top left;`, 
             "toScaleY": val => `transform-origin:top left;\ntransform: scaleY(${val});`, 
             "toRotation": val => `transform: rotate(${val}deg);`, 
             "toRotationX": val => `transform: rotateX(${val}deg);`, 
@@ -193,7 +193,7 @@ const InlineAnimationMapper = {
                     case "restart":
                         return `normal`;
                     case "reverse":
-                        return `reverse`;
+                        return `alternate`;
                     default:
                         return `normal`;
                 }
@@ -276,15 +276,32 @@ function setAnimationStyles (elem, props) {
             window.hasAnimationProps = false;
            });
         }
-
+        const keyframeName = "keyframe_" + props.id + "_" + KEYFRAME_INDEX;
+        KEYFRAME_INDEX += 1;
+        var keyFrameFromMarkup = keyFrameToMarkup = "";
+        var countFrom = countTo = 0;
+        
         animationObjects.forEach(function (animationObject) {
             /* Add keyframe in css */
-            const keyframeName = "keyframe_" + props.id + "_" + KEYFRAME_INDEX;
-            KEYFRAME_INDEX += 1;
-            var keyFrameFromMarkup = keyFrameToMarkup = "";
             for (var [key, value] of Object.entries(animationObject)) {
-                keyFrameFromMarkup += InlineAnimationMapper.map("from")(key, value);
-                keyFrameToMarkup += InlineAnimationMapper.map("to")(key, value);
+                var from = InlineAnimationMapper.map("from")(key, value);
+                if(key == "fromX" || key == "fromScaleX"){
+                    if(countFrom == 0){
+                        keyFrameFromMarkup += from.replace(";", "");
+                        countFrom += 1;
+                    }else{
+                        keyFrameFromMarkup += from.replace("transform:", "");
+                    }
+                }else keyFrameFromMarkup += from;
+                var to = InlineAnimationMapper.map("to")(key, value);
+                if(key == "toX" || key == "toScaleX"){
+                    if(countTo == 0){
+                        keyFrameToMarkup += to.replace(";", "");
+                        countTo += 1;
+                    }else{
+                        keyFrameToMarkup += to.replace("transform:", "");
+                    }
+                }else keyFrameToMarkup += to;
             }
             var keyFrameCSS = AnimationCSSMarkupWriter["keyframe"](keyframeName, 
                                 AnimationCSSMarkupWriter["keyframe-from"](keyFrameFromMarkup) + 

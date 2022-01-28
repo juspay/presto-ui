@@ -74,7 +74,7 @@ function addProps(props){
         ele_style += "animation : shimmer 2s infinite;";
         ele_style += "background-color: " + shimmerColor + ";";
         ele_style += "background-repeat: no-repeat;";
-        ele_style += "background-image: linear-gradient(to right," + shimmerColor + " 0%, #edeef1 20%, " + shimmerColor + " 40%, " + shimmerColor + " 100%);";
+        ele_style += "background-image: linear-gradient(to right," + shimmerColor + " 0%, #e0e0e0 20%, " + shimmerColor + " 40%, " + shimmerColor + " 100%);";
         ele_style += "background-size: " + props.width + " 100%;";
     }
 
