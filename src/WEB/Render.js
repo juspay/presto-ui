@@ -717,7 +717,6 @@ let createNewElement = function(view, parentElement, siblingView){
     let elem = null;
     let subElem = null;
     let element_style ="";
-    //console.log(view.type);
     switch(view.type) {
         case "webView":
             elem = document.createElement('iframe')
@@ -838,6 +837,23 @@ let createNewElement = function(view, parentElement, siblingView){
             } else if (view.props.hint) {
                 elem.placeholder = view.props.hint || "";
             }
+            break;
+        case 'progressBar':
+            elem = document.createElement("div");
+            element_style = "";
+            element_style += "border-radius: 50%;";
+            element_style += "border: 0.25em solid #e0e0e0;";
+            element_style += "display: inline-block;";
+            element_style += "box-sizing: border-box;";
+            element_style += "border-left-color: transparent;";
+            element_style += "width: " + view.props.width + ";";
+            element_style += "height: " + view.props.height + ";";
+            element_style += "animation-duration: 0.7s;";
+            element_style += "animation-name: anim-progress-loader;";
+            element_style += "animation-iteration-count: infinite;";
+            styleElem = document.createElement('style');
+            styleElem.appendChild(document.createTextNode("@keyframes anim-progress-loader {0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); }"));
+            document.getElementsByTagName("body")[0].appendChild(styleElem);
             break;
         case 'shimmerFrameLayout':
             // for shimmerFrameLayout tag leaf nodes in the DOM tree so that CSS properties
