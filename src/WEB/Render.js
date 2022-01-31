@@ -941,7 +941,7 @@ let getElementByView = function(view, parentElement, siblingView, stopChild, ren
             window.focusedElement = view.props.id;
 
     } else if (renderStyle) {
-        element_style += setAttributes(view, elem, true);
+        element_style += setAttributes(view, elem, false);
     }
     setLayout(elem,view);
     if(!stopChild) computeChildDimens(view);
