@@ -739,6 +739,11 @@ let createNewElement = function(view, parentElement, siblingView){
             elem = document.createElement('iframe')
 
             elem.style.border = 'none';
+            // This allow is the property of iframe for setting feature policy 
+            // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-allow
+            if (view.props.allow && typeof view.props.allow === 'string'){
+                elem.allow = view.props.allow;
+            }
             break;
         case "imageView":
             elem = document.createElement("img");
