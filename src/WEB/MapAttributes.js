@@ -68,8 +68,8 @@ function addProps(props){
     if (props.hasOwnProperty("backgroundColor")) { ele_style += "background-color: " + utils.parseColors(props.backgroundColor) + ";"};
 
     if (props.hasOwnProperty("background") && !props.hasOwnProperty("shouldShimmer")) { ele_style += "background: " + utils.parseColors(props.background) + ";"};
-    
-    if (props.hasOwnProperty("background") && props.hasOwnProperty("shouldShimmer") && props.shouldShimmer) { 
+
+    if (props.hasOwnProperty("background") && props.hasOwnProperty("shouldShimmer") && props.shouldShimmer) {
         shimmerColor = utils.parseColors(props.background);
         ele_style += "animation : shimmer 2s infinite;";
         ele_style += "background-color: " + shimmerColor + ";";
@@ -222,21 +222,26 @@ function addStrokeProp(props){
     var ele_style = "";
 
     if (props.hasOwnProperty("stroke")) {
+      let values = props.stroke.split(",");
+      if (values[1]) {
+        values[1] = utils.parseColors(values[1]);
+      }
+      if (values.length == 2) {
+        ele_style += "border: " + values[0] + "px solid " + values[1] + ";";
+      } else if (values.length == 3) {
+        strokeMap = {
+          b: "border-bottom",
+          t: "border-top",
+          r: "border-right",
+          l: "border-left",
+        };
 
-        let values = props.stroke.split(",");
-
-        if(values.length == 2) { 
-            ele_style += "border: " + values[0] + "px solid " + values[1] + ";";
+        for (var i of values[2]) {
+          if (strokeMap[i] !== undefined)
+            ele_style +=
+              strokeMap[i] + ": " + values[0] + "px solid " + values[1] + ";";
         }
-        else if(values.length == 3){
-
-            strokeMap = {"b": "border-bottom", "t" : "border-top", "r" : "border-right", "l" : "border-left"};
-      
-            for (var i of values[2]){
-                if (strokeMap[i] !== undefined)
-                ele_style += strokeMap[i] + ": " + values[0] + "px solid " + values[1] + ";";
-            }
-        }
+      }
     }
 
     if (props.hasOwnProperty("strokeTop")) {
@@ -334,7 +339,7 @@ function addSize(view = {}){
             }
             else elem_style += "width : 100%; ";
             //elem.style.width = '100%';
-        } else if (props.width == 'match_parent' && parentView.state.treatMatchParentAsWrapWidth) { 
+        } else if (props.width == 'match_parent' && parentView.state.treatMatchParentAsWrapWidth) {
             view.state.practicalWidth = 'wrap_content'
         } else if (props.width == 'wrap_content') {
             view.state.practicalWidth = 'wrap_content';
@@ -351,7 +356,7 @@ function addSize(view = {}){
         if (props.height == 'match_parent' && !parentView.state.treatMatchParentAsWrapHeight) {
             elem_style += "height: 100%;";
             // elem.style.height = '100%';
-        } else if (props.height == 'match_parent' && parentView.state.treatMatchParentAsWrapHeight) { 
+        } else if (props.height == 'match_parent' && parentView.state.treatMatchParentAsWrapHeight) {
             view.state.practicalHeight = 'wrap_content'
             elem_style += "height: auto;";
             //elem.style.height = "auto";
@@ -1098,7 +1103,7 @@ function setElemAttributes(element,props){
                         };
                     } else {
                         doc.focus();
-                        
+
                     }
                 }
         }
@@ -1180,8 +1185,3 @@ module.exports = {
     addFunctions,
     addPseudoClasses
 }
-
-
-
-
-
