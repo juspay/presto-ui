@@ -1002,11 +1002,7 @@ function addSetInputTypeProp(ele,props){
             ele.setAttribute("disabled","disabled");
         }
 
-        else if (props.inputType == "numeric") {
-            inputType = "number"
-        }
-
-        else if(props.inputType === "telephone") {
+        else if(props.inputType === "telephone" || props.inputType === "numeric") {
             inputType = "tel";
         }
 
