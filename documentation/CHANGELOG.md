@@ -11,7 +11,19 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
-## [v1.0.7](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.7%0Dv1.0.7)
+## [v1.0.8](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.8%0Dv1.0.8)
+
+## [v1.0.8](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.8%0Dv1.0.7)
+
+```10 April 2022```
+
+> - Added click feedback to views and map it to native on click events
+- Native Android and iOS support is required to be present.
+- For web HyperSDK-web needs to be updated.
+
+### Fixed
+- PICAF-7989: feat: Click Feedback for all items that has an onClick event
+[`#PICAF-7989`](https://juspay.atlassian.net/browse/PICAF-7989)
 
 ## [v1.0.7](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.7%0Dv1.0.6)
 
@@ -168,12 +180,6 @@ All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 - Merged in PICAF-6682-fix-get_PARAMS-android-command (pull request #187)
 [`#PICAF-6682`](https://juspay.atlassian.net/browse/PICAF-6682)
 [`#PICAF-6682`](https://juspay.atlassian.net/browse/PICAF-6682)
-- PICAF-6682-replaced space with semicolon
-[`#PICAF-6682`](https://juspay.atlassian.net/browse/PICAF-6682)
-- PICAF-6672-added display prop for visible iframe/webView
-[`#PICAF-6672`](https://juspay.atlassian.net/browse/PICAF-6672)
-- PICAF-6458 :: Added flex-basis as auto to make weight 1 layouts not expand
-[`#PICAF-6458`](https://juspay.atlassian.net/browse/PICAF-6458)
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
