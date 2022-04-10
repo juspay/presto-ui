@@ -1,25 +1,126 @@
 {
   "name": "presto-ui",
-  "version": "v1.0.1",
+  "version": "1.0.6",
   "description": "Javascript framework for building platform independent apps.",
   "main": "lib/index.js",
   "scripts": {
+    "prepare": "./scripts/setup.sh",
+    "version": "standard-version --no-verify",
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "webpack --mode=production --config webpack.prod.js",
     "watch": "webpack --mode=development --config webpack.dev.js --watch --progress"
   },
-  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.14.3",
     "@babel/preset-env": "^7.3.1",
+    "@commitlint/cli": "^16.2.3",
+    "@commitlint/config-conventional": "^16.2.1",
+    "@digitalroute/cz-conventional-changelog-for-jira": "^7.2.1",
+    "auto-changelog": "^2.4.0",
     "babel-loader": "^8.0.5",
+    "commitizen": "^4.2.4",
+    "commitlint-config-jira": "^1.6.3",
+    "commitlint-plugin-jira-rules": "^1.6.3",
+    "husky": "^7.0.0",
+    "standard-version": "^9.3.2",
     "webpack": "^5.37.1",
-    "webpack-bundle-analyzer": "^4.4.2",
     "webpack-build-notifier": "^2.2.1",
+    "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "^4.7.0",
     "webpack-dashboard": "^3.3.3",
     "webpack-merge": "^5.7.3",
     "webpackbar": "^5.0.0-3"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/@digitalroute/cz-conventional-changelog-for-jira",
+      "jiraPrefix": "PICAF",
+      "jiraLocation": "pre-type",
+      "jiraAppend": ":"
+    }
+  },
+  "standard-version": {
+    "skip": {
+      "commit": true,
+      "changelog": true
+    },
+    "types": [
+      {
+        "type": "feat",
+        "section": "Features",
+        "release": "minor"
+      },
+      {
+        "type": "fix",
+        "section": "Bug Fixes",
+        "release": "minor"
+      },
+      {
+        "type": "test",
+        "section": "Tests"
+      },
+      {
+        "type": "build",
+        "section": "Build System"
+      },
+      {
+        "type": "docs",
+        "section": "Documentation"
+      },
+      {
+        "type": "style",
+        "hidden": true
+      },
+      {
+        "type": "refactor",
+        "section": "Improvements"
+      },
+      {
+        "type": "perf",
+        "section": "Improvements"
+      },
+      {
+        "type": "ci",
+        "hidden": true
+      },
+      {
+        "type": "chore",
+        "hidden": true
+      }
+    ],
+    "issuePrefixes": [
+      "PICAF-"
+    ],
+    "issueUrlFormat": "https://juspay.atlassian.net/browse/{{prefix}}{{id}}",
+    "commitUrlFormat": "https://bitbucket.org/juspay/presto-ui/commits/{{hash}}",
+    "compareUrlFormat": "https://bitbucket.org/juspay/presto-ui/branches/compare/{{currentTag}}%0D{{previousTag}}",
+    "releaseCommitMessageFormat": "chore(release): {{currentTag}} {{prefix}}{{id}}"
+  },
+  "commitlint": {
+    "plugins": [
+      "commitlint-plugin-jira-rules"
+    ],
+    "extends": [
+      "jira"
+    ],
+    "rules": {
+      "jira-task-id-max-length": [
+        0
+      ]
+    }
+  },
+  "auto-changelog": {
+    "output": "documentation/CHANGELOG.md",
+    "template": "./documentation/templates/changelog.hbs",
+    "commitLimit": false,
+    "breakingPattern": "(!:)",
+    "package": true,
+    "issueUrl": "https://juspay.atlassian.net/browse/{id}",
+    "issuePattern": "[A-Z]{2,}-\\d+",
+    "compareUrl": "https://bitbucket.org/juspay/presto-ui/branches/compare/{to}%0D{from}",
+    "releaseSummary": true,
+    "ignoreCommitPattern": "(\\[skip ci\\])",
+    "startingVersion": "v1.0.0"
   },
   "repository": {
     "type": "git",

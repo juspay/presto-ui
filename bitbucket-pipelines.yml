@@ -1,0 +1,30 @@
+options:
+  max-time: 10
+pipelines:
+  branches:
+    release:
+      - step:
+          name: Bump version, Generate Changelog & Commit
+          image: node:10.15.0
+          caches:
+            - node
+          script:
+            - npm install
+            - npm run version
+            - /bin/bash ./scripts/recompile.sh
+          artifacts:
+            - documentation/CHANGELOG.md
+            - package.json
+      - step:
+          name: Sync markdown with Confluence
+          image: kovetskiy/mark
+          script:
+            - LAST_COMMIT_DATA=$(git log -1 --name-only)
+            - MARKDOWN_FILES=$(echo "${LAST_COMMIT_DATA}" | grep -E ".md$" || [[ $? == 1 ]])
+            - if [ -n "${MARKDOWN_FILES}" ]; then
+                  for file in ${MARKDOWN_FILES}; do
+                      echo "> Syncing $file.";
+                      mark -u $MARK_USER -p $MARK_PASS -b $MARK_URL -f $file || exit 1;
+                      echo "> Syncing $file completed.";
+                  done
+                fi
