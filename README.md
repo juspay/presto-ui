@@ -63,8 +63,8 @@ gc #for zsh
 
 Changelog is auto-generated and pushed to confluence docs once pr is merged to `release`.
 
-In case you are `vi` editor, please press `:` then `wq` and `enter` to exit by saving the commit.
+In case you are inside the `vi` editor, please press `:` then `wq` and `enter` to exit by saving the commit.
 
-While committing you can press `enter` on to take the selected `Jira TicketID`.
+While committing you can press `enter` to take the selected `Jira TicketID`, in case of rebase you will need to enter commit message again.
 
-Make sure to add proper details or PR can be rejected.
+Make sure to add proper details in commits or PR's can be rejected.

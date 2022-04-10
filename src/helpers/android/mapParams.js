@@ -1351,6 +1351,24 @@ var map = {
     'dontMap': true,
     fnName: "setIndeterminateTintList",
     inVokedIn: 'VIEW',
+  },
+  "ripple": {
+    values: [],
+    dontMap: true,
+    fnName: "setForeground",
+    inVokedIn: "VIEW"
+  },
+  "rippleColor": {
+    values : [{
+      type: 'cs'
+    }],
+    inVokedIn: 'VIEW'
+  },
+  "disableFeedback": {
+    values : [{
+      type: 'b'
+    }],
+    inVokedIn: 'VIEW'
   }
 }
 

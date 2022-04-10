@@ -1388,6 +1388,34 @@ function this_fontWithName(name) {
   }
 }
 
+function this_setRippleColor() {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName": "setRippleColor:",
+    "values": [{
+      "name": 'color' + window.__COLOR_INDEX,
+      "computed": "true",
+      "type": "cgcolor"
+    }]
+  };
+}
+
+function this_disableFeedback(disableFeedback) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"MJPView",
+    "methodName": "disableFeedback:",
+    "values":[
+      {"name": disableFeedback, "type": "i"}
+    ]
+  };
+}
+
 function UIColor_setColor(color) {
   let values;
   let alpha = "1.00";
@@ -2100,6 +2128,15 @@ module.exports = function(type, config, _getSetType, namespace) {
       console.log(e);
       config.methods.push(this_setCornerCurves(config.cornerRadii));
     }
+  }
+
+  if (config.hasOwnProperty("rippleColor")) {
+    config.methods.push(UIColor_setColor(config.rippleColor));
+    config.methods.push(this_setRippleColor());
+  }
+
+  if (config.hasOwnProperty("disableFeedback")) {
+    config.methods.push(this_disableFeedback(config.disableFeedback));
   }
 
   config.currChildOffset = 0;

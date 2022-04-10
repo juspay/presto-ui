@@ -918,6 +918,12 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     return prePend
   }
 
+  if (attrs.key == "ripple" && JSON.parse(JBridge.getSessionInfo())["android_api_level"] >= 23) {
+    vals = JSON.parse(attrs.value);
+    prePend = addClickFeedback(vals.rippleColor, vals.disableFeedback, vals.enableRadii);
+    currTransVal = ":get_ripple";
+  }
+
   if (belongsTo == "VIEW")
   keyWord = globalObjMap[belongsTo].val;
   else
@@ -937,7 +943,6 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
   _cmd +=  appendArgs(attrs, obj) + ';'
   else
   _cmd += currTransVal + ';';
-
 
   // for testing
   if (typeof finalCmd !== "undefined") {
@@ -1001,6 +1006,19 @@ function parseGroups(type, groups, config) {
         }
         else
         globalObjMap.VIEW = {ctr: "get_view", val: "get_view"};
+      }
+      
+      if (config.hasOwnProperty("onClick")) {
+        groups.VIEW.push(
+          {
+            "key": "ripple", 
+            "value": JSON.stringify({
+              "rippleColor": config.hasOwnProperty("rippleColor") ? config.rippleColor : "#e0e0e0",
+              "disableFeedback": config.hasOwnProperty("disableFeedback") ? config.disableFeedback : false,
+              "enableRadii": config.hasOwnProperty("enableRoundedRipple") && config.enableRoundedRipple
+            })
+          }
+        );
       }
 
       command +=  parseAttrs(groups.VIEW, 'VIEW', true, type)
@@ -1072,6 +1090,31 @@ var flattenObject = function(ob) {
   }
   return toReturn;
 };
+
+function addClickFeedback(rippleColor, disableFeedback, enableRadii) {
+  if (disableFeedback)
+    return "";
+  
+  var feedback = "set_mask=android.graphics.drawable.ShapeDrawable->new;";
+  if (enableRadii) {
+    feedback += "set_c=java.lang.Class->forName:s_java.lang.Float;";
+    feedback += "set_arr=java.util.ArrayList->new;";
+    // 8 values, 2 for each corner. Starts at the left-top and moves clock-wise
+    feedback += "set_r=java.lang.Float->new:dpf_30;";
+    for (var i = 0; i < 8; i++)
+      feedback += "get_arr->add:get_r;";
+    
+    feedback += "infl->convertAndStoreArray:get_arr,get_c,s_pArr,b_true;";
+    feedback += "set_rect=android.graphics.drawable.shapes.RoundRectShape->new:get_pArr,null_pointer,null_pointer;";
+    feedback += "get_mask->setShape:get_rect;";
+
+  }
+  feedback += parseColor(rippleColor, "set_ripplecolor");
+  feedback += "set_paint=get_mask->getPaint;get_paint->setColor:get_ripplecolor;";
+  feedback += "set_colorlist=android.content.res.ColorStateList->valueOf:get_ripplecolor;";
+  feedback += "set_ripple=android.graphics.drawable.RippleDrawable->new:get_colorlist,null_pointer,get_mask;";
+  return feedback;
+}
 
 module.exports = function(type, config, _getSetType) {
   config = flattenObject(config);
