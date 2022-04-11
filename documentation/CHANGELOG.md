@@ -5,14 +5,12 @@
 <!-- Label: changelog -->
 <!-- Label: prestoUI -->
 <!-- Label: library -->
-<!-- Include: disclaimer.md -->
 
+<!-- Include: templates/disclaimer.md -->
 # Releases & Changelog
+<!-- Include: ac:toc -->
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
-
-## [v1.0.8](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.8%0Dv1.0.8)
-
 ## [v1.0.8](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.8%0Dv1.0.7)
 
 ```10 April 2022```

@@ -23,8 +23,11 @@ For general use case you would need to use a micro-app sample and native test to
 <!-- Add details about all frameworks -->
 ## Getting Started
 
+To add presto-ui to your repo you will need run below commands.
+```
+npm install git+ssh://git@bitbucket.org/juspay/presto-ui.git
 
-
+```
 ## Debugging
 
 For debugging presto-ui locally, you can start a server and link the project locally in node modules.
@@ -52,7 +55,13 @@ ln -s ./node_modules/presto-ui/lib <path-to-presto-ui>/lib
 > After every `npm i` you will need to link again
 ## Contributing
 
-We use git hooks to verify commit messages so make sure to use terminal to commit using terminal. Git push will fail if commit message is not proper.
+We use git hooks to verify commit messages so 
+make sure to use `terminal` to commit your changes.  
+
+> Do not use VSCode to commit any changes !!!
+
+Git push will fail if commit message is not proper.
+
 ```
 git commit
 ```
@@ -65,6 +74,6 @@ Changelog is auto-generated and pushed to confluence docs once pr is merged to `
 
 In case you are inside the `vi` editor, please press `:` then `wq` and `enter` to exit by saving the commit.
 
-While committing you can press `enter` to take the selected `Jira TicketID`, in case of rebase you will need to enter commit message again.
+While committing you can press `enter` to take the selected `Jira TicketID` and other defaults, in case of rebase you will need to enter commit message again and correct Jira TicketID.
 
 Make sure to add proper details in commits or PR's can be rejected.

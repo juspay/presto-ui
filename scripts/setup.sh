@@ -3,9 +3,20 @@
 set -e;
 
 # Disabling post install on CI flag
-# CI="true" ./scripts/setup.sh
-if [ "$CI" == "true" ]; then
+# CI = true is added by bitbucket
+# CI = 1 is added by Vercel
+# Might require more CI/Dev flags based on environments.
+if [ "$CI" == "true" ] || [ "$CI" == "1" ]; then
   echo "Skipping package's postinstall routine for CI environment";
+  exit 0;
+fi
+
+# Ensuring this scrip runs only for when current repo is in dev.
+# Adding to prepare command runs the scripts when lib
+# is used as a dependency.
+# Checking if Npm directory is same as current directory.
+if [ "$INIT_CWD" != "$PWD" ]; then
+  echo "Skipping package's postinstall when used as an npm module";
   exit 0;
 fi
 
@@ -37,7 +48,8 @@ else
   echo "Brew already installed."
 fi
 
-# Installing git
+# Check for git
+# Install if we don't have it
 if ! [ -x "$(command -v git)" ]; then
   echo "Installing git..."
   brew install git
@@ -45,7 +57,8 @@ else
   echo "GIT already installed."
 fi
 
-# Installing VSCode
+# Check for VSCode
+# Install if we don't have it
 if mdfind -name 'Visual Studio Code' | grep 'Visual Studio Code';
 then
   echo 'VSCode already installed'
@@ -54,8 +67,8 @@ else
   brew install --cask visual-studio-code
 fi
 
-
-# Installing node
+# Check for node
+# Install if we don't have it
 if ! [ -x "$(command -v node)" ]; then
   echo "Installing node..."
   brew install node
@@ -69,8 +82,11 @@ fi
 # code --install-extension jebbs.plantuml
 
 # husky install to setup pre-commit hooks
-husky install
+npx husky install
 
 # Used to sync markdown files with confluence as part of bitbucket pipeline
+# TODO: Think if mark should be added everywhere?
+# +Helps verify HTML generated locally.
+# -??
 brew tap kovetskiy/mark
 brew install mark
