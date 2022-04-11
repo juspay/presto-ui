@@ -5,12 +5,26 @@
 <!-- Label: changelog -->
 <!-- Label: prestoUI -->
 <!-- Label: library -->
+<!-- Include: disclaimer.md -->
 
-<!-- Include: templates/disclaimer.md -->
 # Releases & Changelog
-<!-- Include: ac:toc -->
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
+
+## [v1.0.9](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.9%0Dv1.0.9)
+
+## [v1.0.9](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.9%0Dv1.0.8)
+
+```11 April 2022```
+
+> - Updated wokflow to create tags after pushing.
+- Added fixes to Setup scripts
+- Added comments for all shell files
+
+### Fixed
+- PICAF-11203: ci: Setup script check and Workflow changes
+[`#PICAF-11203`](https://juspay.atlassian.net/browse/PICAF-11203)
+
 ## [v1.0.8](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.8%0Dv1.0.7)
 
 ```10 April 2022```
@@ -91,9 +105,6 @@ All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
 ```7 February 2022```
 
-### Merged
-- PICAF-6682-replaced space with semicolon [`#187`](https://bitbucket.org/juspay/presto-ui/pull-requests/187)
-
 ### Fixed
 - PICAF-8621 don't attach listeners on patch event
 [`#PICAF-8621`](https://juspay.atlassian.net/browse/PICAF-8621)
@@ -173,11 +184,6 @@ All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 [`#PICAF-6708`](https://juspay.atlassian.net/browse/PICAF-6708)
 - Revert "PICAF-6708 image issue fix when used through url"
 [`#PICAF-6708`](https://juspay.atlassian.net/browse/PICAF-6708)
-- PICAF-6708 image issue fix when used through url
-[`#PICAF-6708`](https://juspay.atlassian.net/browse/PICAF-6708)
-- Merged in PICAF-6682-fix-get_PARAMS-android-command (pull request #187)
-[`#PICAF-6682`](https://juspay.atlassian.net/browse/PICAF-6682)
-[`#PICAF-6682`](https://juspay.atlassian.net/browse/PICAF-6682)
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
