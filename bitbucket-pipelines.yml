@@ -24,7 +24,7 @@ pipelines:
             - if [ -n "${MARKDOWN_FILES}" ]; then
                   for file in ${MARKDOWN_FILES}; do
                       echo "> Syncing $file.";
-                      mark -u $MARK_USER -p $MARK_PASS -b $MARK_URL -f $file || exit 1;
+                      mark -u $MARK_USER -p $MARK_PASS -b $MARK_URL --drop-h1 -f $file  || exit 1;
                       echo "> Syncing $file completed.";
                   done
                 fi

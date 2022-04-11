@@ -114,7 +114,6 @@
     "template": "./documentation/templates/changelog.hbs",
     "commitLimit": false,
     "breakingPattern": "(!:)",
-    "package": true,
     "issueUrl": "https://juspay.atlassian.net/browse/{id}",
     "issuePattern": "[A-Z]{2,}-\\d+",
     "compareUrl": "https://bitbucket.org/juspay/presto-ui/branches/compare/{to}%0D{from}",

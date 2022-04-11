@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -e;
-
+# Triggered via CI pipeline workflow on merge to release branch.
 # Generate changelog
 npx auto-changelog
 

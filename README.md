@@ -4,7 +4,7 @@
 <!-- Label: Readme -->
 <!-- Label: prestoUI -->
 <!-- Label: library -->
-<!-- Include: disclaimer.md -->
+<!-- Include:  documentation/templates/disclaimer.md -->
 # Presto UI
 
 <!-- Include: ac:toc -->

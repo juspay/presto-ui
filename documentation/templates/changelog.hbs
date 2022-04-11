@@ -5,9 +5,10 @@
 <!-- Label: changelog -->
 <!-- Label: prestoUI -->
 <!-- Label: library -->
-<!-- Include: disclaimer.md -->
-
+<!-- Include:  documentation/templates/disclaimer.md -->
 # Releases & Changelog
+
+<!-- Include: ac:toc -->
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
@@ -19,11 +20,13 @@ All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
   {{/if}}
   
   {{#if tag}}
-    ```{{niceDate}}```
+    Released on : `{{niceDate}}`
   {{/if}}
 
   {{#if summary}}
-    > {{summary}}
+    ### Summary
+    ``` {{summary}} 
+    ```
   {{/if}}
 
   {{#if merges}}
