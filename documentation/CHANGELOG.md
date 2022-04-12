@@ -5,21 +5,36 @@
 <!-- Label: changelog -->
 <!-- Label: prestoUI -->
 <!-- Label: library -->
-<!-- Include: disclaimer.md -->
-
+<!-- Include:  documentation/templates/disclaimer.md -->
 # Releases & Changelog
+
+<!-- Include: ac:toc -->
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
-## [v1.0.9](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.9%0Dv1.0.9)
+## [v1.0.10](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.10%0Dv1.0.9)
+
+Released on : `12 April 2022`
+
+### Summary
+``` - Updated change-log template to provide better visibility.
+- Fixed a bug for repeated version in change-logs.
+- Mark-Confluence sync to remove H1 from md. 
+```
+
+### Fixed
+- PICAF-11203: ci: Updated change-log template & Scripts
+[`#PICAF-11203`](https://juspay.atlassian.net/browse/PICAF-11203)
 
 ## [v1.0.9](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.9%0Dv1.0.8)
 
-```11 April 2022```
+Released on : `11 April 2022`
 
-> - Updated wokflow to create tags after pushing.
+### Summary
+``` - Updated wokflow to create tags after pushing.
 - Added fixes to Setup scripts
-- Added comments for all shell files
+- Added comments for all shell files 
+```
 
 ### Fixed
 - PICAF-11203: ci: Setup script check and Workflow changes
@@ -27,11 +42,13 @@ All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
 ## [v1.0.8](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.8%0Dv1.0.7)
 
-```10 April 2022```
+Released on : `10 April 2022`
 
-> - Added click feedback to views and map it to native on click events
+### Summary
+``` - Added click feedback to views and map it to native on click events
 - Native Android and iOS support is required to be present.
-- For web HyperSDK-web needs to be updated.
+- For web HyperSDK-web needs to be updated. 
+```
 
 ### Fixed
 - PICAF-7989: feat: Click Feedback for all items that has an onClick event
@@ -39,11 +56,13 @@ All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
 ## [v1.0.7](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.7%0Dv1.0.6)
 
-```10 April 2022```
+Released on : `10 April 2022`
 
-> - Adding workflow for change-log generation
+### Summary
+``` - Adding workflow for change-log generation
 - Auto-tagging of version
-- workflow for sync with confluence
+- workflow for sync with confluence 
+```
 
 ### Fixed
 - PICAF-11024: ci: Workflow triggers and change log generation
@@ -51,7 +70,7 @@ All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
 ## [v1.0.6](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.6%0Dv1.0.5)
 
-```7 April 2022```
+Released on : `7 April 2022`
 
 ### Fixed
 - PICAF-6815-web-edittext-counter-fix
@@ -59,9 +78,11 @@ All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
 ## [v1.0.5](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.5%0Dv1.0.4)
 
-```6 April 2022```
+Released on : `6 April 2022`
 
-> compiled
+### Summary
+``` compiled 
+```
 
 ### Fixed
 - PICAF-9163: formatted
@@ -69,7 +90,7 @@ All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
 ## [v1.0.4](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.4%0Dv1.0.3)
 
-```28 February 2022```
+Released on : `28 February 2022`
 
 ### Fixed
 - PICAF-7639 reverting input focus setTimeout
@@ -77,7 +98,7 @@ All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
 ## [v1.0.3](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.3%0Dv1.0.2)
 
-```23 February 2022```
+Released on : `23 February 2022`
 
 ### Fixed
 - PICAF-8099 added allow props for feature policy support of iframe
@@ -85,7 +106,7 @@ All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
 ## [v1.0.2](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.2%0Dv1.0.1)
 
-```22 February 2022```
+Released on : `22 February 2022`
 
 ### Fixed
 - PICAF-8053 :: indeterminant loader animation fixed
@@ -93,7 +114,7 @@ All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
 ## [v1.0.1](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.1%0Dv1.0.0)
 
-```17 February 2022```
+Released on : `17 February 2022`
 
 ### Fixed
 - PICAF-8475: added textSizeSp for sp units in Android
@@ -103,7 +124,7 @@ All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
 ## v1.0.0
 
-```7 February 2022```
+Released on : `7 February 2022`
 
 ### Fixed
 - PICAF-8621 don't attach listeners on patch event
@@ -180,10 +201,6 @@ All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 [`#PICAF-6883`](https://juspay.atlassian.net/browse/PICAF-6883)
 - PICAF-6815-gradient-angle-mapping
 [`#PICAF-6815`](https://juspay.atlassian.net/browse/PICAF-6815)
-- PICAF-6708
-[`#PICAF-6708`](https://juspay.atlassian.net/browse/PICAF-6708)
-- Revert "PICAF-6708 image issue fix when used through url"
-[`#PICAF-6708`](https://juspay.atlassian.net/browse/PICAF-6708)
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
