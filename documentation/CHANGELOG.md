@@ -12,6 +12,19 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.0.11](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.11%0Dv1.0.10)
+
+Released on : `12 April 2022`
+
+### Summary
+``` Adding fixes for prepare script.
+Issue faced in few machines running rosetta in M1 mac machines. 
+```
+
+### Fixed
+- PICAF-11203: ci: Updated fixes for script
+[`#PICAF-11203`](https://juspay.atlassian.net/browse/PICAF-11203)
+
 ## [v1.0.10](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.10%0Dv1.0.9)
 
 Released on : `12 April 2022`
@@ -195,12 +208,6 @@ Released on : `7 February 2022`
 [`#PICAF-7177`](https://juspay.atlassian.net/browse/PICAF-7177)
 - PICAF-6883 added shimmer for web
 [`#PICAF-6883`](https://juspay.atlassian.net/browse/PICAF-6883)
-- Merge remote-tracking branch 'origin/master' into PICAF-6883-add-shimmer-web
-[`#PICAF-6883`](https://juspay.atlassian.net/browse/PICAF-6883)
-- PICAF-6883 added shimmer for web
-[`#PICAF-6883`](https://juspay.atlassian.net/browse/PICAF-6883)
-- PICAF-6815-gradient-angle-mapping
-[`#PICAF-6815`](https://juspay.atlassian.net/browse/PICAF-6815)
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
