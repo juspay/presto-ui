@@ -20,6 +20,12 @@ if [ "$INIT_CWD" != "$PWD" ]; then
   exit 0;
 fi
 
+# Adding check for .npm folder
+if [[ $PWD =~ ".npm" ]]; then
+  echo "Skipping package's postinstall when used as an npm module";
+  exit 0;
+fi
+
 # Setting other scripts as executable
 chmod +x ./scripts/pre-commit.sh
 chmod +x ./scripts/prepare-commit-msg.sh

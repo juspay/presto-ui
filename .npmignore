@@ -2,3 +2,4 @@
 !lib/**/*
 !package.json
 !*.md
+scripts

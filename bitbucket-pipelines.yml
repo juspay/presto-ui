@@ -19,7 +19,7 @@ pipelines:
           name: Sync markdown with Confluence
           image: kovetskiy/mark
           script:
-            - LAST_COMMIT_DATA=$(git log -1 --name-only)
+            - LAST_COMMIT_DATA=$(git log -2 --name-only)
             - MARKDOWN_FILES=$(echo "${LAST_COMMIT_DATA}" | grep -E ".md$" || [[ $? == 1 ]])
             - if [ -n "${MARKDOWN_FILES}" ]; then
                   for file in ${MARKDOWN_FILES}; do
