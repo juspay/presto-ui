@@ -73,7 +73,10 @@ function initiateElement(type, props, elem){
                 })
             } else {
                 if (eventType == "click") {
+                    let feedbackMutex = false;
                     const touchFeedbackFn = (e) => {
+                        if (feedbackMutex) return;
+                        feedbackMutex = true;
                         let ogBg = "", temp = elem;
                         while(ogBg === "") {
                             if (temp.style.backgroundColor !== "")
@@ -89,6 +92,9 @@ function initiateElement(type, props, elem){
                         // return the color of the element
                         setTimeout(function() {
                             elem.style.backgroundColor = ogBg;
+                            // prevent multiple clicks from permanently 
+                            // changing the background color
+                            feedbackMutex = false;
                         }, 200);
                     }
                     if (!(props.hasOwnProperty("disableFeedback") && props.disableFeeback)) {
