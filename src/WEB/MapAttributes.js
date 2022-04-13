@@ -784,11 +784,42 @@ function createTextElement(elem, config) {
     elem.appendChild(article)
     return text_style;
 }
+
+function patternCheck(props)
+{
+    var data = props.pattern.split(',');
+    var length = parseInt(data.pop());
+    var regexString = data.join('');
+    var finalData = props.text
+    if (length && finalData.length > length)
+        return false;
+    if(props.hasOwnProperty("separator"))
+    {
+        finalData = finalData.replace(new RegExp(props.separator, 'g') , "");
+    }
+    if (regexString) {
+        var regexPattern = new RegExp(regexString);
+        if (!regexPattern.test(finalData)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 function addTextProperties(props, elem, type) {
     let elem_style = ""
     if (props.hasOwnProperty("text")){
         if (type == "editText")
-            elem.value = props.text
+        {
+            elem.value = props.text;
+            if(props.hasOwnProperty("pattern"))
+            {
+                if(patternCheck(props))
+                {
+                    elem.oldValidValue = props.text;
+                }
+            }
+        }
         else
             elem_style += createTextElement(elem, props)
     }

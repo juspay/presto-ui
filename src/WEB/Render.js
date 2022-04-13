@@ -574,7 +574,7 @@ function separatorInputKeyDownHandler(ev){
             var selectionEnd = input.selectionEnd;
             const newValue = input.value;
             if (length) {
-                if (oldValidValue.length < input.value.length && oldValidValue.length + 1 > length) {
+                if (newValue.length > length) {
                     input.value = oldValidValue;
                     ev.preventDefault();
                     input.selectionStart = selectionStart- (selectionEnd-selectionStart)-1;
@@ -582,7 +582,12 @@ function separatorInputKeyDownHandler(ev){
                     return;
                 }
             }
-            var finalData = newValue.replace(/[^a-zA-Z0-9@.-]/g, "");
+            var finalData = newValue;
+            var separator = input.getAttribute("separator");
+            if(separator)
+            {
+                finalData = finalData.replace(new RegExp(separator, 'g') , "");
+            }
             if (regexString) {
                 var regexPattern = new RegExp(regexString);
                 if (!regexPattern.test(finalData)) {
@@ -593,7 +598,6 @@ function separatorInputKeyDownHandler(ev){
                     return;
                 }
             }
-            var separator = input.getAttribute("separator");
             var separatorRepeat = parseInt(input.getAttribute("separatorRepeat"));
             if (separator && separatorRepeat) {
                 ev.preventDefault();
