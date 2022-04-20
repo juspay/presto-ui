@@ -126,7 +126,7 @@ function runInUI(cmd, namespace) {
             inflateView({view, parentElement, siblingView, renderStyle: true,stopChild,isListItem:true, computeList, chrome50matchList});
             let parent = view.parent;
             while(parent && parent.type=="relativeLayout"){
-              computeList.unshift(view.parent.props.id)
+              computeList.unshift(parent.props.id)
               parent=parent.parent;
             }
             postCompute(computeList);
