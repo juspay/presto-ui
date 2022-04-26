@@ -609,6 +609,10 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
 	return "";
   }
 
+  if(attrs.key == "testID"){
+    attrs.value = attrs.value.replaceAll(/[^a-z0-9_]/gi, '_').replace(/_+/g, '_').toLowerCase();
+  }
+
   if (attrs.key == "letterSpacing") {
     attrs.value = (attrs.value/9) + "";
   }

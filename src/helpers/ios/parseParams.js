@@ -1621,6 +1621,7 @@ module.exports = function(type, config, _getSetType, namespace) {
   }
   console.log(config.testID)
   if (config.testID) {
+    config.testID = config.testID.replaceAll(/[^a-z0-9_]/gi, '_').replace(/_+/g, '_').toLowerCase();
     config.methods.push(this_setAccessibilityId(config.testID));
   }
 
