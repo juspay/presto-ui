@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.0.14](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.14%0Dv1.0.13)
+
+Released on : `2 May 2022`
+
+### Fixed
+- PICAF-11397: fix: replacing all special char in testId with single underscore
+[`#PICAF-11397`](https://juspay.atlassian.net/browse/PICAF-11397)
+
 ## [v1.0.13](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.13%0Dv1.0.12)
 
 Released on : `19 April 2022`
@@ -212,10 +220,6 @@ Released on : `7 February 2022`
 [`#PICAF-7488`](https://juspay.atlassian.net/browse/PICAF-7488)
 - PICAF-7339: make screen transition work for web
 [`#PICAF-7339`](https://juspay.atlassian.net/browse/PICAF-7339)
-- PICAF-7339: refactor and add missing props for inline animations for web
-[`#PICAF-7339`](https://juspay.atlassian.net/browse/PICAF-7339)
-- PICAF-7080 Added shimmerView for iOS
-[`#PICAF-7080`](https://juspay.atlassian.net/browse/PICAF-7080)
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
