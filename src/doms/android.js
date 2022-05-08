@@ -37,6 +37,7 @@ var excluded = {
   "LinearInterpolator": "android.view.animation.",
   "Animation": "android.view.animation.",
   "RecyclerView": "android.support.v7.widget.",
+  "TextureView": "android.view.",
   "PagerTabStrip": "android.support.v4.view.",
   "PagerTitleStrip": "android.support.v4.view.",
   "TabLayout": "in.org.npci.upiapp.",
