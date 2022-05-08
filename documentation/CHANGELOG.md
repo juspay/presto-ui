@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.0.16](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.16%0Dv1.0.15)
+
+Released on : `8 May 2022`
+
+### Fixed
+- PICAF-8103: feat: added mapping for TextureView in android
+[`#PICAF-8103`](https://juspay.atlassian.net/browse/PICAF-8103)
+
 ## [v1.0.15](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.15%0Dv1.0.14)
 
 Released on : `4 May 2022`
@@ -224,10 +232,6 @@ Released on : `7 February 2022`
 [`#PICAF-6978`](https://juspay.atlassian.net/browse/PICAF-6978)
 - PICAF-7639: add max-height if coming for accordion view
 [`#PICAF-7639`](https://juspay.atlassian.net/browse/PICAF-7639)
-- PICAF-7639: focus shift issue fix
-[`#PICAF-7639`](https://juspay.atlassian.net/browse/PICAF-7639)
-- PICAF-7624-adding-top-stroke
-[`#PICAF-7624`](https://juspay.atlassian.net/browse/PICAF-7624)
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
