@@ -343,7 +343,7 @@ function setAnimationStyles (elem, props) {
                 var from = InlineAnimationMapper.map("from")(key, value);
                 if(key == "fromX" || key == "fromScaleX"){
                     if(countFrom == 0){
-                        keyFrameFromMarkup += from.replace(";", "");
+                        keyFrameFromMarkup += from.slice(0, -1);
                         countFrom += 1;
                     }else{
                         keyFrameFromMarkup += from.replace("transform:", "");
@@ -352,7 +352,7 @@ function setAnimationStyles (elem, props) {
                 var to = InlineAnimationMapper.map("to")(key, value);
                 if(key == "toX" || key == "toScaleX"){
                     if(countTo == 0){
-                        keyFrameToMarkup += to.replace(";", "");
+                        keyFrameToMarkup += to.slice(0, -1);
                         countTo += 1;
                     }else{
                         keyFrameToMarkup += to.replace("transform:", "");
