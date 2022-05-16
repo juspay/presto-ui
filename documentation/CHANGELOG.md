@@ -12,6 +12,19 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.0.18](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.18%0Dv1.0.17)
+
+Released on : `16 May 2022`
+
+### Summary
+``` Replace is removing semi colons in between of css property also. So using slice to remove slice to
+remove last semi colon. 
+```
+
+### Fixed
+- PICAF-8053: fix: replacing replace with slice
+[`#PICAF-8053`](https://juspay.atlassian.net/browse/PICAF-8053)
+
 ## [v1.0.17](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.17%0Dv1.0.16)
 
 Released on : `16 May 2022`
@@ -232,10 +245,6 @@ Released on : `7 February 2022`
 [`#PICAF-7733`](https://juspay.atlassian.net/browse/PICAF-7733)
 - PICAF-7811 mapping cirular progress view for progressBar
 [`#PICAF-7811`](https://juspay.atlassian.net/browse/PICAF-7811)
-- PICAF-7733-adding-cornerRadii-web
-[`#PICAF-7733`](https://juspay.atlassian.net/browse/PICAF-7733)
-- PICAF-6978-adding-testID-forios
-[`#PICAF-6978`](https://juspay.atlassian.net/browse/PICAF-6978)
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
