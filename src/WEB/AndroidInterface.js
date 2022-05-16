@@ -135,6 +135,13 @@ function runInUI(cmd, namespace) {
         }
       }
     }
+    if(window.focusedElement) {
+      let elem = document.getElementById(window.focusedElement);
+      if(elem) {
+        elem.focus();
+      }
+      window.focusedElement = undefined;
+    }
     
   //recompute()
   //Render.runInUI(cmd)
