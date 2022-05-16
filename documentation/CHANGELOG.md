@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.0.17](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.17%0Dv1.0.16)
+
+Released on : `16 May 2022`
+
+### Fixed
+- PICAF-12223: fix: Fixed autofocus during patching
+[`#PICAF-12223`](https://juspay.atlassian.net/browse/PICAF-12223)
+
 ## [v1.0.16](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.16%0Dv1.0.15)
 
 Released on : `8 May 2022`
@@ -228,10 +236,6 @@ Released on : `7 February 2022`
 [`#PICAF-7733`](https://juspay.atlassian.net/browse/PICAF-7733)
 - PICAF-6978-adding-testID-forios
 [`#PICAF-6978`](https://juspay.atlassian.net/browse/PICAF-6978)
-- PICAF-6978-testID is added
-[`#PICAF-6978`](https://juspay.atlassian.net/browse/PICAF-6978)
-- PICAF-7639: add max-height if coming for accordion view
-[`#PICAF-7639`](https://juspay.atlassian.net/browse/PICAF-7639)
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
