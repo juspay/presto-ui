@@ -1175,6 +1175,17 @@ function addPseudoClasses(elem, props){
     if (props.hasOwnProperty("hoverColor")) {
         css += "div#\\3" + elem.id[0] + " " + elem.id.substring(1) + ":hover{color:" + props["hoverColor"] + "!important;}";
     }
+    if(props.hasOwnProperty("inputType")){
+        //CODE BLOCK for inheriting textColor & background for autofill
+        var style = "";
+        // 1000px hack added to fill input area
+        const boxShadowVal =  "0 0 0 1000px " + props.background + " inset !important;"
+        style += "-webkit-box-shadow:" + boxShadowVal;
+        style += "-moz-box-shadow:" + boxShadowVal;
+        style += "box-shadow:" + boxShadowVal;
+        style += "-webkit-text-fill-color:" + props.color + ";";
+        css += "[id='" + props.id + "']:-webkit-autofill { " + style + "}";
+    }
 
     if(props.hasOwnProperty("scrollBarVisible") && !props.scrollBarVisible && !css.includes("::-webkit-scrollbar{display:none !important;}")) {
         css += "::-webkit-scrollbar{display:none !important;}"; //Hide Scrollbar For Chrome
