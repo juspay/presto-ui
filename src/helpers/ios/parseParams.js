@@ -43,6 +43,15 @@ function isMystiqueVersionGreaterThan(version) {
   return false;
 }
 
+function makeImageName(name){
+  let jpName = 'jp_' +name;
+  if(window.juspayAssetConfig 
+    && window.juspayAssetConfig.images 
+    && window.juspayAssetConfig.images[jpName])
+      return jpName;
+  return name;
+}
+
 function convertColorToRgba(color){
   color = rWS(cS(color));
 
@@ -464,7 +473,7 @@ function this_setSecureTextEntry(enabled) {
 
 function UIImage_imageNamed(image) {
   window.__IMAGE_INDEX++;
-
+  image = makeImageName(image);
   return {
     "return": "image" + window.__IMAGE_INDEX,
     "invokeOn": "self",
@@ -1021,6 +1030,7 @@ function self_getViewFromTag(tag, namespace){
 }
 
 function this_setImageURL(id,url,placeholder, namespace) {
+  url = makeImageName(url);
   return {
     "return": "false",
     "invokeOn": "self",
@@ -1035,6 +1045,7 @@ function this_setImageURL(id,url,placeholder, namespace) {
 }
 
 function this_setGif(id, imageName, namespace) {
+  imageName = makeImageName(imageName);
   return {
     "return": "false",
     "invokeOn": "self",

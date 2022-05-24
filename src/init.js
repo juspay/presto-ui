@@ -50,6 +50,18 @@ if(window.__OS == "ANDROID"){
     window.__DEVICE_DETAILS = getScreenDetails();
 }
 
+if(window.__OS !="WEB"){
+    if(!window.parent.juspayAssetConfig){
+        try{
+            window.parent.juspayAssetConfig = JSON.parse(JBridge.loadFileInDUI("juspay_assets.json"));
+        }catch(e){
+            window.parent.juspayAssetConfig = {};
+        }
+        
+    }
+    window.juspayAssetConfig = window.parent.juspayAssetConfig;
+}
+
 if (window.__OS == "WEB") {
     // In case of iFrame based integration, this will cause CORS exception.
     try {

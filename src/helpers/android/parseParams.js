@@ -327,6 +327,22 @@ function parseColor(color, setterName) {
   return setterName + '=android.graphics.Color->parseColor:s_' + color + ';';
 }
 
+function makeUrlCmd(imageUrl){
+  var imageValue = imageUrl;
+  var jpImageName = 'jp_' + imageUrl;
+  if (window.juspayAssetConfig 
+      && window.juspayAssetConfig.images 
+      && window.juspayAssetConfig.images[jpImageName]) {
+    imageValue = jpImageName;
+  }
+  var prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_" + imageValue + ",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;"
+  var currTransVal = "get_482380";
+  return {
+    prePend : prePend,
+    currTransVal : currTransVal
+  }
+}
+
 function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
   if (getSetType == "get" && (attrs.key == "width" || attrs.key == "height")) {
     // get case i.e during patch
@@ -420,7 +436,14 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
         currTransVal = "get_dfont";
       }
     } else {
-      prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + attrs.value + "\.ttf;";
+      var fontValue = attrs.value,
+          jpFont = "jp_" + attrs.value;
+      if (window.juspayAssetConfig 
+          && window.juspayAssetConfig.fonts 
+          && window.juspayAssetConfig.fonts[jpFont]) {
+           fontValue = "jp_" + fontValue;
+      }
+      prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + fontValue + "\.ttf;";
       currTransVal = "get_type";
     }
   }
@@ -618,8 +641,9 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
   }
 
   if (attrs.key == "dividerDrawable") {
-    prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_"+  attrs.value +",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;"
-    currTransVal = "get_482380";
+    var out = makeUrlCmd(attrs.value)
+    prePend = out.prePend;
+    currTransVal = out.currTransVal;
   }
 
   if (attrs.key == "textFromHtml") {
@@ -711,8 +735,9 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
         currTransVal = "get_dimage";
       }
     } else {
-      prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_"+  attrs.value +",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;"
-      currTransVal = "get_482380";
+      var out = makeUrlCmd(attrs.value)
+      prePend = out.prePend;
+      currTransVal = out.currTransVal;
     }
   }
 
@@ -762,13 +787,15 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
   // }
 
   if (attrs.key == "defaultImage") {
-    prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_"+  attrs.value +",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;"
-    currTransVal = "get_482380";
+      var out = makeUrlCmd(attrs.value)
+      prePend = out.prePend;
+      currTransVal = out.currTransVal;;
   }
 
   if (attrs.key == "placeHolder") {
-    prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_"+  attrs.value +",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;"
-    currTransVal = "get_482380";
+      var out = makeUrlCmd(attrs.value)
+      prePend = out.prePend;
+      currTransVal = out.currTransVal;
   }
 
   if (attrs.key == "dynamicUrl") {
@@ -782,8 +809,9 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
   }
 
   if (attrs.key == "backgroundDrawable") {
-    prePend = "set_342372=ctx->getPackageName;set_res=ctx->getResources;set_368248=get_res->getIdentifier:s_"+  attrs.value +",s_drawable,get_342372;set_res=ctx->getResources;set_482380=get_res->getDrawable:get_368248;"
-    currTransVal = "get_482380";
+      var out = makeUrlCmd(attrs.value)
+      prePend = out.prePend;
+      currTransVal = out.currTransVal;
   }
 
   if (attrs.key == "fontFamily") {
