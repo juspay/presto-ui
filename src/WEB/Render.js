@@ -97,7 +97,7 @@ function initiateElement(type, props, elem){
                             feedbackMutex = false;
                         }, 200);
                     }
-                    if (!(props.hasOwnProperty("disableFeedback") && props.disableFeeback)) {
+                    if (!(props.hasOwnProperty("disableFeedback") && props.disableFeedback)) {
                         elem.addEventListener('touchstart', touchFeedbackFn);
                         elem.addEventListener('mousedown', touchFeedbackFn);
                     }
