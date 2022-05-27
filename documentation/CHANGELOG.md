@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.0.20](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.20%0Dv1.0.19)
+
+Released on : `27 May 2022`
+
+### Fixed
+- PICAF-12223: fix: Fix focus when previous focused element is not proper
+[`#PICAF-12223`](https://juspay.atlassian.net/browse/PICAF-12223)
+
 ## [v1.0.19](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.19%0Dv1.0.18)
 
 Released on : `27 May 2022`
@@ -245,10 +253,6 @@ Released on : `7 February 2022`
 [`#PICAF-7639`](https://juspay.atlassian.net/browse/PICAF-7639)
 - PICAF-6561 added px for line height
 [`#PICAF-6561`](https://juspay.atlassian.net/browse/PICAF-6561)
-- PICAF-6842 fixed weight when using addview to parent
-[`#PICAF-6842`](https://juspay.atlassian.net/browse/PICAF-6842)
-- PICAF-7327 Added config to hide scrollbar
-[`#PICAF-7327`](https://juspay.atlassian.net/browse/PICAF-7327)
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
