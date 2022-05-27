@@ -1125,9 +1125,7 @@ function setElemAttributes(element,props){
                 var doc = document.getElementById(props.id);
                 if (doc) {
                     if (window.hasAnimationProps) {
-                        if (window.focusedElement == undefined) {
-                            window.focusedElement = props.id;
-                        };
+                        window.focusedElement = props.id;
                     } else {
                         doc.focus();
 
