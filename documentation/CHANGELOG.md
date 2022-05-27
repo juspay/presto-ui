@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.0.19](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.19%0Dv1.0.18)
+
+Released on : `27 May 2022`
+
+### Fixed
+- PICAF-12267: feat: inherit autofill textColor and background from input
+[`#PICAF-12267`](https://juspay.atlassian.net/browse/PICAF-12267)
+
 ## [v1.0.18](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.18%0Dv1.0.17)
 
 Released on : `16 May 2022`
@@ -241,10 +249,6 @@ Released on : `7 February 2022`
 [`#PICAF-6842`](https://juspay.atlassian.net/browse/PICAF-6842)
 - PICAF-7327 Added config to hide scrollbar
 [`#PICAF-7327`](https://juspay.atlassian.net/browse/PICAF-7327)
-- PICAF-7733-typo-horizontalScrollView
-[`#PICAF-7733`](https://juspay.atlassian.net/browse/PICAF-7733)
-- PICAF-7811 mapping cirular progress view for progressBar
-[`#PICAF-7811`](https://juspay.atlassian.net/browse/PICAF-7811)
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
