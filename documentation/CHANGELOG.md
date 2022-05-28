@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.0.21](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.21%0Dv1.0.20)
+
+Released on : `28 May 2022`
+
+### Fixed
+- PICAF-12677-disable-feedback-prop
+[`#PICAF-12677`](https://juspay.atlassian.net/browse/PICAF-12677)
+
 ## [v1.0.20](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.20%0Dv1.0.19)
 
 Released on : `27 May 2022`
@@ -249,10 +257,6 @@ Released on : `7 February 2022`
 [`#PICAF-7951`](https://juspay.atlassian.net/browse/PICAF-7951)
 - PICAF-7639: push compiled files
 [`#PICAF-7639`](https://juspay.atlassian.net/browse/PICAF-7639)
-- PICAF-7639: add missing case for accordionLayout animation
-[`#PICAF-7639`](https://juspay.atlassian.net/browse/PICAF-7639)
-- PICAF-6561 added px for line height
-[`#PICAF-6561`](https://juspay.atlassian.net/browse/PICAF-6561)
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
