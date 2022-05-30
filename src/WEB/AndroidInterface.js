@@ -193,6 +193,13 @@ function moveView(id, index) {
     handleMatchParentChrome50(chrome50matchList)
     postCompute(computeList);
   })
+  if(window.focusedElement) {
+    let elem = document.getElementById(window.focusedElement);
+    if(elem) {
+      elem.focus();
+    }
+    window.focusedElement = undefined;
+  }
 }
 
 
@@ -360,6 +367,13 @@ function replaceView(view, id, namespace) {
   postCompute(computeList);
   handleMatchParentChrome50(chrome50matchList)
   /* Append Children End */
+  if(window.focusedElement) {
+    let elem = document.getElementById(window.focusedElement);
+    if(elem) {
+      elem.focus();
+    }
+    window.focusedElement = undefined;
+  }
 }
 
 // function recompute() {
