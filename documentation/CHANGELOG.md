@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.0.23](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.23%0Dv1.0.22)
+
+Released on : `30 May 2022`
+
+### Fixed
+- PICAF-12668: fix: Removed click feedback for now
+[`#PICAF-12668`](https://juspay.atlassian.net/browse/PICAF-12668)
+
 ## [v1.0.22](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.22%0Dv1.0.21)
 
 Released on : `30 May 2022`
@@ -255,10 +263,6 @@ Released on : `7 February 2022`
 [`#PICAF-7934`](https://juspay.atlassian.net/browse/PICAF-7934)
 - PICAF-7922: setting singleLine to 1 line when it's true
 [`#PICAF-7922`](https://juspay.atlassian.net/browse/PICAF-7922)
-- PICAF-7934-cursor-n-progress-bar-color-support
-[`#PICAF-7934`](https://juspay.atlassian.net/browse/PICAF-7934)
-- PICAF-7934 removed orientation other than linear layout
-[`#PICAF-7934`](https://juspay.atlassian.net/browse/PICAF-7934)
 - PICAF-7934-cursor-n-progress-bar-color-support
 [`#PICAF-7934`](https://juspay.atlassian.net/browse/PICAF-7934)
 
