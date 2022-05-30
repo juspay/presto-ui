@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.0.24](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.24%0Dv1.0.23)
+
+Released on : `30 May 2022`
+
+### Fixed
+- PICAF-8717: feat: Added jp image support in framework level
+[`#PICAF-8717`](https://juspay.atlassian.net/browse/PICAF-8717)
+
 ## [v1.0.23](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.23%0Dv1.0.22)
 
 Released on : `30 May 2022`
@@ -260,10 +268,6 @@ Released on : `7 February 2022`
 - PICAF-6561: revert line-height pixel
 [`#PICAF-6561`](https://juspay.atlassian.net/browse/PICAF-6561)
 - PICAF-7934 cursorColorV2 bugfix
-[`#PICAF-7934`](https://juspay.atlassian.net/browse/PICAF-7934)
-- PICAF-7922: setting singleLine to 1 line when it's true
-[`#PICAF-7922`](https://juspay.atlassian.net/browse/PICAF-7922)
-- PICAF-7934-cursor-n-progress-bar-color-support
 [`#PICAF-7934`](https://juspay.atlassian.net/browse/PICAF-7934)
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
