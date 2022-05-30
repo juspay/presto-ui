@@ -29,6 +29,7 @@ let {
 let mapAttributes = require("./MapAttributes");
 const List = require("./ListPresto");
 var addedShimmerStyle = false;
+const useClickFeedback = false;
 
 function initiateElement(type, props, elem){
     if (type == "editText" && elem.tagName.toLowerCase() == "input") {
@@ -97,7 +98,7 @@ function initiateElement(type, props, elem){
                             feedbackMutex = false;
                         }, 200);
                     }
-                    if (!(props.hasOwnProperty("disableFeedback") && props.disableFeedback)) {
+                    if (!(props.hasOwnProperty("disableFeedback") && props.disableFeedback) && useClickFeedback) {
                         elem.addEventListener('touchstart', touchFeedbackFn);
                         elem.addEventListener('mousedown', touchFeedbackFn);
                     }
