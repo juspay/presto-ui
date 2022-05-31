@@ -1233,8 +1233,10 @@ let postCompute = (list) =>{
         let maxWidth = 0;
         for (var i = 0; i < childNodes.length; ++i) {
                 let style = childNodes[i].currentStyle || window.getComputedStyle(childNodes[i]);
-                maxHeight = maxHeight > childNodes[i].offsetHeight ? maxHeight : (childNodes[i].offsetHeight + getValueFromPixel(style.marginTop) + getValueFromPixel(style.marginBottom));
-                maxWidth = maxWidth > childNodes[i].offsetWidth ? maxWidth : childNodes[i].offsetWidth;
+                if(style.display != "none") {
+                    maxHeight = maxHeight > childNodes[i].offsetHeight ? maxHeight : (childNodes[i].offsetHeight + getValueFromPixel(style.marginTop) + getValueFromPixel(style.marginBottom));
+                    maxWidth = maxWidth > childNodes[i].offsetWidth ? maxWidth : childNodes[i].offsetWidth;
+                }
         }
         let view = window.__VIEWS[id];
         if(view && view.state && view.state.practicalHeight == "wrap_content" ) {
