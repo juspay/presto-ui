@@ -1189,6 +1189,11 @@ function addPseudoClasses(elem, props){
         css += "::-webkit-scrollbar{display:none !important;}"; //Hide Scrollbar For Chrome
     }
 
+    // To add placeholder pseudo-class on edittext element
+    if (props.hasOwnProperty("hintColor")) {
+        css += "input#\\3" + elem.id[0] + " " +elem.id.substring(1) + `::placeholder {color: ${props.hintColor} !important; }`;
+    }
+
     if (!css) return
     if(styleElem) {
       styleElem.innerText += css;
