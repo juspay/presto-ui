@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.0.26](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.26%0Dv1.0.25)
+
+Released on : `2 June 2022`
+
+### Fixed
+- PICAF-11892 Adding hintColor support for Edittext in web
+[`#PICAF-11892`](https://juspay.atlassian.net/browse/PICAF-11892)
+
 ## [v1.0.25](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.25%0Dv1.0.24)
 
 Released on : `31 May 2022`
@@ -269,10 +277,6 @@ Released on : `7 February 2022`
 [`#PICAF-8217`](https://juspay.atlassian.net/browse/PICAF-8217)
 - PICAF-8217 autoUpdateHeight support added
 [`#PICAF-8217`](https://juspay.atlassian.net/browse/PICAF-8217)
-- PICAF-8122 fixed a typo in cornerRadii code
-[`#PICAF-8122`](https://juspay.atlassian.net/browse/PICAF-8122)
-- PICAF-7934 removied maxWidth warning and one bug for api&lt;28
-[`#PICAF-7934`](https://juspay.atlassian.net/browse/PICAF-7934)
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
