@@ -12,6 +12,19 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.0.27](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.27%0Dv1.0.26)
+
+Released on : `8 June 2022`
+
+### Summary
+``` When we patch element A from element B , the focus will set to element A cos it still contains focus
+as true 
+```
+
+### Fixed
+- PICAF-13052: fix: Fixed focus in patching
+[`#PICAF-13052`](https://juspay.atlassian.net/browse/PICAF-13052)
+
 ## [v1.0.26](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.26%0Dv1.0.25)
 
 Released on : `2 June 2022`
@@ -273,10 +286,6 @@ Released on : `7 February 2022`
 [`#PICAF-8621`](https://juspay.atlassian.net/browse/PICAF-8621)
 - PICAF-7639 focus issue shift fix
 [`#PICAF-7639`](https://juspay.atlassian.net/browse/PICAF-7639)
-- PICAF-8217 event heightUpdate changed to runInJuspayBrowser
-[`#PICAF-8217`](https://juspay.atlassian.net/browse/PICAF-8217)
-- PICAF-8217 autoUpdateHeight support added
-[`#PICAF-8217`](https://juspay.atlassian.net/browse/PICAF-8217)
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
