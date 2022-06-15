@@ -45,7 +45,7 @@ function initiateElement(type, props, elem){
         }
     }
 
-    let events = ['onClick', 'onEnterPressedEvent', 'onChange', 'onMouseDown', 'onMouseUp', 'onMouseEnter', 'onMouseOver', 'onMouseMove', 'onMouseOut', 'onMouseLeave', 'onFocus', 'onPaste']
+    let events = ['onClick', 'onEnterPressedEvent', 'onDeletePressedEvent', 'onRightArrowPressedEvent', 'onLeftArrowPressedEvent', 'onChange', 'onMouseDown', 'onMouseUp', 'onMouseEnter', 'onMouseOver', 'onMouseMove', 'onMouseOut', 'onMouseLeave', 'onFocus', 'onPaste']
 
     for (let i = 0; i < events.length; i++) {
         let key = events[i]
@@ -57,6 +57,33 @@ function initiateElement(type, props, elem){
                     e.stopPropagation()
 
                     if (e.keyCode == 13) {
+                        callback(e)
+                    }
+                })
+            }
+            if (key == "onDeletePressedEvent") {
+                elem.addEventListener('keyup', (e) => {
+                    e.stopPropagation()
+                    
+                    if (e.keyCode == 8) {
+                        callback(e)
+                    }
+                })
+            }
+            if (key == "onRightArrowPressedEvent") {
+                elem.addEventListener('keyup', (e) => {
+                    e.stopPropagation()
+                    
+                    if (e.keyCode == 39) {
+                        callback(e)
+                    }
+                })
+            }
+            if (key == "onLeftArrowPressedEvent") {
+                elem.addEventListener('keyup', (e) => {
+                    e.stopPropagation()
+                    
+                    if (e.keyCode == 37) {
                         callback(e)
                     }
                 })
