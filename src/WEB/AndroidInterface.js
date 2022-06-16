@@ -36,6 +36,7 @@ var {
 var helper = require('../helper');
 var callbackInvoker = require("../helpers/common/callbackInvoker");
 const { diffArray } = require("./ListPresto");
+const {setUseHintColor} = require("./MapAttributes");
 
 var {addToContainerList, getContainer, getParentView} = require('./Utils')
 
@@ -419,5 +420,8 @@ module.exports = {
 
   getWindow: getWindow,
 
-  getDocument: getDocument
+  getDocument: getDocument,
+
+  setUseHintColor : setUseHintColor
+  
 };

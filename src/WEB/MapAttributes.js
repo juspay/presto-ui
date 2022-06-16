@@ -1,5 +1,7 @@
 let utils = require("./Utils");
 
+let useHintColor = false;
+
 function mapPropToStyle(element,props,type){
     let ele_style = "";
     ele_style += addProps(props);
@@ -1183,7 +1185,7 @@ function addPseudoClasses(elem, props){
     }
 
     // To add placeholder pseudo-class on edittext element
-    if (props.hasOwnProperty("hintColor")) {
+    if (props.hasOwnProperty("hintColor") && useHintColor) {
         css += "input#\\3" + elem.id[0] + " " +elem.id.substring(1) + `::placeholder {color: ${props.hintColor} !important; }`;
     }
 
@@ -1197,6 +1199,8 @@ function addPseudoClasses(elem, props){
     }
 
 }
+
+let setUseHintColor = (val) => useHintColor = val;
 
 
 module.exports = {
@@ -1217,5 +1221,6 @@ module.exports = {
     addTextProperties,
     addClassNameProperties,
     addFunctions,
-    addPseudoClasses
+    addPseudoClasses,
+    setUseHintColor
 }
