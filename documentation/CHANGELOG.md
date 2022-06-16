@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.0.28](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.28%0Dv1.0.27)
+
+Released on : `16 June 2022`
+
+### Fixed
+- PICAF-11892: fix: Turning off hint color
+[`#PICAF-11892`](https://juspay.atlassian.net/browse/PICAF-11892)
+
 ## [v1.0.27](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.27%0Dv1.0.26)
 
 Released on : `8 June 2022`
@@ -266,26 +274,6 @@ Released on : `22 February 2022`
 ### Fixed
 - PICAF-8053 :: indeterminant loader animation fixed
 [`#PICAF-8053`](https://juspay.atlassian.net/browse/PICAF-8053)
-
-## [v1.0.1](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.1%0Dv1.0.0)
-
-Released on : `17 February 2022`
-
-### Fixed
-- PICAF-8475: added textSizeSp for sp units in Android
-[`#PICAF-8475`](https://juspay.atlassian.net/browse/PICAF-8475)
-- [PICAF-8298] added support for progressBar
-[`#PICAF-8298`](https://juspay.atlassian.net/browse/PICAF-8298)
-
-## v1.0.0
-
-Released on : `7 February 2022`
-
-### Fixed
-- PICAF-8621 don't attach listeners on patch event
-[`#PICAF-8621`](https://juspay.atlassian.net/browse/PICAF-8621)
-- PICAF-7639 focus issue shift fix
-[`#PICAF-7639`](https://juspay.atlassian.net/browse/PICAF-7639)
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
