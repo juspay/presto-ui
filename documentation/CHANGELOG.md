@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.0.29](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.29%0Dv1.0.28)
+
+Released on : `20 June 2022`
+
+### Fixed
+- PICAF-13415-adding-events-for-left-right-and-delete-key
+[`#PICAF-13415`](https://juspay.atlassian.net/browse/PICAF-13415)
+
 ## [v1.0.28](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.28%0Dv1.0.27)
 
 Released on : `16 June 2022`
@@ -266,14 +274,6 @@ Released on : `23 February 2022`
 ### Fixed
 - PICAF-8099 added allow props for feature policy support of iframe
 [`#PICAF-8099`](https://juspay.atlassian.net/browse/PICAF-8099)
-
-## [v1.0.2](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.2%0Dv1.0.1)
-
-Released on : `22 February 2022`
-
-### Fixed
-- PICAF-8053 :: indeterminant loader animation fixed
-[`#PICAF-8053`](https://juspay.atlassian.net/browse/PICAF-8053)
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
