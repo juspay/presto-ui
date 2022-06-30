@@ -1024,6 +1024,7 @@ function addSetInputTypeProp(ele,props){
             ele_style += "-webkit-text-security:disc;";
             ele_style += "-moz-text-security:disc;";
             ele_style += "text-security:disc;";
+            ele.setAttribute("autocomplete","off");
           }
           else {
             ele.setAttribute("autocomplete","new-password");
