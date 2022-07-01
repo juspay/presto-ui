@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.0.30](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.30%0Dv1.0.29)
+
+Released on : `1 July 2022`
+
+### Fixed
+- PICAF-13592: fix: Removing autosuggestion for passwords in web
+[`#PICAF-13592`](https://juspay.atlassian.net/browse/PICAF-13592)
+
 ## [v1.0.29](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.29%0Dv1.0.28)
 
 Released on : `20 June 2022`
@@ -258,22 +266,6 @@ Released on : `6 April 2022`
 ### Fixed
 - PICAF-9163: formatted
 [`#PICAF-9163`](https://juspay.atlassian.net/browse/PICAF-9163)
-
-## [v1.0.4](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.4%0Dv1.0.3)
-
-Released on : `28 February 2022`
-
-### Fixed
-- PICAF-7639 reverting input focus setTimeout
-[`#PICAF-7639`](https://juspay.atlassian.net/browse/PICAF-7639)
-
-## [v1.0.3](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.3%0Dv1.0.2)
-
-Released on : `23 February 2022`
-
-### Fixed
-- PICAF-8099 added allow props for feature policy support of iframe
-[`#PICAF-8099`](https://juspay.atlassian.net/browse/PICAF-8099)
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
