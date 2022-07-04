@@ -19,7 +19,8 @@ git config user.name "$GIT_USERNAME"
 git config user.email "$GIT_EMAIL"
 # Add and push updated files.
 # :Can be made better by lopping on files and only commiting if any files have changed.
-git add documentation/CHANGELOG.md package.json
+npm run compile
+git add documentation/CHANGELOG.md package.json lib
 git commit -m "[skip ci] $TICKET chore(release) - Released a new version > $LATEST_TAG"
 git push origin
 # Pushing the tag manually instead of via standard-version library

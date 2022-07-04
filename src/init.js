@@ -26,6 +26,8 @@
 /*
  Used to initialize defaults for window funcions and variables.
 */
+
+window.presto_ui_version = __VERSION__;
 const { merge } = require('./helper');
 window.PrestoUI = require("./PrestoUIInterface");
 

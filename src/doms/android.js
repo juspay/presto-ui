@@ -36,7 +36,7 @@ var excluded = {
   "RotateAnimation": "android.view.animation.",
   "LinearInterpolator": "android.view.animation.",
   "Animation": "android.view.animation.",
-  "RecyclerView": "android.support.v7.widget.",
+  "RecyclerView": "androidx.recyclerview.widget.",
   "TextureView": "android.view.",
   "PagerTabStrip": "android.support.v4.view.",
   "PagerTitleStrip": "android.support.v4.view.",

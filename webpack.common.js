@@ -3,17 +3,21 @@ const webpack = require('webpack');
 const WebpackBar = require('webpackbar');
 const DashboardPlugin = require("webpack-dashboard/plugin");
 const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
+const packageJSON = require("./package.json");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const isWebpackDevServer = process.argv.some(a => path.basename(a) === 'serve');
 const isWatch = process.argv.includes('--watch');
 const isAnalyse = process.argv.includes('--analyse');
 
+__VERSION__ = packageJSON.version
+
 var plugins = [
   new WebpackBar(),  
   new webpack.DefinePlugin({
     // Set this to false to create a build that contains DateRangePicker for web
-    '__ignoreDateRangePickerWeb': JSON.stringify(true)
+    '__ignoreDateRangePickerWeb': JSON.stringify(true),
+    __VERSION__: JSON.stringify(packageJSON.version)
   }),
 ];
 

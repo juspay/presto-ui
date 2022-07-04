@@ -226,7 +226,7 @@ function getCtr(viewGroup) {
     'viewPager': 'android.support.v4.view.ViewPager$LayoutParams->new',
     'listView': 'android.widget.LinearLayout$LayoutParams->new',
     'expandableListView': 'android.widget.LinearLayout$LayoutParams->new',
-    'recyclerView': 'android.support.v7.widget.RecyclerView$LayoutParams->new',
+    'recyclerView': 'androidx.recyclerview.widget.RecyclerView$LayoutParams->new',
     'ratingBar': 'android.widget.LinearLayout$LayoutParams->new',
     'accordionLayout': 'android.widget.FrameLayout$LayoutParams->new',
     'swypeLayout': 'android.widget.FrameLayout$LayoutParams->new',
