@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.0.32](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.32%0Dv1.0.31)
+
+Released on : `4 July 2022`
+
+### Fixed
+- PICAF-7851: feat: android recycler view support
+[`#PICAF-7851`](https://juspay.atlassian.net/browse/PICAF-7851)
+
 ## [v1.0.31](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.31%0Dv1.0.30)
 
 Released on : `4 July 2022`
@@ -226,34 +234,6 @@ Released on : `11 April 2022`
 ### Fixed
 - PICAF-11203: ci: Setup script check and Workflow changes
 [`#PICAF-11203`](https://juspay.atlassian.net/browse/PICAF-11203)
-
-## [v1.0.8](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.8%0Dv1.0.7)
-
-Released on : `10 April 2022`
-
-### Summary
-``` - Added click feedback to views and map it to native on click events
-- Native Android and iOS support is required to be present.
-- For web HyperSDK-web needs to be updated. 
-```
-
-### Fixed
-- PICAF-7989: feat: Click Feedback for all items that has an onClick event
-[`#PICAF-7989`](https://juspay.atlassian.net/browse/PICAF-7989)
-
-## [v1.0.7](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.7%0Dv1.0.6)
-
-Released on : `10 April 2022`
-
-### Summary
-``` - Adding workflow for change-log generation
-- Auto-tagging of version
-- workflow for sync with confluence 
-```
-
-### Fixed
-- PICAF-11024: ci: Workflow triggers and change log generation
-[`#PICAF-11024`](https://juspay.atlassian.net/browse/PICAF-11024)
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
