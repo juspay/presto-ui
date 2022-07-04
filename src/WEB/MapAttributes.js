@@ -1159,7 +1159,8 @@ function setElemAttributes(element,props){
 
 }
 
-function addPseudoClasses(elem, props){
+function addPseudoClasses(elem, view){
+    let props = view.props
     let styleElem = document.getElementById(window.__STYLE_ID) || document.getElementsByTagName("body")[0].getElementsByTagName("style")[0];
     let css = "";
     if (props.hasOwnProperty("hoverBg")) {
@@ -1188,6 +1189,8 @@ function addPseudoClasses(elem, props){
     // To add placeholder pseudo-class on edittext element
     if (props.hasOwnProperty("hintColor") && useHintColor) {
         css += "input#\\3" + elem.id[0] + " " +elem.id.substring(1) + `::placeholder {color: ${props.hintColor} !important; }`;
+    } else if (view.type == "editText") {
+        css += "input#\\3" + elem.id[0] + " " +elem.id.substring(1) + `::placeholder {opacity: 0.35 !important; }`;
     }
 
     if (!css) return

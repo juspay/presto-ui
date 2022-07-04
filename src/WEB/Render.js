@@ -733,7 +733,7 @@ function setAttributes(view, elem, firstRender) {
     elem = mapAttributes.setElemAttributes(elem,props);
     elem_style+=mapAttributes.addFunctions(props, elem);
     elem_style+=mapAttributes.addAnimationAttributes(props);
-    mapAttributes.addPseudoClasses(elem, props);
+    mapAttributes.addPseudoClasses(elem, view);
 
     if (firstRender) { // Events are added when the element is created for the first time
         initiateElement(type, props, elem)
