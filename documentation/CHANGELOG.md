@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.0.31](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.31%0Dv1.0.30)
+
+Released on : `4 July 2022`
+
+### Fixed
+- PICAF-11892: fix: moved opacity of placeholder from sdk web to presto ui
+[`#PICAF-11892`](https://juspay.atlassian.net/browse/PICAF-11892)
+
 ## [v1.0.30](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.30%0Dv1.0.29)
 
 Released on : `1 July 2022`
@@ -246,26 +254,6 @@ Released on : `10 April 2022`
 ### Fixed
 - PICAF-11024: ci: Workflow triggers and change log generation
 [`#PICAF-11024`](https://juspay.atlassian.net/browse/PICAF-11024)
-
-## [v1.0.6](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.6%0Dv1.0.5)
-
-Released on : `7 April 2022`
-
-### Fixed
-- PICAF-6815-web-edittext-counter-fix
-[`#PICAF-6815`](https://juspay.atlassian.net/browse/PICAF-6815)
-
-## [v1.0.5](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.5%0Dv1.0.4)
-
-Released on : `6 April 2022`
-
-### Summary
-``` compiled 
-```
-
-### Fixed
-- PICAF-9163: formatted
-[`#PICAF-9163`](https://juspay.atlassian.net/browse/PICAF-9163)
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
