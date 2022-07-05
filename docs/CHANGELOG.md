@@ -5,7 +5,7 @@
 <!-- Label: changelog -->
 <!-- Label: prestoUI -->
 <!-- Label: library -->
-<!-- Include:  documentation/templates/disclaimer.md -->
+<!-- Include:  docs/templates/disclaimer.md -->
 # Releases & Changelog
 
 <!-- Include: ac:toc -->
@@ -58,7 +58,7 @@ Released on : `8 June 2022`
 
 ### Summary
 ``` When we patch element A from element B , the focus will set to element A cos it still contains focus
-as true 
+as true
 ```
 
 ### Fixed
@@ -135,7 +135,7 @@ Released on : `16 May 2022`
 
 ### Summary
 ``` Replace is removing semi colons in between of css property also. So using slice to remove slice to
-remove last semi colon. 
+remove last semi colon.
 ```
 
 ### Fixed
@@ -163,7 +163,7 @@ Released on : `8 May 2022`
 Released on : `4 May 2022`
 
 ### Summary
-``` Prevent background colour change, when user clicks within 200ms of click feedback 
+``` Prevent background colour change, when user clicks within 200ms of click feedback
 ```
 
 ### Fixed
@@ -200,7 +200,7 @@ Released on : `12 April 2022`
 
 ### Summary
 ``` Adding fixes for prepare script.
-Issue faced in few machines running rosetta in M1 mac machines. 
+Issue faced in few machines running rosetta in M1 mac machines.
 ```
 
 ### Fixed
@@ -214,7 +214,7 @@ Released on : `12 April 2022`
 ### Summary
 ``` - Updated change-log template to provide better visibility.
 - Fixed a bug for repeated version in change-logs.
-- Mark-Confluence sync to remove H1 from md. 
+- Mark-Confluence sync to remove H1 from md.
 ```
 
 ### Fixed
@@ -228,7 +228,7 @@ Released on : `11 April 2022`
 ### Summary
 ``` - Updated wokflow to create tags after pushing.
 - Added fixes to Setup scripts
-- Added comments for all shell files 
+- Added comments for all shell files
 ```
 
 ### Fixed

@@ -4,7 +4,7 @@
 <!-- Label: Readme -->
 <!-- Label: prestoUI -->
 <!-- Label: library -->
-<!-- Include:  documentation/templates/disclaimer.md -->
+<!-- Include:  docs/templates/disclaimer.md -->
 # Presto UI
 
 <!-- Include: ac:toc -->
@@ -19,7 +19,7 @@ In itself presto-ui takes markup as input and generates commands consumed by low
 
 For **web**, presto-ui generates vanilla js and css.
 
-For general use case you would need to use a micro-app sample and native test tools. 
+For general use case you would need to use a micro-app sample and native test tools.
 <!-- Add details about all frameworks -->
 ## Getting Started
 
@@ -55,8 +55,8 @@ ln -s ./node_modules/presto-ui/lib <path-to-presto-ui>/lib
 > After every `npm i` you will need to link again
 ## Contributing
 
-We use git hooks to verify commit messages so 
-make sure to use `terminal` to commit your changes.  
+We use git hooks to verify commit messages so
+make sure to use `terminal` to commit your changes.
 
 > Do not use VSCode to commit any changes !!!
 
@@ -65,7 +65,7 @@ Git push will fail if commit message is not proper.
 ```
 git commit
 ```
-or 
+or
 ``` zsh
 gc #for zsh
 ```

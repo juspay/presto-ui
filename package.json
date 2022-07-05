@@ -5,7 +5,6 @@
   "main": "lib/index.js",
   "scripts": {
     "prepare": "./scripts/setup.sh",
-    "version": "standard-version --no-verify",
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "webpack --mode=production --config webpack.prod.js",
     "watch": "webpack --mode=development --config webpack.dev.js --watch --progress"
@@ -22,6 +21,7 @@
     "commitlint-config-jira": "^1.6.3",
     "commitlint-plugin-jira-rules": "^1.6.3",
     "husky": "^7.0.0",
+    "prettier": "2.6.2",
     "standard-version": "^9.3.2",
     "webpack": "^5.37.1",
     "webpack-build-notifier": "^2.2.1",
@@ -110,8 +110,8 @@
     }
   },
   "auto-changelog": {
-    "output": "documentation/CHANGELOG.md",
-    "template": "./documentation/templates/changelog.hbs",
+    "output": "docs/CHANGELOG.md",
+    "template": "./docs/templates/changelog.hbs",
     "commitLimit": false,
     "breakingPattern": "(!:)",
     "issueUrl": "https://juspay.atlassian.net/browse/{id}",
