@@ -1630,7 +1630,6 @@ module.exports = function(type, config, _getSetType, namespace) {
       config.methods.push(this_setTag(tag));
     }
   }
-  console.log(config.testID)
   if (config.testID) {
     config.testID = config.testID.replaceAll(/[^a-z0-9_]/gi, '_').replace(/_+/g, '_').toLowerCase();
     config.methods.push(this_setAccessibilityId(config.testID));
@@ -2117,6 +2116,15 @@ module.exports = function(type, config, _getSetType, namespace) {
 
   if (config.hasOwnProperty("listData") && config.hasOwnProperty("listItem")) {
     const item = JSON.parse(config.listItem);
+    const listDataObj = JSON.parse(config.listData)
+        for(var i = 0; i < listDataObj.length; i++){
+          for(var key in listDataObj[i]){
+            if(key.substring(key.length - 6) == "TestId"){
+              listDataObj[i][key] = listDataObj[i][key].replaceAll(/[^a-z0-9_]/gi, '_').replace(/_+/g, '_').toLowerCase();
+            }
+          }
+        }
+    config.listData = JSON.stringify(listDataObj)
     item.itemView = Android.createListData(config.id, item.itemView);
     config.methods.push(this_setupList(config.listData, JSON.stringify(item)));
   }
