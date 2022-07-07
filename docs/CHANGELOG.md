@@ -12,6 +12,15 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.0.34](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.34%0Dv1.0.33)
+
+Released on : `7 July 2022`
+
+### Fixed
+- PICAF-13953: fix: "PICAF-13953:fix:prestoList-testId-formatting"
+[`#PICAF-13953`](https://juspay.atlassian.net/browse/PICAF-13953)
+[`#PICAF-13953`](https://juspay.atlassian.net/browse/PICAF-13953)
+
 ## [v1.0.33](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.33%0Dv1.0.32)
 
 Released on : `5 July 2022`
