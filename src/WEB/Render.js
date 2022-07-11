@@ -360,12 +360,11 @@ function setAnimationStyles (elem, props) {
             window.hasAnimationProps = false;
            });
         }
-        const keyframeName = "keyframe_" + props.id + "_" + KEYFRAME_INDEX;
-        KEYFRAME_INDEX += 1;
         var keyFrameFromMarkup = keyFrameToMarkup = "";
         var countFrom = countTo = 0;
         
         animationObjects.forEach(function (animationObject) {
+            const keyframeName = "keyframe_" + props.id + "_" + KEYFRAME_INDEX++;
             /* Add keyframe in css */
             for (var [key, value] of Object.entries(animationObject)) {
                 var from = InlineAnimationMapper.map("from")(key, value);
