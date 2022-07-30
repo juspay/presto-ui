@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.0.35](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.35%0Dv1.0.34)
+
+Released on : `30 July 2022`
+
+### Fixed
+- PICAF-14368: fix: Fix for Screen Entry and Exit Animation
+[`#PICAF-14368`](https://juspay.atlassian.net/browse/PICAF-14368)
+
 ## [v1.0.34](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.34%0Dv1.0.33)
 
 Released on : `7 July 2022`
