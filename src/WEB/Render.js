@@ -31,6 +31,22 @@ const List = require("./ListPresto");
 var addedShimmerStyle = false;
 const useClickFeedback = false;
 
+function attachKeyDownEventListenerKeyCode(elem, callback, keyCode) {
+    elem.addEventListener('keydown', (e) => {
+        
+        if(e.repeat) { 
+            e.preventDefault();
+            return;
+         }  // to handle if pressed multiple times
+        else {
+            e.stopPropagation()
+            if (e.keyCode == keyCode) {
+                callback(e)
+            }
+        }    
+    })
+}
+
 function initiateElement(type, props, elem){
     if (type == "editText" && elem.tagName.toLowerCase() == "input") {
 
@@ -45,7 +61,7 @@ function initiateElement(type, props, elem){
         }
     }
 
-    let events = ['onClick', 'onEnterPressedEvent', 'onDeletePressedEvent', 'onRightArrowPressedEvent', 'onLeftArrowPressedEvent', 'onChange', 'onMouseDown', 'onMouseUp', 'onMouseEnter', 'onMouseOver', 'onMouseMove', 'onMouseOut', 'onMouseLeave', 'onFocus', 'onPaste']
+    let events = ['onClick', 'onEnterPressedEvent', 'onDeletePressedEvent', 'onRightArrowPressedEvent', 'onLeftArrowPressedEvent', 'onChange', 'onMouseDown', 'onMouseUp', 'onMouseEnter', 'onMouseOver', 'onMouseMove', 'onMouseOut', 'onMouseLeave', 'onFocus', 'onPaste','getInputEventData']
 
     for (let i = 0; i < events.length; i++) {
         let key = events[i]
@@ -53,41 +69,28 @@ function initiateElement(type, props, elem){
         if (props.hasOwnProperty(key) && typeof props[key] == "function") {
             const callback = props[key]
             if (key == "onEnterPressedEvent") {
-                elem.addEventListener('keyup', (e) => {
-                    e.stopPropagation()
-
-                    if (e.keyCode == 13) {
-                        callback(e)
-                    }
-                })
+                attachKeyDownEventListenerKeyCode(elem, callback, 13);
             }
             if (key == "onDeletePressedEvent") {
-                elem.addEventListener('keyup', (e) => {
-                    e.stopPropagation()
-                    
-                    if (e.keyCode == 8) {
-                        callback(e)
-                    }
-                })
+                attachKeyDownEventListenerKeyCode(elem, callback, 8);
             }
             if (key == "onRightArrowPressedEvent") {
-                elem.addEventListener('keyup', (e) => {
-                    e.stopPropagation()
-                    
-                    if (e.keyCode == 39) {
-                        callback(e)
-                    }
-                })
+                attachKeyDownEventListenerKeyCode(elem, callback, 39);
             }
             if (key == "onLeftArrowPressedEvent") {
-                elem.addEventListener('keyup', (e) => {
-                    e.stopPropagation()
-                    
-                    if (e.keyCode == 37) {
-                        callback(e)
-                    }
+                attachKeyDownEventListenerKeyCode(elem, callback, 37);
+            }
+            if (key == "getInputEventData") {
+                elem.addEventListener('input', (e) => {
+                    callback(e.data)
                 })
             }
+            if (key == "onPaste") {
+                elem.onpaste = e => {
+                let paste = (e.clipboardData || window.clipboardData).getData('text');
+                callback(paste);
+            }
+        }
             if (eventType == "change") {
                 elem.addEventListener('input', (e) => {
                     callback(e.target.value)
