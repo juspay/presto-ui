@@ -1750,6 +1750,17 @@ module.exports = function(type, config, _getSetType, namespace) {
     config.methods.push(this_setFrame());
   }
 
+  if(config.hasOwnProperty("gifUrl"))
+  {
+    let id = cS(config.id);
+    if (config.gifUrl.endsWith(".gif")){
+      var gifName=config.gifUrl.substring(config.gifUrl.lastIndexOf("/")+1);
+      JBridge.renewFile(config.gifUrl,gifName);
+      config.methods.push(this_setGif(id,JBridge.getResourcePath(gifName), namespace));
+      config.methods.push(this_startGif());
+    }
+  }
+
   if (config.hasOwnProperty("imageNamed")) {
     let id = cS(config.id);
     let placeholder = config.placeHolder || "";

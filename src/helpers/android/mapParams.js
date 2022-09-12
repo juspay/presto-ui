@@ -408,6 +408,30 @@ var map = {
     fnName: 'setImageDrawable',
     inVokedIn: 'VIEW',
   },
+  "gifUrl": {
+    values: [{
+      type: 's',
+    }],
+    'dontMap': true,
+    fnName: 'setBackgroundDrawable',
+    inVokedIn: 'VIEW',
+  },
+  "numFrames": {
+    values: [{
+      type: 's',
+    }],
+    'dontMap': true,
+    fnName: 'setBackgroundDrawable',
+    inVokedIn: 'VIEW',
+  },
+  "frameDelay": {
+    values: [{
+      type: 's',
+    }],
+    'dontMap': true,
+    fnName: 'setBackgroundDrawable',
+    inVokedIn: 'VIEW',
+  },
   "placeHolder": {
     values: [{
       type: 's',

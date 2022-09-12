@@ -703,6 +703,56 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     prePend = "set_PM=ctx->getPackageManager;set_AI=get_PM->getApplicationInfo:s_" + attrs.value + ",i_0;set_11747=get_AI->loadIcon:get_PM;";
     currTransVal = "get_11747";
   }
+  if(attrs.key=="gifUrl")
+  {
+    const numFrames = allProps.find(a => a.key === "numFrames").value;
+    delay =  allProps.find(a => a.key === "frameDelay").value;
+    delay = (delay || 50)+"";
+    const id = allProps.find(a => a.key === "id");
+    if(!numFrames||!id)
+    {
+      console.error(">>>> Please provide numFrames for GIF Animation");
+      return;
+    }
+    if(isURL(attrs.value)) {
+      var ind = attrs.value.lastIndexOf('/')
+      var image = attrs.value.substr(ind + 1);
+      var imageName = image.substr(0,image.lastIndexOf('.'));
+      var rawUrl =  attrs.value.substr(0,ind + 1);
+      var urlSetCommands = "set_directory=ctx->getDir:s_juspay,i_0;set_anime=android.graphics.drawable.AnimationDrawable->new;get_anime->setOneShot:b_true;"
+      for(var i=0;i<numFrames;i++)
+      {  
+        var currFrame = imageName+i+".png";
+        JBridge.renewFile(rawUrl+currFrame, currFrame);
+        
+      }
+      for(var i=0;i<numFrames;i++)
+      { 
+            var currFrame = imageName+i+".png";
+            if(!JBridge.isFilePresent(currFrame))
+            { 
+              console.error("Some images are not available for GIF :"+rawUrl+currFrame);
+              return "";
+            }
+            urlSetCommands += "set_resolvedFile"+i+"=java.io.File->new:get_directory,s_" + JBridge.getFilePath(currFrame) + ";" +
+                              "set_resolvedPath"+i+"=get_resolvedFile"+i+"->toString;"+
+                              "set_bmp"+i+"=android.graphics.BitmapFactory->decodeFile:get_resolvedPath"+i+";"+
+                              "set_frame"+i+"=android.graphics.drawable.BitmapDrawable->new:get_bmp"+i+";"+
+                              "get_anime->addFrame:get_frame"+i+",i_"+delay+";"
+      }
+      urlSetCommands  +=  "this->setBackgroundDrawable:get_anime;"+
+                          "get_anime->start;"
+      prePend = urlSetCommands;
+      dontLoad=true;
+    }
+    else
+    {
+      console.error(">>>> The value provided for gifUrl is not a valid URL");
+    }
+
+  }
+  if (attrs.key == "numFrames") { return "";}
+  if (attrs.key == "frameDelay") { return "";}
 
   if (attrs.key == "imageUrl") {
 

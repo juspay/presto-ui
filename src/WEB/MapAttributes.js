@@ -724,8 +724,8 @@ function addLayout(elem, type, props) {
 
 function addImage(type,props,elem) {
     if (type == 'imageView') {
-        if (props.imageUrl) {
-            let imageUrl = props.imageUrl
+        if (props.imageUrl||props.gifUrl) {
+            let imageUrl = props.imageUrl||props.gifUrl;
 
             if (props.rawData) {
                 // Do Nothing
@@ -742,11 +742,18 @@ function addImage(type,props,elem) {
                     imageUrl += '.png'
                 }
             }
-
             if (window.generateVdom) {
                 elem.setAttribute('src2', imageUrl);
             } else {
                 elem.setAttribute('src', imageUrl);
+            }
+            if(props.gifUrl && (!window.generateVdom))
+            {
+                var delay = props.frameDelay || 50;
+                var totalDelay = delay * props.numFrames;
+                var ind = props.gifUrl.lastIndexOf('.')
+                var lastImg = props.gifUrl.substr(0,ind)+(props.numFrames-1)+".png";
+                setTimeout(function(){elem.setAttribute('src',lastImg);},totalDelay);
             }
         }
     }
