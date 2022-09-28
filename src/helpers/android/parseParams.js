@@ -31,6 +31,7 @@ var globalObjMap = {};
 var command = "";
 var elementType;
 var getSetType;
+const sessionInfo = window.sessionInfo ? (typeof window.sessionInfo == "string" ? JSON.parse(window.sessionInfo) : window.sessionInfo) : JSON.parse(JBridge.getSessionInfo())
 
 function getGradientOrientation(angle){
 
@@ -99,7 +100,7 @@ function getConfigGroups(config, type) {
   let paddingVal = config["padding"];
   let strokeVal = config["stroke"]
   if(type == "editText" && typeof config["cursorColor"] != undefined){
-    if(JSON.parse(JBridge.getSessionInfo())["android_api_level"] < 28){
+    if(sessionInfo["android_api_level"] < 28){
       config["cursorColorV2"] = config.cursorColor
       delete config.cursorColor
     }
@@ -330,8 +331,8 @@ function parseColor(color, setterName) {
 function makeUrlCmd(imageUrl){
   var imageValue = imageUrl;
   var jpImageName = 'jp_' + imageUrl;
-  if (window.juspayAssetConfig 
-      && window.juspayAssetConfig.images 
+  if (window.juspayAssetConfig
+      && window.juspayAssetConfig.images
       && window.juspayAssetConfig.images[jpImageName]) {
     imageValue = jpImageName;
   }
@@ -438,8 +439,8 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     } else {
       var fontValue = attrs.value,
           jpFont = "jp_" + attrs.value;
-      if (window.juspayAssetConfig 
-          && window.juspayAssetConfig.fonts 
+      if (window.juspayAssetConfig
+          && window.juspayAssetConfig.fonts
           && window.juspayAssetConfig.fonts[jpFont]) {
            fontValue = "jp_" + fontValue;
       }
@@ -748,7 +749,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
       prePend = parseColor(attrs.value, "set_cursorColor");
       prePend += ";set_kl=java.lang.Class->forName:s_android.widget.TextView"
       prePend += ";set_draw=android.graphics.drawable.ShapeDrawable->new;get_draw->setIntrinsicHeight:i_25;get_draw->setIntrinsicWidth:i_4;set_p=get_draw->getPaint;get_p->setColor:get_cursorColor"
-      prePend += ";set_currentView=this->findViewById:i_" + id.value  
+      prePend += ";set_currentView=this->findViewById:i_" + id.value
       prePend += ";set_c=java.lang.Class->forName:s_android.graphics.drawable.Drawable";
       prePend += ";set_f=get_kl->getDeclaredField:s_mEditor"
       prePend += ";get_f->setAccessible:b_true"
@@ -756,7 +757,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
       prePend += ";set_drawablesArr=java.util.ArrayList->new"
       prePend += ";get_drawablesArr->add:get_draw"
       prePend += ";get_drawablesArr->add:get_draw"
-      prePend += ";infl->convertAndStoreArray:get_drawablesArr,get_c,s_drawables,b_false" 
+      prePend += ";infl->convertAndStoreArray:get_drawablesArr,get_c,s_drawables,b_false"
       prePend += ";set_fieldDash=get_editor->getClass;set_f=get_fieldDash->getDeclaredField:s_mCursorDrawable"
       prePend += ";get_f->setAccessible:b_true"
       prePend += ";get_f->set:get_editor,get_drawables;"
@@ -950,11 +951,11 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     return prePend
   }
 
-  if (attrs.key == "ripple" && JSON.parse(JBridge.getSessionInfo())["android_api_level"] >= 23) {
-    vals = JSON.parse(attrs.value);
-    prePend = addClickFeedback(vals.rippleColor, vals.disableFeedback, vals.enableRadii);
-    currTransVal = ":get_ripple";
-  }
+  // if (attrs.key == "ripple" && sessionInfo["android_api_level"] >= 23) {
+  //   vals = JSON.parse(attrs.value);
+  //   prePend = addClickFeedback(vals.rippleColor, vals.disableFeedback, vals.enableRadii);
+  //   currTransVal = ":get_ripple";
+  // }
 
   if (belongsTo == "VIEW")
   keyWord = globalObjMap[belongsTo].val;
@@ -963,9 +964,9 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
 
   if (transformFn || attrs.key == "duration" || attrs.key == "delay" || attrs.key == "curve")
   _cmd = keyWord +  '->' + ((typeof obj.fnName == "undefined")?obj.varName:obj.fnName);
-  else 
+  else
     _cmd = keyWord + '->' +   attrs.key;
-    
+
   if (obj.values && obj.values.length)
   _cmd += ':';
 
@@ -1032,18 +1033,18 @@ function parseGroups(type, groups, config) {
           if (type != "linearLayout"){
             groups.VIEW = groups.VIEW.filter(views => {
               if(views.key != "orientation") return views
-            })           
+            })
           }
           globalObjMap.VIEW = {ctr: "this", val: "this"};
         }
         else
         globalObjMap.VIEW = {ctr: "get_view", val: "get_view"};
       }
-      
+
       if (config.hasOwnProperty("onClick")) {
         groups.VIEW.push(
           {
-            "key": "ripple", 
+            "key": "ripple",
             "value": JSON.stringify({
               "rippleColor": config.hasOwnProperty("rippleColor") ? config.rippleColor : "#e0e0e0",
               "disableFeedback": config.hasOwnProperty("disableFeedback") ? config.disableFeedback : false,
@@ -1126,7 +1127,7 @@ var flattenObject = function(ob) {
 function addClickFeedback(rippleColor, disableFeedback, enableRadii) {
   if (disableFeedback)
     return "";
-  
+
   var feedback = "set_mask=android.graphics.drawable.ShapeDrawable->new;";
   if (enableRadii) {
     feedback += "set_c=java.lang.Class->forName:s_java.lang.Float;";
@@ -1135,7 +1136,7 @@ function addClickFeedback(rippleColor, disableFeedback, enableRadii) {
     feedback += "set_r=java.lang.Float->new:dpf_30;";
     for (var i = 0; i < 8; i++)
       feedback += "get_arr->add:get_r;";
-    
+
     feedback += "infl->convertAndStoreArray:get_arr,get_c,s_pArr,b_true;";
     feedback += "set_rect=android.graphics.drawable.shapes.RoundRectShape->new:get_pArr,null_pointer,null_pointer;";
     feedback += "get_mask->setShape:get_rect;";
