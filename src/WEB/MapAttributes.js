@@ -607,7 +607,7 @@ function setGravityStylesForColumn(elem, props) {
 function addLayout(elem, type, props) {
     let scrollBarX = props.hasOwnProperty('scrollBarX')?props.scrollBarX:true;
     let scrollBarY = props.hasOwnProperty('scrollBarY')?props.scrollBarX:true;
-    let scrollBarVisible = props.hasOwnProperty('scrollBarVisible')?props.scrollBarVisible:true;
+    let scrollBarVisible = props.hasOwnProperty('scrollBarVisible')?props.scrollBarVisible:false; // by default, hiding the scrollbar, unless `scrollBarVisible` prop is used
     let elem_style = "";
     switch(type){
         case 'linearLayout':
@@ -694,10 +694,6 @@ function addLayout(elem, type, props) {
             if(!scrollBarVisible){
                 elem_style += "scrollbar-width: none;" //Hide Scrollbar for Firefox
                 elem_style += "-ms-overflow-style: none;" //Hide Scrollbar for IE and Edge
-            }
-            else{
-                elem_style += "scrollbar-width: none;"
-                elem_style += "-ms-overflow-style: none;"
             }
             break;
         case 'relativeLayout':
