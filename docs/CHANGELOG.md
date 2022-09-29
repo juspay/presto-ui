@@ -12,6 +12,16 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.0.36](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.36%0Dv1.0.35)
+
+Released on : `29 September 2022`
+
+### Fixed
+- PICAF-16740: fix: disabled click feedback
+[`#PICAF-16740`](https://juspay.atlassian.net/browse/PICAF-16740)
+- PICAF-15133:adding-events-for-otpv2-comp
+[`#PICAF-15133`](https://juspay.atlassian.net/browse/PICAF-15133)
+
 ## [v1.0.35](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.35%0Dv1.0.34)
 
 Released on : `30 July 2022`
