@@ -2150,6 +2150,8 @@ module.exports = function(type, config, _getSetType, namespace) {
     }
   }
 
+  config.methods.push(this_disableFeedback(true));
+
   if (config.hasOwnProperty("rippleColor")) {
     config.methods.push(UIColor_setColor(config.rippleColor));
     config.methods.push(this_setRippleColor());
