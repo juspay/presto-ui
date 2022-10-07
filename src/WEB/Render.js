@@ -728,7 +728,7 @@ function setAttributes(view, elem, firstRender) {
     elem_style+=mapAttributes.addLayout(elem, type, props);
 
     mapAttributes.addImage(type,props,elem);
-    mapAttributes.addTextProperties(props, elem, type);
+    elem_style+=mapAttributes.addTextProperties(props, elem, type);
     mapAttributes.addClassNameProperties(props,elem);
 
     elem_style += mapAttributes.mapPropToStyle(elem,props,type);
