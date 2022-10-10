@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.0.38](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.38%0Dv1.0.37)
+
+Released on : `10 October 2022`
+
+### Fixed
+- PICAF-16551: fix: fixing scrollbar not visibile in firefox and IE
+[`#PICAF-16551`](https://juspay.atlassian.net/browse/PICAF-16551)
+
 ## [v1.0.37](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.37%0Dv1.0.36)
 
 Released on : `7 October 2022`
