@@ -12,6 +12,18 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.1.0](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.1.0%0Dv1.0.38)
+
+Released on : `10 October 2022`
+
+### Summary
+``` Text styles appended to elem styles
+```
+
+### Fixed
+- PICAF-16789: feat: LetterSpacing support for web
+[`#PICAF-16789`](https://juspay.atlassian.net/browse/PICAF-16789)
+
 ## [v1.0.38](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.0.38%0Dv1.0.37)
 
 Released on : `10 October 2022`
