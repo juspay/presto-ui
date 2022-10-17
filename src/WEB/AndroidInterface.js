@@ -92,7 +92,11 @@ function runInUI(cmd, namespace) {
           //diffing arrrays to find the difference between old data and new data
           //console.time('diffArray')
           console.log("diff")
-          view.props.diffArray = List.diffArray(view.props.itemDatas,JSON.parse(cmd.listData));
+          var x = cmd.listData
+          if(typeof cmd.listData == "string"){
+            x = JSON.parse(cmd.listData)
+          }
+          view.props.diffArray = List.diffArray(view.props.itemDatas,x);
           //console.dir(view.props.diffArray)
           //console.timeEnd('diffArray')
 
@@ -126,6 +130,11 @@ function runInUI(cmd, namespace) {
             }
             inflateView({view, parentElement, siblingView, renderStyle: true,stopChild,isListItem:true, computeList, chrome50matchList});
             let parent = view.parent;
+            for (var i =0;i<parentView.children.length;i++){
+              if(parentView.children[i].props.id == view.props.id){
+                parentView.children[i] = view
+              }
+            }
             while(parent && parent.type=="relativeLayout"){
               computeList.unshift(parent.props.id)
               parent=parent.parent;
@@ -155,7 +164,10 @@ function Render(view, cb, namespace) {
   
   if(parentView.oldView) {
     addViewToParent(parentElement.id, view, parentView.children.indexOf(view), cb, false)
-  } else {
+  } else if (window.generateVdom == false){
+    if (cb) callbackInvoker.invoke(cb);
+  }
+  else{
     computeChildDimens(parentView);
     let computeList = [];
     const elem = inflateView({view, parentElement,computeList});
@@ -212,8 +224,10 @@ function addViewToParent(id, view, index, cb, replace, namespace) {
   view.parent = parentView;
   let siblingView = null
 
-  if(!parentElement || !parentView)
-    return
+  if(!parentElement || !parentView){
+    console.error(`Parent element with id: ${id} not found`);
+    return;
+  }
 
   parentView.children.splice(index, 0, view)
 
@@ -377,6 +391,52 @@ function replaceView(view, id, namespace) {
   }
 }
 
+function addEventListeners(eventListeners) {
+  for(var i = 0; i<eventListeners.length; i++ ){
+      var view = eventListeners[i].view;
+      var props = view.props
+      var id = eventListeners[i].id;
+      let elem = document.getElementById(id)
+      if(!elem)
+        continue
+      let key = eventListeners[i].event
+      let eventType = key.substring(2, key.length).toLowerCase()
+      if (props.hasOwnProperty(key) && typeof props[key] == "function") {
+          const callback = props[key]
+          if (key == "onEnterPressedEvent") {
+              elem.addEventListener('keyup', (e) => {
+                  e.stopPropagation()
+
+                  if (e.keyCode == 13) {
+                      callback(e)
+                  }
+              })
+          }
+          if (eventType == "change") {
+              elem.addEventListener('input', (e) => {
+                  callback(e.target.value)
+              })
+          } else if (eventType == "focus"){
+              elem.addEventListener('focus', (e) => {
+                  callback("true")
+              })
+              elem.addEventListener('blur', (e) => {
+                  callback("false")
+              })
+          } else {
+              props.oldEventListener = props.oldEventListener || {};
+              if (typeof props.oldEventListener[eventType] == "function") {
+                  elem.removeEventListener(eventType, props.oldEventListener[eventType]);
+              }
+              props.oldEventListener[eventType] = (e) => {
+                  e.stopPropagation();
+                  callback(e)
+              };
+              elem.addEventListener(eventType, props.oldEventListener[eventType]);
+          }
+      }
+  }
+}
 // function recompute() {
 //   const rootnode = document.getElementById('content');
 //   const child = rootnode.firstElementChild;
@@ -415,6 +475,8 @@ module.exports = {
   removeView: removeView,
 
   replaceView: replaceView,
+
+  addEventListeners: addEventListeners,
 
   getNewID: getNewID,
 

@@ -743,7 +743,11 @@ function addImage(type,props,elem) {
                 }
             }
 
-            elem.setAttribute('src', imageUrl)
+            if (window.generateVdom) {
+                elem.setAttribute('src2', imageUrl);
+            } else {
+                elem.setAttribute('src', imageUrl);
+            }
         }
     }
 }
@@ -765,7 +769,7 @@ function getArticle(children, config) {
     if (config.isHtmlContent)
         article.innerHTML = config.textFromHtml
     else
-        article.innerText = config.text
+        article.textContent = config.text
     article.style.wordBreak = "break-word"
     article.style.display = "inline"
     return article;
@@ -1191,7 +1195,7 @@ function addPseudoClasses(elem, view){
 
     if (!css) return
     if(styleElem) {
-      styleElem.innerText += css;
+      styleElem.textContent += css;
     } else {
       styleElem = document.createElement('style');
       styleElem.appendChild(document.createTextNode(css));

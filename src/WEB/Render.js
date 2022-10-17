@@ -1166,7 +1166,7 @@ let renderList = (view,elem, computeList)=>{
 let inflateView = function ({view, parentElement, siblingView, stopChild, renderStyle, computeList, chrome50matchList} ={}) {
     view.state = view.state || {};
     if(view.props.listData){
-        view.props.itemDatas = JSON.parse(view.props.listData);
+        view.props.itemDatas = (typeof view.props.listData == "string") ? JSON.parse(view.props.listData) : view.props.listData;
         if(!view.props.data){
             view.props.data = JSON.parse(view.props.listItem)
         }
@@ -1257,7 +1257,7 @@ let postCompute = (list) =>{
         let elem = document.getElementById(id);
         if(!elem)
             continue;
-        let childNodes = elem.childNodes;
+        let childNodes = elem.children;
         let maxHeight = 0;
         let maxWidth = 0;
         for (var i = 0; i < childNodes.length; ++i) {

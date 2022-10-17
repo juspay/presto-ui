@@ -51,7 +51,7 @@ function getValueFromPixel (pixel) { return parseInt(pixel.substring(0,pixel.len
 
 function calculateHeight (elem) {
   if(!elem) return 0;
-  let childNodes = elem.childNodes;
+  let childNodes = elem.children;
   let maxHeight = 0;
   for (var i = 0; i < childNodes.length; ++i) {
           let style = childNodes[i].currentStyle || window.getComputedStyle(childNodes[i]);
