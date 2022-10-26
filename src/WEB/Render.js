@@ -61,13 +61,24 @@ function initiateElement(type, props, elem){
         }
     }
 
-    let events = ['onClick', 'onEnterPressedEvent', 'onDeletePressedEvent', 'onRightArrowPressedEvent', 'onLeftArrowPressedEvent', 'onChange', 'onMouseDown', 'onMouseUp', 'onMouseEnter', 'onMouseOver', 'onMouseMove', 'onMouseOut', 'onMouseLeave', 'onFocus', 'onPaste','getInputEventData']
+    let events = ['onClick', 'onEnterPressedEvent', 'onDeletePressedEvent', 'onRightArrowPressedEvent', 'onLeftArrowPressedEvent', 'onChange', 'onMouseDown', 'onMouseUp', 'onMouseEnter', 'onMouseOver', 'onMouseMove', 'onMouseOut', 'onMouseLeave', 'onFocus', 'onPaste','getInputEventData','onAnimationEnd']
 
     for (let i = 0; i < events.length; i++) {
         let key = events[i]
         let eventType = key.substring(2, key.length).toLowerCase()
         if (props.hasOwnProperty(key) && typeof props[key] == "function") {
             const callback = props[key]
+
+            if(key == "onAnimationEnd") {
+                elem.addEventListener("animationend", function () {
+                    if (props.onAnimationEnd) {
+                        elem.style.animation = null;
+                        props.onAnimationEnd();
+                    }
+                    manualFocus();
+                    window.hasAnimationProps = false;
+                   });
+            }
             if (key == "onEnterPressedEvent") {
                 attachKeyDownEventListenerKeyCode(elem, callback, 13);
             }
@@ -353,16 +364,6 @@ function setAnimationStyles (elem, props) {
         var keyFrameShorthands = [];
         var AnimationCSSMarkupWriter = CSSMarkupWriter["animations"];
 
-        if (elem) {
-           elem.addEventListener("animationend", function () {
-            if (props.onAnimationEnd) {
-                elem.style.animation = null;
-                props.onAnimationEnd();
-            }
-            manualFocus();
-            window.hasAnimationProps = false;
-           });
-        }
         var keyFrameFromMarkup = keyFrameToMarkup = "";
         var countFrom = countTo = 0;
         
