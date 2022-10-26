@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.2.1](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.2.1%0Dv1.2.0)
+
+Released on : `26 October 2022`
+
+### Fixed
+- PICAF-17488: fix: Move View Change
+[`#PICAF-17488`](https://juspay.atlassian.net/browse/PICAF-17488)
+
 ## [v1.2.0](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.2.0%0Dv1.1.0)
 
 Released on : `17 October 2022`
