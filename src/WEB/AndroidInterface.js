@@ -192,20 +192,10 @@ function moveView(id, index) {
   var viewElem = document.getElementById(id);
   var parentId = viewElem.parentNode.id;
   var parent = window.__VIEWS[parentId];
+  var parentElem = document.getElementById(parentId);
   var children = getUpdatedChildren(parent,view,index);
-
+  parentElem.insertBefore(viewElem, parentElem.children[index]);
   computeChildDimens(parent)
-  children.forEach(child => {
-    let computeList = [];
-    console.log("moving")
-    var chrome50matchList;
-    if(isChrome50()) {
-      chrome50matchList = {h : [], w: []}
-    }
-    inflateView({view:child, parentElement : parent, computeList, chrome50matchList})
-    handleMatchParentChrome50(chrome50matchList)
-    postCompute(computeList);
-  })
   if(window.focusedElement) {
     let elem = document.getElementById(window.focusedElement);
     if(elem) {
