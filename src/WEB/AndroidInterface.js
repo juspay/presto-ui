@@ -111,7 +111,7 @@ function runInUI(cmd, namespace) {
         let parentElement = null
         let parentView = null
 
-        let stopChild = !isOrientatationChanged(cmd);
+        let stopChild = isOrientatationChanged(cmd);
         parentId = elem.parentNode.id
 
         if(parentId){
