@@ -956,6 +956,8 @@ function addTypeSpecificProp(type,props){
         }
     }
 
+    if (type == "editText") ele_style += "user-select: text !important;";
+
     return ele_style;
 }
 
@@ -1228,3 +1230,4 @@ module.exports = {
     addPseudoClasses,
     setUseHintColor
 }
+
