@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.2.5](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.2.5%0Dv1.2.4)
+
+Released on : `17 November 2022`
+
+### Fixed
+- PICAF-16599: fix: Firefox issue with navigating in editText
+[`#PICAF-16599`](https://juspay.atlassian.net/browse/PICAF-16599)
+
 ## [v1.2.4](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.2.4%0Dv1.2.3)
 
 Released on : `12 November 2022`
