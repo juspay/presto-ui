@@ -37,6 +37,7 @@ var helper = require('../helper');
 var callbackInvoker = require("../helpers/common/callbackInvoker");
 const { diffArray } = require("./ListPresto");
 const {setUseHintColor} = require("./MapAttributes");
+var storedDiv = "";
 
 var {addToContainerList, getContainer, getParentView} = require('./Utils')
 
@@ -157,14 +158,18 @@ function runInUI(cmd, namespace) {
   //Render.runInUI(cmd)
 }
 
-function Render(view, cb, namespace) {
+function Render(view, cb, namespace, useStoredDiv=false) {
   let parentElement = getContainer(namespace);
   // console.debug("presto content element found?? ",parentElement);
   let parentView = getParentView(namespace, view);
-  
-  if(parentView.oldView) {
+  if(parentView.oldView && useStoredDiv && storedDiv){
+    document.getElementById("content").innerHTML = storedDiv;
+    if (cb) callbackInvoker.invoke(cb);
+  }
+  else if(parentView.oldView) {
     addViewToParent(parentElement.id, view, parentView.children.indexOf(view), cb, false)
   } else if (window.generateVdom == false){
+    storedDiv = document.getElementById("content").innerHTML;
     if (cb) callbackInvoker.invoke(cb);
   }
   else{
