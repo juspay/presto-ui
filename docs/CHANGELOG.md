@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.2.6](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.2.6%0Dv1.2.5)
+
+Released on : `29 November 2022`
+
+### Fixed
+- PICAF-10982: fix: iFrame fix
+[`#PICAF-10982`](https://juspay.atlassian.net/browse/PICAF-10982)
+
 ## [v1.2.5](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.2.5%0Dv1.2.4)
 
 Released on : `17 November 2022`
