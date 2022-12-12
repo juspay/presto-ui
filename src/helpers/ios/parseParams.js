@@ -1750,7 +1750,7 @@ module.exports = function(type, config, _getSetType, namespace) {
     config.methods.push(this_setFrame());
   }
 
-  if(config.hasOwnProperty("gifUrl"))
+  if(config.hasOwnProperty("gifUrl") && JBridge.getResourcePath && isMystiqueVersionGreaterThan(1.5))
   {
     let id = cS(config.id);
     if (config.gifUrl.endsWith(".gif")){
