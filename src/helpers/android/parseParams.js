@@ -721,16 +721,16 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
       var rawUrl =  attrs.value.substr(0,ind + 1);
       var urlSetCommands = "set_directory=ctx->getDir:s_juspay,i_0;set_anime=android.graphics.drawable.AnimationDrawable->new;get_anime->setOneShot:b_true;"
       for(var i=0;i<numFrames;i++)
-      {  
+      {
         var currFrame = imageName+i+".png";
         JBridge.renewFile(rawUrl+currFrame, currFrame);
-        
+
       }
       for(var i=0;i<numFrames;i++)
-      { 
+      {
             var currFrame = imageName+i+".png";
             if(!JBridge.isFilePresent(currFrame))
-            { 
+            {
               console.error("Some images are not available for GIF :"+rawUrl+currFrame);
               return "";
             }
@@ -754,29 +754,31 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
   if (attrs.key == "numFrames") { return "";}
   if (attrs.key == "frameDelay") { return "";}
 
-  if (attrs.key == "imageUrl") {
 
-    if(isURL(attrs.value)) {
+  function getImage(imageUrl){
+
+    if(isURL(imageUrl)) {
       if(typeof window.__PROXY_FN == "undefined") {
         window.__PROXY_FN = {};
       }
-      var image = attrs.value.substr(attrs.value.lastIndexOf('/') + 1)
-      var callback = "onImage" + image.substr(0, image.indexOf('.'))
 
+      var image = imageUrl.substr(imageUrl.lastIndexOf('/') + 1)
+      var callback = "onImage" + image.substr(0, image.indexOf('.'))
       var filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(image);
+
       if (!filePresent) {
         var callback = callbackMapper.map(function (isNew, url, fileName) {
-          const id = allProps.find(a => a.key === "id");
-          if (!id) return;
-          var urlSetCommands = "set_directory=ctx->getDir:s_juspay,i_0;" +
-                                "set_resolvedFile=java.io.File->new:get_directory,s_" + fileName + ";" +
-                                "set_resolvedPath=get_resolvedFile->toString;" +
-                                "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;" +
-                                "set_imgV=ctx->findViewById:i_" + id.value + ";" +
-                                "get_imgV->setImageDrawable:get_dimage"
-                                Android.runInUI(urlSetCommands ,null)
-                              });
-        JBridge.renewFile(attrs.value, image, callback);
+            const id = allProps.find(a => a.key === "id");
+            if (!id) return;
+            var urlSetCommands = "set_directory=ctx->getDir:s_juspay,i_0;" +
+                                  "set_resolvedFile=java.io.File->new:get_directory,s_" + fileName + ";" +
+                                  "set_resolvedPath=get_resolvedFile->toString;" +
+                                  "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;" +
+                                  "set_imgV=ctx->findViewById:i_" + id.value + ";" +
+                                  "get_imgV->setImageDrawable:get_dimage"
+                                  Android.runInUI(urlSetCommands ,null)
+          });
+        JBridge.renewFile(imageUrl, image, callback);
         dontLoad = true
       } else if(JBridge.getFilePath) {
         prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
@@ -786,10 +788,14 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
         currTransVal = "get_dimage";
       }
     } else {
-      var out = makeUrlCmd(attrs.value)
+      var out = makeUrlCmd(imageUrl)
       prePend = out.prePend;
       currTransVal = out.currTransVal;
     }
+  }
+
+  if (attrs.key == "imageUrl") {
+    getImage(attrs.value);
   }
 
   if (attrs.key == "cursorColorV2") {
@@ -859,10 +865,9 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     currTransVal = "get_dimage";
   }
 
+
   if (attrs.key == "backgroundDrawable") {
-      var out = makeUrlCmd(attrs.value)
-      prePend = out.prePend;
-      currTransVal = out.currTransVal;
+    getImage(attrs.value);
   }
 
   if (attrs.key == "fontFamily") {
@@ -1156,6 +1161,7 @@ function parseGroups(type, groups, config) {
   }
   return command.substring(0, command.length - 1);
 }
+
 
 var flattenObject = function(ob) {
   var toReturn = {};
