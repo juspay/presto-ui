@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.2.8](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.2.8%0Dv1.2.7)
+
+Released on : `5 January 2023`
+
+### Fixed
+- PICAF-19443: fix: parsing the string to float for letterSpacing hintprop
+[`#PICAF-19443`](https://juspay.atlassian.net/browse/PICAF-19443)
+
 ## [v1.2.7](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.2.7%0Dv1.2.6)
 
 Released on : `13 December 2022`
