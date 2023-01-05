@@ -1787,7 +1787,10 @@ module.exports = function(type, config, _getSetType, namespace) {
       'hint': cS(config.hint)
     }
     if (config.letterSpacing) {
-      hintProps['letterSpacing'] = config.letterSpacing;
+      var lS = parseFloat(config.letterSpacing);
+      if(!isNaN(lS)) {
+        hintProps['letterSpacing'] = lS;
+      }
     }
     if (config.hintColor) {
       hintProps['hintColor'] = convertColorToRgba(config.hintColor);
