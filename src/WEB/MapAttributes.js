@@ -963,7 +963,13 @@ function addTypeSpecificProp(type,props){
         }
     }
 
-    if (type == "editText") ele_style += "user-select: text !important;";
+    if (type == "editText") {
+
+        if(props.hasOwnProperty("gravity"))
+            ele_style += "text-align:"+ props.gravity + ";";
+
+        ele_style += "user-select: text !important;";
+    }
 
     return ele_style;
 }
