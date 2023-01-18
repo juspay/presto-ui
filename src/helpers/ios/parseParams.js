@@ -1631,7 +1631,7 @@ module.exports = function(type, config, _getSetType, namespace) {
     }
   }
   if (config.testID) {
-    config.testID = config.testID.replaceAll(/[^a-z0-9_]/gi, '_').replace(/_+/g, '_').toLowerCase();
+    config.testID = config.testID.replace(/\W|_/g, '_').replace(/_+/g, '_').toLowerCase();
     config.methods.push(this_setAccessibilityId(config.testID));
   }
 

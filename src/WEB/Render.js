@@ -1185,7 +1185,7 @@ let inflateView = function ({view, parentElement, siblingView, stopChild, render
 
     let {elem,newInflated} = getElementByView(view, parentElement, siblingView, stopChild, renderStyle);
     if (view && view.hasOwnProperty("props") && view.props.hasOwnProperty("testID")){
-        view.props.testID = view.props.testID.replaceAll(/[^a-z0-9_]/gi, '_').replace(/_+/g, '_').toLowerCase();
+        view.props.testID = view.props.testID.replace(/\W|_/g, '_').replace(/_+/g, '_').toLowerCase();
         elem.setAttribute("testID", view.props.testID);
     }
     //patching list
