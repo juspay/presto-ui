@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.2.9](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.2.9%0Dv1.2.8)
+
+Released on : `18 January 2023`
+
+### Fixed
+- PICAF-18701: fix: Added gravity support for editText in web
+[`#PICAF-18701`](https://juspay.atlassian.net/browse/PICAF-18701)
+
 ## [v1.2.8](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.2.8%0Dv1.2.7)
 
 Released on : `5 January 2023`
