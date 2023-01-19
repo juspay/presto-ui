@@ -12,6 +12,14 @@
 
 All notable changes to **<u>PrestoUI</u>** lib will be documented in this file.
 
+## [v1.2.10](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.2.10%0Dv1.2.9)
+
+Released on : `19 January 2023`
+
+### Fixed
+- PICAF-19835: fix: removing-replaceAll-to-basic-replace-function
+[`#PICAF-19835`](https://juspay.atlassian.net/browse/PICAF-19835)
+
 ## [v1.2.9](https://bitbucket.org/juspay/presto-ui/branches/compare/v1.2.9%0Dv1.2.8)
 
 Released on : `18 January 2023`
