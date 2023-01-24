@@ -47,7 +47,8 @@ var excluded = {
   "AccordionLayout": "in.juspay.mystique.",
   "Shape": "in.juspay.mystique.",
   "BottomSheetLayout": "in.juspay.mystique.",
-  "LottieAnimationView": "com.airbnb.lottie."
+  "LottieAnimationView": "com.airbnb.lottie.",
+  "NestedScrollView": "androidx.core.widget."
 }
 
 function getCtr(viewGroup) {
@@ -56,6 +57,7 @@ function getCtr(viewGroup) {
     'coordinatorLayout': 'androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams->new',
     'swipeRefreshLayout': 'androidx.swiperefreshlayout.widget.SwipeRefreshLayout$LayoutParams->new',
     'scrollView': 'android.widget.LinearLayout$LayoutParams->new',
+    'nestedScrollView': 'android.widget.LinearLayout$LayoutParams->new',
     'horizontalScrollView': 'android.widget.LinearLayout$LayoutParams->new',
     'relativeLayout': 'android.widget.RelativeLayout$LayoutParams->new',
     'frameLayout': 'android.widget.FrameLayout$LayoutParams->new',

@@ -39,7 +39,7 @@ const { diffArray } = require("./ListPresto");
 const {setUseHintColor} = require("./MapAttributes");
 var storedDiv = "";
 
-var {addToContainerList, getContainer, getParentView} = require('./Utils')
+var {addToContainerList, getContainer, getParentView, postRenderElements} = require('./Utils')
 
 function getScreenDimensions(namespace) {
   let element = getContainer(namespace);
@@ -146,16 +146,27 @@ function runInUI(cmd, namespace) {
         }
       }
     }
-    if(window.focusedElement) {
-      let elem = document.getElementById(window.focusedElement);
-      if(elem) {
-        elem.focus();
-      }
-      window.focusedElement = undefined;
-    }
-    
+    setPostRender();
+
   //recompute()
   //Render.runInUI(cmd)
+}
+
+function setPostRender() {
+  if(postRenderElements.focusedElement) {
+    let elem = document.getElementById(postRenderElements.focusedElement);
+    if(elem) {
+      elem.focus();
+    }
+    postRenderElements.focusedElement = undefined;
+  }
+  if(postRenderElements.scrollToID) {
+    let elem = document.getElementById(postRenderElements.scrollToID);
+    if(elem) {
+      elem.scrollIntoView({behavior: "smooth", block: 'nearest'})
+    }
+    postRenderElements.scrollToID = undefined;
+  }
 }
 
 function Render(view, cb, namespace, useStoredDiv=false) {
@@ -201,13 +212,7 @@ function moveView(id, index) {
   var children = getUpdatedChildren(parent,view,index);
   parentElem.insertBefore(viewElem, parentElem.children[index]);
   computeChildDimens(parent)
-  if(window.focusedElement) {
-    let elem = document.getElementById(window.focusedElement);
-    if(elem) {
-      elem.focus();
-    }
-    window.focusedElement = undefined;
-  }
+  setPostRender();
 }
 
 
@@ -264,12 +269,8 @@ function addViewToParent(id, view, index, cb, replace, namespace) {
         parentElement.appendChild(elem);
     }
   }
-  if (!window.hasAnimationProps && window.focusedElement !== undefined){
-    var c = document.getElementById(window.focusedElement);
-    window.focusedElement = undefined;
-    if (c) {
-        c.focus();
-    }
+  if (!window.hasAnimationProps && postRenderElements.focusedElement !== undefined){
+    setPostRender();
   }
   postCompute(computeList);
   handleMatchParentChrome50(chrome50matchList)
@@ -365,10 +366,10 @@ function replaceView(view, id, namespace) {
   }
   inflateView({view:oldView, parentElement: parentElem, siblingView, stopChild : true, computeList, chrome50matchList});
   window.__VIEWS[id] = oldView
-  
+
   /* Append Children */
   elem = document.getElementById(id)
-  
+
   if(elem && childrenElem.length > 0){
     for(let i = 0; i < childrenElem.length; i++){
       elem.appendChild(childrenElem[i])
@@ -377,13 +378,7 @@ function replaceView(view, id, namespace) {
   postCompute(computeList);
   handleMatchParentChrome50(chrome50matchList)
   /* Append Children End */
-  if(window.focusedElement) {
-    let elem = document.getElementById(window.focusedElement);
-    if(elem) {
-      elem.focus();
-    }
-    window.focusedElement = undefined;
-  }
+  setPostRender();
 }
 
 function addEventListeners(eventListeners) {
@@ -454,7 +449,7 @@ function getDocument() {
 
 module.exports = {
   addToContainerList : addToContainerList,
-  
+
   getScreenDimensions: getScreenDimensions,
 
   getUIElement : getUIElement,
@@ -464,7 +459,7 @@ module.exports = {
   Render: Render,
 
   addViewToParent: addViewToParent,
-  
+
   moveView: moveView,
 
   removeView: removeView,
@@ -480,5 +475,5 @@ module.exports = {
   getDocument: getDocument,
 
   setUseHintColor : setUseHintColor
-  
+
 };

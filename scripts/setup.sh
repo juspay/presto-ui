@@ -94,5 +94,5 @@ npx husky install
 # TODO: Think if mark should be added everywhere?
 # +Helps verify HTML generated locally.
 # -??
-brew tap kovetskiy/mark
-brew install mark
+# brew tap kovetskiy/mark
+# brew install mark

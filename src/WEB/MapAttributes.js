@@ -505,6 +505,9 @@ function setGravityStylesForRow(elem, props) {
             // elem.gravity_row_style['align-items'] = 'center';
             // elem.gravity_row_style['justify-content'] = 'flex-start';
             break;
+        case "bottom":
+          gravity_row_style += "align-items: flex-end;" ;
+          break;
         case 'center_horizontal':
             gravity_row_style += "align-items: flex-start;";
             gravity_row_style += "justify-content: center;";
@@ -562,6 +565,9 @@ function setGravityStylesForColumn(elem, props) {
             // elem.style['align-items'] = 'flex-start';
             // elem.style['justify-content'] = 'center';
             break;
+        case "bottom":
+          gravity_col_style += "justify-content: flex-end;";
+          break;
         case 'center_horizontal':
             gravity_col_style += "align-items: center;";
             gravity_col_style += "justify-content: flex-start;";
@@ -1140,11 +1146,15 @@ function setElemAttributes(element,props){
 
     if(props.hasOwnProperty("focus")) {
             if (props.focus && props.id){
-                    window.focusedElement = props.id;
+                    utils.postRenderElements.focusedElement = props.id;
                     delete props.focus;
                 }
     }
 
+    if(props.scrollToDescendant) {
+        utils.postRenderElements.scrollToID = props.scrollToDescendant
+        delete props.scrollToDescendant
+    }
 
     if (props.hasOwnProperty('contentEditable')) {element.setAttribute('contentEditable','true')};
 

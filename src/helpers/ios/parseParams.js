@@ -45,8 +45,8 @@ function isMystiqueVersionGreaterThan(version) {
 
 function makeImageName(name){
   let jpName = 'jp_' +name;
-  if(window.juspayAssetConfig 
-    && window.juspayAssetConfig.images 
+  if(window.juspayAssetConfig
+    && window.juspayAssetConfig.images
     && window.juspayAssetConfig.images[jpName])
       return jpName;
   return name;
@@ -1709,7 +1709,7 @@ module.exports = function(type, config, _getSetType, namespace) {
     let arg = rWS(cS(config.borderWidth));
     config.methods.push(setBorderWidth(arg));
   }
-  
+
   if (config.hasOwnProperty("disableCopy")) {
     config.methods.push(this_setDisableCopy(config.disableCopy));
   }
@@ -1817,6 +1817,10 @@ module.exports = function(type, config, _getSetType, namespace) {
     var data = config.scrollTo.split(",");
     var parsedData = JSON.stringify({"x": data[0], "y": data[1]});
     config.methods.push(this_scrollTo(cS(parsedData)));
+  }
+
+  if(config.hasOwnProperty("scrollToDescendant")) {
+    config.methods.push(this_scrollToTag(config.scrollToDescendant));
   }
 
   if (config.hasOwnProperty("expand")) {
@@ -2155,7 +2159,7 @@ module.exports = function(type, config, _getSetType, namespace) {
     try {
       var radiiLen = config.cornerRadii.length;
       var newCornerRadii = config.cornerRadii.substr(0, radiiLen-3);
-      newCornerRadii += 
+      newCornerRadii +=
         config.cornerRadii[radiiLen-1] + "," + config.cornerRadii[radiiLen-3];
       config.methods.push(this_setCornerCurves(newCornerRadii));
     } catch(e){
@@ -2201,13 +2205,24 @@ window.startCachedAnimation = function(id) {
   }
 }
 
+function this_scrollToTag(value) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "mJPScrollView",
+    "methodName": "scrollRectToVisible:",
+    "values": [{"name": value, "type": "s"}]
+  };
+}
+
 function this_mapToInlineAnimation(id, config) {
-  
+
   var animations = [];
   var callbacks = [];
-  
+
   var parsedConfigs = JSON.parse(config);
-  
+
   parsedConfigs.forEach(parsedConfig => {
 
     var innerProps = JSON.parse(parsedConfig.props);
@@ -2260,7 +2275,7 @@ function this_mapToInlineAnimation(id, config) {
       updatedConfig["isMapperAnimation"] = true;
       configArray.push(updatedConfig);
     });
-    
+
     if (parsedConfig.onEnd) {
       callbacks.push(function() {
         window.startCachedAnimation(parsedConfig.onEnd);

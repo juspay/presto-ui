@@ -216,6 +216,7 @@ function getCtr(viewGroup) {
     'coordinatorLayout': 'androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams->new',
     'swipeRefreshLayout': 'androidx.swiperefreshlayout.widget.SwipeRefreshLayout$LayoutParams->new',
     'scrollView': 'android.widget.LinearLayout$LayoutParams->new',
+    'nestedScrollView': 'android.widget.LinearLayout$LayoutParams->new',
     'horizontalScrollView': 'android.widget.LinearLayout$LayoutParams->new',
     'relativeLayout': 'android.widget.RelativeLayout$LayoutParams->new',
     'frameLayout': 'android.widget.FrameLayout$LayoutParams->new',
@@ -447,6 +448,12 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
       prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + fontValue + "\.ttf;";
       currTransVal = "get_type";
     }
+  }
+
+  if (attrs.key == "scrollToDescendant") {
+    var id = attrs.value;
+    prePend = "set_v=ctx->findViewById:i_" + id + ";";
+    currTransVal = "get_v";
   }
 
   if (attrs.key == "font") {

@@ -1381,6 +1381,16 @@ var map = {
       type: 'b'
     }],
     inVokedIn: 'VIEW'
+  },
+  "scrollToDescendant": {
+    values: [
+      {
+        type: "s",
+      },
+    ],
+    dontMap: true,
+    fnName: "scrollToDescendant",
+    inVokedIn: "VIEW",
   }
 }
 
