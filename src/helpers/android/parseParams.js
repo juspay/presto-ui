@@ -805,6 +805,47 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     getImage(attrs.value);
   }
 
+  if (attrs.key == "imageWithFallback") {
+    image = attrs.value.split(",")
+    imageName = image[0]
+    url = image[1]
+    if(window.juspayAssetConfig && window.juspayAssetConfig.images && window.juspayAssetConfig.images[imageName]) {
+      var out = makeUrlCmd(imageName)
+      prePend = out.prePend;
+      currTransVal = out.currTransVal;
+    } else if(isURL(url)) {
+      if(typeof window.__PROXY_FN == "undefined") {
+        window.__PROXY_FN = {};
+      }
+      var image = url.substr(url.lastIndexOf('/') + 1)
+      var callback = "onImage" + image.substr(0, image.indexOf('.'))
+
+      var filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(image);
+      if (!filePresent) {
+        var callback = callbackMapper.map(function (isNew, url, fileName) {
+          const id = allProps.find(a => a.key === "id");
+          if (!id) return;
+          var urlSetCommands = "set_directory=ctx->getDir:s_juspay,i_0;" +
+                                "set_resolvedFile=java.io.File->new:get_directory,s_" + fileName + ";" +
+                                "set_resolvedPath=get_resolvedFile->toString;" +
+                                "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;" +
+                                "set_imgV=ctx->findViewById:i_" + id.value + ";" +
+                                "get_imgV->setImageDrawable:get_dimage"
+                                Android.runInUI(urlSetCommands ,null)
+                              });
+        JBridge.renewFile(url, image, callback);
+        dontLoad = true
+      } else if(JBridge.getFilePath) {
+        prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
+                    "set_resolvedFile=java.io.File->new:get_directory,s_" + JBridge.getFilePath(image) + ";" +
+                    "set_resolvedPath=get_resolvedFile->toString;" +
+                    "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;"
+        currTransVal = "get_dimage";
+      }
+    } 
+  }
+
+
   if (attrs.key == "cursorColorV2") {
     const id = allProps.find(a => a.key === "id");
     dontLoad = true;
