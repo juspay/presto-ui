@@ -52,6 +52,15 @@ function makeImageName(name){
   return name;
 }
 
+function isURL(str) {
+  try{
+    var url = new URL(str);
+    return str.indexOf(".") != -1;
+  } catch (err) {
+    return false;
+  }
+}
+
 function convertColorToRgba(color){
   color = rWS(cS(color));
 
@@ -1858,6 +1867,33 @@ module.exports = function(type, config, _getSetType, namespace) {
       config.methods.push(this_setGif(id, config.imageNamed, namespace));
     } else {
       config.methods.push(this_setImageURL(id, config.imageNamed, placeholder, namespace));
+    }
+  }
+  
+  if (config.hasOwnProperty("imageWithFallback")) {
+    let id = cS(config.id);
+    let placeholder = "";
+
+    let imageData = config.imageWithFallback.split(",")
+    let imageName = makeImageName(imageData[0])
+    let url = imageData[1]
+
+    if (window.juspayAssetConfig && window.juspayAssetConfig.images && window.juspayAssetConfig.images[imageName]) {
+      config.methods.push(this_setImageURL(id, imageName, placeholder, namespace));
+    } else if (isURL(url)) {
+      let urlImageName = url.substr(url.lastIndexOf('/') + 1)
+      var filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(urlImageName) == "1";
+      if (filePresent) {
+        config.methods.push(this_setImageURL(id, urlImageName, placeholder, namespace));
+      } else {
+        var callback = callbackMapper.map(function () {
+          Android.runInUI({
+            id: id,
+            imageNamed: urlImageName
+          });
+        });
+        JBridge.renewFile(url, urlImageName, callback);
+      }
     }
   }
 
