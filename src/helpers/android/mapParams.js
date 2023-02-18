@@ -149,7 +149,7 @@ var map = {
     'dontMap': true,
     fnName: 'setPrimitive',
     inVokedIn: 'VIEW'
-  }, 
+  },
   "cx": {
     values: [{
       type: 'f'
@@ -541,7 +541,7 @@ var map = {
   },
   "minWidth": {
     values: [{
-      type: 'i',
+      type: 'dp',
     }],
     'dontMap': true,
     fnName: 'setMinimumWidth',
@@ -549,7 +549,7 @@ var map = {
   },
   "minHeight": {
     values: [{
-      type: 'i',
+      type: 'dp',
     }],
     'dontMap': true,
     fnName: 'setMinimumHeight',
@@ -557,7 +557,7 @@ var map = {
   },
   "maxWidth": {
     values: [{
-      type: 'i',
+      type: 'dp',
     }],
     'dontMap': true,
     fnName: 'setMaxWidth',
