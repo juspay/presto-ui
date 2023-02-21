@@ -1253,12 +1253,12 @@ function addClickFeedback(rippleColor, disableFeedback, enableRadii) {
   return feedback;
 }
 
-module.exports = function(type, config, _getSetType) {
+module.exports = function (type, config, _getSetType) {
   config = flattenObject(config);
   getSetType = _getSetType;
   elementType = type;
 
-  var groups =  getConfigGroups(config, elementType);
+  var groups = getConfigGroups(config, elementType);
 
   command = '';
   globalObjMap = {};
@@ -1271,7 +1271,43 @@ module.exports = function(type, config, _getSetType) {
       break;
     }
   }
-
+  if (config['lottieAnimation']) {
+    try {
+      var animationArray = JSON.parse(config['lottieAnimation']);
+      for (i = 0; i < animationArray.length; i++) {
+        if (!animationArray[i].lottieUrl) continue;
+        var lottieUrl = JSON.parse(animationArray[i].lottieUrl);
+        if (!isURL(lottieUrl)) continue;
+        var strictMode = animationArray[i].strictMode ? JSON.parse(animationArray[i].strictMode) : false;
+        var animation = animationArray[i];
+        var lottieName = lottieUrl.substring(lottieUrl.lastIndexOf('/') + 1)
+        var filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(lottieName);
+        if (filePresent) {
+          animationArray[i].lottieUrl = lottieName;
+          config.lottieAnimation = JSON.stringify(animationArray);
+        }
+        else {
+          if (strictMode) {
+            JBridge.renewFile(lottieUrl, lottieName);
+          }
+          else {
+            var callback = callbackMapper.map(function (isNew, url, fileName) {
+              animation.lottieUrl = lottieName;
+              var updatedProps = {};
+              updatedProps.id = config.id;
+              updatedProps.lottieAnimation = JSON.stringify([animation]);
+              Android.updateProperties(JSON.stringify(updatedProps));
+            });
+            JBridge.renewFile(lottieUrl, lottieName, callback);
+          }
+          animationArray.splice(i, 1);
+        }
+      }
+    }
+    catch (err) {
+      console.log(">>>>error in prestoUI lottie Animation:", err);
+    }
+  }
   if (!flag) {
     config.runInUI = parseGroups(type, groups, config);
   }

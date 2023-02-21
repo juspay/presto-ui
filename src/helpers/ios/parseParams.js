@@ -1293,6 +1293,16 @@ function this_inlineAnimation(config) {
     };
 }
 
+function this_lottieAnimation(config){
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "invokeOn": "this",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "methodName": "addLottie:",
+    "values": [ { "name": JSON.stringify(config), "type": "s" }]
+  };
+}
 
 function modifyTranslation(config){
   var x = config.x || "0";
@@ -2292,6 +2302,48 @@ module.exports = function(type, config, _getSetType, namespace) {
   if (config.hasOwnProperty("inlineAnimation")) {
     config.methods.push(this_inlineAnimation(config));
   }
+
+  if (config.hasOwnProperty("lottieAnimation")) {
+    try {
+          let id = cS(config.id);
+          let animationArray = JSON.parse(config['lottieAnimation']);
+          let animation = animationArray[animationArray.length - 1];
+          if(animation.lottieUrl && JBridge.getResourcePath)
+          {
+            let lottieUrl = JSON.parse(animation.lottieUrl);
+            let strictMode = animation.strictMode ? JSON.parse(animation.strictMode) : false;
+            let lottieName = lottieUrl.substr(lottieUrl.lastIndexOf('/') + 1);
+            let filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(lottieName) == "1";
+            if (filePresent) {
+              animation.lottieUrl = JBridge.getResourcePath(lottieName);
+              config.methods.push(this_lottieAnimation(animation));
+            } 
+            else {
+              if(strictMode){
+                JBridge.renewFile(lottieUrl, lottieName);
+              }
+              else{
+                var runInUIObj = {
+                  id: id,
+                  lottieAnimation: config["lottieAnimation"]
+                };
+                var callback = callbackMapper.map(function () {
+                  Android.runInUI(runInUIObj);
+                });
+                JBridge.renewFile(lottieUrl, lottieName, callback);
+              }
+            }
+        }
+        else
+        {
+          config.methods.push(this_lottieAnimation(animation));
+        }
+  }
+  catch(err){
+       console.log(">>>>error in prestoUI lottie Animation:",err);
+  }
+}
+
 
   if (config.hasOwnProperty("clipsToBounds")) {
     config.methods.push(this_setClipsToBounds(config.clipsToBounds));
