@@ -813,6 +813,19 @@ function this_setNumberOfLines(count) {
   }
 }
 
+function this_setAdjustsFontSizeToFitWidth(enabled) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setAdjustsFontSizeToFitWidth:",
+    "values":[
+      {"name": enabled, "type": "i"}
+    ]
+  }
+}
+
 function this_setTextAlignment(mode) {
   return {
     "return": "false",
@@ -1399,6 +1412,20 @@ function this_fontWithName(name) {
   }
 }
 
+function this_setPeakHeight(height) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName": "setPeakHeight:",
+    "values": [{
+      "name": String(height),
+      type: "f"
+    }]
+  };
+}
+
 function this_setRippleColor() {
   return {
     "return": "false",
@@ -1414,6 +1441,34 @@ function this_setRippleColor() {
   };
 }
 
+function this_setHalfExpandedRatio(ratio) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName": "setHalfExpandedRatio:",
+    "values": [{
+      "name": String(ratio),
+      type: "f"
+    }]
+  };
+}
+
+function this_setSheetState(state) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName": "setSheetState:",
+    "values": [{
+      "name": String(state),
+      type: "i"
+    }]
+  };
+}
+
 function this_disableFeedback(disableFeedback) {
   return {
     "return": "false",
@@ -1424,6 +1479,20 @@ function this_disableFeedback(disableFeedback) {
     "values":[
       {"name": disableFeedback, "type": "i"}
     ]
+  };
+}
+
+function this_loadURL(url) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "MJPWebView",
+    "methodName": "loadURL:",
+    "values": [{
+      "name": url,
+      "type": "s"
+    }]
   };
 }
 
@@ -1480,6 +1549,10 @@ function generateType(type, config) {
   switch(type){
     case "editText":{
       modifiedType = "mJPEditText";
+    }
+    break;
+    case "multiLineEditText":{
+      modifiedType = "mJPMultiLineEditText";
     }
     break;
     case "imageView":{
@@ -1558,6 +1631,23 @@ function generateType(type, config) {
     break;
     case "shimmerFrameLayout": {
       modifiedType = "mJPShimmerFrameLayout";
+    }
+    break;
+    case "bottomSheetLayout": {
+      modifiedType = "mJPBottomSheetLayout";
+    }
+    break;
+    case "coordinatorLayout": {
+      modifiedType = "mJPRelativeLayout";
+    }
+    break;
+    case "swipeRefreshLayout": {
+      modifiedType = "mJPLinearLayout";
+    }
+    break;
+    case "webView":
+    {
+      modifiedType = "mJPWebView";
     }
     break;
     default: {
@@ -1890,6 +1980,22 @@ module.exports = function(type, config, _getSetType, namespace) {
     }
   }
 
+
+  if (config.hasOwnProperty("ellipsize")) {
+    if(config.ellipsize){
+      config.methods.push(this_setLineBreakMode("4"));
+      config.methods.push(this_setNumberOfLines("1"));
+      config.methods.push(this_setAdjustsFontSizeToFitWidth(false));
+    } else {
+      config.methods.push(this_setLineBreakMode("0"));
+      config.methods.push(this_setNumberOfLines("0"));
+    }
+  }
+
+  if (config.hasOwnProperty("maxLines")) {
+    config.methods.push(this_setNumberOfLines(""+config.maxLines));
+  }
+
   if (!config.useConstraits && config.visibility) {
     config.methods.push(this_setHidden(config.visibility));
   }
@@ -2135,13 +2241,13 @@ module.exports = function(type, config, _getSetType, namespace) {
   if (config.hasOwnProperty("listData") && config.hasOwnProperty("listItem")) {
     const item = JSON.parse(config.listItem);
     const listDataObj = JSON.parse(config.listData)
-        for(var i = 0; i < listDataObj.length; i++){
-          for(var key in listDataObj[i]){
-            if(key.substring(key.length - 6) == "TestId"){
-              listDataObj[i][key] = listDataObj[i][key].replaceAll(/[^a-z0-9_]/gi, '_').replace(/_+/g, '_').toLowerCase();
-            }
-          }
+    for(var i = 0; i < listDataObj.length; i++){
+      for(var key in listDataObj[i]){
+        if(key.substring(key.length - 6) == "TestId"){
+          listDataObj[i][key] = listDataObj[i][key].replaceAll(/[^a-z0-9_]/gi, '_').replace(/_+/g, '_').toLowerCase();
         }
+      }
+    }
     config.listData = JSON.stringify(listDataObj)
     item.itemView = Android.createListData(config.id, item.itemView);
     config.methods.push(this_setupList(config.listData, JSON.stringify(item)));
@@ -2170,6 +2276,29 @@ module.exports = function(type, config, _getSetType, namespace) {
 
   config.methods.push(this_disableFeedback(true));
 
+  if (config.hasOwnProperty("peakHeight")) {
+    config.methods.push(this_setPeakHeight(config.peakHeight));
+  }
+
+  if (config.hasOwnProperty("halfExpandedRatio")) {
+    config.methods.push(this_setHalfExpandedRatio(config.halfExpandedRatio));
+  }
+
+  if (config.hasOwnProperty("sheetState")) {
+    var state = 0;
+    var sheetState = config.sheetState;
+    if (sheetState == "expanded") {
+      state = 3;
+    } else if (sheetState == "collapsed") {
+      state = 4;
+    } else if (sheetState == "hidden") {
+      state = 5;
+    } else if (sheetState == "halfExpanded") {
+      state = 6;
+    }
+    config.methods.push(this_setSheetState(state));
+  }
+
   if (config.hasOwnProperty("rippleColor")) {
     config.methods.push(UIColor_setColor(config.rippleColor));
     config.methods.push(this_setRippleColor());
@@ -2177,6 +2306,10 @@ module.exports = function(type, config, _getSetType, namespace) {
 
   if (config.hasOwnProperty("disableFeedback")) {
     config.methods.push(this_disableFeedback(config.disableFeedback));
+  }
+
+  if (config.hasOwnProperty("url")) {
+    config.methods.push(this_loadURL(config.url));
   }
 
   config.currChildOffset = 0;
