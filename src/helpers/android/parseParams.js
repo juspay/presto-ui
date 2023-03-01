@@ -430,6 +430,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
                                 Android.runInUI(urlSetCommands ,null)
                               });
         JBridge.renewFile(attrs.value, font, callback);
+        dontLoad = true;
       } else if(JBridge.getFilePath) {
         prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
                     "set_resolvedFile=java.io.File->new:get_directory,s_" + JBridge.getFilePath(font) + ";" +
@@ -444,9 +445,18 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
           && window.juspayAssetConfig.fonts
           && window.juspayAssetConfig.fonts[jpFont]) {
            fontValue = "jp_" + fontValue;
+           prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + fontValue + "\.ttf;";
+           currTransVal = "get_type";
       }
-      prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + fontValue + "\.ttf;";
-      currTransVal = "get_type";
+      else if (window.juspayAssetConfig
+              && window.juspayAssetConfig.fonts
+              && window.juspayAssetConfig.fonts[fontValue]) {
+          prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + fontValue + "\.ttf;";
+          currTransVal = "get_type";
+      }
+      else {
+        dontLoad = true;
+      }
     }
   }
 
@@ -842,7 +852,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
                     "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;"
         currTransVal = "get_dimage";
       }
-    } 
+    }
   }
 
 
