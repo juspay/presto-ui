@@ -37,8 +37,9 @@ var helper = require('../helper');
 var callbackInvoker = require("../helpers/common/callbackInvoker");
 const { diffArray } = require("./ListPresto");
 const {setUseHintColor} = require("./MapAttributes");
+var storedDiv = "";
 
-var {addToContainerList, getContainer, getParentView} = require('./Utils')
+var {addToContainerList, getContainer, getParentView, postRenderElements} = require('./Utils')
 
 function getScreenDimensions(namespace) {
   let element = getContainer(namespace);
@@ -92,7 +93,11 @@ function runInUI(cmd, namespace) {
           //diffing arrrays to find the difference between old data and new data
           //console.time('diffArray')
           console.log("diff")
-          view.props.diffArray = List.diffArray(view.props.itemDatas,JSON.parse(cmd.listData));
+          var x = cmd.listData
+          if(typeof cmd.listData == "string"){
+            x = JSON.parse(cmd.listData)
+          }
+          view.props.diffArray = List.diffArray(view.props.itemDatas,x);
           //console.dir(view.props.diffArray)
           //console.timeEnd('diffArray')
 
@@ -107,7 +112,7 @@ function runInUI(cmd, namespace) {
         let parentElement = null
         let parentView = null
 
-        let stopChild = !isOrientatationChanged(cmd);
+        let stopChild = isOrientatationChanged(cmd);
         parentId = elem.parentNode.id
 
         if(parentId){
@@ -126,6 +131,11 @@ function runInUI(cmd, namespace) {
             }
             inflateView({view, parentElement, siblingView, renderStyle: true,stopChild,isListItem:true, computeList, chrome50matchList});
             let parent = view.parent;
+            for (var i =0;i<parentView.children.length;i++){
+              if(parentView.children[i].props.id == view.props.id){
+                parentView.children[i] = view
+              }
+            }
             while(parent && parent.type=="relativeLayout"){
               computeList.unshift(parent.props.id)
               parent=parent.parent;
@@ -136,26 +146,44 @@ function runInUI(cmd, namespace) {
         }
       }
     }
-    if(window.focusedElement) {
-      let elem = document.getElementById(window.focusedElement);
-      if(elem) {
-        elem.focus();
-      }
-      window.focusedElement = undefined;
-    }
-    
+    setPostRender();
+
   //recompute()
   //Render.runInUI(cmd)
 }
 
-function Render(view, cb, namespace) {
+function setPostRender() {
+  if(postRenderElements.focusedElement) {
+    let elem = document.getElementById(postRenderElements.focusedElement);
+    if(elem) {
+      elem.focus();
+    }
+    postRenderElements.focusedElement = undefined;
+  }
+  if(postRenderElements.scrollToID) {
+    let elem = document.getElementById(postRenderElements.scrollToID);
+    if(elem) {
+      elem.scrollIntoView({behavior: "smooth", block: 'nearest'})
+    }
+    postRenderElements.scrollToID = undefined;
+  }
+}
+
+function Render(view, cb, namespace, useStoredDiv=false) {
   let parentElement = getContainer(namespace);
   // console.debug("presto content element found?? ",parentElement);
   let parentView = getParentView(namespace, view);
-  
-  if(parentView.oldView) {
+  if(parentView.oldView && useStoredDiv && storedDiv){
+    document.getElementById("content").innerHTML = storedDiv;
+    if (cb) callbackInvoker.invoke(cb);
+  }
+  else if(parentView.oldView) {
     addViewToParent(parentElement.id, view, parentView.children.indexOf(view), cb, false)
-  } else {
+  } else if (window.generateVdom == false){
+    storedDiv = document.getElementById("content").innerHTML;
+    if (cb) callbackInvoker.invoke(cb);
+  }
+  else{
     computeChildDimens(parentView);
     let computeList = [];
     const elem = inflateView({view, parentElement,computeList});
@@ -180,27 +208,11 @@ function moveView(id, index) {
   var viewElem = document.getElementById(id);
   var parentId = viewElem.parentNode.id;
   var parent = window.__VIEWS[parentId];
+  var parentElem = document.getElementById(parentId);
   var children = getUpdatedChildren(parent,view,index);
-
+  parentElem.insertBefore(viewElem, parentElem.children[index]);
   computeChildDimens(parent)
-  children.forEach(child => {
-    let computeList = [];
-    console.log("moving")
-    var chrome50matchList;
-    if(isChrome50()) {
-      chrome50matchList = {h : [], w: []}
-    }
-    inflateView({view:child, parentElement : parent, computeList, chrome50matchList})
-    handleMatchParentChrome50(chrome50matchList)
-    postCompute(computeList);
-  })
-  if(window.focusedElement) {
-    let elem = document.getElementById(window.focusedElement);
-    if(elem) {
-      elem.focus();
-    }
-    window.focusedElement = undefined;
-  }
+  setPostRender();
 }
 
 
@@ -212,8 +224,10 @@ function addViewToParent(id, view, index, cb, replace, namespace) {
   view.parent = parentView;
   let siblingView = null
 
-  if(!parentElement || !parentView)
-    return
+  if(!parentElement || !parentView){
+    console.error(`Parent element with id: ${id} not found`);
+    return;
+  }
 
   parentView.children.splice(index, 0, view)
 
@@ -255,12 +269,8 @@ function addViewToParent(id, view, index, cb, replace, namespace) {
         parentElement.appendChild(elem);
     }
   }
-  if (!window.hasAnimationProps && window.focusedElement !== undefined){
-    var c = document.getElementById(window.focusedElement);
-    window.focusedElement = undefined;
-    if (c) {
-        c.focus();
-    }
+  if (!window.hasAnimationProps && postRenderElements.focusedElement !== undefined){
+    setPostRender();
   }
   postCompute(computeList);
   handleMatchParentChrome50(chrome50matchList)
@@ -356,10 +366,10 @@ function replaceView(view, id, namespace) {
   }
   inflateView({view:oldView, parentElement: parentElem, siblingView, stopChild : true, computeList, chrome50matchList});
   window.__VIEWS[id] = oldView
-  
+
   /* Append Children */
   elem = document.getElementById(id)
-  
+
   if(elem && childrenElem.length > 0){
     for(let i = 0; i < childrenElem.length; i++){
       elem.appendChild(childrenElem[i])
@@ -368,15 +378,55 @@ function replaceView(view, id, namespace) {
   postCompute(computeList);
   handleMatchParentChrome50(chrome50matchList)
   /* Append Children End */
-  if(window.focusedElement) {
-    let elem = document.getElementById(window.focusedElement);
-    if(elem) {
-      elem.focus();
-    }
-    window.focusedElement = undefined;
-  }
+  setPostRender();
 }
 
+function addEventListeners(eventListeners) {
+  for(var i = 0; i<eventListeners.length; i++ ){
+      var view = eventListeners[i].view;
+      var props = view.props
+      var id = eventListeners[i].id;
+      let elem = document.getElementById(id)
+      if(!elem)
+        continue
+      let key = eventListeners[i].event
+      let eventType = key.substring(2, key.length).toLowerCase()
+      if (props.hasOwnProperty(key) && typeof props[key] == "function") {
+          const callback = props[key]
+          if (key == "onEnterPressedEvent") {
+              elem.addEventListener('keyup', (e) => {
+                  e.stopPropagation()
+
+                  if (e.keyCode == 13) {
+                      callback(e)
+                  }
+              })
+          }
+          if (eventType == "change") {
+              elem.addEventListener('input', (e) => {
+                  callback(e.target.value)
+              })
+          } else if (eventType == "focus"){
+              elem.addEventListener('focus', (e) => {
+                  callback("true")
+              })
+              elem.addEventListener('blur', (e) => {
+                  callback("false")
+              })
+          } else {
+              props.oldEventListener = props.oldEventListener || {};
+              if (typeof props.oldEventListener[eventType] == "function") {
+                  elem.removeEventListener(eventType, props.oldEventListener[eventType]);
+              }
+              props.oldEventListener[eventType] = (e) => {
+                  e.stopPropagation();
+                  callback(e)
+              };
+              elem.addEventListener(eventType, props.oldEventListener[eventType]);
+          }
+      }
+  }
+}
 // function recompute() {
 //   const rootnode = document.getElementById('content');
 //   const child = rootnode.firstElementChild;
@@ -399,7 +449,7 @@ function getDocument() {
 
 module.exports = {
   addToContainerList : addToContainerList,
-  
+
   getScreenDimensions: getScreenDimensions,
 
   getUIElement : getUIElement,
@@ -409,12 +459,14 @@ module.exports = {
   Render: Render,
 
   addViewToParent: addViewToParent,
-  
+
   moveView: moveView,
 
   removeView: removeView,
 
   replaceView: replaceView,
+
+  addEventListeners: addEventListeners,
 
   getNewID: getNewID,
 
@@ -423,5 +475,5 @@ module.exports = {
   getDocument: getDocument,
 
   setUseHintColor : setUseHintColor
-  
+
 };

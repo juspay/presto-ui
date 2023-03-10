@@ -505,6 +505,9 @@ function setGravityStylesForRow(elem, props) {
             // elem.gravity_row_style['align-items'] = 'center';
             // elem.gravity_row_style['justify-content'] = 'flex-start';
             break;
+        case "bottom":
+          gravity_row_style += "align-items: flex-end;" ;
+          break;
         case 'center_horizontal':
             gravity_row_style += "align-items: flex-start;";
             gravity_row_style += "justify-content: center;";
@@ -562,6 +565,9 @@ function setGravityStylesForColumn(elem, props) {
             // elem.style['align-items'] = 'flex-start';
             // elem.style['justify-content'] = 'center';
             break;
+        case "bottom":
+          gravity_col_style += "justify-content: flex-end;";
+          break;
         case 'center_horizontal':
             gravity_col_style += "align-items: center;";
             gravity_col_style += "justify-content: flex-start;";
@@ -607,7 +613,7 @@ function setGravityStylesForColumn(elem, props) {
 function addLayout(elem, type, props) {
     let scrollBarX = props.hasOwnProperty('scrollBarX')?props.scrollBarX:true;
     let scrollBarY = props.hasOwnProperty('scrollBarY')?props.scrollBarX:true;
-    let scrollBarVisible = props.hasOwnProperty('scrollBarVisible')?props.scrollBarVisible:true;
+    let scrollBarVisible = props.hasOwnProperty('scrollBarVisible')?props.scrollBarVisible:false; // by default, hiding the scrollbar, unless `scrollBarVisible` prop is used
     let elem_style = "";
     switch(type){
         case 'linearLayout':
@@ -695,10 +701,6 @@ function addLayout(elem, type, props) {
                 elem_style += "scrollbar-width: none;" //Hide Scrollbar for Firefox
                 elem_style += "-ms-overflow-style: none;" //Hide Scrollbar for IE and Edge
             }
-            else{
-                elem_style += "scrollbar-width: none;"
-                elem_style += "-ms-overflow-style: none;"
-            }
             break;
         case 'relativeLayout':
             elem_style += "position: relative;";
@@ -728,8 +730,8 @@ function addLayout(elem, type, props) {
 
 function addImage(type,props,elem) {
     if (type == 'imageView') {
-        if (props.imageUrl) {
-            let imageUrl = props.imageUrl
+        if (props.imageUrl||props.gifUrl) {
+            let imageUrl = props.imageUrl||props.gifUrl;
 
             if (props.rawData) {
                 // Do Nothing
@@ -746,8 +748,19 @@ function addImage(type,props,elem) {
                     imageUrl += '.png'
                 }
             }
-
-            elem.setAttribute('src', imageUrl)
+            if (window.generateVdom) {
+                elem.setAttribute('src2', imageUrl);
+            } else {
+                elem.setAttribute('src', imageUrl);
+            }
+            if(props.gifUrl && (!window.generateVdom))
+            {
+                var delay = props.frameDelay || 50;
+                var totalDelay = delay * props.numFrames;
+                var ind = props.gifUrl.lastIndexOf('.')
+                var lastImg = props.gifUrl.substr(0,ind)+(props.numFrames-1)+".png";
+                setTimeout(function(){elem.setAttribute('src',lastImg);},totalDelay);
+            }
         }
     }
 }
@@ -769,7 +782,7 @@ function getArticle(children, config) {
     if (config.isHtmlContent)
         article.innerHTML = config.textFromHtml
     else
-        article.innerText = config.text
+        article.textContent = config.text
     article.style.wordBreak = "break-word"
     article.style.display = "inline"
     return article;
@@ -956,6 +969,14 @@ function addTypeSpecificProp(type,props){
         }
     }
 
+    if (type == "editText") {
+
+        if(props.hasOwnProperty("gravity"))
+            ele_style += "text-align:"+ props.gravity + ";";
+
+        ele_style += "user-select: text !important;";
+    }
+
     return ele_style;
 }
 
@@ -1125,11 +1146,15 @@ function setElemAttributes(element,props){
 
     if(props.hasOwnProperty("focus")) {
             if (props.focus && props.id){
-                    window.focusedElement = props.id;
+                    utils.postRenderElements.focusedElement = props.id;
                     delete props.focus;
                 }
     }
 
+    if(props.scrollToDescendant) {
+        utils.postRenderElements.scrollToID = props.scrollToDescendant
+        delete props.scrollToDescendant
+    }
 
     if (props.hasOwnProperty('contentEditable')) {element.setAttribute('contentEditable','true')};
 
@@ -1195,7 +1220,7 @@ function addPseudoClasses(elem, view){
 
     if (!css) return
     if(styleElem) {
-      styleElem.innerText += css;
+      styleElem.textContent += css;
     } else {
       styleElem = document.createElement('style');
       styleElem.appendChild(document.createTextNode(css));
@@ -1228,3 +1253,4 @@ module.exports = {
     addPseudoClasses,
     setUseHintColor
 }
+

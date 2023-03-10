@@ -81,7 +81,8 @@ function computeRelativeLayout(view) {
   let viewCtx = viewCtxObj(view);
   let children = view.children;
 
-  children.forEach(child => {
+  children.forEach(child2 => {
+    let child = window.__VIEWS[child2.props.id] || child2;
     let props = child.props;
     var pl = 0, pr = 0, pt = 0, pb =0;
     if(view.props && view.props.hasOwnProperty('padding')) {
@@ -131,7 +132,8 @@ function computeLinearlayout(view) {
   }
 
   /* Initialize */
-  children.forEach(child => {
+  children.forEach(child2 => {
+    let child = window.__VIEWS[child2.props.id] || child2;
     let props = child.props;
 
     if (props.hasOwnProperty("activeDimen"))
@@ -144,7 +146,8 @@ function computeLinearlayout(view) {
   if(hasMatchParent || hasWeight){
     let first = true;
     /* Iterate Child */
-    children.forEach(child => {
+    children.forEach(child2 => {
+      let child = window.__VIEWS[child2.props.id] || child2;
       let props = child.props;
 
       if(props.hasOwnProperty(activeDimen) && props[activeDimen] == 'match_parent'){

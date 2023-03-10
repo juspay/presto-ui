@@ -32,7 +32,7 @@ Array.prototype.flatten = function () {
   }, []);
 };
 
-module.exports = function (type, props, children) {
+module.exports = function (type, props, children, elemType, keyId) {
   // console.log("type is",type); 
   // console.log("props are",props); 
   // console.log("children is",children); 
@@ -50,6 +50,12 @@ module.exports = function (type, props, children) {
       type: type,
       children: children
     };
+    if(elemType){
+      obj.elemType = elemType;
+    }
+    if(keyId){
+      obj.keyId = keyId;
+    }
 
     window.__VIEWS[props.id] = obj; 
     window.__VIEW_DIMENSIONS[props.id] = null;
