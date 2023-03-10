@@ -149,7 +149,7 @@ var map = {
     'dontMap': true,
     fnName: 'setPrimitive',
     inVokedIn: 'VIEW'
-  }, 
+  },
   "cx": {
     values: [{
       type: 'f'
@@ -408,6 +408,38 @@ var map = {
     fnName: 'setImageDrawable',
     inVokedIn: 'VIEW',
   },
+  "imageWithFallback": {
+    values: [{
+      type: 's',
+    }],
+    'dontMap': true,
+    fnName: 'setImageDrawable',
+    inVokedIn: 'VIEW',
+  },
+  "gifUrl": {
+    values: [{
+      type: 's',
+    }],
+    'dontMap': true,
+    fnName: 'setBackgroundDrawable',
+    inVokedIn: 'VIEW',
+  },
+  "numFrames": {
+    values: [{
+      type: 's',
+    }],
+    'dontMap': true,
+    fnName: 'setBackgroundDrawable',
+    inVokedIn: 'VIEW',
+  },
+  "frameDelay": {
+    values: [{
+      type: 's',
+    }],
+    'dontMap': true,
+    fnName: 'setBackgroundDrawable',
+    inVokedIn: 'VIEW',
+  },
   "placeHolder": {
     values: [{
       type: 's',
@@ -517,7 +549,7 @@ var map = {
   },
   "minWidth": {
     values: [{
-      type: 'i',
+      type: 'dp',
     }],
     'dontMap': true,
     fnName: 'setMinimumWidth',
@@ -525,7 +557,7 @@ var map = {
   },
   "minHeight": {
     values: [{
-      type: 'i',
+      type: 'dp',
     }],
     'dontMap': true,
     fnName: 'setMinimumHeight',
@@ -533,7 +565,7 @@ var map = {
   },
   "maxWidth": {
     values: [{
-      type: 'i',
+      type: 'dp',
     }],
     'dontMap': true,
     fnName: 'setMaxWidth',
@@ -1352,23 +1384,21 @@ var map = {
     fnName: "setIndeterminateTintList",
     inVokedIn: 'VIEW',
   },
-  "ripple": {
-    values: [],
-    dontMap: true,
-    fnName: "setForeground",
-    inVokedIn: "VIEW"
-  },
-  "rippleColor": {
-    values : [{
-      type: 'cs'
-    }],
-    inVokedIn: 'VIEW'
-  },
   "disableFeedback": {
     values : [{
       type: 'b'
     }],
     inVokedIn: 'VIEW'
+  },
+  "scrollToDescendant": {
+    values: [
+      {
+        type: "s",
+      },
+    ],
+    dontMap: true,
+    fnName: "scrollToDescendant",
+    inVokedIn: "VIEW",
   }
 }
 

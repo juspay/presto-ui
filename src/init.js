@@ -51,7 +51,7 @@ if(window.__OS == "ANDROID"){
     };
     window.__DEVICE_DETAILS = getScreenDetails();
 }
-// Test
+
 if(window.__OS !="WEB"){
     if(!window.parent.juspayAssetConfig){
         try{
@@ -59,7 +59,7 @@ if(window.__OS !="WEB"){
         }catch(e){
             window.parent.juspayAssetConfig = {};
         }
-
+        
     }
     window.juspayAssetConfig = window.parent.juspayAssetConfig;
 }

@@ -31,6 +31,7 @@ var globalObjMap = {};
 var command = "";
 var elementType;
 var getSetType;
+const sessionInfo = window.sessionInfo ? (typeof window.sessionInfo == "string" ? JSON.parse(window.sessionInfo) : window.sessionInfo) : JSON.parse(JBridge.getSessionInfo())
 
 function getGradientOrientation(angle){
 
@@ -99,7 +100,7 @@ function getConfigGroups(config, type) {
   let paddingVal = config["padding"];
   let strokeVal = config["stroke"]
   if(type == "editText" && typeof config["cursorColor"] != undefined){
-    if(JSON.parse(JBridge.getSessionInfo())["android_api_level"] < 28){
+    if(sessionInfo["android_api_level"] < 28){
       config["cursorColorV2"] = config.cursorColor
       delete config.cursorColor
     }
@@ -215,6 +216,7 @@ function getCtr(viewGroup) {
     'coordinatorLayout': 'androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams->new',
     'swipeRefreshLayout': 'androidx.swiperefreshlayout.widget.SwipeRefreshLayout$LayoutParams->new',
     'scrollView': 'android.widget.LinearLayout$LayoutParams->new',
+    'nestedScrollView': 'android.widget.LinearLayout$LayoutParams->new',
     'horizontalScrollView': 'android.widget.LinearLayout$LayoutParams->new',
     'relativeLayout': 'android.widget.RelativeLayout$LayoutParams->new',
     'frameLayout': 'android.widget.FrameLayout$LayoutParams->new',
@@ -330,8 +332,8 @@ function parseColor(color, setterName) {
 function makeUrlCmd(imageUrl){
   var imageValue = imageUrl;
   var jpImageName = 'jp_' + imageUrl;
-  if (window.juspayAssetConfig 
-      && window.juspayAssetConfig.images 
+  if (window.juspayAssetConfig
+      && window.juspayAssetConfig.images
       && window.juspayAssetConfig.images[jpImageName]) {
     imageValue = jpImageName;
   }
@@ -428,6 +430,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
                                 Android.runInUI(urlSetCommands ,null)
                               });
         JBridge.renewFile(attrs.value, font, callback);
+        dontLoad = true;
       } else if(JBridge.getFilePath) {
         prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
                     "set_resolvedFile=java.io.File->new:get_directory,s_" + JBridge.getFilePath(font) + ";" +
@@ -438,14 +441,29 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     } else {
       var fontValue = attrs.value,
           jpFont = "jp_" + attrs.value;
-      if (window.juspayAssetConfig 
-          && window.juspayAssetConfig.fonts 
+      if (window.juspayAssetConfig
+          && window.juspayAssetConfig.fonts
           && window.juspayAssetConfig.fonts[jpFont]) {
            fontValue = "jp_" + fontValue;
+           prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + fontValue + "\.ttf;";
+           currTransVal = "get_type";
       }
-      prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + fontValue + "\.ttf;";
-      currTransVal = "get_type";
+      else if (window.juspayAssetConfig
+              && window.juspayAssetConfig.fonts
+              && window.juspayAssetConfig.fonts[fontValue]) {
+          prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + fontValue + "\.ttf;";
+          currTransVal = "get_type";
+      }
+      else {
+        dontLoad = true;
+      }
     }
+  }
+
+  if (attrs.key == "scrollToDescendant") {
+    var id = attrs.value;
+    prePend = "set_v=ctx->findViewById:i_" + id + ";";
+    currTransVal = "get_v";
   }
 
   if (attrs.key == "font") {
@@ -633,7 +651,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
   }
 
   if(attrs.key == "testID"){
-    attrs.value = attrs.value.replaceAll(/[^a-z0-9_]/gi, '_').replace(/_+/g, '_').toLowerCase();
+    attrs.value = attrs.value.replace(/\W|_/g, '_').replace(/_+/g, '_').toLowerCase();
   }
 
   if (attrs.key == "letterSpacing") {
@@ -702,14 +720,114 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     prePend = "set_PM=ctx->getPackageManager;set_AI=get_PM->getApplicationInfo:s_" + attrs.value + ",i_0;set_11747=get_AI->loadIcon:get_PM;";
     currTransVal = "get_11747";
   }
-
-  if (attrs.key == "imageUrl") {
-
+  if(attrs.key=="gifUrl")
+  {
+    const numFrames = allProps.find(a => a.key === "numFrames").value;
+    delay =  allProps.find(a => a.key === "frameDelay").value;
+    delay = (delay || 50)+"";
+    const id = allProps.find(a => a.key === "id");
+    if(!numFrames||!id)
+    {
+      console.error(">>>> Please provide numFrames for GIF Animation");
+      return;
+    }
     if(isURL(attrs.value)) {
+      var ind = attrs.value.lastIndexOf('/')
+      var image = attrs.value.substr(ind + 1);
+      var imageName = image.substr(0,image.lastIndexOf('.'));
+      var rawUrl =  attrs.value.substr(0,ind + 1);
+      var urlSetCommands = "set_directory=ctx->getDir:s_juspay,i_0;set_anime=android.graphics.drawable.AnimationDrawable->new;get_anime->setOneShot:b_true;"
+      for(var i=0;i<numFrames;i++)
+      {
+        var currFrame = imageName+i+".png";
+        JBridge.renewFile(rawUrl+currFrame, currFrame);
+
+      }
+      for(var i=0;i<numFrames;i++)
+      {
+            var currFrame = imageName+i+".png";
+            if(!JBridge.isFilePresent(currFrame))
+            {
+              console.error("Some images are not available for GIF :"+rawUrl+currFrame);
+              return "";
+            }
+            urlSetCommands += "set_resolvedFile"+i+"=java.io.File->new:get_directory,s_" + JBridge.getFilePath(currFrame) + ";" +
+                              "set_resolvedPath"+i+"=get_resolvedFile"+i+"->toString;"+
+                              "set_bmp"+i+"=android.graphics.BitmapFactory->decodeFile:get_resolvedPath"+i+";"+
+                              "set_frame"+i+"=android.graphics.drawable.BitmapDrawable->new:get_bmp"+i+";"+
+                              "get_anime->addFrame:get_frame"+i+",i_"+delay+";"
+      }
+      urlSetCommands  +=  "this->setBackgroundDrawable:get_anime;"+
+                          "get_anime->start;"
+      prePend = urlSetCommands;
+      dontLoad=true;
+    }
+    else
+    {
+      console.error(">>>> The value provided for gifUrl is not a valid URL");
+    }
+
+  }
+  if (attrs.key == "numFrames") { return "";}
+  if (attrs.key == "frameDelay") { return "";}
+
+
+  function getImage(imageUrl){
+
+    if(isURL(imageUrl)) {
       if(typeof window.__PROXY_FN == "undefined") {
         window.__PROXY_FN = {};
       }
-      var image = attrs.value.substr(attrs.value.lastIndexOf('/') + 1)
+
+      var image = imageUrl.substr(imageUrl.lastIndexOf('/') + 1)
+      var callback = "onImage" + image.substr(0, image.indexOf('.'))
+      var filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(image);
+
+      if (!filePresent) {
+        var callback = callbackMapper.map(function (isNew, url, fileName) {
+            const id = allProps.find(a => a.key === "id");
+            if (!id) return;
+            var urlSetCommands = "set_directory=ctx->getDir:s_juspay,i_0;" +
+                                  "set_resolvedFile=java.io.File->new:get_directory,s_" + fileName + ";" +
+                                  "set_resolvedPath=get_resolvedFile->toString;" +
+                                  "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;" +
+                                  "set_imgV=ctx->findViewById:i_" + id.value + ";" +
+                                  "get_imgV->setImageDrawable:get_dimage"
+                                  Android.runInUI(urlSetCommands ,null)
+          });
+        JBridge.renewFile(imageUrl, image, callback);
+        dontLoad = true
+      } else if(JBridge.getFilePath) {
+        prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
+                    "set_resolvedFile=java.io.File->new:get_directory,s_" + JBridge.getFilePath(image) + ";" +
+                    "set_resolvedPath=get_resolvedFile->toString;" +
+                    "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;"
+        currTransVal = "get_dimage";
+      }
+    } else {
+      var out = makeUrlCmd(imageUrl)
+      prePend = out.prePend;
+      currTransVal = out.currTransVal;
+    }
+  }
+
+  if (attrs.key == "imageUrl") {
+    getImage(attrs.value);
+  }
+
+  if (attrs.key == "imageWithFallback") {
+    image = attrs.value.split(",")
+    imageName = image[0]
+    url = image[1]
+    if(window.juspayAssetConfig && window.juspayAssetConfig.images && window.juspayAssetConfig.images[imageName]) {
+      var out = makeUrlCmd(imageName)
+      prePend = out.prePend;
+      currTransVal = out.currTransVal;
+    } else if(isURL(url)) {
+      if(typeof window.__PROXY_FN == "undefined") {
+        window.__PROXY_FN = {};
+      }
+      var image = url.substr(url.lastIndexOf('/') + 1)
       var callback = "onImage" + image.substr(0, image.indexOf('.'))
 
       var filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(image);
@@ -725,7 +843,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
                                 "get_imgV->setImageDrawable:get_dimage"
                                 Android.runInUI(urlSetCommands ,null)
                               });
-        JBridge.renewFile(attrs.value, image, callback);
+        JBridge.renewFile(url, image, callback);
         dontLoad = true
       } else if(JBridge.getFilePath) {
         prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
@@ -734,12 +852,9 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
                     "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;"
         currTransVal = "get_dimage";
       }
-    } else {
-      var out = makeUrlCmd(attrs.value)
-      prePend = out.prePend;
-      currTransVal = out.currTransVal;
     }
   }
+
 
   if (attrs.key == "cursorColorV2") {
     const id = allProps.find(a => a.key === "id");
@@ -748,7 +863,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
       prePend = parseColor(attrs.value, "set_cursorColor");
       prePend += ";set_kl=java.lang.Class->forName:s_android.widget.TextView"
       prePend += ";set_draw=android.graphics.drawable.ShapeDrawable->new;get_draw->setIntrinsicHeight:i_25;get_draw->setIntrinsicWidth:i_4;set_p=get_draw->getPaint;get_p->setColor:get_cursorColor"
-      prePend += ";set_currentView=this->findViewById:i_" + id.value  
+      prePend += ";set_currentView=this->findViewById:i_" + id.value
       prePend += ";set_c=java.lang.Class->forName:s_android.graphics.drawable.Drawable";
       prePend += ";set_f=get_kl->getDeclaredField:s_mEditor"
       prePend += ";get_f->setAccessible:b_true"
@@ -756,7 +871,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
       prePend += ";set_drawablesArr=java.util.ArrayList->new"
       prePend += ";get_drawablesArr->add:get_draw"
       prePend += ";get_drawablesArr->add:get_draw"
-      prePend += ";infl->convertAndStoreArray:get_drawablesArr,get_c,s_drawables,b_false" 
+      prePend += ";infl->convertAndStoreArray:get_drawablesArr,get_c,s_drawables,b_false"
       prePend += ";set_fieldDash=get_editor->getClass;set_f=get_fieldDash->getDeclaredField:s_mCursorDrawable"
       prePend += ";get_f->setAccessible:b_true"
       prePend += ";get_f->set:get_editor,get_drawables;"
@@ -808,10 +923,9 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     currTransVal = "get_dimage";
   }
 
+
   if (attrs.key == "backgroundDrawable") {
-      var out = makeUrlCmd(attrs.value)
-      prePend = out.prePend;
-      currTransVal = out.currTransVal;
+    getImage(attrs.value);
   }
 
   if (attrs.key == "fontFamily") {
@@ -950,11 +1064,11 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     return prePend
   }
 
-  if (attrs.key == "ripple" && JSON.parse(JBridge.getSessionInfo())["android_api_level"] >= 23) {
-    vals = JSON.parse(attrs.value);
-    prePend = addClickFeedback(vals.rippleColor, vals.disableFeedback, vals.enableRadii);
-    currTransVal = ":get_ripple";
-  }
+  // if (attrs.key == "ripple" && sessionInfo["android_api_level"] >= 23) {
+  //   vals = JSON.parse(attrs.value);
+  //   prePend = addClickFeedback(vals.rippleColor, vals.disableFeedback, vals.enableRadii);
+  //   currTransVal = ":get_ripple";
+  // }
 
   if (belongsTo == "VIEW")
   keyWord = globalObjMap[belongsTo].val;
@@ -963,9 +1077,9 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
 
   if (transformFn || attrs.key == "duration" || attrs.key == "delay" || attrs.key == "curve")
   _cmd = keyWord +  '->' + ((typeof obj.fnName == "undefined")?obj.varName:obj.fnName);
-  else 
+  else
     _cmd = keyWord + '->' +   attrs.key;
-    
+
   if (obj.values && obj.values.length)
   _cmd += ':';
 
@@ -1032,18 +1146,18 @@ function parseGroups(type, groups, config) {
           if (type != "linearLayout"){
             groups.VIEW = groups.VIEW.filter(views => {
               if(views.key != "orientation") return views
-            })           
+            })
           }
           globalObjMap.VIEW = {ctr: "this", val: "this"};
         }
         else
         globalObjMap.VIEW = {ctr: "get_view", val: "get_view"};
       }
-      
+
       if (config.hasOwnProperty("onClick")) {
         groups.VIEW.push(
           {
-            "key": "ripple", 
+            "key": "ripple",
             "value": JSON.stringify({
               "rippleColor": config.hasOwnProperty("rippleColor") ? config.rippleColor : "#e0e0e0",
               "disableFeedback": config.hasOwnProperty("disableFeedback") ? config.disableFeedback : false,
@@ -1106,6 +1220,7 @@ function parseGroups(type, groups, config) {
   return command.substring(0, command.length - 1);
 }
 
+
 var flattenObject = function(ob) {
   var toReturn = {};
   for (var i in ob) {
@@ -1126,7 +1241,7 @@ var flattenObject = function(ob) {
 function addClickFeedback(rippleColor, disableFeedback, enableRadii) {
   if (disableFeedback)
     return "";
-  
+
   var feedback = "set_mask=android.graphics.drawable.ShapeDrawable->new;";
   if (enableRadii) {
     feedback += "set_c=java.lang.Class->forName:s_java.lang.Float;";
@@ -1135,7 +1250,7 @@ function addClickFeedback(rippleColor, disableFeedback, enableRadii) {
     feedback += "set_r=java.lang.Float->new:dpf_30;";
     for (var i = 0; i < 8; i++)
       feedback += "get_arr->add:get_r;";
-    
+
     feedback += "infl->convertAndStoreArray:get_arr,get_c,s_pArr,b_true;";
     feedback += "set_rect=android.graphics.drawable.shapes.RoundRectShape->new:get_pArr,null_pointer,null_pointer;";
     feedback += "get_mask->setShape:get_rect;";
@@ -1148,12 +1263,12 @@ function addClickFeedback(rippleColor, disableFeedback, enableRadii) {
   return feedback;
 }
 
-module.exports = function(type, config, _getSetType) {
+module.exports = function (type, config, _getSetType) {
   config = flattenObject(config);
   getSetType = _getSetType;
   elementType = type;
 
-  var groups =  getConfigGroups(config, elementType);
+  var groups = getConfigGroups(config, elementType);
 
   command = '';
   globalObjMap = {};
@@ -1166,7 +1281,43 @@ module.exports = function(type, config, _getSetType) {
       break;
     }
   }
-
+  if (config['lottieAnimation']) {
+    try {
+      var animationArray = JSON.parse(config['lottieAnimation']);
+      for (i = 0; i < animationArray.length; i++) {
+        if (!animationArray[i].lottieUrl) continue;
+        var lottieUrl = JSON.parse(animationArray[i].lottieUrl);
+        if (!isURL(lottieUrl)) continue;
+        var strictMode = animationArray[i].strictMode ? JSON.parse(animationArray[i].strictMode) : false;
+        var animation = animationArray[i];
+        var lottieName = lottieUrl.substring(lottieUrl.lastIndexOf('/') + 1)
+        var filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(lottieName);
+        if (filePresent) {
+          animationArray[i].lottieUrl = lottieName;
+          config.lottieAnimation = JSON.stringify(animationArray);
+        }
+        else {
+          if (strictMode) {
+            JBridge.renewFile(lottieUrl, lottieName);
+          }
+          else {
+            var callback = callbackMapper.map(function (isNew, url, fileName) {
+              animation.lottieUrl = lottieName;
+              var updatedProps = {};
+              updatedProps.id = config.id;
+              updatedProps.lottieAnimation = JSON.stringify([animation]);
+              Android.updateProperties(JSON.stringify(updatedProps));
+            });
+            JBridge.renewFile(lottieUrl, lottieName, callback);
+          }
+          animationArray.splice(i, 1);
+        }
+      }
+    }
+    catch (err) {
+      console.log(">>>>error in prestoUI lottie Animation:", err);
+    }
+  }
   if (!flag) {
     config.runInUI = parseGroups(type, groups, config);
   }

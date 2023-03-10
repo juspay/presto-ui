@@ -45,11 +45,20 @@ function isMystiqueVersionGreaterThan(version) {
 
 function makeImageName(name){
   let jpName = 'jp_' +name;
-  if(window.juspayAssetConfig 
-    && window.juspayAssetConfig.images 
+  if(window.juspayAssetConfig
+    && window.juspayAssetConfig.images
     && window.juspayAssetConfig.images[jpName])
       return jpName;
   return name;
+}
+
+function isURL(str) {
+  try{
+    var url = new URL(str);
+    return str.indexOf(".") != -1;
+  } catch (err) {
+    return false;
+  }
 }
 
 function convertColorToRgba(color){
@@ -813,6 +822,19 @@ function this_setNumberOfLines(count) {
   }
 }
 
+function this_setAdjustsFontSizeToFitWidth(enabled) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setAdjustsFontSizeToFitWidth:",
+    "values":[
+      {"name": enabled, "type": "i"}
+    ]
+  }
+}
+
 function this_setTextAlignment(mode) {
   return {
     "return": "false",
@@ -1271,6 +1293,16 @@ function this_inlineAnimation(config) {
     };
 }
 
+function this_lottieAnimation(config){
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "invokeOn": "this",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "methodName": "addLottie:",
+    "values": [ { "name": JSON.stringify(config), "type": "s" }]
+  };
+}
 
 function modifyTranslation(config){
   var x = config.x || "0";
@@ -1399,6 +1431,20 @@ function this_fontWithName(name) {
   }
 }
 
+function this_setPeakHeight(height) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName": "setPeakHeight:",
+    "values": [{
+      "name": String(height),
+      type: "f"
+    }]
+  };
+}
+
 function this_setRippleColor() {
   return {
     "return": "false",
@@ -1414,6 +1460,34 @@ function this_setRippleColor() {
   };
 }
 
+function this_setHalfExpandedRatio(ratio) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName": "setHalfExpandedRatio:",
+    "values": [{
+      "name": String(ratio),
+      type: "f"
+    }]
+  };
+}
+
+function this_setSheetState(state) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName": "setSheetState:",
+    "values": [{
+      "name": String(state),
+      type: "i"
+    }]
+  };
+}
+
 function this_disableFeedback(disableFeedback) {
   return {
     "return": "false",
@@ -1424,6 +1498,20 @@ function this_disableFeedback(disableFeedback) {
     "values":[
       {"name": disableFeedback, "type": "i"}
     ]
+  };
+}
+
+function this_loadURL(url) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "MJPWebView",
+    "methodName": "loadURL:",
+    "values": [{
+      "name": url,
+      "type": "s"
+    }]
   };
 }
 
@@ -1480,6 +1568,10 @@ function generateType(type, config) {
   switch(type){
     case "editText":{
       modifiedType = "mJPEditText";
+    }
+    break;
+    case "multiLineEditText":{
+      modifiedType = "mJPMultiLineEditText";
     }
     break;
     case "imageView":{
@@ -1560,6 +1652,23 @@ function generateType(type, config) {
       modifiedType = "mJPShimmerFrameLayout";
     }
     break;
+    case "bottomSheetLayout": {
+      modifiedType = "mJPBottomSheetLayout";
+    }
+    break;
+    case "coordinatorLayout": {
+      modifiedType = "mJPRelativeLayout";
+    }
+    break;
+    case "swipeRefreshLayout": {
+      modifiedType = "mJPLinearLayout";
+    }
+    break;
+    case "webView":
+    {
+      modifiedType = "mJPWebView";
+    }
+    break;
     default: {
       modifiedType = "mJPView";
     }
@@ -1630,9 +1739,8 @@ module.exports = function(type, config, _getSetType, namespace) {
       config.methods.push(this_setTag(tag));
     }
   }
-  console.log(config.testID)
   if (config.testID) {
-    config.testID = config.testID.replaceAll(/[^a-z0-9_]/gi, '_').replace(/_+/g, '_').toLowerCase();
+    config.testID = config.testID.replace(/\W|_/g, '_').replace(/_+/g, '_').toLowerCase();
     config.methods.push(this_setAccessibilityId(config.testID));
   }
 
@@ -1710,7 +1818,7 @@ module.exports = function(type, config, _getSetType, namespace) {
     let arg = rWS(cS(config.borderWidth));
     config.methods.push(setBorderWidth(arg));
   }
-  
+
   if (config.hasOwnProperty("disableCopy")) {
     config.methods.push(this_setDisableCopy(config.disableCopy));
   }
@@ -1751,6 +1859,17 @@ module.exports = function(type, config, _getSetType, namespace) {
     config.methods.push(this_setFrame());
   }
 
+  if(config.hasOwnProperty("gifUrl") && JBridge.getResourcePath && isMystiqueVersionGreaterThan(1.5))
+  {
+    let id = cS(config.id);
+    if (config.gifUrl.endsWith(".gif")){
+      var gifName=config.gifUrl.substring(config.gifUrl.lastIndexOf("/")+1);
+      JBridge.renewFile(config.gifUrl,gifName);
+      config.methods.push(this_setGif(id,JBridge.getResourcePath(gifName), namespace));
+      config.methods.push(this_startGif());
+    }
+  }
+
   if (config.hasOwnProperty("imageNamed")) {
     let id = cS(config.id);
     let placeholder = config.placeHolder || "";
@@ -1758,6 +1877,33 @@ module.exports = function(type, config, _getSetType, namespace) {
       config.methods.push(this_setGif(id, config.imageNamed, namespace));
     } else {
       config.methods.push(this_setImageURL(id, config.imageNamed, placeholder, namespace));
+    }
+  }
+  
+  if (config.hasOwnProperty("imageWithFallback")) {
+    let id = cS(config.id);
+    let placeholder = "";
+
+    let imageData = config.imageWithFallback.split(",")
+    let imageName = makeImageName(imageData[0])
+    let url = imageData[1]
+
+    if (window.juspayAssetConfig && window.juspayAssetConfig.images && window.juspayAssetConfig.images[imageName]) {
+      config.methods.push(this_setImageURL(id, imageName, placeholder, namespace));
+    } else if (isURL(url)) {
+      let urlImageName = url.substr(url.lastIndexOf('/') + 1)
+      var filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(urlImageName) == "1";
+      if (filePresent) {
+        config.methods.push(this_setImageURL(id, urlImageName, placeholder, namespace));
+      } else {
+        var callback = callbackMapper.map(function () {
+          Android.runInUI({
+            id: id,
+            imageNamed: urlImageName
+          });
+        });
+        JBridge.renewFile(url, urlImageName, callback);
+      }
     }
   }
 
@@ -1777,7 +1923,10 @@ module.exports = function(type, config, _getSetType, namespace) {
       'hint': cS(config.hint)
     }
     if (config.letterSpacing) {
-      hintProps['letterSpacing'] = config.letterSpacing;
+      var lS = parseFloat(config.letterSpacing);
+      if(!isNaN(lS)) {
+        hintProps['letterSpacing'] = lS;
+      }
     }
     if (config.hintColor) {
       hintProps['hintColor'] = convertColorToRgba(config.hintColor);
@@ -1804,6 +1953,10 @@ module.exports = function(type, config, _getSetType, namespace) {
     var data = config.scrollTo.split(",");
     var parsedData = JSON.stringify({"x": data[0], "y": data[1]});
     config.methods.push(this_scrollTo(cS(parsedData)));
+  }
+
+  if(config.hasOwnProperty("scrollToDescendant")) {
+    config.methods.push(this_scrollToTag(config.scrollToDescendant));
   }
 
   if (config.hasOwnProperty("expand")) {
@@ -1871,6 +2024,22 @@ module.exports = function(type, config, _getSetType, namespace) {
     } else {
       config.methods.push(this_setNumberOfLines("1"));
     }
+  }
+
+
+  if (config.hasOwnProperty("ellipsize")) {
+    if(config.ellipsize){
+      config.methods.push(this_setLineBreakMode("4"));
+      config.methods.push(this_setNumberOfLines("1"));
+      config.methods.push(this_setAdjustsFontSizeToFitWidth(false));
+    } else {
+      config.methods.push(this_setLineBreakMode("0"));
+      config.methods.push(this_setNumberOfLines("0"));
+    }
+  }
+
+  if (config.hasOwnProperty("maxLines")) {
+    config.methods.push(this_setNumberOfLines(""+config.maxLines));
   }
 
   if (!config.useConstraits && config.visibility) {
@@ -2117,6 +2286,15 @@ module.exports = function(type, config, _getSetType, namespace) {
 
   if (config.hasOwnProperty("listData") && config.hasOwnProperty("listItem")) {
     const item = JSON.parse(config.listItem);
+    const listDataObj = JSON.parse(config.listData)
+    for(var i = 0; i < listDataObj.length; i++){
+      for(var key in listDataObj[i]){
+        if(key.substring(key.length - 6) == "TestId"){
+          listDataObj[i][key] = listDataObj[i][key].replaceAll(/[^a-z0-9_]/gi, '_').replace(/_+/g, '_').toLowerCase();
+        }
+      }
+    }
+    config.listData = JSON.stringify(listDataObj)
     item.itemView = Android.createListData(config.id, item.itemView);
     config.methods.push(this_setupList(config.listData, JSON.stringify(item)));
   }
@@ -2124,6 +2302,48 @@ module.exports = function(type, config, _getSetType, namespace) {
   if (config.hasOwnProperty("inlineAnimation")) {
     config.methods.push(this_inlineAnimation(config));
   }
+
+  if (config.hasOwnProperty("lottieAnimation")) {
+    try {
+          let id = cS(config.id);
+          let animationArray = JSON.parse(config['lottieAnimation']);
+          let animation = animationArray[animationArray.length - 1];
+          if(animation.lottieUrl && JBridge.getResourcePath)
+          {
+            let lottieUrl = JSON.parse(animation.lottieUrl);
+            let strictMode = animation.strictMode ? JSON.parse(animation.strictMode) : false;
+            let lottieName = lottieUrl.substr(lottieUrl.lastIndexOf('/') + 1);
+            let filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(lottieName) == "1";
+            if (filePresent) {
+              animation.lottieUrl = JBridge.getResourcePath(lottieName);
+              config.methods.push(this_lottieAnimation(animation));
+            } 
+            else {
+              if(strictMode){
+                JBridge.renewFile(lottieUrl, lottieName);
+              }
+              else{
+                var runInUIObj = {
+                  id: id,
+                  lottieAnimation: config["lottieAnimation"]
+                };
+                var callback = callbackMapper.map(function () {
+                  Android.runInUI(runInUIObj);
+                });
+                JBridge.renewFile(lottieUrl, lottieName, callback);
+              }
+            }
+        }
+        else
+        {
+          config.methods.push(this_lottieAnimation(animation));
+        }
+  }
+  catch(err){
+       console.log(">>>>error in prestoUI lottie Animation:",err);
+  }
+}
+
 
   if (config.hasOwnProperty("clipsToBounds")) {
     config.methods.push(this_setClipsToBounds(config.clipsToBounds));
@@ -2133,13 +2353,38 @@ module.exports = function(type, config, _getSetType, namespace) {
     try {
       var radiiLen = config.cornerRadii.length;
       var newCornerRadii = config.cornerRadii.substr(0, radiiLen-3);
-      newCornerRadii += 
+      newCornerRadii +=
         config.cornerRadii[radiiLen-1] + "," + config.cornerRadii[radiiLen-3];
       config.methods.push(this_setCornerCurves(newCornerRadii));
     } catch(e){
       console.log(e);
       config.methods.push(this_setCornerCurves(config.cornerRadii));
     }
+  }
+
+  config.methods.push(this_disableFeedback(true));
+
+  if (config.hasOwnProperty("peakHeight")) {
+    config.methods.push(this_setPeakHeight(config.peakHeight));
+  }
+
+  if (config.hasOwnProperty("halfExpandedRatio")) {
+    config.methods.push(this_setHalfExpandedRatio(config.halfExpandedRatio));
+  }
+
+  if (config.hasOwnProperty("sheetState")) {
+    var state = 0;
+    var sheetState = config.sheetState;
+    if (sheetState == "expanded") {
+      state = 3;
+    } else if (sheetState == "collapsed") {
+      state = 4;
+    } else if (sheetState == "hidden") {
+      state = 5;
+    } else if (sheetState == "halfExpanded") {
+      state = 6;
+    }
+    config.methods.push(this_setSheetState(state));
   }
 
   if (config.hasOwnProperty("rippleColor")) {
@@ -2149,6 +2394,10 @@ module.exports = function(type, config, _getSetType, namespace) {
 
   if (config.hasOwnProperty("disableFeedback")) {
     config.methods.push(this_disableFeedback(config.disableFeedback));
+  }
+
+  if (config.hasOwnProperty("url")) {
+    config.methods.push(this_loadURL(config.url));
   }
 
   config.currChildOffset = 0;
@@ -2177,13 +2426,24 @@ window.startCachedAnimation = function(id) {
   }
 }
 
+function this_scrollToTag(value) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "mJPScrollView",
+    "methodName": "scrollRectToVisible:",
+    "values": [{"name": value, "type": "s"}]
+  };
+}
+
 function this_mapToInlineAnimation(id, config) {
-  
+
   var animations = [];
   var callbacks = [];
-  
+
   var parsedConfigs = JSON.parse(config);
-  
+
   parsedConfigs.forEach(parsedConfig => {
 
     var innerProps = JSON.parse(parsedConfig.props);
@@ -2236,7 +2496,7 @@ function this_mapToInlineAnimation(id, config) {
       updatedConfig["isMapperAnimation"] = true;
       configArray.push(updatedConfig);
     });
-    
+
     if (parsedConfig.onEnd) {
       callbacks.push(function() {
         window.startCachedAnimation(parsedConfig.onEnd);
