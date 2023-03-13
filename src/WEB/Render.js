@@ -1076,12 +1076,6 @@ let getElementByView = function(view, parentElement, siblingView, stopChild, ren
         element_style += setAttributes(view, elem, false);
     }
     
-    if(view.props.selectAll){
-        let elem = document.getElementById(view.props.id);
-        if(elem && view.props.selectAll){
-          elem.select();
-        }
-      }
     setLayout(elem,view);
     if(!stopChild) computeChildDimens(view);
     element_style += setComputedStyles(elem, view.props);

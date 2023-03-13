@@ -160,6 +160,13 @@ function setPostRender() {
     }
     postRenderElements.focusedElement = undefined;
   }
+  if(postRenderElements.selectAll) {
+    let elem = document.getElementById(postRenderElements.selectAll);
+    if(elem) {
+      elem.select();
+    }
+    postRenderElements.selectAll = undefined;
+  }
   if(postRenderElements.scrollToID) {
     let elem = document.getElementById(postRenderElements.scrollToID);
     if(elem) {

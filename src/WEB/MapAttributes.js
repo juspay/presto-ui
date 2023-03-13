@@ -1151,6 +1151,13 @@ function setElemAttributes(element,props){
                 }
     }
 
+    if(props.hasOwnProperty("selectAll")) {
+        if (props.selectAll && props.id){
+                utils.postRenderElements.selectAll = props.id;
+                delete props.selectAll;
+            }
+     }
+
     if(props.scrollToDescendant) {
         utils.postRenderElements.scrollToID = props.scrollToDescendant
         delete props.scrollToDescendant
