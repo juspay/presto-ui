@@ -26,12 +26,17 @@
 var mapParams = require('./mapParams');
 var objMap = require('./objMap');
 var callbackMapper  = require("../common/callbackMapper")
+var utils = require("./utils");
 
 var globalObjMap = {};
 var command = "";
 var elementType;
 var getSetType;
 const sessionInfo = window.sessionInfo ? (typeof window.sessionInfo == "string" ? JSON.parse(window.sessionInfo) : window.sessionInfo) : JSON.parse(JBridge.getSessionInfo())
+// primary key is id
+// value is array of subDrawbles
+// Sample {"10000034" : [{isCreated : true, "dr" : "GradientDrawble"}, {"dr" : "ShapeDrawble", isCreated : false}]} // Drawbable
+let drawableMap = {};
 
 function getGradientOrientation(angle){
 
@@ -73,23 +78,6 @@ function isURL(str) {
     return false;
   }
 }
-function attachFeedback(config, keys, i) {
-  var feedbackFn = function() {};
-
-  if (typeof config.feedback !== "undefined") {
-    if (config.feedback == "true") {
-      config.feedback = callbackMapper.map(feedbackFn);
-      window.__ALL_ONCLICKS.push(config.feedback);
-    }
-
-    return;
-  }
-
-  if (config.onClick) {
-    config.feedback = callbackMapper.map(feedbackFn);
-    window.__ALL_ONCLICKS.push(config.feedback);
-  }
-}
 
 function getConfigGroups(config, type) {
   var groups = {};
@@ -99,6 +87,7 @@ function getConfigGroups(config, type) {
   var heightFound = 0;
   let paddingVal = config["padding"];
   let strokeVal = config["stroke"]
+  let currentDrawables = [];
   if(type == "editText" && typeof config["cursorColor"] != undefined){
     if(sessionInfo["android_api_level"] < 28){
       config["cursorColorV2"] = config.cursorColor
@@ -122,8 +111,7 @@ function getConfigGroups(config, type) {
   }
   var keys =  Object.keys(config);
   var proxyFnName;
-   for (var i = 0; i<keys.length; i++) {
-    attachFeedback(config, keys, i);
+  for (var i = 0; i<keys.length; i++) {
 
     if (typeof config[keys[i]] == "undefined" || config[keys[i]] == null) {
       delete config[keys[i]];
@@ -139,7 +127,7 @@ function getConfigGroups(config, type) {
         config[keys[i]] = callbackMapper.map(config[keys[i]]);
 
         if (keys[i] == "onClick"){
-          window.__FN_MAP[config[keys[i]]] = config.text || config.id || "";
+          window.__FN_MAP[config[keys[i]]] = config.text || utils.getId(config) || "";
 
           if(!config.allowMultipleClicks || config.allowMultipleClick=="false"){
             window.__THROTTELED_ACTIONS.push(config[keys[i]]);
@@ -172,20 +160,23 @@ function getConfigGroups(config, type) {
       if (objType) {
         if (isAnimation){
           if (!groups['ANIMATION'])
-          groups['ANIMATION'] = [];
+          groups['ANIMATION'] = {props: [], id : utils.getId(config)};
 
 
-          groups['ANIMATION'].push({key: keys[i].split('_')[1], value: config[keys[i]]})
+          groups['ANIMATION'].props.push({key: keys[i].split('_')[1], value: config[keys[i]]})
         } else {
-          if (!groups[objType.inVokedIn])
-          groups[objType.inVokedIn] = [];
-
+          if (!groups[objType.inVokedIn]) {
+            groups[objType.inVokedIn] = {props: [], id : utils.getId(config)};
+          }
+          if (objType.inVokedIn == "DRAWABLE") {
+            currentDrawables.push(objType.subDrawable);
+          }
           if (keys[i] == "width")
           widthFound ++;
           if (keys[i] == "height")
           heightFound ++;
 
-          groups[objType.inVokedIn].push({key: keys[i], value: config[keys[i]]})
+          groups[objType.inVokedIn].props.push({key: keys[i], value: config[keys[i]]})
         }
 
         if (keys[i]!=="pattern" && keys[i] !== "root" && keys[i] !== "id" && keys[i]!== "__filename") {
@@ -197,14 +188,28 @@ function getConfigGroups(config, type) {
 
   if (getSetType == "set") {
     if (!groups.PARAMS)
-    groups.PARAMS = [];
+    groups.PARAMS = {props: [], id : utils.getId(config)};
     if (!config.hasOwnProperty("padding")) {
       config.padding = "0,0,0,0"
     }
     if (!widthFound)
-    groups.PARAMS.push({key: "width", value: 'wrap_content'});
+    groups.PARAMS.props.push({key: "width", value: 'wrap_content'});
     if (!heightFound)
-    groups.PARAMS.push({key: "height", value: 'wrap_content'});
+    groups.PARAMS.props.push({key: "height", value: 'wrap_content'});
+    if(drawableMap[utils.getId(config)]){
+      drawableMap[utils.getId(config)] = [];
+    }
+  }
+  if(groups.DRAWABLE) {
+    for(let i = 0; i < currentDrawables.length; i++) {
+      let drawable = currentDrawables[i];
+      drawableMap[utils.getId(config)] = drawableMap[utils.getId(config)] || []
+      let isExist = drawableMap[utils.getId(config)].some((({dr}) => dr === drawable))
+      if(!(isExist)){
+        let id = objMap[drawable].index
+        drawableMap[utils.getId(config)].splice(id, 0, {dr : drawable ,  isCreated : false})
+      }
+    }
   }
 
   return groups;
@@ -292,11 +297,34 @@ function appendArgs(attrs, obj) {
   return args.substring(0, args.length-1);
 }
 
-function prepareCtr(attrs, belongsTo) {
+function prepareCtr(attrs, belongsTo, id) {
   var obj = objMap[belongsTo];
   var ctr = globalObjMap[belongsTo].ctr;
   var reqAttrs;
 
+  
+  if (belongsTo == "DRAWABLE") {
+    let lastDrawableIndex = -1;
+    ctr = ctr + ";set_layersArray=java.util.ArrayList->new;"
+    for( var i = 0; i < drawableMap[id].length; ++i) {
+      // if not isCreated then create drawable and add to bg
+      // else fetch from index.
+      if(!drawableMap[id][i].isCreated ) {
+        drawableMap[id][i].isCreated = true;
+        var dr = drawableMap[id][i].dr;
+        ctr = ctr + ";set_" + dr + "=" + objMap[dr].ctr + ";"
+      } else {
+        var dr = drawableMap[id][i].dr;
+        lastDrawableIndex++;
+        ctr = ctr + ";set_" + dr + "=get_DRAWABLE->getDrawable:i_" + lastDrawableIndex + ";"
+      }
+      
+      ctr = ctr + "get_layersArray->add:get_" + dr + ";";
+    }
+    ctr += ";set_c=java.lang.Class->forName:s_android.graphics.drawable.Drawable;"
+    ctr += "infl->convertAndStoreArray:get_layersArray,get_c,s_layers,b_false;";
+    ctr += "set_DRAWABLE=android.graphics.drawable.LayerDrawable->new:get_layers;";
+  }
   if (getSetType == "get" && (belongsTo == "ANIMATION" || belongsTo == "DRAWABLE" || belongsTo == "PARAMS")) {
     return ctr;
   }
@@ -1026,13 +1054,35 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     afterCmd =  "set_win=ctx->getWindow;get_win->setSoftInputMode:5;";
   }
 
-  if (attrs.key == "shadowLayer") {
-    color = attrs.value.split(',')[3];
-    arr = appendArgs(attrs,obj).split(',');
-    arr.splice(arr.length1 , 1);
-
-    prePend = parseColor(color);
-    currTransVal =  arr.join(',') + ',get_colorInt'
+  if (attrs.key == "shadow") {
+    var shadowValues = attrs.value.split(',');
+    let cornerRR = 0;
+    for(var prop of allProps){
+      if(prop.key == "cornerRadius"){
+        cornerRR = prop.value;
+        break;
+      }
+    }
+    var shadowBlur = shadowValues[2];
+    var shadowOffset = {
+      x: shadowValues[0],
+      y: shadowValues[1]
+    };
+   var shadowColor = shadowValues[4];
+    prePend = parseColor(shadowColor);
+    prePend += "set_paint=get_ShapeDrawable->getPaint;"
+    prePend += "get_paint->setShadowLayer:dpf_"
+                  + shadowBlur + ",dpf_" + shadowOffset.x + ",dpf_" + shadowOffset.y + ",get_colorInt;"
+    prePend += "get_paint->setColor:get_colorInt;";
+    let cornerRadiiArray = [cornerRR,cornerRR,cornerRR,cornerRR,cornerRR,cornerRR,cornerRR,cornerRR]
+    let arrList = "set_arr=java.util.ArrayList->new;";
+    let floatArray = cornerRadiiArray.map(function(val,i){return "set_cornerRadius=java.lang.Float->new:dpf_"+ val + ";get_arr->add:get_cornerRadius;"});
+    prePend += arrList + ";";
+    prePend += "set_c=java.lang.Class->forName:s_java.lang.Float;";
+    prePend += floatArray.join("");
+    prePend += "infl->convertAndStoreArray:get_arr,get_c,s_pArr,b_true;";
+    prePend += "set_r=android.graphics.drawable.shapes.RoundRectShape->new:get_pArr,null_pointer,null_pointer;"
+    currTransVal = "get_r";
   }
 
   if (attrs.key == "values") {
@@ -1072,8 +1122,11 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
 
   if (belongsTo == "VIEW")
   keyWord = globalObjMap[belongsTo].val;
-  else
-  keyWord = 'get_' + globalObjMap[belongsTo].val;
+  else if (belongsTo == "DRAWABLE") {
+    keyWord = 'get_' + mapParams[attrs.key].subDrawable
+  } else {
+    keyWord = 'get_' + globalObjMap[belongsTo].val;
+  }
 
   if (transformFn || attrs.key == "duration" || attrs.key == "delay" || attrs.key == "curve")
   _cmd = keyWord +  '->' + ((typeof obj.fnName == "undefined")?obj.varName:obj.fnName);
@@ -1101,7 +1154,9 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
   return beforeCmd  + prePend + _cmd + afterCmd
 }
 
-function parseAttrs(attrs, belongsTo, transformFn, type) {
+function parseAttrs(group, belongsTo, transformFn, type) {
+  attrs = group.props
+  id = group.id
   var obj;
   var retVal;
   var cmd = '';
@@ -1117,7 +1172,7 @@ function parseAttrs(attrs, belongsTo, transformFn, type) {
   if (belongsTo == "VIEW")
   return cmd;
 
-  return prepareCtr(attrs, belongsTo) + ';' + cmd;
+  return prepareCtr(attrs, belongsTo, id) + ';' + cmd;
 }
 
 function parseGroups(type, groups, config) {
@@ -1144,7 +1199,7 @@ function parseGroups(type, groups, config) {
       if (!globalObjMap.VIEW) {
         if (getSetType == "set") {
           if (type != "linearLayout"){
-            groups.VIEW = groups.VIEW.filter(views => {
+            groups.VIEW.props = groups.VIEW.props.filter(views => {
               if(views.key != "orientation") return views
             })
           }
@@ -1155,7 +1210,7 @@ function parseGroups(type, groups, config) {
       }
 
       if (config.hasOwnProperty("onClick")) {
-        groups.VIEW.push(
+        groups.VIEW.props.push(
           {
             "key": "ripple",
             "value": JSON.stringify({
@@ -1203,16 +1258,20 @@ function parseGroups(type, groups, config) {
 
       command += 'set_' +  globalObjMap.ANIMATION.val + '=' +  parseAttrs(groups[keys[i]], keys[i], false, type);
 
-    }  else {
+    } else {
       // Works only for drawable
       if (!globalObjMap[keys[i]]) {
         if (getSetType == "set") {
+          command += "set_arr=java.util.ArrayList->new;";
+          command += "set_c=java.lang.Class->forName:s_android.graphics.drawable.Drawable;";
+          command += "infl->convertAndStoreArray:get_arr,get_c,s_lyrArr,b_false;";
           globalObjMap[keys[i]] = {ctr: objMap[keys[i]].ctr,  val:  keys[i] };
           command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true, type)
             + 'this->' + objMap[keys[i]].viewMethod.split(',')[0] + ':' + 'get_' +  globalObjMap[keys[i]].val + ';'
         } else {
           globalObjMap[keys[i]] = {ctr: 'get_view->getBackground',  val:  keys[i] };
           command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true, type);
+          command += 'this->' + objMap[keys[i]].viewMethod.split(',')[0] + ':' + 'get_' +  globalObjMap[keys[i]].val + ';';
         }
       }
     }

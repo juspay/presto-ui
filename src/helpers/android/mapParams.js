@@ -473,6 +473,7 @@ var map = {
     }],
     'dontMap': true,
     fnName: 'setCornerRadii',
+    subDrawable : "GradientDrawable",
     inVokedIn: 'DRAWABLE'
   },
   "lineSpacing": {
@@ -601,6 +602,7 @@ var map = {
       }],
       'dontMap': true,
       fnName: 'setColors',
+      subDrawable : "GradientDrawable",
       inVokedIn: 'DRAWABLE'
   },
   "gradientAngle": {
@@ -609,6 +611,7 @@ var map = {
     }],
     'dontMap': true,
     fnName: 'setOrientation',
+    subDrawable : "GradientDrawable",
     inVokedIn: 'DRAWABLE'
 },
   "lineHeight": {
@@ -1051,6 +1054,7 @@ var map = {
       type: 'dpf'
     }],
     dontMap: true,
+    subDrawable : "GradientDrawable",
     inVokedIn: 'DRAWABLE',
     fnName: "setCornerRadius",
   },
@@ -1061,6 +1065,7 @@ var map = {
       type: 's'
     }],
     dontMap: true,
+    subDrawable : "GradientDrawable",
     inVokedIn: 'DRAWABLE',
     fnName: "setStroke",
   },
@@ -1080,6 +1085,7 @@ var map = {
       type: 's'
     }],
     dontMap: true,
+    subDrawable : "GradientDrawable",
     inVokedIn: 'DRAWABLE',
     fnName: "setColor",
   },
@@ -1143,19 +1149,14 @@ var map = {
     fnName: 'setTextColor',
     inVokedIn: 'VIEW',
   },
-  shadowLayer: {
+  shadow: {
     values: [{
       type: 'f'
-    }, {
-      type: 'f'
-    }, {
-      type: 'f'
-    }, {
-      type: 'i'
     }],
     dontMap: true,
-    fnName: 'setShadowLayer',
-    inVokedIn: 'VIEW',
+    fnName: 'setShape',
+    inVokedIn: 'DRAWABLE',
+    subDrawable: "ShapeDrawable"
   },
   elevation: {
     values: [{

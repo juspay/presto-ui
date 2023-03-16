@@ -24,15 +24,30 @@
 */
 
 
+
+//Index is priority only.
+// We map to the earliest available index based on the priority
 var  map = {
   'PARAMS': {
     'required': 'width, height',
     'viewMethod': 'setLayoutParams,getLayoutParams'
   },
   'DRAWABLE': {
-    'ctr': 'android.graphics.drawable.GradientDrawable->new',
+    'ctr': 'android.graphics.drawable.LayerDrawable->new:get_lyrArr',
     'required': '',
     'viewMethod': 'setBackground,getBackground'
+  },
+  'ShapeDrawable' : {
+    'ctr': 'android.graphics.drawable.ShapeDrawable->new',
+    'required': '',
+    'viewMethod': 'setBackground,getBackground',
+    'index':0
+  },
+  'GradientDrawable' : {
+    'ctr': 'android.graphics.drawable.GradientDrawable->new',
+    'required': '',
+    'viewMethod': 'setBackground,getBackground',
+    'index':1
   }
 }
 
