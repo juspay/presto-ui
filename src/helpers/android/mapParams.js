@@ -246,6 +246,22 @@ var map = {
     fnName: 'setClipChildren',
     inVokedIn: 'VIEW',
   },
+  clipToPadding: {
+    values: [{
+      type: 'b',
+    }],
+    dontMap: 'true',
+    fnName: 'setClipToPadding',
+    inVokedIn: 'VIEW',
+  },
+  clipToOutline: {
+    values: [{
+      type: 'b',
+    }],
+    dontMap: 'true',
+    fnName: 'setClipToOutline',
+    inVokedIn: 'VIEW',
+  },
   adjustViewBounds: {
     values: [{
       type: 'b',
