@@ -33,8 +33,8 @@ const useClickFeedback = false;
 
 function attachKeyDownEventListenerKeyCode(elem, callback, keyCode) {
     elem.addEventListener('keydown', (e) => {
-        
-        if(e.repeat) { 
+
+        if(e.repeat) {
             e.preventDefault();
             return;
          }  // to handle if pressed multiple times
@@ -43,7 +43,7 @@ function attachKeyDownEventListenerKeyCode(elem, callback, keyCode) {
             if (e.keyCode == keyCode) {
                 callback(e)
             }
-        }    
+        }
     })
 }
 
@@ -134,7 +134,7 @@ function initiateElement(type, props, elem){
                         // return the color of the element
                         setTimeout(function() {
                             elem.style.backgroundColor = ogBg;
-                            // prevent multiple clicks from permanently 
+                            // prevent multiple clicks from permanently
                             // changing the background color
                             feedbackMutex = false;
                         }, 200);
@@ -227,22 +227,22 @@ const InlineAnimationMapper = {
         "from": {
             "fromX": val => `transform: translateX(${val}px);`,
             "fromY": val => `transform: translateY(${val}px);`,
-            "fromScaleX": val => `transform: scaleX(${val});\ntransform-origin:top left;`, 
-            "fromScaleY": val => `transform-origin:top left;\ntransform: scaleY(${val});`, 
-            "fromRotation": val => `transform: rotate(${val}deg);`, 
-            "fromRotationX": val => `transform: rotateX(${val}deg);`, 
-            "fromRotationY": val => `transform: rotateY(${val}deg);`, 
-            "fromAlpha": val => `opacity: ${val};`, 
+            "fromScaleX": val => `transform: scaleX(${val});\ntransform-origin:top left;`,
+            "fromScaleY": val => `transform-origin:top left;\ntransform: scaleY(${val});`,
+            "fromRotation": val => `transform: rotate(${val}deg);`,
+            "fromRotationX": val => `transform: rotateX(${val}deg);`,
+            "fromRotationY": val => `transform: rotateY(${val}deg);`,
+            "fromAlpha": val => `opacity: ${val};`,
         },
         "to": {
-            "toX": val => `transform: translateX(${val}px);`, 
-            "toY": val => `transform: translateY(${val}px);`, 
-            "toScaleX": val => `transform: scaleX(${val});\ntransform-origin:top left;`, 
-            "toScaleY": val => `transform-origin:top left;\ntransform: scaleY(${val});`, 
-            "toRotation": val => `transform: rotate(${val}deg);`, 
-            "toRotationX": val => `transform: rotateX(${val}deg);`, 
-            "toRotationY": val => `transform: rotateY(${val}deg);`, 
-            "toAlpha": val => `opacity: ${val};`, 
+            "toX": val => `transform: translateX(${val}px);`,
+            "toY": val => `transform: translateY(${val}px);`,
+            "toScaleX": val => `transform: scaleX(${val});\ntransform-origin:top left;`,
+            "toScaleY": val => `transform-origin:top left;\ntransform: scaleY(${val});`,
+            "toRotation": val => `transform: rotate(${val}deg);`,
+            "toRotationX": val => `transform: rotateX(${val}deg);`,
+            "toRotationY": val => `transform: rotateY(${val}deg);`,
+            "toAlpha": val => `opacity: ${val};`,
         },
         // ref: https://developer.mozilla.org/en-US/docs/Web/CSS/animation
         "animation-shorthand-seq": ["duration", "interpolator", "delay", "repeatCount", "repeatMode", "fillMode"],
@@ -265,7 +265,7 @@ const InlineAnimationMapper = {
                             return `${val}`;
                     }
                 }
-            }, 
+            },
             "delay": val => {
                 if (!val) {
                     return `0s`;
@@ -275,7 +275,7 @@ const InlineAnimationMapper = {
                 } else {
                     return `0s`;
                 }
-            }, 
+            },
             "duration": val => {
                 if (!val) {
                     return `0s`;
@@ -285,7 +285,7 @@ const InlineAnimationMapper = {
                 } else {
                     return `0s`;
                 }
-            },  
+            },
             "repeatMode": val => {
                 switch (val) {
                     case "restart":
@@ -295,14 +295,14 @@ const InlineAnimationMapper = {
                     default:
                         return `normal`;
                 }
-            }, 
+            },
             "repeatCount": val => {
                 if (!val) return `1`;
                 val = parseInt(val);
                 if (isNaN(val)) { return `1`; }
                 else if (val < 0) { return `infinite`}
                 else { return `${val+1}`}
-            }, 
+            },
             "fillMode": val => {
                 if (!val) return `forwards`;
                 else return `${val}`;
@@ -366,7 +366,7 @@ function setAnimationStyles (elem, props) {
 
         var keyFrameFromMarkup = keyFrameToMarkup = "";
         var countFrom = countTo = 0;
-        
+
         animationObjects.forEach(function (animationObject) {
             const keyframeName = "keyframe_" + props.id + "_" + KEYFRAME_INDEX++;
             /* Add keyframe in css */
@@ -390,14 +390,14 @@ function setAnimationStyles (elem, props) {
                     }
                 }else keyFrameToMarkup += to;
             }
-            var keyFrameCSS = AnimationCSSMarkupWriter["keyframe"](keyframeName, 
-                                AnimationCSSMarkupWriter["keyframe-from"](keyFrameFromMarkup) + 
+            var keyFrameCSS = AnimationCSSMarkupWriter["keyframe"](keyframeName,
+                                AnimationCSSMarkupWriter["keyframe-from"](keyFrameFromMarkup) +
                                 AnimationCSSMarkupWriter["keyframe-to"](keyFrameToMarkup)
                             );
-            
+
             addCSSStyle(keyFrameCSS);
             window.__RENDERED_KEYFRAMES.push(keyframeName);
-        
+
             /* Add animation shorthand prop of keyframe in element*/
             var keyFrameAnimShorthand = `${keyframeName} `;
             InlineAnimationMapper.MAPPINGS["animation-shorthand-seq"].forEach(function (key) {
@@ -418,16 +418,16 @@ function addHoverProps (elem, view) {
         var hoverProps = JSON.parse(view.props.onHover);
         var elem_style = mapAttributes.mapPropToStyle(elem, hoverProps, view.type);
         if (hoverProps.hasOwnProperty('width') && !isNaN(hoverProps.width)) {
-            elem_style += "width: " + hoverProps.width + "px;"; 
+            elem_style += "width: " + hoverProps.width + "px;";
         }
         if (hoverProps.hasOwnProperty('height') && !isNaN(hoverProps.height)) {
-            elem_style += "height: " + hoverProps.height + "px;"; 
+            elem_style += "height: " + hoverProps.height + "px;";
         }
         elem_style = elem_style.replaceAll(";", " !important;"); // add important to make hover props precendence over inline styles
         if (hoverProps.hoverPath) {
-            addCSSStyle(hoverProps.hoverPath + ":hover #\\3" + id[0] + " " + id.substring(1) + " { " + elem_style + " }");    
+            addCSSStyle(hoverProps.hoverPath + ":hover #\\3" + id[0] + " " + id.substring(1) + " { " + elem_style + " }");
         } else {
-            addCSSStyle("#\\3" + id[0] + " " + id.substring(1) + ":hover { " + elem_style + " }");    
+            addCSSStyle("#\\3" + id[0] + " " + id.substring(1) + ":hover { " + elem_style + " }");
         }
     } catch {
         return;
@@ -826,11 +826,25 @@ let createNewElement = function(view, parentElement, siblingView){
     let subElem = null;
     let element_style ="";
     switch(view.type) {
+        case "textureView":
+            elem = document.createElement("video");
+            source = document.createElement("source");
+            if(view.props.source){
+                source.setAttribute("src",view.props.source);
+                source.setAttribute("type","video/mp4");
+            }
+            elem.appendChild(source);
+            if(view.props.autoloop) {
+                elem.loop = true;
+            }
+            elem.autoplay = true;
+            elem.muted = true;
+            break;
         case "webView":
             elem = document.createElement('iframe')
 
             elem.style.border = 'none';
-            // This allow is the property of iframe for setting feature policy 
+            // This allow is the property of iframe for setting feature policy
             // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-allow
             if (view.props.allow && typeof view.props.allow === 'string'){
                 elem.allow = view.props.allow;
@@ -1211,7 +1225,7 @@ let inflateView = function ({view, parentElement, siblingView, stopChild, render
                     }
                 }
             }
-           
+
         }
         view.state = view.state || {};
         view.state.computedHeight = isNaN(parseInt(view.props.height)) ? view.state.computedHeight || 0 : parseInt(view.props.height)
@@ -1255,7 +1269,7 @@ let getValueFromPixel = (pixel) =>{
 let postCompute = (list) =>{
     while(list.length>0){
         let id = list.pop();
- 
+
         let elem = document.getElementById(id);
         if(!elem)
             continue;
@@ -1276,7 +1290,7 @@ let postCompute = (list) =>{
         if(view && view.state && view.state.practicalWidth == "wrap_content") {
             elem.style.width = maxWidth + "px"
         }
-        
+
     }
 }
 let postComputeLayoutDimens = (view, elem) => {
@@ -1323,19 +1337,19 @@ function handleMatchParentChrome50 (chrome50matchList) {
     for(var x = chrome50matchList.h, i =0 ; x && i < x.length ; ++i) {
         if(x[i] && x[i].props && x[i].props.id){
             var elm = document.getElementById(x[i].props.id)
-            if ( elm && elm.parentElement 
-                && (elm.parentElement.parentElement 
+            if ( elm && elm.parentElement
+                && (elm.parentElement.parentElement
                     // Code to handle cases where parent is height 0 weight 1
                     // and parent of parent is orientation vertical
                     && elm.parentElement.parentElement.style
-                    && elm.parentElement.parentElement.style.flexDirection == "column" 
+                    && elm.parentElement.parentElement.style.flexDirection == "column"
                     && elm.parentElement.style['flex-grow'] == "1"
                     && elm.parentElement.style['flex-shrink'] == "1"
-                    // Do not apply if offset height is 0; 
-                    // this will happen for relative layouts; 
+                    // Do not apply if offset height is 0;
+                    // this will happen for relative layouts;
                     // 100% which is already present will give correct result
                     && elm.parentElement.offsetHeight
-                    ) 
+                    )
                 ) {
                 elm.style.height = elm.parentElement.offsetHeight + "px"
                 // window.modifiedIds.push(x[i].props.id)
@@ -1345,16 +1359,16 @@ function handleMatchParentChrome50 (chrome50matchList) {
     for(var x = chrome50matchList.w, i =0 ; x && i < x.length ; ++i) {
         if(x[i] && x[i].props && x[i].props.id){
             var elm = document.getElementById(x[i].props.id)
-            if ( elm && elm.parentElement 
+            if ( elm && elm.parentElement
                 && (elm.parentElement.parentElement
                     && elm.parentElement.parentElement.style
                     // Code to handle cases where parent is width 0 weight 1
                     // and parent of parent is orientation horizontal
-                    && elm.parentElement.parentElement.style.flexDirection == "row" 
+                    && elm.parentElement.parentElement.style.flexDirection == "row"
                     && elm.parentElement.style['flex-grow'] == "1"
                     && elm.parentElement.style['flex-shrink'] == "1"
-                    // Do not apply if offset width is 0; 
-                    // this will happen for relative layouts; 
+                    // Do not apply if offset width is 0;
+                    // this will happen for relative layouts;
                     // 100% which is already present will give correct result
                     && elm.parentElement.offsetWidth
                     )
