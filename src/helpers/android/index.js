@@ -32,8 +32,11 @@ if (!String.prototype.startsWith) {
     });
 }
 
+var parseParams_ = require("./parseParams");
+
 module.exports = {
-	parseParams : require("./parseParams"),
+	parseParams : parseParams_.configFunction,
 	mapPrams : require("./mapParams"),
-	callbackMapper : require("../common/callbackMapper")
+	callbackMapper : require("../common/callbackMapper"),
+    addToFontsWhiteList : parseParams_.appendToFontWhiteList
 }

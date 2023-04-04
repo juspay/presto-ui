@@ -29,13 +29,15 @@ var webParseParams;
 var iOSParseParams;
 var parseParams;
 const helper = require('./helper');
+window.fontsWhiteList = [];
 
 if (window.__OS === "WEB") {
   webParseParams = helpers.web.parseParams;
 } else if (window.__OS === "IOS") {
   iOSParseParams = helpers.ios.parseParams;
 } else if (window.__OS === "ANDROID") {
-  parseParams = helpers.android.parseParams;
+  var androidHelpers = helpers.android;
+  parseParams = androidHelpers.parseParams;
 }
 
 function domAll(elem) {
@@ -79,6 +81,10 @@ function getDomToRender(elem) {
   } else {
     return res;
   }
+}
+
+function addFontsToWhitelist(fonts) {
+  androidHelpers.addToFontsWhiteList(fonts);
 }
 
 
@@ -283,7 +289,7 @@ function executePostProcess(cb) {
             JSON.stringify(window.shadowObject[tag]["factor"])
         );
       }
-    } 
+    }
   }
 }
 
@@ -300,6 +306,7 @@ module.exports = {
   removeAttribute: removeAttribute,
   updateProperty: updateAttribute,
   addProperty: addAttribute,
-  insertDom: insertDom
+  insertDom: insertDom,
+  addFontsToWhitelist: addFontsToWhitelist
 };
 

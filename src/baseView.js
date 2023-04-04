@@ -36,7 +36,7 @@ Array.prototype.addCmd = function(data) {
 
 let parseParams;
 if (window.__OS == "ANDROID")
-  parseParams = require('./helpers/android/parseParams');
+  parseParams = require('./helpers/android/parseParams').configFunction;
 else if (window.__OS == "WEB")
   parseParams = require('./helpers/web/parseParams');
 else
@@ -104,7 +104,7 @@ class BaseView {
       window.__ID++;
       this.idSet[name] = window.__ID;
     }
-    
+
     return this.idSet[name];
   }
 

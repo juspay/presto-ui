@@ -38,6 +38,10 @@ const sessionInfo = window.sessionInfo ? (typeof window.sessionInfo == "string" 
 // Sample {"10000034" : [{isCreated : true, "dr" : "GradientDrawble"}, {"dr" : "ShapeDrawble", isCreated : false}]} // Drawbable
 let drawableMap = {};
 
+const state = {
+  fontsWhiteList: []
+};
+
 function getGradientOrientation(angle){
 
   function roundOff(num){
@@ -302,7 +306,7 @@ function prepareCtr(attrs, belongsTo, id) {
   var ctr = globalObjMap[belongsTo].ctr;
   var reqAttrs;
 
-  
+
   if (belongsTo == "DRAWABLE") {
     let lastDrawableIndex = -1;
     ctr = ctr + ";set_layersArray=java.util.ArrayList->new;"
@@ -318,7 +322,7 @@ function prepareCtr(attrs, belongsTo, id) {
         lastDrawableIndex++;
         ctr = ctr + ";set_" + dr + "=get_DRAWABLE->getDrawable:i_" + lastDrawableIndex + ";"
       }
-      
+
       ctr = ctr + "get_layersArray->add:get_" + dr + ";";
     }
     ctr += ";set_c=java.lang.Class->forName:s_android.graphics.drawable.Drawable;"
@@ -469,20 +473,21 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     } else {
       var fontValue = attrs.value,
           jpFont = "jp_" + attrs.value;
-      if (window.juspayAssetConfig
+      if ((state.fontsWhiteList.indexOf(jpFont) !== -1) ||
+          window.juspayAssetConfig
           && window.juspayAssetConfig.fonts
           && window.juspayAssetConfig.fonts[jpFont]) {
            fontValue = "jp_" + fontValue;
            prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + fontValue + "\.ttf;";
            currTransVal = "get_type";
       }
-      else if (window.juspayAssetConfig
+      else if ((state.fontsWhiteList.indexOf(fontValue) !== -1) ||
+              window.juspayAssetConfig
               && window.juspayAssetConfig.fonts
               && window.juspayAssetConfig.fonts[fontValue]) {
           prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + fontValue + "\.ttf;";
           currTransVal = "get_type";
-      }
-      else {
+      } else {
         dontLoad = true;
       }
     }
@@ -1322,7 +1327,7 @@ function addClickFeedback(rippleColor, disableFeedback, enableRadii) {
   return feedback;
 }
 
-module.exports = function (type, config, _getSetType) {
+function configFunction(type, config, _getSetType) {
   config = flattenObject(config);
   getSetType = _getSetType;
   elementType = type;
@@ -1382,4 +1387,13 @@ module.exports = function (type, config, _getSetType) {
   }
 
   return config;
+}
+
+function appendToFontWhiteList(fonts) {
+  state.fontsWhiteList = state.fontsWhiteList.concat(fonts);
+}
+
+module.exports = {
+  configFunction: configFunction,
+  appendToFontWhiteList: appendToFontWhiteList
 }
