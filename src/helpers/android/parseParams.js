@@ -574,7 +574,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     if (gradientObj.type == "linear") {
     } else {}
 
-    prePend += "set_o=android.graphics.drawable.GradientDrawable$Orientation->valueOf:s_"+ getGradientOrientation(Number(gradientObj.angle)) +";get_DRAWABLE->setOrientation:get_o;"
+    prePend += "set_o=android.graphics.drawable.GradientDrawable$Orientation->valueOf:s_"+ getGradientOrientation(Number(gradientObj.angle)) +";get_GradientDrawable->setOrientation:get_o;"
 
     var intClass = "set_cc=java.lang.Class->forName:s_java.lang.Integer;";
     var arrList = "set_arr=java.util.ArrayList->new;";
