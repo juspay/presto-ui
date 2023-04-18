@@ -2,7 +2,13 @@
   "name": "presto-ui",
   "version": "1.4.1",
   "description": "Javascript framework for building platform independent apps.",
-  "main": "lib/index.js",
+  "main": "index.js",
+  "type": "commonjs",
+  "files": [
+    "index.js",
+    "src/**/*",
+    "LICENSE"
+  ],
   "scripts": {
     "prepare": "./scripts/setup.sh",
     "test": "echo \"Error: no test specified\" && exit 1",
