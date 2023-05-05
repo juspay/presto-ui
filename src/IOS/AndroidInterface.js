@@ -58,7 +58,7 @@ var renderWrapper = function(view, cb, namespace){
   }
   var rootId = top.fragments[namespace];
   window.__VIEWS[rootId] = top.fragmentObjects[namespace]
-  return addViewToParentImpl(rootId, view, 0, null, null);
+  return addViewToParentImpl(rootId, view, 0, cb, null);
 }
 
 var renderFunction = function (view, cb, namespace) {
