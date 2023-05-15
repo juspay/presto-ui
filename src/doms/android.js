@@ -99,7 +99,7 @@ function setAutogenId(props) {
   return props;
 }
 
-module.exports = function(type, props, ...children) {
+module.exports = function(type, props, children, patchImageCB) {
   var paramType;
 
   children = children.flatten();
@@ -109,7 +109,7 @@ module.exports = function(type, props, ...children) {
 
   if(typeof type === "object") {
     paramType = getCtr(type.parentType);
-    props = parseParams(type.elemType, props, "set");
+    props = parseParams(type.elemType, props, "set", patchImageCB);
     props = setAutogenId(props);
     props.runInUI = props.runInUI.replace('PARAM_CTR_HOLDER', paramType);
     if(type.elemType == "webView") {
@@ -125,7 +125,7 @@ module.exports = function(type, props, ...children) {
     return {type: "android.widget." + finalType, props: props, children: children}
   } else if (typeof type === "string") {
     paramType = getCtr(type);
-    props = parseParams(type, props, "set");
+    props = parseParams(type, props, "set", patchImageCB);
 
     props = setAutogenId(props);
 

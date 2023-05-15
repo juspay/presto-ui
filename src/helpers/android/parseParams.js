@@ -377,7 +377,7 @@ function makeUrlCmd(imageUrl){
   }
 }
 
-function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
+function mashThis(attrs, obj, belongsTo, transformFn, allProps, type, patchImageCB) {
   if (getSetType == "get" && (attrs.key == "width" || attrs.key == "height")) {
     // get case i.e during patch
     if(!isNaN(attrs.value * 1)) {
@@ -813,36 +813,97 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
       }
 
       var image = imageUrl.substr(imageUrl.lastIndexOf('/') + 1)
-      var callback = "onImage" + image.substr(0, image.indexOf('.'))
-      var filePresent = (typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(image);
-
-      if (!filePresent) {
-        var callback = callbackMapper.map(function (isNew, url, fileName) {
-            const id = allProps.find(a => a.key === "id");
-            if (!id) return;
-            var urlSetCommands = "set_directory=ctx->getDir:s_juspay,i_0;" +
-                                  "set_resolvedFile=java.io.File->new:get_directory,s_" + fileName + ";" +
-                                  "set_resolvedPath=get_resolvedFile->toString;" +
-                                  "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;" +
-                                  "set_imgV=ctx->findViewById:i_" + id.value + ";" +
-                                  "get_imgV->setImageDrawable:get_dimage"
-                                  Android.runInUI(urlSetCommands ,null)
-          });
-        JBridge.renewFile(imageUrl, image, callback);
-        dontLoad = true
-      } else if(JBridge.getFilePath) {
-        prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
-                    "set_resolvedFile=java.io.File->new:get_directory,s_" + JBridge.getFilePath(image) + ";" +
-                    "set_resolvedPath=get_resolvedFile->toString;" +
-                    "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;"
-        currTransVal = "get_dimage";
-      }
+      checkInCacheOrFallback(image, ()=>{showFromRemote(imageUrl, image)});
     } else {
-      var out = makeUrlCmd(imageUrl)
-      prePend = out.prePend;
-      currTransVal = out.currTransVal;
+      showFromLocal(imageUrl);
     }
   }
+
+function checkInCacheOrFallback(image, fallback){
+  if((typeof JBridge.isFilePresent == "function") && JBridge.isFilePresent(image) && JBridge.getFilePath){
+    prePend = "set_directory=ctx->getDir:s_juspay,i_0;" +
+    "set_resolvedFile=java.io.File->new:get_directory,s_" + JBridge.getFilePath(image) + ";" +
+    "set_resolvedPath=get_resolvedFile->toString;" +
+    "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;"
+    currTransVal = "get_dimage";
+  }
+  else{
+    fallback();
+  }
+}
+
+function patch( id, fileName){
+  return ()=>{
+  var urlSetCommands = "set_directory=ctx->getDir:s_juspay,i_0;" +
+      "set_resolvedFile=java.io.File->new:get_directory,s_" + fileName + ";" +
+      "set_resolvedPath=get_resolvedFile->toString;" +
+      "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;" +
+      "set_imgV=ctx->findViewById:i_" + id.value + ";" +
+      "get_imgV->setImageDrawable:get_dimage"
+  Android.runInUI(urlSetCommands ,null)
+  }
+}
+
+function showFromRemote(imageUrl, image){
+  var callback = callbackMapper.map(function (isNew, url, fileName) {
+    const id = allProps.find(a => a.key === "id");
+    if (!id) return;
+    if(patchImageCB) {
+      patchImageCB(patch(id, fileName));
+    } else {
+      patch(id, fileName)(); 
+    }
+  });
+  JBridge.renewFile(imageUrl, image, callback);
+  dontLoad = true;
+}
+
+function showFromLocal(imageName){
+  var out = makeUrlCmd(imageName);
+  prePend = out.prePend;
+  currTransVal = out.currTransVal;
+}
+
+function validString(str){
+  return (str && str != "");
+}
+
+  if (attrs.key == "imageUrlWithFallback") {
+    try{
+      const strArray = attrs.value.split(",");
+      const imageName = strArray[0];
+      const url = strArray[1];
+      const preferLocal = strArray[2]=="true";
+      const image = url.substr(url.lastIndexOf("/") + 1);
+      if(window.juspayAssetConfig && window.juspayAssetConfig.images){
+        const images = window.juspayAssetConfig.images;
+        const isUrl = isURL(url);
+        if(validString(imageName) && (images[imageName] || images["jp_"+imageName])){
+          const assetUrl = images["jp_"+imageName] || images[imageName] ;
+          if(preferLocal || assetUrl === url || (!isUrl)){
+            showFromLocal(imageName);
+          }
+          else {
+            checkInCacheOrFallback(image, ()=> {JBridge.renewFile(url,image);showFromLocal(imageName); });
+          }
+        }
+        else if (isUrl){
+          checkInCacheOrFallback(image, ()=> {showFromRemote(url,image)});
+        }
+      }
+      else {
+        if(preferLocal && validString(imageName)) {
+          showFromLocal(imageName);
+        }
+        else{
+        showFromRemote(url,image);
+        }
+      }
+    }
+    catch(e){
+    }
+  }
+
 
   if (attrs.key == "imageUrl") {
     getImage(attrs.value);
@@ -1172,7 +1233,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
   return beforeCmd  + prePend + _cmd + afterCmd
 }
 
-function parseAttrs(group, belongsTo, transformFn, type) {
+function parseAttrs(group, belongsTo, transformFn, type, patchImageCB) {
   attrs = group.props
   id = group.id
   var obj;
@@ -1183,7 +1244,7 @@ function parseAttrs(group, belongsTo, transformFn, type) {
   for (var i =0 ;i<attrs.length; i++) {
     obj = mapParams[attrs[i].key];
     if (obj) {
-      cmd += mashThis(attrs[i], obj, belongsTo, transformFn, attrs, type);
+      cmd += mashThis(attrs[i], obj, belongsTo, transformFn, attrs, type, patchImageCB);
     }
   }
 
@@ -1193,7 +1254,7 @@ function parseAttrs(group, belongsTo, transformFn, type) {
   return prepareCtr(attrs, belongsTo, id) + ';' + cmd;
 }
 
-function parseGroups(type, groups, config) {
+function parseGroups(type, groups, config, patchImageCB) {
   var keys = Object.keys(groups);
   var ctr;
 
@@ -1202,16 +1263,16 @@ function parseGroups(type, groups, config) {
       if (!globalObjMap[keys[i]]) {
         if (getSetType == "set") {
           globalObjMap[keys[i]] = {ctr: "android.graphics.drawable.GradientDrawable->new",  val:  keys[i] };
-          command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true, type)
+          command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true, type, patchImageCB)
             + 'this->' + "setForeground" + ':' + 'get_' +  globalObjMap[keys[i]].val + ';'
         } else {
           globalObjMap[keys[i]] = {ctr: 'get_view->getForeground',  val:  keys[i] };
-          command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true, type);
+          command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true, type, patchImageCB);
         }
       }
     } else if (keys[i] == "LAYOUT_TRANSITION") {
         globalObjMap.LAYOUT_TRANSITION = {ctr: 'android.animation.LayoutTransition->new', val: "LAYOUT_TRANSITION"};
-        command +=  'set_' +  globalObjMap.LAYOUT_TRANSITION.val + '=' +  parseAttrs(groups.PARAMS, 'LAYOUT_TRANSITION', true, type)
+        command +=  'set_' +  globalObjMap.LAYOUT_TRANSITION.val + '=' +  parseAttrs(groups.PARAMS, 'LAYOUT_TRANSITION', true, type, patchImageCB)
              + 'this->' + "setLayoutTransition" + ':get_'  + globalObjMap.LAYOUT_TRANSITION.val + ';';
     } else if (keys[i] == "VIEW") {
       if (!globalObjMap.VIEW) {
@@ -1240,7 +1301,7 @@ function parseGroups(type, groups, config) {
         );
       }
 
-      command +=  parseAttrs(groups.VIEW, 'VIEW', true, type)
+      command +=  parseAttrs(groups.VIEW, 'VIEW', true, type, patchImageCB)
 
     } else if (keys[i] == "PARAMS") {
       if (getSetType == "set") {
@@ -1249,7 +1310,7 @@ function parseGroups(type, groups, config) {
           globalObjMap.PARAMS = {ctr: ctr, val: "PARAMS" };
         }
 
-        command +=  'set_' +  globalObjMap.PARAMS.val + '=' +  parseAttrs(groups.PARAMS, 'PARAMS', true, type)
+        command +=  'set_' +  globalObjMap.PARAMS.val + '=' +  parseAttrs(groups.PARAMS, 'PARAMS', true, type, patchImageCB)
              + 'this->' + objMap.PARAMS.viewMethod.split(',')[0] + ':get_'  + globalObjMap.PARAMS.val + ';';
       } else {
         if (!globalObjMap.PARAMS) {
@@ -1257,7 +1318,7 @@ function parseGroups(type, groups, config) {
           globalObjMap.PARAMS = {ctr: ctr, val: "PARAMS" };
         }
 
-        command += 'set_' +  globalObjMap.PARAMS.val + '=' +  parseAttrs(groups[keys[i]], keys[i], true, type);
+        command += 'set_' +  globalObjMap.PARAMS.val + '=' +  parseAttrs(groups[keys[i]], keys[i], true, type, patchImageCB);
       }
 
     } else if (keys[i] == "MUTATEBG") {
@@ -1265,7 +1326,7 @@ function parseGroups(type, groups, config) {
         globalObjMap.MUTATEBG = {ctr: 'this->getBackground', val: "MUTATEBG"};
       }
 
-      command += 'set_' +  globalObjMap.MUTATEBG.val + '=' +  parseAttrs(groups[keys[i]], keys[i], true, type);
+      command += 'set_' +  globalObjMap.MUTATEBG.val + '=' +  parseAttrs(groups[keys[i]], keys[i], true, type, patchImageCB);
     } else if (keys[i] == "ANIMATION") {
       if (!globalObjMap.ANIMATION) {
         if (getSetType == "set")
@@ -1274,7 +1335,7 @@ function parseGroups(type, groups, config) {
         globalObjMap.ANIMATION = {ctr: 'get_view->animate', val: "ANIMATION"};
       }
 
-      command += 'set_' +  globalObjMap.ANIMATION.val + '=' +  parseAttrs(groups[keys[i]], keys[i], false, type);
+      command += 'set_' +  globalObjMap.ANIMATION.val + '=' +  parseAttrs(groups[keys[i]], keys[i], false, type, patchImageCB);
 
     } else {
       // Works only for drawable
@@ -1284,11 +1345,11 @@ function parseGroups(type, groups, config) {
           command += "set_c=java.lang.Class->forName:s_android.graphics.drawable.Drawable;";
           command += "infl->convertAndStoreArray:get_arr,get_c,s_lyrArr,b_false;";
           globalObjMap[keys[i]] = {ctr: objMap[keys[i]].ctr,  val:  keys[i] };
-          command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true, type)
+          command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true, type, patchImageCB)
             + 'this->' + objMap[keys[i]].viewMethod.split(',')[0] + ':' + 'get_' +  globalObjMap[keys[i]].val + ';'
         } else {
           globalObjMap[keys[i]] = {ctr: 'get_view->getBackground',  val:  keys[i] };
-          command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true, type);
+          command += 'set_' +  globalObjMap[keys[i]].val + '=' +  parseAttrs(groups[keys[i]], keys[i], true, type, patchImageCB);
           command += 'this->' + objMap[keys[i]].viewMethod.split(',')[0] + ':' + 'get_' +  globalObjMap[keys[i]].val + ';';
         }
       }
@@ -1340,7 +1401,7 @@ function addClickFeedback(rippleColor, disableFeedback, enableRadii) {
   return feedback;
 }
 
-function configFunction(type, config, _getSetType) {
+function configFunction(type, config, _getSetType, patchImageCB) {
   config = flattenObject(config);
   getSetType = _getSetType;
   elementType = type;
@@ -1396,7 +1457,7 @@ function configFunction(type, config, _getSetType) {
     }
   }
   if (!flag) {
-    config.runInUI = parseGroups(type, groups, config);
+    config.runInUI = parseGroups(type, groups, config, patchImageCB);
   }
 
   return config;

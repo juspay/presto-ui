@@ -730,9 +730,18 @@ function addLayout(elem, type, props) {
 
 function addImage(type,props,elem) {
     if (type == 'imageView') {
-        if (props.imageUrl||props.gifUrl) {
-            let imageUrl = props.imageUrl||props.gifUrl;
-
+        if (props.imageUrl||props.imageUrlWithFallback||props.gifUrl) {
+            let imageUrl = props.imageUrl||props.gifUrl||props.imageUrlWithFallback.split(",")[1];
+            if(props.imageUrlWithFallback && props.imageUrlWithFallback.includes("data:image/"))
+            {   
+                let arr = props.imageUrlWithFallback.split(",");
+                arr.shift();
+                arr.pop();
+                imageUrl = arr.join(",");
+            }
+            if(imageUrl == ""){
+                return;
+            }
             if (props.rawData) {
                 // Do Nothing
             } else {

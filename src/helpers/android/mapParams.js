@@ -424,6 +424,14 @@ var map = {
     fnName: 'setImageDrawable',
     inVokedIn: 'VIEW',
   },
+  "imageUrlWithFallback": {
+    values: [{
+      type: 's',
+    }],
+    'dontMap': true,
+    fnName: 'setImageDrawable',
+    inVokedIn: 'VIEW',
+  },
   "imageWithFallback": {
     values: [{
       type: 's',

@@ -1911,6 +1911,46 @@ module.exports = function(type, config, _getSetType, namespace) {
     }
   }
 
+  function validString(str){
+    return (str && str != "");
+  }
+  
+  if (config.hasOwnProperty("imageUrlWithFallback")) {
+    try{
+      const id = cS(config.id);
+      const strArray = config.imageUrlWithFallback.split(",");
+      const imageName = strArray[0];
+      const url = strArray[1];
+      const preferLocal = strArray[2]=="true";
+      if(window.juspayAssetConfig && window.juspayAssetConfig.images){
+        const images = window.juspayAssetConfig.images;
+        if(validString(imageName) && (images[imageName] || images["jp_"+imageName])){
+          const assetUrl = images["jp_"+imageName] || images[imageName] ;
+
+          if(preferLocal || assetUrl === url || (!isURL(url))){
+            config.methods.push(this_setImageURL(id, imageName, "", namespace));
+          }
+          else {
+            config.methods.push(this_setImageURL(id, url, imageName, namespace));
+          }
+        }
+        else if (isURL(url)){
+          config.methods.push(this_setImageURL(id, url, "", namespace));
+        }
+      }
+      else {
+        if(preferLocal && validString(imageName)) {
+          config.methods.push(this_setImageURL(id, imageName, "", namespace));
+        }
+        else{
+          config.methods.push(this_setImageURL(id, url, imageName, namespace));
+        }
+      }
+    }
+    catch(e){
+    }
+  }
+
   if (config.hasOwnProperty("imageNamed")) {
     let id = cS(config.id);
     let placeholder = config.placeHolder || "";
