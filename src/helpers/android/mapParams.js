@@ -296,6 +296,16 @@ var map = {
     fnName: 'setInterpolator',
     inVokedIn: 'VIEW',
   },
+  fontWeight: {
+    values: [{
+      type: 'i',
+    }, {
+      type: 'b',
+    }],
+    dontMap: 'true',
+    fnName: 'setTypeface',
+    inVokedIn: 'VIEW',
+  },
   fontFamily: {
     values: [{
       type: 's',
