@@ -26,6 +26,7 @@
 let {
     computeChildDimens
 } = require("../compute")
+let {postRenderElements, state} = require("./Utils")
 let mapAttributes = require("./MapAttributes");
 const List = require("./ListPresto");
 var addedShimmerStyle = false;
@@ -69,16 +70,6 @@ function initiateElement(type, props, elem){
         if (props.hasOwnProperty(key) && typeof props[key] == "function") {
             const callback = props[key]
 
-            if(key == "onAnimationEnd") {
-                elem.addEventListener("animationend", function () {
-                    if (props.onAnimationEnd) {
-                        elem.style.animation = null;
-                        props.onAnimationEnd();
-                    }
-                    manualFocus();
-                    window.hasAnimationProps = false;
-                   });
-            }
             if (key == "onEnterPressedEvent") {
                 attachKeyDownEventListenerKeyCode(elem, callback, 13);
             }
@@ -343,9 +334,9 @@ function addCSSStyle (style) {
 var KEYFRAME_INDEX = 0;
 
 function manualFocus () {
-    if (window.focusedElement !== undefined){
-        var c = document.getElementById(window.focusedElement);
-        window.focusedElement = undefined;
+    if (state.animationFocus !== undefined){
+        var c = document.getElementById(state.animationFocus);
+        state.animationFocus = undefined;
         if (c) {
             console.debug("now focusing");
             c.focus();
@@ -360,7 +351,6 @@ function setAnimationStyles (elem, props) {
     try {
         const animationObjects = JSON.parse(props.inlineAnimation);
         if(!Array.isArray(animationObjects) || (Array.isArray(animationObjects) && animationObjects.length == 0)) return "";
-        window.hasAnimationProps = true;
         var keyFrameShorthands = [];
         var AnimationCSSMarkupWriter = CSSMarkupWriter["animations"];
 
@@ -404,7 +394,19 @@ function setAnimationStyles (elem, props) {
                 keyFrameAnimShorthand += (InlineAnimationMapper.map("animation-props")(key, animationObject[key]) + " ");
             });
             keyFrameShorthands.push(keyFrameAnimShorthand);
-        });
+            if(animationObject.repeatCount != "-1") {
+                state.hasAnimationProps ++;
+                elem.onanimationend = function () {
+                    state.hasAnimationProps--;
+                    if (props.onAnimationEnd) {
+                        elem.style.animation = null;
+                        props.onAnimationEnd();
+                    }
+                    if(state.hasAnimationProps == 0)
+                        manualFocus();
+                }
+            };
+            });
         return AnimationCSSMarkupWriter["animation-shorthand"](keyFrameShorthands);
     } catch {
         return "";

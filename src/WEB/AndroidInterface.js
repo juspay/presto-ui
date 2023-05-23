@@ -34,6 +34,7 @@ var {
   handleMatchParentChrome50
 } = require("./Render");
 var helper = require('../helper');
+const { state} = require("./Utils")
 var callbackInvoker = require("../helpers/common/callbackInvoker");
 const { diffArray } = require("./ListPresto");
 const {setUseHintColor} = require("./MapAttributes");
@@ -153,24 +154,28 @@ function runInUI(cmd, namespace) {
 }
 
 function setPostRender() {
-  if(postRenderElements.focusedElement) {
-    let elem = document.getElementById(postRenderElements.focusedElement);
-    if(elem) {
-      elem.focus();
+  if (postRenderElements.focusedElement) {
+    if (state.hasAnimationProps > 0) {
+      state.animationFocus = postRenderElements.focusedElement;
+    } else {
+      let elem = document.getElementById(postRenderElements.focusedElement);
+      if (elem) {
+        elem.focus();
+      }
     }
     postRenderElements.focusedElement = undefined;
   }
-  if(postRenderElements.selectAll) {
+  if (postRenderElements.selectAll) {
     let elem = document.getElementById(postRenderElements.selectAll);
-    if(elem) {
+    if (elem) {
       elem.select();
     }
     postRenderElements.selectAll = undefined;
   }
-  if(postRenderElements.scrollToID) {
+  if (postRenderElements.scrollToID) {
     let elem = document.getElementById(postRenderElements.scrollToID);
-    if(elem) {
-      elem.scrollIntoView({behavior: "smooth", block: 'nearest'})
+    if (elem) {
+      elem.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
     postRenderElements.scrollToID = undefined;
   }
@@ -276,7 +281,7 @@ function addViewToParent(id, view, index, cb, replace, namespace) {
         parentElement.appendChild(elem);
     }
   }
-  if (!window.hasAnimationProps && postRenderElements.focusedElement !== undefined){
+  if (postRenderElements.focusedElement !== undefined){
     setPostRender();
   }
   postCompute(computeList);

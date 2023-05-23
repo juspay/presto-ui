@@ -1146,9 +1146,9 @@ function setElemAttributes(element,props){
 
     if(props.hasOwnProperty("focus")) {
             if (props.focus && props.id){
-                    utils.postRenderElements.focusedElement = props.id;
-                    delete props.focus;
-                }
+                utils.postRenderElements.focusedElement = props.id;
+                delete props.focus;
+        }
     }
 
     if(props.hasOwnProperty("selectAll")) {

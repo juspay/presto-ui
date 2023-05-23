@@ -73,6 +73,8 @@ function convertHexToRgb(hex) {
 const state = {
   fragments : {},
   fragmentTypes : {},
+  hasAnimationProps: 0,
+  animationFocus : undefined,
   mainRootView : {
     type: "relativeLayout",
     props: {
@@ -171,5 +173,6 @@ module.exports = {
     getParentView,
     getContainer,
     calculateHeight,
-    postRenderElements
+    postRenderElements,
+    state
 }
