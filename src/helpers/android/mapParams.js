@@ -32,6 +32,12 @@ var map = {
     fnName: 'setText',
     inVokedIn: 'VIEW',
   },
+  "ripple": {
+    values: [],
+    dontMap: 'true',
+    fnName: "setForeground",
+    inVokedIn: "VIEW"
+  },
   ellipsize: {
     values: [{
       type: 'b',

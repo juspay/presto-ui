@@ -74,7 +74,9 @@ function isURL(str) {
   }
 }
 function attachFeedback(config, keys, i) {
-  var feedbackFn = function() {};
+  var feedbackFn = function() {
+    console.log("KAVYA feedback called");
+  };
 
   if (typeof config.feedback !== "undefined") {
     if (config.feedback == "true") {
@@ -1064,11 +1066,13 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     return prePend
   }
 
-  // if (attrs.key == "ripple" && sessionInfo["android_api_level"] >= 23) {
-  //   vals = JSON.parse(attrs.value);
-  //   prePend = addClickFeedback(vals.rippleColor, vals.disableFeedback, vals.enableRadii);
-  //   currTransVal = ":get_ripple";
-  // }
+  if (attrs.key == "ripple") {
+    vals = JSON.parse(attrs.value);
+    // rippleColor, disableFeedback, enableRadii = attrs.value.split(",");
+    prePend = addClickFeedback(vals.rippleColor, vals.disableFeedback, vals.enableRadii);
+    console.log("KAVYA prePend ", prePend);
+    currTransVal = "get_ripple";
+  }
 
   if (belongsTo == "VIEW")
   keyWord = globalObjMap[belongsTo].val;
@@ -1155,13 +1159,14 @@ function parseGroups(type, groups, config) {
       }
 
       if (config.hasOwnProperty("onClick")) {
+        console.log("KAVYA config ", config );
         groups.VIEW.push(
           {
             "key": "ripple",
             "value": JSON.stringify({
-              "rippleColor": config.hasOwnProperty("rippleColor") ? config.rippleColor : "#e0e0e0",
-              "disableFeedback": config.hasOwnProperty("disableFeedback") ? config.disableFeedback : false,
-              "enableRadii": config.hasOwnProperty("enableRoundedRipple") && config.enableRoundedRipple
+              "rippleColor": "#ab0de3",
+              "disableFeedback": false,
+              "enableRadii": true
             })
           }
         );
@@ -1239,8 +1244,11 @@ var flattenObject = function(ob) {
 };
 
 function addClickFeedback(rippleColor, disableFeedback, enableRadii) {
-  if (disableFeedback)
-    return "";
+  console.log("KAVYA rippleColor" , rippleColor);
+  console.log("KAVYA disableFeedback" , disableFeedback);
+  console.log("KAVYA enableRadii" , enableRadii)
+  // if (disableFeedback)
+  //   return "";
 
   var feedback = "set_mask=android.graphics.drawable.ShapeDrawable->new;";
   if (enableRadii) {
@@ -1260,6 +1268,7 @@ function addClickFeedback(rippleColor, disableFeedback, enableRadii) {
   feedback += "set_paint=get_mask->getPaint;get_paint->setColor:get_ripplecolor;";
   feedback += "set_colorlist=android.content.res.ColorStateList->valueOf:get_ripplecolor;";
   feedback += "set_ripple=android.graphics.drawable.RippleDrawable->new:get_colorlist,null_pointer,get_mask;";
+  console.log("KAVYA feedback" , feedback);
   return feedback;
 }
 
