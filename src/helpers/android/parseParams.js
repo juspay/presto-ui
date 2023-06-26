@@ -1061,21 +1061,23 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
 
   if (attrs.key == "shadow") {
     var shadowValues = attrs.value.split(',');
-    var cornerRadiiArray = []
+    let cornerRadiiArray = [0,0,0,0,0,0,0,0]
     for(var prop of allProps){
       if(prop.key == "cornerRadius"){
-        cornerRadiiArray = [prop.value,prop.value,prop.value,prop.value,prop.value,prop.value,prop.value,prop.value]
+        cornerRadiiArray = cornerRadiiArray.map(function () {prop.value})
         break;
       }
-      else if (attrs.key == "cornerRadii") {
-        var cornerRadiis = attrs.value.split(',');
+      else if (prop.key == "cornerRadii") {
+        var cornerRadiis = prop.value.split(',');
         var cornerRadius = cornerRadiis.splice(0,1);
+        cornerRadiiArray = [];
         for(var i = 0; i< cornerRadiis.length;++i){
           cornerRadiiArray.push((cornerRadiis[i]*cornerRadius)+"");
           cornerRadiiArray.push((cornerRadiis[i]*cornerRadius)+"");
         }
       }
     }
+    console.log(allProps)
     var shadowBlur = shadowValues[2];
     var shadowOffset = {
       x: shadowValues[0],
