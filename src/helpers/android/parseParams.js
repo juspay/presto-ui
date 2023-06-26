@@ -1077,7 +1077,6 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
         }
       }
     }
-    console.log(allProps)
     var shadowBlur = shadowValues[2];
     var shadowOffset = {
       x: shadowValues[0],
