@@ -1085,9 +1085,8 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     prePend = parseColor(shadowColor);
     prePend += "set_paint=get_ShapeDrawable->getPaint;"
     prePend += "get_paint->setShadowLayer:dpf_"
-                  + shadowBlur + ",f_" + shadowOffset.x + ",f_" + shadowOffset.y + ",get_colorInt;"
+                  + shadowBlur + ",dpf_" + shadowOffset.x + ",dpf_" + shadowOffset.y + ",get_colorInt;"
     prePend += "get_paint->setColor:get_colorInt;";
-    //let cornerRadiiArray = [cornerRR,cornerRR,cornerRR,cornerRR,cornerRR,cornerRR,cornerRR,cornerRR]
     let arrList = "set_arr=java.util.ArrayList->new;";
     let floatArray = cornerRadiiArray.map(function(val,i){return "set_cornerRadius=java.lang.Float->new:dpf_"+ val + ";get_arr->add:get_cornerRadius;"});
     prePend += arrList + ";";
