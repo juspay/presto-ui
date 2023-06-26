@@ -1061,11 +1061,19 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
 
   if (attrs.key == "shadow") {
     var shadowValues = attrs.value.split(',');
-    let cornerRR = 0;
+    var cornerRadiiArray = []
     for(var prop of allProps){
       if(prop.key == "cornerRadius"){
-        cornerRR = prop.value;
+        cornerRadiiArray = [prop.value,prop.value,prop.value,prop.value,prop.value,prop.value,prop.value,prop.value]
         break;
+      }
+      else if (attrs.key == "cornerRadii") {
+        var cornerRadiis = attrs.value.split(',');
+        var cornerRadius = cornerRadiis.splice(0,1);
+        for(var i = 0; i< cornerRadiis.length;++i){
+          cornerRadiiArray.push((cornerRadiis[i]*cornerRadius)+"");
+          cornerRadiiArray.push((cornerRadiis[i]*cornerRadius)+"");
+        }
       }
     }
     var shadowBlur = shadowValues[2];
@@ -1077,9 +1085,9 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     prePend = parseColor(shadowColor);
     prePend += "set_paint=get_ShapeDrawable->getPaint;"
     prePend += "get_paint->setShadowLayer:dpf_"
-                  + shadowBlur + ",dpf_" + shadowOffset.x + ",dpf_" + shadowOffset.y + ",get_colorInt;"
+                  + shadowBlur + ",f_" + shadowOffset.x + ",f_" + shadowOffset.y + ",get_colorInt;"
     prePend += "get_paint->setColor:get_colorInt;";
-    let cornerRadiiArray = [cornerRR,cornerRR,cornerRR,cornerRR,cornerRR,cornerRR,cornerRR,cornerRR]
+    //let cornerRadiiArray = [cornerRR,cornerRR,cornerRR,cornerRR,cornerRR,cornerRR,cornerRR,cornerRR]
     let arrList = "set_arr=java.util.ArrayList->new;";
     let floatArray = cornerRadiiArray.map(function(val,i){return "set_cornerRadius=java.lang.Float->new:dpf_"+ val + ";get_arr->add:get_cornerRadius;"});
     prePend += arrList + ";";
