@@ -1,6 +1,6 @@
 {
   "name": "presto-ui",
-  "version": "1.4.1",
+  "version": "1.5.3",
   "description": "Javascript framework for building platform independent apps.",
   "main": "index.js",
   "type": "commonjs",
@@ -10,7 +10,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "prepare": "./scripts/setup.sh",
+    "prepare": "./scripts/setup.sh && node ./scripts/update-version.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "webpack --mode=production --config webpack.prod.js",
     "watch": "webpack --mode=development --config webpack.dev.js --watch --progress"
@@ -35,7 +35,13 @@
     "webpack-cli": "^4.7.0",
     "webpack-dashboard": "^3.3.3",
     "webpack-merge": "^5.7.3",
-    "webpackbar": "^5.0.0-3"
+    "webpackbar": "^5.0.0-3",
+    "@semantic-release/changelog": "^6.0.2",
+    "@semantic-release/commit-analyzer": "^9.0.2",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/npm": "^9.0.1",
+    "@semantic-release/release-notes-generator": "^10.0.3",
+    "semantic-release": "^19.0.5"
   },
   "config": {
     "commitizen": {
@@ -126,6 +132,23 @@
     "releaseSummary": true,
     "ignoreCommitPattern": "(\\[skip ci\\])",
     "startingVersion": "v1.0.0"
+  },
+  "release": {
+    "branches": [
+      "release",
+      {
+        "name": "hotfix-[0-9]+",
+        "prerelease": true
+      }
+    ],
+    "repositoryUrl": "git@ssh.bitbucket.juspay.net:picaf/presto-ui.git",
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/npm",
+      "@semantic-release/changelog",
+      "@semantic-release/git"
+    ]
   },
   "repository": {
     "type": "git",
