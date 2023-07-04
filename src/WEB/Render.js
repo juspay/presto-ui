@@ -71,38 +71,45 @@ function initiateElement(type, props, elem){
             const callback = props[key]
 
             if(key == "onAnimationEnd") {
-                elem.addEventListener("animationend", function () {
-                    if (props.onAnimationEnd) {
+                elem.onanimationend = function (ev) {
+                    if (props.onAnimationEnd && props.id == ev.target.id) {
                         elem.style.animation = null;
-                        props.onAnimationEnd();
+                        callback();
                     }
                     manualFocus();
                     window.hasAnimationProps = false;
-                   });
+                   };
+                continue;
             }
             if (key == "onEnterPressedEvent") {
                 attachKeyDownEventListenerKeyCode(elem, callback, 13);
+                continue;
             }
             if (key == "onDeletePressedEvent") {
                 attachKeyDownEventListenerKeyCode(elem, callback, 8);
+                continue;
             }
             if (key == "onRightArrowPressedEvent") {
                 attachKeyDownEventListenerKeyCode(elem, callback, 39);
+                continue;
             }
             if (key == "onLeftArrowPressedEvent") {
                 attachKeyDownEventListenerKeyCode(elem, callback, 37);
+                continue;
             }
             if (key == "getInputEventData") {
                 elem.addEventListener('input', (e) => {
                     callback(e.data)
                 })
+                continue;
             }
             if (key == "onPaste") {
                 elem.onpaste = e => {
                 let paste = (e.clipboardData || window.clipboardData).getData('text');
                 callback(paste);
+                }
+                continue;
             }
-        }
             if (eventType == "change") {
                 elem.addEventListener('input', (e) => {
                     callback(e.target.value)
@@ -236,27 +243,33 @@ const InlineAnimationMapper = {
             } else return "";
         }
     },
+    fromMap: function (k, val) {
+        var mappings = {
+            "fromX": {key: "transform", value:`translateX(${val}px);`},
+            "fromY": {key: "transform", value:`translateY(${val}px);`},
+            "fromScaleX": {key: "transform", value:`scaleX(${val});`},
+            "fromScaleY": {key: "transform", value:`scaleY(${val});`},
+            "fromRotation": {key: "transform", value:`rotate(${val}deg);`},
+            "fromRotationX": {key: "transform", value:`rotateX(${val}deg);`},
+            "fromRotationY": {key: "transform", value:`rotateY(${val}deg);`},
+            "fromAlpha": {key: "opacity", value: `${val};`},
+        };
+        return mappings[k];
+    },
+    toMap: function (k, val) {
+        var mappings = {
+            "toX": {key: "transform", value:`translateX(${val}px);`},
+            "toY": {key: "transform", value:`translateY(${val}px);`},
+            "toScaleX": {key: "transform", value:`scaleX(${val});`},
+            "toScaleY": {key: "transform", value:`scaleY(${val});`},
+            "toRotation": {key: "transform", value:`rotate(${val}deg);`},
+            "toRotationX": {key: "transform", value:`rotateX(${val}deg);`},
+            "toRotationY": {key: "transform", value:`rotateY(${val}deg);`},
+            "toAlpha": {key: "opacity", value: `${val};`},
+        }
+        return mappings[k];
+    },
     MAPPINGS: {
-        "from": {
-            "fromX": val => `transform: translateX(${val}px);`,
-            "fromY": val => `transform: translateY(${val}px);`,
-            "fromScaleX": val => `transform: scaleX(${val});\ntransform-origin:top left;`,
-            "fromScaleY": val => `transform-origin:top left;\ntransform: scaleY(${val});`,
-            "fromRotation": val => `transform: rotate(${val}deg);`,
-            "fromRotationX": val => `transform: rotateX(${val}deg);`,
-            "fromRotationY": val => `transform: rotateY(${val}deg);`,
-            "fromAlpha": val => `opacity: ${val};`,
-        },
-        "to": {
-            "toX": val => `transform: translateX(${val}px);`,
-            "toY": val => `transform: translateY(${val}px);`,
-            "toScaleX": val => `transform: scaleX(${val});\ntransform-origin:top left;`,
-            "toScaleY": val => `transform-origin:top left;\ntransform: scaleY(${val});`,
-            "toRotation": val => `transform: rotate(${val}deg);`,
-            "toRotationX": val => `transform: rotateX(${val}deg);`,
-            "toRotationY": val => `transform: rotateY(${val}deg);`,
-            "toAlpha": val => `opacity: ${val};`,
-        },
         // ref: https://developer.mozilla.org/en-US/docs/Web/CSS/animation
         "animation-shorthand-seq": ["duration", "interpolator", "delay", "repeatCount", "repeatMode", "fillMode"],
         "animation-props": {
@@ -324,11 +337,17 @@ const InlineAnimationMapper = {
     }
 }
 
+function objToString (obj) {
+    return Object.entries(obj).reduce((str, [p, val]) => {
+        return `${str} ${p}: ${val}\n`;
+    }, '');
+}
+
 const CSSMarkupWriter = {
     "animations": {
         "keyframe": (name, code) => `@keyframes ${name} {${code}}`,
-        "keyframe-from": (code) => `from {${code}}`,
-        "keyframe-to": (code) => `to {${code}}`,
+        "keyframe-from": (code) => `from {${objToString(code)}}`,
+        "keyframe-to": (code) => `to {${objToString(code)}}`,
         "animation-shorthand": (keyframes) => {
             var val = "";
             keyframes.forEach((keyframe, i) => {
@@ -366,6 +385,16 @@ function manualFocus () {
     }
 }
 
+function addNewAnimation(animationObj, newAnimation) {
+    if (newAnimation) {
+        if(!animationObj[newAnimation.key]){
+            animationObj[newAnimation.key] = newAnimation.value;
+        } else {
+            animationObj[newAnimation.key] = animationObj[newAnimation.key].slice(0, -1) + " " + newAnimation.value;
+        }
+    }
+}
+
 function setAnimationStyles (elem, props) {
     if (!props.hasOwnProperty('hasAnimation') || !props.hasAnimation || !props.inlineAnimation) {
         return "";
@@ -376,34 +405,25 @@ function setAnimationStyles (elem, props) {
         window.hasAnimationProps = true;
         var keyFrameShorthands = [];
         var AnimationCSSMarkupWriter = CSSMarkupWriter["animations"];
-
-        var keyFrameFromMarkup = "";
-        var keyFrameToMarkup = "";
-        var countFrom = 0;
-        var countTo = 0;
-
+        let keyFrameFromMarkup = {}, keyFrameToMarkup = {};
         animationObjects.forEach(function (animationObject) {
             const keyframeName = "keyframe_" + props.id + "_" + KEYFRAME_INDEX++;
+            if (animationObject.delay) {
+                keyFrameFromMarkup = {}; keyFrameToMarkup = {};
+            }
             /* Add keyframe in css */
-            for (var [key, value] of Object.entries(animationObject)) {
-                var from = InlineAnimationMapper.map("from")(key, value);
-                if(key == "fromX" || key == "fromScaleX"){
-                    if(countFrom == 0){
-                        keyFrameFromMarkup += from.slice(0, -1);
-                        countFrom += 1;
-                    }else{
-                        keyFrameFromMarkup += from.replace("transform:", "");
-                    }
-                }else keyFrameFromMarkup += from;
-                var to = InlineAnimationMapper.map("to")(key, value);
-                if(key == "toX" || key == "toScaleX"){
-                    if(countTo == 0){
-                        keyFrameToMarkup += to.slice(0, -1);
-                        countTo += 1;
-                    }else{
-                        keyFrameToMarkup += to.replace("transform:", "");
-                    }
-                }else keyFrameToMarkup += to;
+            for (let [key, value] of Object.entries(animationObject)) {
+                addNewAnimation(keyFrameFromMarkup, InlineAnimationMapper.fromMap(key, value));
+                addNewAnimation(keyFrameToMarkup, InlineAnimationMapper.toMap(key, value));
+                if (key == "fromScaleX" || key == "fromScaleY") {
+                    keyFrameFromMarkup["transform-origin"] = `left top;`;
+                } else if (key == "toScaleX" || key == "toScaleY") {
+                    keyFrameToMarkup["transform-origin"] = `left top;`;
+                }
+            }
+            if (props.hasOwnProperty("pivotX") || props.hasOwnProperty("pivotY")) {
+                let origin = `${props.hasOwnProperty("pivotX") ? props.pivotX + "%" : "left"} ${props.hasOwnProperty("pivotY") ? props.pivotY + "%" : "top"};`;
+                keyFrameFromMarkup["transform-origin"] = keyFrameToMarkup["transform-origin"] = origin;
             }
             var keyFrameCSS = AnimationCSSMarkupWriter["keyframe"](keyframeName,
                                 AnimationCSSMarkupWriter["keyframe-from"](keyFrameFromMarkup) +
