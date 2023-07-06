@@ -1021,7 +1021,7 @@ function addShadowProp(props){
         var shadowColor = utils.convertColorToRgba(shadowValues[4]);
         var shadowType = props.shadowType ? `${props.shadowType} ` : ''
 
-        ele_style += "box-shadow:" + shadowType + parseInt(shadowOffset.x) + "px " + parseInt(shadowOffset.y) + "px " + parseInt(shadowBlur) + "px " + parseInt(shadowSpread) + "px rgba(" + shadowColor.r + ", " +  shadowColor.g + ", " +  shadowColor.b + ", " +  shadowColor.a + ");" ;
+        ele_style += "box-shadow:" + shadowType + parseInt(shadowOffset.x) + "px " + parseInt(shadowOffset.y) + "px " + parseInt(shadowBlur) + "px " + parseInt(shadowSpread) + "px rgba(" + shadowColor.r + ", " +  shadowColor.g + ", " +  shadowColor.b + ", " + (shadowColor.a * shadowOpacity) + ");" ;
     }
 
     return ele_style;

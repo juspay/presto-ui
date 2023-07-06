@@ -962,8 +962,7 @@ function this_setShadow(id, shadowOffset, shadowBlur, shadowSpread, shadowColor,
         "color": shadowColor,
         "blur": shadowBlur,
         "opacity": shadowOpacity,
-        "offset": shadowOffset,
-        "spread": shadowSpread
+        "offset": shadowOffset
         }),
         "type": "s"
       }
@@ -999,7 +998,7 @@ function this_setBackgroundImage() {
   };
 }
 
-function _UILabelLayer_setMasksToBounds() {
+function _UILabelLayer_setMasksToBounds(shouldClipBounds) {
   return {
     "return": "false",
     "fromStore":"true",
@@ -1007,7 +1006,7 @@ function _UILabelLayer_setMasksToBounds() {
     "invokeOn": "_UILabelLayer",
     "methodName":"setMJPMasksToBounds:",
     "values":[
-      {"name": "1", type: "i"}
+      {"name": shouldClipBounds ? "1" : "0", type: "i"}
     ]
   }
 }
@@ -1837,6 +1836,10 @@ module.exports = function(type, config, _getSetType, namespace) {
     config.methods.push(setBorderWidth("1"));
   }
 
+  if(config.hasOwnProperty("clipChildren")) { 
+    config.methods.push(_UILabelLayer_setMasksToBounds(config.clipChildren));
+  }
+
   if (config.shadow) {
     var shadowValues = config.shadow.split(',');
     var shadowBlur = rWS(cS(shadowValues[2]));
@@ -1849,6 +1852,7 @@ module.exports = function(type, config, _getSetType, namespace) {
 
     var shadowColor = convertColorToRgba(shadowValues[4]);
 
+    config.methods.push(_UILabelLayer_setMasksToBounds(false));
     config.methods.push(this_setShadow(config.id, shadowOffset, shadowBlur, shadowSpread, shadowColor, shadowOpacity, namespace));
   }
 

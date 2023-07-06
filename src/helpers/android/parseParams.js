@@ -27,7 +27,7 @@ var mapParams = require('./mapParams');
 var objMap = require('./objMap');
 var callbackMapper  = require("../common/callbackMapper")
 var utils = require("./utils");
-
+var devicePixelRatio = window.devicePixelRatio;
 var globalObjMap = {};
 var command = "";
 var elementType;
@@ -1064,7 +1064,7 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     let cornerRadiiArray = [0,0,0,0,0,0,0,0]
     for(var prop of allProps){
       if(prop.key == "cornerRadius"){
-        cornerRadiiArray = cornerRadiiArray.map(function () {prop.value})
+        cornerRadiiArray = cornerRadiiArray.map(function () {return prop.value})
         break;
       }
       else if (prop.key == "cornerRadii") {
@@ -1079,14 +1079,14 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     }
     var shadowBlur = shadowValues[2];
     var shadowOffset = {
-      x: shadowValues[0],
-      y: shadowValues[1]
+      x: devicePixelRatio * Number(shadowValues[0]),
+      y: devicePixelRatio * Number(shadowValues[1])
     };
-   var shadowColor = shadowValues[4];
+   var shadowColor = utils.addAlphaToColor(shadowValues[4], shadowValues[5]);
     prePend = parseColor(shadowColor);
     prePend += "set_paint=get_ShapeDrawable->getPaint;"
     prePend += "get_paint->setShadowLayer:dpf_"
-                  + shadowBlur + ",dpf_" + shadowOffset.x + ",dpf_" + shadowOffset.y + ",get_colorInt;"
+                  + shadowBlur + ",f_" + shadowOffset.x + ",f_" + shadowOffset.y + ",get_colorInt;"
     prePend += "get_paint->setColor:get_colorInt;";
     let arrList = "set_arr=java.util.ArrayList->new;";
     let floatArray = cornerRadiiArray.map(function(val,i){return "set_cornerRadius=java.lang.Float->new:dpf_"+ val + ";get_arr->add:get_cornerRadius;"});
