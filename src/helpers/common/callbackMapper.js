@@ -33,7 +33,9 @@ module.exports.map = (fn) => {
 	// console.debug("presto-ui callback-mapper document location",document.location); 
 	if(typeof window.__FN_INDEX !== 'undefined' && window.__FN_INDEX !== null) {
 		var proxyFnName = 'F' + window.__FN_INDEX;
-		if (window.__payload && window.__payload.service){
+		if (JOS.self){
+			proxyFnName = JOS.self + "_" + proxyFnName;
+		} else if (window.__payload && window.__payload.service){
 			proxyFnName = window.__payload.service + "_" + proxyFnName;
 		}
 		window.__PROXY_FN[proxyFnName] = fn;
