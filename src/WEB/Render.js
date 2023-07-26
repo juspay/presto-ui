@@ -839,6 +839,7 @@ let createNewElement = function(view, parentElement, siblingView){
             }
             elem.autoplay = true;
             elem.muted = true;
+            elem.playsInline = true;
             break;
         case "webView":
             elem = document.createElement('iframe')
