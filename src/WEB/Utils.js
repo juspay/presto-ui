@@ -1,3 +1,5 @@
+const {hexToAlpha} = require("../utils");
+
 function parseColors(color) {
     if (color.length < 8)
       return color;
@@ -31,8 +33,7 @@ function convertColorToRgba(color) {
   var alpha = "1.00";
 
   if (color.length >= 8) {
-    alpha = parseInt(color.substring(1, 3), 16);
-    alpha = (alpha / 255).toFixed(2);
+    alpha = hexToAlpha(color.substring(1, 3)).toFixed(2);
     color = color.substring(3, 9);
   } else {
     color = color.substring(1, color.length);

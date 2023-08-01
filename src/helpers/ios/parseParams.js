@@ -552,6 +552,17 @@ function this_updateLayoutParams(config) {
   };
 }
 
+function this_setZPosition(zIndex) {
+  return {
+    "return": "false",
+    "fromStore": "true",
+    "storeKey": "layer" + window.__LAYER_INDEX,
+    "invokeOn": "this",
+    "methodName": "setZPosition:",
+    "values": [{ "name": zIndex, type: "f" }]
+  };
+
+}
 
 function this_setPadding(padding) {
   return {
@@ -1949,10 +1960,14 @@ module.exports = function(type, config, _getSetType, namespace) {
     config.methods.push(this_setSeparatorRepeat(_enabled6));
   }
 
-   if (config.translationZ){
-     config.methods.push(this_setTranslationZ(cS(config.translationZ)));
+   if (config.translationZ){ 
+    config.methods.push(this_setTranslationZ(cS(config.translationZ)));
    }
 
+   if (config.hasOwnProperty("zIndex")){
+    config.methods.push(this_layer());
+    config.methods.push(this_setZPosition(cS(config.zIndex)));
+  }
   if (config.scrollTo) {
     var data = config.scrollTo.split(",");
     var parsedData = JSON.stringify({"x": data[0], "y": data[1]});

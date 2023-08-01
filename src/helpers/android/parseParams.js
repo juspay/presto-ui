@@ -1058,7 +1058,12 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
   if(attrs.key=="focus") {
     afterCmd =  "set_win=ctx->getWindow;get_win->setSoftInputMode:5;";
   }
-
+  if(attrs.key == "zIndex") {
+     prePend = parseColor("#00000000");
+     prePend += "this->setTranslationZ:f_" + attrs.value + ";"
+     prePend += "this->setOutlineSpotShadowColor:get_colorInt;";
+     prePend += "this->setOutlineAmbientShadowColor:get_colorInt;";
+  }
   if (attrs.key == "shadow") {
     var shadowValues = attrs.value.split(',');
     let cornerRadiiArray = [0,0,0,0,0,0,0,0]

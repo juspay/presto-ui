@@ -534,6 +534,12 @@ var map = {
     fnName: 'setTranslationZ',
     inVokedIn: 'VIEW',
   },
+  zIndex: {
+    values : [{type: 'f'}],
+    dontMap: true,
+    fnName: 'setTranslationZ',
+    inVokedIn: 'VIEW'
+  },
   "delay": {
     values: [{
       type: 'l',
