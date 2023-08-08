@@ -1976,6 +1976,9 @@ module.exports = function(type, config, _getSetType, namespace) {
       config.methods.push(this_setTextAlignment(rWS(cS(config.textAlignment))));
   }
 
+  if(config.hasOwnProperty("accessibilityHint")){
+    config.methods.push(this_setAccessibilityId(config.accessibilityHint));
+  }
   if (config.hasOwnProperty("textFromHtml")) {
       var modifiedHtmlString = "<span style=\""
       if (config.hasOwnProperty("fontStyle")) {
