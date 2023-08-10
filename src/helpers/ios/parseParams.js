@@ -552,6 +552,33 @@ function this_updateLayoutParams(config) {
   };
 }
 
+function this_setFlexWrap(wrap) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setFlexWrap:",
+    "values":[
+          {"name": encodeURI(wrap), "type": 'i'}
+     ]
+  }
+}
+
+
+// function this_setHeight(height) {
+//   return {
+//     "return": "false",
+//     "fromStore": getSetType?"false":"true",
+//     "storeKey": "view" + window.__VIEW_INDEX,
+//     "invokeOn": getSetType?"this":"MJPViewAL",
+//     "methodName":"setHeight:",
+//     "values":[
+//       {"name": height +'', "type": 'i'}
+//     ]
+//   }
+// }
+
 
 function this_setPadding(padding) {
   return {
@@ -1026,6 +1053,19 @@ function this_setTag(tag) {
 }
 
 function this_setAccessibilityId(tag) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setAccessibilityIdentifier:",
+    "values":[
+      {"name": tag, type: "s"}
+    ]
+  }
+}
+
+function this_setAccessibilityImportance(tag) {
   return {
     "return": "false",
     "fromStore": getSetType?"false":"true",

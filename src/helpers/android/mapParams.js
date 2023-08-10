@@ -1303,7 +1303,7 @@ var map = {
       enable_accessibility: 1, // imp
       not_important: 4 // not much imp
     }],
-    dontMap: 'true',
+    // dontMap: 'true',
     fnName: 'setImportantForAccessibility',
     inVokedIn: 'VIEW',
   },
