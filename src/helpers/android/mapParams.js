@@ -729,6 +729,16 @@ var map = {
     fnName: 'setTypeface',
     inVokedIn: 'VIEW',
   },
+  "fontWeight": {
+    values: [{
+      type: 'i',
+    }, {
+      type: 'b',
+    }],
+    dontMap: 'true',
+    fnName: 'setTypeface',
+    inVokedIn: 'VIEW',
+  },
   "font" : {
     values: [{
       type: 's',

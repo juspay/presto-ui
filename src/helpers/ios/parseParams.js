@@ -807,6 +807,22 @@ function UIFont_systemFontOfSizeWeight(size, weight) {
   }
 }
 
+function mapToIosFontWeight (weight){
+  switch(weight) {
+    case "100" : return "-0.600"
+    case "200" : return "-0.800"
+    case "300" : return "-0.400"
+    case "400" : return "0.000"
+    case "500" : return "0.230"
+    case "600" : return "0.300"
+    case "700" : return "0.400"
+    case "800" : return "0.450"
+    case "900" : return "0.560"
+    case "950" : return "0.620"
+    default : return "0.000"
+  }
+}
+
 function this_setLineBreakMode(mode) {
   return {
     "return": "false",
@@ -2033,6 +2049,13 @@ module.exports = function(type, config, _getSetType, namespace) {
 
   if (config.fontFamily) {
     config.methods.push(UIFont_systemFontOfSizeWeight((config.textSize || "14") + "", config.fontFamily || "0.0"));
+    config.methods.push(this_setFont());
+  }
+
+  if (config.fontWeight) {
+    var prop = config.fontWeight.split(",");
+    console.log("inside font Weight", config.fontWeight, prop)
+    config.methods.push(UIFont_systemFontOfSizeWeight((config.textSize || "14") + "", mapToIosFontWeight(prop[0]) || "0.0"));
     config.methods.push(this_setFont());
   }
 
