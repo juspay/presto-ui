@@ -1301,7 +1301,7 @@ var map = {
       auto: 0, // automatic
       disable_accessibility: 2 , // not imp
       enable_accessibility: 1, // imp
-      not_important: 4 // not much imp
+      disable_descendant_accessibility: 4 // not much imp
     }],
     // dontMap: 'true',
     fnName: 'setImportantForAccessibility',

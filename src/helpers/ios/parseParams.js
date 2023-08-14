@@ -277,6 +277,19 @@ function this_setBackgroundColor() {
   }
 }
 
+function this_setImportantForAccessibility() {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setImportantForAccessibility:",
+    "values":[
+      {"name": "color" + window.__COLOR_INDEX, "computed": "true"},
+    ]
+  }
+}
+
 function this_superview() {
   var currViewIndex = window.__VIEW_INDEX;
 
@@ -2018,6 +2031,10 @@ module.exports = function(type, config, _getSetType, namespace) {
 
   if(config.hasOwnProperty("accessibilityHint")){
     config.methods.push(this_setAccessibilityId(config.accessibilityHint));
+  }
+
+  if(config.hasOwnProperty("accessibilityImportance")){
+    config.methods.push(this_setImportantForAccessibility(config.accessibilityHint));
   }
   if (config.hasOwnProperty("textFromHtml")) {
       var modifiedHtmlString = "<span style=\""
