@@ -277,6 +277,19 @@ function this_setBackgroundColor() {
   }
 }
 
+function this_setImportantForAccessibility(tag) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setImportantForAccessibility:",
+    "values":[
+      {"name": tag, "type" : "s"},
+    ]
+  }
+}
+
 function this_superview() {
   var currViewIndex = window.__VIEW_INDEX;
 
@@ -551,6 +564,33 @@ function this_updateLayoutParams(config) {
     }]
   };
 }
+
+function this_setFlexWrap(wrap) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setFlexWrap:",
+    "values":[
+          {"name": encodeURI(wrap), "type": 'i'}
+     ]
+  }
+}
+
+
+// function this_setHeight(height) {
+//   return {
+//     "return": "false",
+//     "fromStore": getSetType?"false":"true",
+//     "storeKey": "view" + window.__VIEW_INDEX,
+//     "invokeOn": getSetType?"this":"MJPViewAL",
+//     "methodName":"setHeight:",
+//     "values":[
+//       {"name": height +'', "type": 'i'}
+//     ]
+//   }
+// }
 
 
 function this_setPadding(padding) {
@@ -1032,6 +1072,19 @@ function this_setAccessibilityId(tag) {
     "storeKey": "view" + window.__VIEW_INDEX,
     "invokeOn": getSetType?"this":"UIView",
     "methodName":"setAccessibilityIdentifier:",
+    "values":[
+      {"name": tag, type: "s"}
+    ]
+  }
+}
+
+function this_setAccessibilityHint(tag) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setAccessibilityHint:",
     "values":[
       {"name": tag, type: "s"}
     ]
@@ -1976,6 +2029,13 @@ module.exports = function(type, config, _getSetType, namespace) {
       config.methods.push(this_setTextAlignment(rWS(cS(config.textAlignment))));
   }
 
+  if(config.hasOwnProperty("accessibilityHint")){
+    config.methods.push(this_setAccessibilityHint(config.accessibilityHint));
+  }
+
+  if(config.hasOwnProperty("accessibilityImportance")){
+    config.methods.push(this_setImportantForAccessibility(config.accessibilityImportance));
+  }
   if (config.hasOwnProperty("textFromHtml")) {
       var modifiedHtmlString = "<span style=\""
       if (config.hasOwnProperty("fontStyle")) {
