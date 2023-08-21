@@ -210,8 +210,9 @@ function getConfigGroups(config, type) {
       drawableMap[utils.getId(config)] = drawableMap[utils.getId(config)] || []
       let isExist = drawableMap[utils.getId(config)].some((({dr}) => dr === drawable))
       if(!(isExist)){
-        let id = objMap[drawable].index
-        drawableMap[utils.getId(config)].splice(id, 0, {dr : drawable ,  isCreated : false})
+        (a,b) => objMap[b.dr].index > objMap[a.dr].index
+        utils.insertionSort(drawableMap[utils.getId(config)], {dr : drawable ,  isCreated : false}, (a,b) => objMap[b.dr].index < objMap[a.dr].index)
+        // drawableMap[utils.getId(config)].splice(id, 0, {dr : drawable ,  isCreated : false})
       }
     }
   }
@@ -316,7 +317,10 @@ function prepareCtr(attrs, belongsTo, id) {
       if(!drawableMap[id][i].isCreated ) {
         drawableMap[id][i].isCreated = true;
         var dr = drawableMap[id][i].dr;
-        ctr = ctr + ";set_" + dr + "=" + objMap[dr].ctr + ";"
+        if(dr=="RippleDrawable") {
+          ctr += parseColor("#ffffffff","set_rc")+"set_mask=android.graphics.drawable.ShapeDrawable->new;set_paint=get_mask->getPaint;get_paint->setColor:get_rc;set_colorlist=android.content.res.ColorStateList->valueOf:get_rc;"
+        }
+        ctr += ctr + ";set_" + dr + "=" + objMap[dr].ctr + ";"
       } else {
         var dr = drawableMap[id][i].dr;
         lastDrawableIndex++;
@@ -446,6 +450,26 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     prePend = "set_dfont=android.graphics.Typeface->create:null_pointer,i_"+prop[0]+",b_"+ prop[1]+";";
     currTransVal = "get_dfont";
   }
+  if(attrs.key == "rippleColor") {
+    var currentColor = attrs.value;
+    prePend = parseColor(currentColor,"set_rc")+"set_colorlist=android.content.res.ColorStateList->valueOf:get_rc;"
+    currTransVal = "get_colorlist";
+  }
+  if(attrs.key == "rcc") {
+    prePend = "set_c=java.lang.Class->forName:s_java.lang.Float;";
+    prePend += "set_arr=java.util.ArrayList->new;";
+    // 8 values, 2 for each corner. Starts at the left-top and moves clock-wise
+    let rcc = attrs.value.split(',');
+    for (var i = 0; i < rcc.length; i++) {
+      prePend += "set_r" + i+  "=java.lang.Float->new:dpf_" + rcc[i] + ";";
+      prePend += "get_arr->add:get_r"+ i +  ";";
+    }
+
+    prePend += "infl->convertAndStoreArray:get_arr,get_c,s_pArr,b_true;";
+    prePend += "set_rect=android.graphics.drawable.shapes.RoundRectShape->new:get_pArr,null_pointer,null_pointer;";
+    prePend += "get_mask->setShape:get_rect;";
+    dontLoad = true;
+  }
   if (attrs.key == "fontStyle") {
     if(isURL(attrs.value)) {
       if(typeof window.__PROXY_FN == "undefined") {
@@ -572,6 +596,31 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
     prePend += orientation;
     currTransVal = "get_o"
   }
+
+  // if (attrs.key == "rippleColor")  {
+  //   prePend += parseColor(attrs.value, "set_ripplecolor");
+  //   currTransVal = "get_ripplecolor";
+
+  // // var feedback = "set_mask=android.graphics.drawable.ShapeDrawable->new;";
+  // // if (enableRadii) {
+  // //   feedback += "set_c=java.lang.Class->forName:s_java.lang.Float;";
+  // //   feedback += "set_arr=java.util.ArrayList->new;";
+  // //   // 8 values, 2 for each corner. Starts at the left-top and moves clock-wise
+  // //   feedback += "set_r=java.lang.Float->new:dpf_30;";
+  // //   for (var i = 0; i < 8; i++)
+  // //     feedback += "get_arr->add:get_r;";
+
+  // //   feedback += "infl->convertAndStoreArray:get_arr,get_c,s_pArr,b_true;";
+  // //   feedback += "set_rect=android.graphics.drawable.shapes.RoundRectShape->new:get_pArr,null_pointer,null_pointer;";
+  // //   feedback += "get_mask->setShape:get_rect;";
+
+  // // }
+  // feedback += parseColor(rippleColor, "set_ripplecolor");
+  // feedback += "set_paint=get_mask->getPaint;get_paint->setColor:get_ripplecolor;";
+  // feedback += "set_colorlist=android.content.res.ColorStateList->valueOf:get_ripplecolor;";
+  // feedback += "set_ripple=android.graphics.drawable.RippleDrawable->new:get_colorlist,null_pointer,null_ptr;";
+  // return feedback;
+  // }
 
   if (attrs.key == "gradient") {
     var gradientObj = JSON.parse(attrs.value);
@@ -1232,18 +1281,18 @@ function parseGroups(type, groups, config) {
         globalObjMap.VIEW = {ctr: "get_view", val: "get_view"};
       }
 
-      if (config.hasOwnProperty("onClick")) {
-        groups.VIEW.props.push(
-          {
-            "key": "ripple",
-            "value": JSON.stringify({
-              "rippleColor": config.hasOwnProperty("rippleColor") ? config.rippleColor : "#e0e0e0",
-              "disableFeedback": config.hasOwnProperty("disableFeedback") ? config.disableFeedback : false,
-              "enableRadii": config.hasOwnProperty("enableRoundedRipple") && config.enableRoundedRipple
-            })
-          }
-        );
-      }
+      // if (config.hasOwnProperty("onClick")) {
+      //   groups.VIEW.props.push(
+      //     {
+      //       "key": "ripple",
+      //       "value": JSON.stringify({
+      //         "rippleColor": config.hasOwnProperty("rippleColor") ? config.rippleColor : "#e0e0e0",
+      //         "disableFeedback": config.hasOwnProperty("disableFeedback") ? config.disableFeedback : false,
+      //         "enableRadii": config.hasOwnProperty("enableRoundedRipple") && config.enableRoundedRipple
+      //       })
+      //     }
+      //   );
+      // }
 
       command +=  parseAttrs(groups.VIEW, 'VIEW', true, type)
 
@@ -1320,32 +1369,38 @@ var flattenObject = function(ob) {
   return toReturn;
 };
 
-function addClickFeedback(rippleColor, disableFeedback, enableRadii) {
-  if (disableFeedback)
-    return "";
+// function addClickFeedback(rippleColor, disableFeedback, enableRadii) {
+//   if (disableFeedback)
+//     return "";
 
-  var feedback = "set_mask=android.graphics.drawable.ShapeDrawable->new;";
-  if (enableRadii) {
-    feedback += "set_c=java.lang.Class->forName:s_java.lang.Float;";
-    feedback += "set_arr=java.util.ArrayList->new;";
-    // 8 values, 2 for each corner. Starts at the left-top and moves clock-wise
-    feedback += "set_r=java.lang.Float->new:dpf_30;";
-    for (var i = 0; i < 8; i++)
-      feedback += "get_arr->add:get_r;";
+//   var feedback = "set_mask=android.graphics.drawable.ShapeDrawable->new;";
+//   if (enableRadii) {
+//     feedback += "set_c=java.lang.Class->forName:s_java.lang.Float;";
+//     feedback += "set_arr=java.util.ArrayList->new;";
+//     // 8 values, 2 for each corner. Starts at the left-top and moves clock-wise
+//     feedback += "set_r=java.lang.Float->new:dpf_30;";
+//     for (var i = 0; i < 8; i++)
+//       feedback += "get_arr->add:get_r;";
 
-    feedback += "infl->convertAndStoreArray:get_arr,get_c,s_pArr,b_true;";
-    feedback += "set_rect=android.graphics.drawable.shapes.RoundRectShape->new:get_pArr,null_pointer,null_pointer;";
-    feedback += "get_mask->setShape:get_rect;";
+//     feedback += "infl->convertAndStoreArray:get_arr,get_c,s_pArr,b_true;";
+//     feedback += "set_rect=android.graphics.drawable.shapes.RoundRectShape->new:get_pArr,null_pointer,null_pointer;";
+//     feedback += "get_mask->setShape:get_rect;";
 
+//   }
+//   feedback += parseColor(rippleColor, "set_ripplecolor");
+//   feedback += "set_paint=get_mask->getPaint;get_paint->setColor:get_ripplecolor;";
+//   feedback += "set_colorlist=android.content.res.ColorStateList->valueOf:get_ripplecolor;";
+//   feedback += "set_ripple=android.graphics.drawable.RippleDrawable->new:get_colorlist,null_pointer,get_mask;";
+//   return feedback;
+// }
+
+function configFunction(type, config, _getSetType, totalProps) {
+  if(totalProps == undefined) {
+    totalProps = config;
   }
-  feedback += parseColor(rippleColor, "set_ripplecolor");
-  feedback += "set_paint=get_mask->getPaint;get_paint->setColor:get_ripplecolor;";
-  feedback += "set_colorlist=android.content.res.ColorStateList->valueOf:get_ripplecolor;";
-  feedback += "set_ripple=android.graphics.drawable.RippleDrawable->new:get_colorlist,null_pointer,get_mask;";
-  return feedback;
-}
-
-function configFunction(type, config, _getSetType) {
+  if(config.cornerRadius && (totalProps["rippleColor"] && ! totalProps["rcc"])) {
+    config.rcc = config.cornerRadius +"," + config.cornerRadius + "," + config.cornerRadius + "," + config.cornerRadius + "," +config.cornerRadius +"," + config.cornerRadius + "," + config.cornerRadius + "," + config.cornerRadius;
+  }
   config = flattenObject(config);
   getSetType = _getSetType;
   elementType = type;
@@ -1403,7 +1458,6 @@ function configFunction(type, config, _getSetType) {
   if (!flag) {
     config.runInUI = parseGroups(type, groups, config);
   }
-
   return config;
 }
 

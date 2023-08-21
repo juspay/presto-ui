@@ -1190,6 +1190,19 @@ var map = {
     inVokedIn: 'DRAWABLE',
     subDrawable: "ShapeDrawable"
   },
+  rippleColor: {
+    values: [{
+      type: 's'
+    }],
+    dontMap: true,
+    fnName: 'setColor',
+    inVokedIn: 'DRAWABLE',
+    subDrawable: "RippleDrawable"
+  },
+  rcc: {
+    inVokedIn: 'DRAWABLE',
+    subDrawable: "RippleDrawable"
+  },
   elevation: {
     values: [{
       type: 'i'
