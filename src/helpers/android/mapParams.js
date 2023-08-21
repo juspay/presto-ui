@@ -1308,6 +1308,25 @@ var map = {
     fnName: 'setContentDescription',
     inVokedIn: 'VIEW',
   },
+  accessibilityImportance: {
+    values: [{
+      type: 'i',
+      auto: 0,
+      disable_accessibility: 2 ,
+      enable_accessibility: 1,
+      disable_descendant_accessibility: 4
+    }],
+    fnName: 'setImportantForAccessibility',
+    inVokedIn: 'VIEW',
+  },
+  accessibilityFocusable : {
+    values: [{
+      type: 'b',
+    }],
+    dontMap: 'true',
+    fnName: 'setScreenReaderFocusable',
+    inVokedIn: 'VIEW',
+  },
   imeOptions: {
     values: [{
       type: 'i',

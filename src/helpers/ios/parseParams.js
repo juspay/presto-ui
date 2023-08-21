@@ -277,6 +277,32 @@ function this_setBackgroundColor() {
   }
 }
 
+function this_setAccessibilityHint(tag) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setAccessibilityHint:",
+    "values":[
+      {"name": tag, type: "s"}
+    ]
+  }
+}
+
+function this_setImportantForAccessibility(tag) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setImportantForAccessibility:",
+    "values":[
+      {"name": tag, "type" : "s"},
+    ]
+  }
+}
+
 function this_superview() {
   var currViewIndex = window.__VIEW_INDEX;
 
@@ -1993,6 +2019,14 @@ module.exports = function(type, config, _getSetType, namespace) {
   //Updated to handle 0 being passed for default alignment
   if (config.hasOwnProperty("textAlignment")) {
       config.methods.push(this_setTextAlignment(rWS(cS(config.textAlignment))));
+  }
+  
+  if(config.hasOwnProperty("accessibilityHint")){
+    config.methods.push(this_setAccessibilityHint(config.accessibilityHint));
+  }
+
+  if(config.hasOwnProperty("accessibilityImportance")){
+    config.methods.push(this_setImportantForAccessibility(config.accessibilityImportance));
   }
 
   if (config.hasOwnProperty("textFromHtml")) {
