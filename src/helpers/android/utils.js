@@ -28,9 +28,7 @@ function insertionSort(arr, key, fun) {
     if(!fun) fun = (a,b) => b<a;
     let max = key;
     let tmp = max;
-    // debugger;
     for (let i = 0; i < arr.length; i++) {
-        console.log("gebin here",fun(arr[i],max));
         if(fun(arr[i],max)){
             tmp = arr[i];
             arr[i] = max;
