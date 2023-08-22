@@ -371,6 +371,7 @@ function replaceView(view, id, namespace) {
   if(isChrome50()) {
     chrome50matchList = {h : [], w: []}
   }
+  computeChildDimens(parentView)
   inflateView({view:oldView, parentElement: parentElem, siblingView, stopChild : true, computeList, chrome50matchList});
   window.__VIEWS[id] = oldView
 
