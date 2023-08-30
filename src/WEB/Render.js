@@ -377,8 +377,10 @@ function setAnimationStyles (elem, props) {
         var keyFrameShorthands = [];
         var AnimationCSSMarkupWriter = CSSMarkupWriter["animations"];
 
-        var keyFrameFromMarkup = keyFrameToMarkup = "";
-        var countFrom = countTo = 0;
+        var keyFrameFromMarkup = "";
+        var keyFrameToMarkup = "";
+        var countFrom = 0;
+        var countTo = 0;
 
         animationObjects.forEach(function (animationObject) {
             const keyframeName = "keyframe_" + props.id + "_" + KEYFRAME_INDEX++;
@@ -1103,7 +1105,7 @@ let getElementByView = function(view, parentElement, siblingView, stopChild, ren
     } else if (renderStyle) {
         element_style += setAttributes(view, elem, false);
     }
-    
+
     setLayout(elem,view);
     if(!stopChild) computeChildDimens(view);
     element_style += setComputedStyles(elem, view.props);
