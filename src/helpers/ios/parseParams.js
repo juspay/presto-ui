@@ -2065,8 +2065,8 @@ module.exports = function(type, config, _getSetType, namespace) {
     config.methods.push(this_setAccessibilityHint(config.accessibilityHint));
   }
 
-  if(config.hasOwnProperty("accessibilityImportance")){
-    config.methods.push(this_setImportantForAccessibility(config.accessibilityImportance));
+  if(config.hasOwnProperty("accessibility")){
+    config.methods.push(this_setImportantForAccessibility(config.accessibility));
   }
 
   if (config.hasOwnProperty("textFromHtml")) {

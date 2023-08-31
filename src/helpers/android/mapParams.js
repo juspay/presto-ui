@@ -1316,7 +1316,7 @@ var map = {
     fnName: 'setContentDescription',
     inVokedIn: 'VIEW',
   },
-  accessibilityImportance: {
+  accessibility: {
     values: [{
       type: 'i',
       auto: 0,
