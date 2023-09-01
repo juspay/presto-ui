@@ -409,6 +409,11 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type) {
       prePend = parseColor(color);
     }
   }
+  if (attrs.key == "fontWeight") {
+    var prop = attrs.value.split(",");
+    prePend = "set_dfont=android.graphics.Typeface->create:null_pointer,i_"+prop[0]+",b_"+ prop[1]+";";
+    currTransVal = "get_dfont";
+  }
   if (attrs.key == "fontStyle") {
     if(isURL(attrs.value)) {
       if(typeof window.__PROXY_FN == "undefined") {
