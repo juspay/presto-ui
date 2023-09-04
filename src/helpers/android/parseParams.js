@@ -258,11 +258,11 @@ function appendArgs(attrs, obj) {
   return "";
 
   var args = "";
-  var value = (attrs.key == "text" || attrs.key == "hint")
+  var value = (attrs.key == "text" || attrs.key == "hint" || attrs.key == "accessibilityHint")
     ?attrs.value:attrs.value.replace(/ /g,'');
 
   var incomingArgs;
-  if (attrs.key == "text" || attrs.key == "hint") {
+  if (attrs.key == "text" || attrs.key == "hint" || attrs.key == "accessibilityHint") {
     incomingArgs = [];
     incomingArgs.push(handleSpecialChars(value));
 
