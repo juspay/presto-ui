@@ -30,6 +30,7 @@ let mapAttributes = require("./MapAttributes");
 const List = require("./ListPresto");
 var addedShimmerStyle = false;
 const useClickFeedback = false;
+const idsWithTestId = []; // it contains all the dom id's which have testId prop
 
 function attachKeyDownEventListenerKeyCode(elem, callback, keyCode) {
     elem.addEventListener('keydown', (e) => {
@@ -61,7 +62,7 @@ function initiateElement(type, props, elem){
         }
     }
 
-    let events = ['onClick', 'onEnterPressedEvent', 'onDeletePressedEvent', 'onRightArrowPressedEvent', 'onLeftArrowPressedEvent', 'onChange', 'onMouseDown', 'onMouseUp', 'onMouseEnter', 'onMouseOver', 'onMouseMove', 'onMouseOut', 'onMouseLeave', 'onFocus', 'onPaste','getInputEventData','onAnimationEnd']
+    let events = ['onInspectClick', 'onClick', 'onEnterPressedEvent', 'onDeletePressedEvent', 'onRightArrowPressedEvent', 'onLeftArrowPressedEvent', 'onChange', 'onMouseDown', 'onMouseUp', 'onMouseEnter', 'onMouseOver', 'onMouseMove', 'onMouseOut', 'onMouseLeave', 'onFocus', 'onPaste','getInputEventData','onAnimationEnd']
 
     for (let i = 0; i < events.length; i++) {
         let key = events[i]
@@ -113,7 +114,19 @@ function initiateElement(type, props, elem){
                 elem.addEventListener('blur', (e) => {
                     callback("false")
                 })
-            } else {
+            }
+            else if(eventType == "inspectclick") {
+                props.oldEventListener = props.oldEventListener || {};
+                if (typeof props.oldEventListener[eventType] == "function") {
+                    elem.removeEventListener("click", props.oldEventListener[eventType]);
+                }
+                props.oldEventListener[eventType] = (e) => {
+                    e.stopPropagation();
+                    callback(e)
+                };
+                elem.addEventListener("click", props.oldEventListener[eventType]);
+            }
+            else {
                 if (eventType == "click") {
                     let feedbackMutex = false;
                     const touchFeedbackFn = (e) => {
@@ -1203,6 +1216,7 @@ let inflateView = function ({view, parentElement, siblingView, stopChild, render
     if (view && view.hasOwnProperty("props") && view.props.hasOwnProperty("testID")){
         view.props.testID = view.props.testID.replace(/\W|_/g, '_').replace(/_+/g, '_').toLowerCase();
         elem.setAttribute("testID", view.props.testID);
+        idsWithTestId.push(elem.id);
     }
     //patching list
     if(view.props.listData && renderStyle ){
@@ -1395,6 +1409,93 @@ let tagShimmerElementsForRender = function(node, children, width) {
     return width;
 }
 
+function addOnHover(hoverMode){
+    if(!hoverMode){
+        idsWithTestId.forEach(function(id){
+            elem = document.getElementById(id);
+            if(elem != undefined){
+                elem.removeEventListener('mouseover', mouseIn);
+                elem.removeEventListener('mouseout', mouseOut);
+            }
+        })
+      hoverMode = !hoverMode;
+    } else {
+        makeFakeClick();
+        idsWithTestId.forEach(function(id){
+            elem = document.getElementById(id);
+            if(elem != undefined){
+                elem.addEventListener('mouseover', mouseIn);
+                elem.addEventListener('mouseout', mouseOut);
+            }
+        })
+      hoverMode = !hoverMode;
+    }
+  }
+
+// borderMap holds the orginal borders of the elements so that when we hover out from the element in inspectMode then we can
+// apply the original border to it.
+const borderMap = {}; 
+
+function mouseIn(id) {
+    configuratorBorder = id.target.getAttribute("configuratorBorder");
+    if (!configuratorBorder) {
+        borderMap[id.target.id] = id.target.style.border;
+    }
+    id.target.setAttribute("configuratorBorder", true);
+    id.target.style.border = "thin solid #bf0000";
+    id.target.setAttribute("readOnly", true);
+}
+
+function mouseOut(id) {
+    id.target.style.border = borderMap[id.target.id];
+    id.target.removeAttribute("configuratorBorder");
+    id.target.setAttribute("readOnly", false);
+}
+
+/*
+
+makeFakeClick function makes .click() on each element with testID. This is being done because we want to exponse an event that configurator can call
+to highlight elements which are using a specific config path.
+
+domIdConfigMap : This is map which gives info about what config path is being used for making a layout with a specific dom id.
+    Ex : [[23012 : "PaymentPage.Screen.xyz", 23014 : "AddCard.Screen.xyz", 23016 : undefined, 24082 : undefined]]
+
+domIdConfigMapIndex : We are maintaining this index, because some of the elements which are having testId might not have onInspectClick on them and doing
+    .click() on them won't fire componentConfigPath action to sdk web. So to fill componentMappingPath correctly we have to maintain this index.
+
+isFakeClick : This is being done to inform sdk-web that this click should not emit the path to configurator as it is a fake click.
+
+*/
+function makeFakeClick() {
+    window.isFakeClick = true;
+    window.domIdConfigMap = [];
+    window.domIdConfigMapIndex = 0;
+    for(let i = 0; i < idsWithTestId.length; i++) {
+        const elem = document.getElementById(idsWithTestId[i]);
+        if(!elem) continue;
+        window.domIdConfigMap.push([idsWithTestId[i], undefined]);
+    }
+    for(let i = 0; i < window.domIdConfigMap.length; i++) {
+        const elem = document.getElementById(window.domIdConfigMap[i][0]);
+        elem.click();
+        window.domIdConfigMapIndex++;
+    }
+    window.isFakeClick = false;
+}
+
+function highlightElementsWithPath(json) {
+    parsedJson = JSON.parse(json);
+    borderDisappearTime = parsedJson.disappearTime ? parsedJson.disappearTime : 500;
+    for (let i = 0; i < window.domIdConfigMap.length; i++) {
+        if(window.domIdConfigMap[i][1] === parsedJson.path) {
+            document.getElementById(window.domIdConfigMap[i][0]).style.border = "thin solid #bf0000";
+            setTimeout(() => {
+                document.getElementById(window.domIdConfigMap[i][0]).style.border = "";
+            }, borderDisappearTime);
+        }
+    }
+}
+
 module.exports = {
     inflateView,
     computeChildDimens,
@@ -1403,5 +1504,7 @@ module.exports = {
     preComputeLayoutDimens,
     postCompute,
     isChrome50,
-    handleMatchParentChrome50
+    handleMatchParentChrome50,
+    addOnHover,
+    highlightElementsWithPath
 };

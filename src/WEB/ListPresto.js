@@ -14,6 +14,10 @@ let setChildAttributes = function(view,holder,itemData,index){
         if(key == 'onClick') {
             let onClickFunction =()=> invoke(holder.onClick,index);
             view.props.onClick = onClickFunction;
+        }
+        else if(key == 'onInspectClick') {
+            let onClickFunction =()=> invoke(holder.onInspectClick,index);
+            view.props.onInspectClick = onClickFunction;
         } else if (itemData.hasOwnProperty(holder[key])) {
             view.props[key] = itemData[holder[key]]
         }

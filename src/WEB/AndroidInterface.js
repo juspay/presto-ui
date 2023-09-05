@@ -31,7 +31,9 @@ var {
   preComputeLayoutDimens,
   postCompute,
   isChrome50,
-  handleMatchParentChrome50
+  handleMatchParentChrome50,
+  addOnHover,
+  highlightElementsWithPath
 } = require("./Render");
 var helper = require('../helper');
 var callbackInvoker = require("../helpers/common/callbackInvoker");
@@ -482,6 +484,9 @@ module.exports = {
 
   getDocument: getDocument,
 
-  setUseHintColor : setUseHintColor
+  setUseHintColor : setUseHintColor,
 
+  addOnHover : addOnHover,
+
+  highlightElementsWithPath : highlightElementsWithPath
 };
