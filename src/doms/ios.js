@@ -48,10 +48,7 @@ function flattenObject(ob) {
   return toReturn;
 };
 
-module.exports = function(type, props, ...children){
-  var paramType;
-
-  children =  children.flatten();
+module.exports = function(type, props, children, cb){
 
   if (!props)
   props = {};
