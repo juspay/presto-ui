@@ -1188,6 +1188,14 @@ var map = {
     inVokedIn: 'DRAWABLE',
     subDrawable: "ShapeDrawable"
   },
+  autoFillHint: {
+    values: [{
+      type: 's'
+    }],
+    dontMap: true,
+    fnName : 'setAutofillHints',
+    inVokedIn: 'VIEW',
+  },
   elevation: {
     values: [{
       type: 'i'

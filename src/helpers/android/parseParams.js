@@ -587,6 +587,14 @@ function mashThis(attrs, obj, belongsTo, transformFn, allProps, type, patchImage
     currTransVal = "get_pArr";
   }
 
+  if (attrs.key == "autoFillHint") {
+    prePend += "set_arr=java.util.ArrayList->new;";
+    prePend += "get_arr->add:s_"+ attrs.value +";";
+    prePend += "set_cls=java.lang.Class->forName:s_java.lang.String;";
+    prePend += "infl->convertAndStoreArray:get_arr,get_cls,s_pArr,b_false;"
+    currTransVal = "get_pArr";
+  }
+
   if (attrs.key == "cornerRadii") {
     var cornerRadiis = attrs.value.split(',');
     var cornerRadius = cornerRadiis.splice(0,1);

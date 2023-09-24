@@ -27,7 +27,7 @@
  Used to initialize defaults for window funcions and variables.
 */
 
-window.presto_ui_version = __VERSION__;
+window.presto_ui_version = "1.5.3";
 const { merge } = require('./helper');
 window.PrestoUI = require("./PrestoUIInterface");
 

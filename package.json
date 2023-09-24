@@ -16,6 +16,8 @@
     "watch": "webpack --mode=development --config webpack.dev.js --watch --progress"
   },
   "devDependencies": {
+    "core-js": "^3.13.0",
+
     "@babel/core": "^7.14.3",
     "@babel/preset-env": "^7.3.1",
     "@commitlint/cli": "^16.2.3",
