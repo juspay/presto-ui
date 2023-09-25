@@ -1,3 +1,5 @@
+let isURL = require("../utils").isURL
+
 let utils = require("./Utils");
 
 let useHintColor = false;
@@ -733,7 +735,7 @@ function addImage(type,props,elem) {
         if (props.imageUrl||props.imageUrlWithFallback||props.gifUrl) {
             let imageUrl = props.imageUrl||props.gifUrl||props.imageUrlWithFallback.split(",")[1];
             if(props.imageUrlWithFallback && props.imageUrlWithFallback.includes("data:image/"))
-            {   
+            {
                 let arr = props.imageUrlWithFallback.split(",");
                 arr.shift();
                 arr.pop();
@@ -761,6 +763,14 @@ function addImage(type,props,elem) {
                 elem.setAttribute('src2', imageUrl);
             } else {
                 elem.setAttribute('src', imageUrl);
+                if(props.imageUrlWithFallback && !elem.onerror) {
+                    let fallbackUrl = props.imageUrlWithFallback.split(",")[0];
+                    if(isURL(fallbackUrl)){
+                        elem.onerror = (ev) => {
+                            elem.setAttribute("src",fallbackUrl)
+                        }
+                    }
+                }
             }
             if(props.gifUrl && (!window.generateVdom))
             {

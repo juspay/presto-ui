@@ -24,6 +24,7 @@
 */
 
 var mapParams = require('./mapParams');
+var isURL = require("../../utils").isURL;
 var objMap = require('./objMap');
 var callbackMapper  = require("../common/callbackMapper")
 var utils = require("./utils");
@@ -73,14 +74,6 @@ function isValidFontStyleFormat(font){
   }
   catch(err){}
   return false;
-}
-function isURL(str) {
-  try{
-    var url = new URL(str);
-    return str.indexOf(".") != -1;
-  } catch (err) {
-    return false;
-  }
 }
 
 function getConfigGroups(config, type) {
@@ -851,7 +844,7 @@ function showFromRemote(imageUrl, image){
     if(patchImageCB) {
       patchImageCB(patch(id, fileName));
     } else {
-      patch(id, fileName)(); 
+      patch(id, fileName)();
     }
   });
   JBridge.renewFile(imageUrl, image, callback);

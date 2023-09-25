@@ -22,7 +22,17 @@ function alphaToHex(alpha) {
     return hex;
 }
 
+function isURL(str) {
+  try{
+    var url = new URL(str);
+    return str.indexOf(".") != -1;
+  } catch (err) {
+    return false;
+  }
+}
+
 module.exports = {
     hexToAlpha,
-    alphaToHex
+    alphaToHex,
+    isURL
   }
