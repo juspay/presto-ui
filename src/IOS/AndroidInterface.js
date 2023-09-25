@@ -236,6 +236,7 @@ module.exports = {
 
   removeView: function (id, namespace) {
     const view = window.__VIEWS[id];
+    if(!view || !view.props) return; 
     const parent = window.__VIEWS[view.props.parentId];
     const index = parent ? parent.children.indexOf(view) : 0;
     if(parent){
