@@ -1415,6 +1415,22 @@ var map = {
     fnName: 'setHideable',
     inVokedIn: 'VIEW',
   },
+  "topShift": {
+    values : [{
+      type: 'f'
+    }],
+    'dontMap': true,
+    fnName: 'setTopShift',
+    inVokedIn: 'VIEW',
+  },
+  "bottomShift": {
+    values : [{
+      type: 'f'
+    }],
+    'dontMap': true,
+    fnName: 'setBottomShift',
+    inVokedIn: 'VIEW',
+  },
   "cursorColor": {
     values : [{
       type: 'b'
