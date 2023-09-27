@@ -130,7 +130,7 @@ module.exports = function(type, props, children, patchImageCB) {
     props = setAutogenId(props);
 
     for (let j = 0; j < children.length; j++) {
-      if (children[j].props.runInUI) {
+      if (children[j].props && children[j].props.runInUI) {
         children[j].props.runInUI = children[j].props.runInUI.replace('PARAM_CTR_HOLDER', paramType);
       }
     }

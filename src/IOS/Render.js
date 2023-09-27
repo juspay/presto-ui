@@ -29,6 +29,9 @@ const helper = require('../helper');
 
 
 function inflate(view, namespace) {
+
+  if(!view.props) return;
+
   const id = view.props.id;
 
   if (!window.__VIEWS.hasOwnProperty(id)) {

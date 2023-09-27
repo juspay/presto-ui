@@ -58,7 +58,8 @@ module.exports = function(type, props, children, cb){
     props = flattenObject(props);
     window.__NODE_ID++;
     children.forEach(child => {
-      child.props.parentId = props.id;
+      if(child.props)
+        child.props.parentId = props.id;
     })
 
     if (!props.__filename)
