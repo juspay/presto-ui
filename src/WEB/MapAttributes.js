@@ -767,6 +767,7 @@ function addImage(type,props,elem) {
                     let fallbackUrl = props.imageUrlWithFallback.split(",")[0];
                     if(isURL(fallbackUrl)){
                         elem.onerror = (ev) => {
+                            elem.onerror = null;
                             elem.setAttribute("src",fallbackUrl)
                         }
                     }
