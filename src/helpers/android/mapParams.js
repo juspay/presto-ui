@@ -502,7 +502,7 @@ var map = {
   },
   "lineSpacing": {
     values: [{
-      type: 'dp'
+      type: 'dpf'
     }, {
       type: 'f'
     }],

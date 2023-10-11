@@ -1247,6 +1247,17 @@ function this_setLineSpacing(data) {
   };
 }
 
+function this_setLineHeightMultiplier(data) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "MJPLabel",
+    "methodName": "setLineHeightMultiplier:",
+    "values": [{ "name": data, "type": "s" }]
+  };
+}
+
 function this_setCaretColor() {
   return {
     "return": "false",
@@ -1886,7 +1897,10 @@ module.exports = function(type, config, _getSetType, namespace) {
   }
 
   if (config.hasOwnProperty("lineSpacing")) {
-    config.methods.push(this_setLineSpacing(config.lineSpacing));
+    var lineSpacing = config.lineSpacing.split(",")[0];
+    var lineHeightMultiple = config.lineSpacing.split(",")[1];
+    config.methods.push(this_setLineSpacing(lineSpacing));
+    config.methods.push(this_setLineHeightMultiplier(lineHeightMultiple));
   }
 
   if (config.hasOwnProperty("caretColor")) {
