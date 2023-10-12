@@ -24,7 +24,7 @@ function mapPropToStyle(element,props,type){
 
 let initializeShow = function (elem, props, type) {
     var style = "";
-    if (type == 'linearLayout') {
+    if (type == 'linearLayout' || type == 'flexBoxLayout') {
         if (props.hasOwnProperty('width') && props.width == 'wrap_content') {
             style += "display: inline-flex;";
             style += "width: max-content;";
@@ -612,6 +612,44 @@ function setGravityStylesForColumn(elem, props) {
     return gravity_col_style;
 }
 
+function setFlexBoxProperties(elem , props){
+    let style = "";
+    const regex = /_/g;
+    const replacement = '-';
+
+    if(props.hasOwnProperty("flexDirection")){
+        style += `flex-direction: ${props.flexDirection.replace(regex,replacement)};`;
+    }
+
+    if(props.hasOwnProperty("flexWrap")){
+        switch(props.flexWrap){
+            case "no_wrap":
+                style += "flex-wrap: nowrap;"
+                break;
+            default:
+                style += `flex-wrap: ${props.flexWrap.replace(regex,replacement)};`;
+        }
+    }
+
+    if(props.hasOwnProperty("justifyContent")){
+        style += `justify-content: ${props.justifyContent.replace(regex,replacement)};`;
+    }
+    if(props.hasOwnProperty("alignItems")){        
+        switch(props.alignItems){
+            case "base_line":
+                style += "align-items: baseline;"
+                break;
+            default :
+                style += `align-items: ${props.alignItems.replace(regex,replacement)};`;
+        }
+    }
+
+    if(props.hasOwnProperty("alignContent")){
+        style += `align-content: ${props.alignContent.replace(regex,replacement)};`;
+    }
+    return style
+}
+
 function addLayout(elem, type, props) {
     let scrollBarX = props.hasOwnProperty('scrollBarX')?props.scrollBarX:true;
     let scrollBarY = props.hasOwnProperty('scrollBarY')?props.scrollBarX:true;
@@ -666,6 +704,23 @@ function addLayout(elem, type, props) {
                 else
                     elem_style += "overflow-y: hidden;";
                     // elem.style.overflowY = 'hidden'
+            }
+            break;
+        case "flexBoxLayout":
+            elem_style += "box-sizing: border-box;";
+            elem_style += setFlexBoxProperties(elem , props);
+
+            if(!scrollBarVisible){
+                elem_style += "scrollbar-width: none;"
+                elem_style += "-ms-overflow-style: none;"
+            }
+            if (props.hasOwnProperty('scrollBarX')) {
+                if (props.scrollBarX) elem_style += "overflow-x: auto;";
+                else elem_style += "overflow-x: hidden;";
+            }
+            if (props.hasOwnProperty('scrollBarY')) {
+                if (props.scrollBarY) elem_style += "overflow-y: auto;";
+                else elem_style += "overflow-y: hidden;";
             }
             break;
         case "horizontalScrollView":

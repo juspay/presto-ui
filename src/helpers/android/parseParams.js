@@ -236,7 +236,8 @@ function getCtr(viewGroup) {
     'swypeLayout': 'android.widget.FrameLayout$LayoutParams->new',
     'swypeScroll': 'android.widget.LinearLayout$LayoutParams->new',
     "shimmerFrameLayout": "android.widget.FrameLayout$LayoutParams->new",
-    "bottomSheetLayout": 'android.widget.FrameLayout$LayoutParams->new'
+    "bottomSheetLayout": 'android.widget.FrameLayout$LayoutParams->new',
+    'flexBoxLayout': 'com.google.android.flexbox.FlexboxLayout$LayoutParams->new'
   };
 
   if(!viewGroupMap[viewGroup]) {

@@ -1457,6 +1457,65 @@ var map = {
     dontMap: true,
     fnName: "scrollToDescendant",
     inVokedIn: "VIEW",
+  },
+  flexDirection: {
+    values: [{
+      type: 'i',
+      row: 0,
+      row_reverse: 1,
+      column: 2 ,
+      column_reverse: 3
+    }],
+    fnName: 'setFlexDirection',
+    inVokedIn: 'VIEW',
+  },
+  flexWrap: {
+    values: [{
+      type: 'i',
+      no_wrap: 0,
+      wrap: 1,
+      wrap_reverse: 2
+    }],
+    fnName: 'setFlexWrap',
+    inVokedIn: 'VIEW',
+  },
+  justifyContent: {
+    values: [{
+      type: 'i',
+      flex_start: 0,
+      flex_end: 1,
+      center: 2,
+      space_between: 3,
+      space_around: 4,
+      space_evenly: 5
+    }],
+    fnName: 'setJustifyContent',
+    inVokedIn: 'VIEW',
+  },
+  alignItems: {
+    values: [{
+      type: 'i',
+      flex_start: 0,
+      flex_end: 1,
+      center: 2,
+      base_line: 3,
+      stretch: 4,
+    }],
+    fnName: 'setAlignItems',
+    inVokedIn: 'VIEW',
+  },
+  alignContent: {
+    values: [{
+      type: 'i',
+      flex_start: 0,
+      flex_end: 1,
+      center: 2,
+      space_between: 3,
+      space_around: 4,
+      stretch: 5
+    }],
+    fnName: 'setAlignContent',
+    inVokedIn: 'VIEW',
   }
 }
 

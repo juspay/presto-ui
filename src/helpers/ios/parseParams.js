@@ -590,6 +590,59 @@ function this_setZPosition(zIndex) {
 
 }
 
+function this_setFlexWrap(wrap) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setFlexWrap:",
+    "values":[
+          {"name": encodeURI(wrap), "type": "s"}
+     ]
+  }
+}
+
+function this_setJustifyContent(justifyContent) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setJustifyContent:",
+    "values":[
+          {"name": encodeURI(justifyContent), "type": "s"}
+     ]
+  }
+}
+
+function this_setAlignContent(alignContent) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setAlignContent:",
+    "values":[
+          {"name": encodeURI(alignContent), "type": "s"}
+     ]
+  }
+}
+
+function this_setAlignItemst(alignItemst) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setAlignItems:",
+    "values":[
+          {"name": encodeURI(alignItemst), "type": "s"}
+     ]
+  }
+}
+
+
 function this_setPadding(padding) {
   return {
     "return": "false",
@@ -1705,6 +1758,11 @@ function generateType(type, config) {
       modifiedType = "mJPWebView";
     }
     break;
+    case "flexBoxLayout":
+    {
+      modifiedType = "mJPFlexBoxLayout";
+    }
+    break;
     default: {
       modifiedType = "mJPView";
     }
@@ -1801,6 +1859,26 @@ module.exports = function(type, config, _getSetType, namespace) {
 
   if (config.useConstraits) {
     config.methods.push(this_updateLayoutParams(config));
+  }
+
+  if(config.hasOwnProperty("flexDirection")){
+    config.methods.push(this_setFlexDirection(config.flexDirection));
+  }
+
+  if(config.hasOwnProperty("flexWrap")){
+    config.methods.push(this_setFlexWrap(config.flexWrap));
+  }
+
+  if(config.hasOwnProperty("justifyContent")){
+    config.methods.push(this_setJustifyContent(config.justifyContent));
+  }
+
+  if(config.hasOwnProperty("alignContent")){
+    config.methods.push(this_setAlignContent(config.alignContent));
+  }
+
+  if(config.hasOwnProperty("alignItems")){
+    config.methods.push(this_setAlignItemst(config.alignItems));
   }
 
   if (config.hasOwnProperty("letterSpacing")) {
