@@ -72,7 +72,7 @@ function initiateElement(type, props, elem){
 
             if(key == "onAnimationEnd") {
                 elem.onanimationend = function (ev) {
-                    if (props.onAnimationEnd && props.id == ev.target.id) {
+                    if (props.onAnimationEnd) {
                         elem.style.animation = null;
                         callback();
                     }
