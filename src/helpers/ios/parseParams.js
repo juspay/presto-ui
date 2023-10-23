@@ -1561,6 +1561,20 @@ function this_setPeakHeight(height) {
   };
 }
 
+function this_setDraggingEnabled(isEnabled) {
+  return {
+    "return": "false",
+    "fromStore": getSetType ? "false" : "true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType ? "this" : "UIView",
+    "methodName": "setDraggingEnabled:",
+    "values": [{
+      "name": String(isEnabled),
+      type: "s"
+    }]
+  };
+}
+
 function this_setRippleColor() {
   return {
     "return": "false",
@@ -2575,7 +2589,9 @@ module.exports = function(type, config, _getSetType, namespace) {
   if (config.hasOwnProperty("peakHeight")) {
     config.methods.push(this_setPeakHeight(config.peakHeight));
   }
-
+  if (config.hasOwnProperty("draggingEnabled")) {
+    config.methods.push(this_setDraggingEnabled(config.draggingEnabled));
+  }
   if (config.hasOwnProperty("halfExpandedRatio")) {
     config.methods.push(this_setHalfExpandedRatio(config.halfExpandedRatio));
   }

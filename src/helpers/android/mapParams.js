@@ -1550,6 +1550,8 @@ var map = {
       stretch: 5
     }],
     fnName: 'setAlignContent',
+    inVokedIn: 'VIEW',
+  },
   selectAllOnFocus: {
     values: [{
       type: 'b',
