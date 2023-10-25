@@ -1475,6 +1475,14 @@ var map = {
     dontMap: true,
     fnName: "scrollToDescendant",
     inVokedIn: "VIEW",
+  },
+  selectAllOnFocus: {
+    values: [{
+      type: 'b',
+    }],
+    dontMap: 'true',
+    fnName: 'setSelectAllOnFocus',
+    inVokedIn: 'VIEW',
   }
 }
 
