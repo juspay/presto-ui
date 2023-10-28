@@ -27,6 +27,7 @@
 
 //Index is priority only.
 // We map to the earliest available index based on the priority
+
 var  map = {
   'PARAMS': {
     'required': 'width, height',
@@ -36,6 +37,12 @@ var  map = {
     'ctr': 'android.graphics.drawable.LayerDrawable->new:get_lyrArr',
     'required': '',
     'viewMethod': 'setBackground,getBackground'
+  },
+  "RippleDrawable": {
+    "ctr": "android.graphics.drawable.RippleDrawable->new:get_colorlist,null_pointer,get_mask",
+    "required":"",
+    "viewMethod":"setBackground,getBackground",
+    "index":2
   },
   'ShapeDrawable' : {
     'ctr': 'android.graphics.drawable.ShapeDrawable->new',

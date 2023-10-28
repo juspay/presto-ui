@@ -18,4 +18,19 @@ function addAlphaToColor(color, alpha) {
     }
 }
 
-module.exports = {getId, addAlphaToColor}
+
+function insertionSort(arr, key, fun) {
+    if(!fun) fun = (a,b) => b<a;
+    let max = key;
+    let tmp = max;
+    for (let i = 0; i < arr.length; i++) {
+        if(fun(arr[i],max)){
+            tmp = arr[i];
+            arr[i] = max;
+            max = tmp;
+        }
+    }
+    arr.push(max);
+    return arr;
+}
+module.exports = {getId, addAlphaToColor,insertionSort}
