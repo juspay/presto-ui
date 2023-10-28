@@ -1271,6 +1271,14 @@ var map = {
     fnName: 'setVerticalScrollBarEnabled',
     inVokedIn: 'VIEW',
   },
+  "nestedScrollView": {
+    values: [{
+      type: 'b',
+    }],
+    'dontMap': true,
+    fnName: 'setNestedScrollingEnabled',
+    inVokedIn: 'VIEW',
+  },
   "clickable": {
     values: [{
       type: 'b',
