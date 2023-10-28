@@ -23,8 +23,9 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 */
 
+require("./src/init")
+
 module.exports = {
-	init: require("./src/init"), 
 	doms : require("./src/doms"),
 	handler : require("./src/handler"),
 	helpers : require("./src/helpers"),
