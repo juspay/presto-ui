@@ -722,6 +722,33 @@ function self_alignToParent(type, values) {
   }
 }
 
+function this_scrollBarX(enabled) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setShowsHorizontalScrollIndicator:",
+    "values":[
+      {"name": enabled, "type": "i"}
+    ]
+  }
+ }
+
+
+function this_scrollBarY(enabled) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setShowsVerticalScrollIndicator:",
+    "values":[
+      {"name": enabled, "type": "i"}
+    ]
+  }
+ }
+
 function this_setCenter() {
   return {
     "return": "false",
@@ -2565,6 +2592,14 @@ module.exports = function(type, config, _getSetType, namespace) {
        console.log(">>>>error in prestoUI lottie Animation:",err);
   }
 }
+
+  if (config.hasOwnProperty("scrollBarX")) {
+    config.methods.push(this_scrollBarX(config.scrollBarX));
+  }
+
+  if (config.hasOwnProperty("scrollBarY")) {
+    config.methods.push(this_scrollBarY(config.scrollBarX));
+  }
 
 
   if (config.hasOwnProperty("clipsToBounds")) {
