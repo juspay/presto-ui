@@ -1196,6 +1196,15 @@ var map = {
     fnName : 'setAutofillHints',
     inVokedIn: 'VIEW',
   },
+  rippleColor: {
+    values: [{
+      type: 's'
+    }],
+    dontMap: true,
+    fnName: 'setColor',
+    inVokedIn: 'DRAWABLE',
+    subDrawable: "RippleDrawable"
+  },
   elevation: {
     values: [{
       type: 'i'
