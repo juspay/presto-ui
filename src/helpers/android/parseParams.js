@@ -394,7 +394,7 @@ function makeUrlCmd(imageUrl){
   }
 }
 
-function mashThis(attrs, obj, belongsTo, transformFn, allProps, type, patchImageCB) {
+function mashThis(attrs, obj, belongsTo, transformFn, allProps, type, patchImageCB, _id) {
   if (getSetType == "get" && (attrs.key == "width" || attrs.key == "height")) {
     // get case i.e during patch
     if(!isNaN(attrs.value * 1)) {
@@ -874,13 +874,13 @@ function checkInCacheOrFallback(image, fallback){
   }
 }
 
-function patch( id, fileName){
+function patch(id, fileName){
   return ()=>{
   var urlSetCommands = "set_directory=ctx->getDir:s_juspay,i_0;" +
       "set_resolvedFile=java.io.File->new:get_directory,s_" + fileName + ";" +
       "set_resolvedPath=get_resolvedFile->toString;" +
       "set_dimage=android.graphics.drawable.Drawable->createFromPath:get_resolvedPath;" +
-      "set_imgV=ctx->findViewById:i_" + id.value + ";" +
+      "set_imgV=ctx->findViewById:i_" + id + ";" +
       "get_imgV->setImageDrawable:get_dimage"
   Android.runInUI(urlSetCommands ,null)
   }
@@ -888,7 +888,7 @@ function patch( id, fileName){
 
 function showFromRemote(imageUrl, image){
   var callback = callbackMapper.map(function (isNew, url, fileName) {
-    const id = allProps.find(a => a.key === "id");
+    const id = _id;
     if (!id) return;
     if(patchImageCB) {
       patchImageCB(patch(id, fileName));
@@ -1260,7 +1260,7 @@ function validString(str){
   return beforeCmd  + prePend + _cmd + afterCmd
 }
 
-function parseAttrs(group, belongsTo, transformFn, type, patchImageCB) {
+function parseAttrs(group, belongsTo, transformFn, type, patchImageCB, id) {
   attrs = group.props
   id = group.id
   var obj;
@@ -1271,7 +1271,7 @@ function parseAttrs(group, belongsTo, transformFn, type, patchImageCB) {
   for (var i =0 ;i<attrs.length; i++) {
     obj = mapParams[attrs[i].key];
     if (obj) {
-      cmd += mashThis(attrs[i], obj, belongsTo, transformFn, attrs, type, patchImageCB);
+      cmd += mashThis(attrs[i], obj, belongsTo, transformFn, attrs, type, patchImageCB, id);
     }
   }
 
@@ -1284,7 +1284,7 @@ function parseAttrs(group, belongsTo, transformFn, type, patchImageCB) {
 function parseGroups(type, groups, config, patchImageCB) {
   var keys = Object.keys(groups);
   var ctr;
-
+  var _id = utils.getId(config);
   for (var i = 0; i< keys.length; i++) {
     if  (keys[i] == "FOREGROUND") {
       if (!globalObjMap[keys[i]]) {
@@ -1315,7 +1315,7 @@ function parseGroups(type, groups, config, patchImageCB) {
         globalObjMap.VIEW = {ctr: "get_view", val: "get_view"};
       }
 
-      command +=  parseAttrs(groups.VIEW, 'VIEW', true, type, patchImageCB)
+      command +=  parseAttrs(groups.VIEW, 'VIEW', true, type, patchImageCB, _id)
 
     } else if (keys[i] == "PARAMS") {
       if (getSetType == "set") {
