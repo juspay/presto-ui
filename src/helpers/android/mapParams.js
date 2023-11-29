@@ -296,6 +296,14 @@ var map = {
     fnName: 'setLayerType',
     inVokedIn: 'VIEW',
   },
+  enableShift: {
+    values: [{
+      type: 'b',
+    }],
+    dontMap: 'true',
+    fnName: 'setEnableShift',
+    inVokedIn: 'VIEW',
+  },
   selected: {
     values: [{
       type: 'b'

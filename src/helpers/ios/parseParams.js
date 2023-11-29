@@ -1602,6 +1602,32 @@ function this_setDraggingEnabled(isEnabled) {
   };
 }
 
+function this_disableKeyboardAvoidance(disableKeyboardAvoidance) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setDisableKeyboardAvoidance:",
+    "values":[
+      {"name": disableKeyboardAvoidance, "type": "i"}
+    ]
+  }
+}
+
+function this_setRotation(rotation) {
+  return {
+    "return": "false",
+    "fromStore": getSetType?"false":"true",
+    "storeKey": "view" + window.__VIEW_INDEX,
+    "invokeOn": getSetType?"this":"UIView",
+    "methodName":"setRotation:",
+    "values":[
+      {"name": rotation, "type": "f"}
+    ]
+  }
+}
+
 function this_setRippleColor() {
   return {
     "return": "false",
@@ -2275,6 +2301,13 @@ module.exports = function(type, config, _getSetType, namespace) {
     }
   }
 
+  if(config.hasOwnProperty("disableKeyboardAvoidance")) {
+    config.methods.push(this_disableKeyboardAvoidance(config.disableKeyboardAvoidance))
+  }
+
+  if(config.hasOwnProperty("rotation")) {
+    config.methods.push(this_setRotation(config.rotation));
+  }
 
   if (config.hasOwnProperty("ellipsize")) {
     if(config.ellipsize){
