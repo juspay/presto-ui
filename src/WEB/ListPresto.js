@@ -15,6 +15,9 @@ let setChildAttributes = function(view,holder,itemData,index){
             let onClickFunction =()=> invoke(holder.onClick,index);
             view.props.onClick = onClickFunction;
         }
+        if(key == 'onHover') {
+            view.props[key] = JSON.stringify(itemData[holder.onHover])
+        }
         else if(key == 'onInspectClick') {
             let onClickFunction =()=> invoke(holder.onInspectClick,index);
             view.props.onInspectClick = onClickFunction;

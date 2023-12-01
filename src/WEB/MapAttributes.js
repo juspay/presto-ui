@@ -118,6 +118,7 @@ function addProps(props){
     if (props.hasOwnProperty("clickable")) {ele_style += "pointer-events: " + (props.clickable ? "auto" : "none") + ";";}
 
     if (props.hasOwnProperty("display")) { ele_style += "display:" + props.display + ";"; }
+    if (props.hasOwnProperty("transition") ) { ele_style += "transition: all " + props.transition + "s;"; }
 
     if (props.ellipsize) { ele_style += "white-space: nowrap; overflow: hidden; text-overflow: ellipsis;";}
 

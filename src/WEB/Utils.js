@@ -163,6 +163,210 @@ function getParentView(namespace, view) {
 //   return (animationArray);
 // }
 
+function addCSSStyle (style) {
+  var styleElem = document.getElementById(window.__STYLE_ID)
+  if(styleElem && styleElem.styleSheet){
+      styleElem.styleSheet.cssText += style;
+  }else{
+      styleElem = document.createElement('style');
+      styleElem.appendChild(document.createTextNode(style));
+      document.getElementsByTagName("head")[0].appendChild(styleElem);
+  }
+}
+
+var KEYFRAME_INDEX = 0;
+
+function manualFocus () {
+  if (window.focusedElement !== undefined){
+      var c = document.getElementById(window.focusedElement);
+      window.focusedElement = undefined;
+      if (c) {
+          console.debug("now focusing");
+          c.focus();
+      }
+  }
+}
+
+const CSSMarkupWriter = {
+  "animations": {
+      "keyframe": (name, code) => `@keyframes ${name} {${code}}`,
+      "keyframe-from": (code) => `from {${code}}`,
+      "keyframe-to": (code) => `to {${code}}`,
+      "animation-shorthand": (keyframes) => {
+          var val = "";
+          keyframes.forEach((keyframe, i) => {
+              val += keyframe;
+              if (i == (keyframes.length-1)) { val += ';'; }
+              else { val += ', '; }
+          });
+          return `animation: ${val}`;
+      }
+  }
+
+}
+function addNewAnimation(animationObj, newAnimation) {
+    if (newAnimation) {
+        if(!animationObj[newAnimation.key]){
+            animationObj[newAnimation.key] = newAnimation.value;
+        } else {
+            animationObj[newAnimation.key] = animationObj[newAnimation.key].slice(0, -1) + " " + newAnimation.value;
+        }
+    }
+}
+
+function setAnimationStyles (elem, props) {
+    if (!props.hasOwnProperty('hasAnimation') || !props.hasAnimation || !props.inlineAnimation) {
+        return "";
+    }
+    try {
+        const animationObjects = JSON.parse(props.inlineAnimation);
+        if(!Array.isArray(animationObjects) || (Array.isArray(animationObjects) && animationObjects.length == 0)) return "";
+        window.hasAnimationProps = true;
+        var keyFrameShorthands = [];
+        var AnimationCSSMarkupWriter = CSSMarkupWriter["animations"];
+        let keyFrameFromMarkup = {}, keyFrameToMarkup = {};
+        animationObjects.forEach(function (animationObject) {
+            const keyframeName = "keyframe_" + props.id + "_" + KEYFRAME_INDEX++;
+            if (animationObject.delay) {
+                keyFrameFromMarkup = {}; keyFrameToMarkup = {};
+            }
+            /* Add keyframe in css */
+            for (let [key, value] of Object.entries(animationObject)) {
+                addNewAnimation(keyFrameFromMarkup, InlineAnimationMapper.fromMap(key, value));
+                addNewAnimation(keyFrameToMarkup, InlineAnimationMapper.toMap(key, value));
+                if (key == "fromScaleX" || key == "fromScaleY") {
+                    keyFrameFromMarkup["transform-origin"] = `left top;`;
+                } else if (key == "toScaleX" || key == "toScaleY") {
+                    keyFrameToMarkup["transform-origin"] = `left top;`;
+                }
+            }
+            if (props.hasOwnProperty("pivotX") || props.hasOwnProperty("pivotY")) {
+                let origin = `${props.hasOwnProperty("pivotX") ? props.pivotX + "%" : "left"} ${props.hasOwnProperty("pivotY") ? props.pivotY + "%" : "top"};`;
+                keyFrameFromMarkup["transform-origin"] = keyFrameToMarkup["transform-origin"] = origin;
+            }
+            var keyFrameCSS = AnimationCSSMarkupWriter["keyframe"](keyframeName,
+                                AnimationCSSMarkupWriter["keyframe-from"](keyFrameFromMarkup) +
+                                AnimationCSSMarkupWriter["keyframe-to"](keyFrameToMarkup)
+                            );
+
+            addCSSStyle(keyFrameCSS);
+            window.__RENDERED_KEYFRAMES.push(keyframeName);
+
+            /* Add animation shorthand prop of keyframe in element*/
+            var keyFrameAnimShorthand = `${keyframeName} `;
+            InlineAnimationMapper.MAPPINGS["animation-shorthand-seq"].forEach(function (key) {
+                keyFrameAnimShorthand += (InlineAnimationMapper.map("animation-props")(key, animationObject[key]) + " ");
+            });
+            keyFrameShorthands.push(keyFrameAnimShorthand);
+        });
+        return AnimationCSSMarkupWriter["animation-shorthand"](keyFrameShorthands);
+    } catch {
+        return "";
+    }
+}
+
+const InlineAnimationMapper = {
+    map: function (type) {
+        var self = this;
+        return function (key, value) {
+            if (self.MAPPINGS[type] && self.MAPPINGS[type][key]) {
+                return self.MAPPINGS[type][key](value);
+            } else return "";
+        }
+    },
+    fromMap: function (k, val) {
+        var mappings = {
+            "fromX": {key: "transform", value:`translateX(${val}px);`},
+            "fromY": {key: "transform", value:`translateY(${val}px);`},
+            "fromScaleX": {key: "transform", value:`scaleX(${val});`},
+            "fromScaleY": {key: "transform", value:`scaleY(${val});`},
+            "fromRotation": {key: "transform", value:`rotate(${val}deg);`},
+            "fromRotationX": {key: "transform", value:`rotateX(${val}deg);`},
+            "fromRotationY": {key: "transform", value:`rotateY(${val}deg);`},
+            "fromAlpha": {key: "opacity", value: `${val};`},
+        };
+        return mappings[k];
+    },
+    toMap: function (k, val) {
+        var mappings = {
+            "toX": {key: "transform", value:`translateX(${val}px);`},
+            "toY": {key: "transform", value:`translateY(${val}px);`},
+            "toScaleX": {key: "transform", value:`scaleX(${val});`},
+            "toScaleY": {key: "transform", value:`scaleY(${val});`},
+            "toRotation": {key: "transform", value:`rotate(${val}deg);`},
+            "toRotationX": {key: "transform", value:`rotateX(${val}deg);`},
+            "toRotationY": {key: "transform", value:`rotateY(${val}deg);`},
+            "toAlpha": {key: "opacity", value: `${val};`},
+        }
+        return mappings[k];
+    },
+    MAPPINGS: {
+        // ref: https://developer.mozilla.org/en-US/docs/Web/CSS/animation
+        "animation-shorthand-seq": ["duration", "interpolator", "delay", "repeatCount", "repeatMode", "fillMode"],
+        "animation-props": {
+            "interpolator": val => {
+                if (!val) {
+                    return `ease`;
+                } else if (typeof val == "string" && val.split(',').length == 4) {
+                    return `cubic-bezier(${val})`
+                } else {
+                    switch (val) {
+                        case "easein":
+                            return "ease-in";
+                        case "easeout":
+                            return "ease-out";
+                        case "bounce":
+                        case "easeinout":
+                            return "ease-in-out";
+                        default:
+                            return `${val}`;
+                    }
+                }
+            },
+            "delay": val => {
+                if (!val) {
+                    return `0s`;
+                } else if (!isNaN(val)) {
+                    val = parseFloat(parseFloat(val) / 1000).toFixed(2);
+                    return `${val}s `;
+                } else {
+                    return `0s`;
+                }
+            },
+            "duration": val => {
+                if (!val) {
+                    return `0s`;
+                } if (!isNaN(val)) {
+                    val = parseFloat(parseFloat(val) / 1000).toFixed(2);
+                    return `${val}s`;
+                } else {
+                    return `0s`;
+                }
+            },
+            "repeatMode": val => {
+                switch (val) {
+                    case "restart":
+                        return `normal`;
+                    case "reverse":
+                        return `alternate`;
+                    default:
+                        return `normal`;
+                }
+            },
+            "repeatCount": val => {
+                if (!val) return `1`;
+                val = parseInt(val);
+                if (isNaN(val)) { return `1`; }
+                else if (val < 0) { return `infinite`}
+                else { return `${val+1}`}
+            },
+            "fillMode": val => {
+                if (!val) return `forwards`;
+                else return `${val}`;
+            }
+        }
+    }
+}
 module.exports = {
     parseColors,
     rWS,
@@ -172,5 +376,6 @@ module.exports = {
     getParentView,
     getContainer,
     calculateHeight,
+    setAnimationStyles,
     postRenderElements
 }
