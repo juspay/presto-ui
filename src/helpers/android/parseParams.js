@@ -247,7 +247,7 @@ function getCtr(viewGroup) {
     'appBarLayout': 'android.support.design.widget.AppBarLayout$LayoutParams->new',
     'view': 'android.widget.LinearLayout$LayoutParams->new',
     'tabLayout': 'android.widget.LinearLayout$LayoutParams->new',
-    'viewPager': 'android.support.v4.view.ViewPager$LayoutParams->new',
+    'viewPager': 'androidx.viewpager2.widget.ViewPager2$LayoutParams->new',
     'listView': 'android.widget.LinearLayout$LayoutParams->new',
     'expandableListView': 'android.widget.LinearLayout$LayoutParams->new',
     'recyclerView': 'androidx.recyclerview.widget.RecyclerView$LayoutParams->new',
